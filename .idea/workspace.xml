@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="37e5c24e-d30d-478a-bef8-bbadb98ca4d8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedicalInform/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/MedicalInform/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Noting/Q&amp;A.md" beforeDir="false" afterPath="$PROJECT_DIR$/Noting/Q&amp;A.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Noting/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Noting/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OCR/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/OCR/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retrieval/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Retrieval/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebDesign/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/WebDesign/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,15 +28,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -40,6 +48,7 @@
       <updated>1673940281091</updated>
       <workItem from="1673940286096" duration="4256000" />
       <workItem from="1673959114289" duration="1541000" />
+      <workItem from="1673963679084" duration="738000" />
     </task>
     <servers />
   </component>
