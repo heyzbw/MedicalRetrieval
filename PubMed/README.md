@@ -1,7 +1,8 @@
 # PubMed
 
 > [PubMed](https://pubmed.ncbi.nlm.nih.gov/)是一个免费的[MEDLINE](https://www.nlm.nih.gov/medline/index.html)数据库，提供生物医学和健康科学领域的文献检索服务，其检索设计对我们的系统设计启发很大
-
+>
+> 中文类似的检索系统可参考[中国生物医学文献数据库(sinomed)](http://www.sinomed.ac.cn/index.jsp)
 ### PubMed提供了三种基本的检索方法：
 
 + 1.直接检索： 在检索界面，直接输入想要检索的内容即可。比如"mutation"。
@@ -77,8 +78,7 @@
 > PubMed的高级检索界面主要包括了两个部分：检索栏和历史记录
 
 ##### 检索栏当中，可以进行作者检索、杂志检索、日期检索、标题/摘要检索等
-
-    > 进一步详情了解可以参考[Help-PubMed](https://pubmed.ncbi.nlm.nih.gov/help/#advanced-search)
+> 进一步详情了解可以参考[Help-PubMed](https://pubmed.ncbi.nlm.nih.gov/help/#advanced-search)
 
 ##### 历史记录
 + 高级检索中可以看到之前的检索的历史记录。在历史记录当中可以看到每一个检索的检索式以及有多少相关的文献。 
