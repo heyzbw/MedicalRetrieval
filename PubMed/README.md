@@ -5,16 +5,16 @@
 ### PubMed提供了三种基本的检索方法：
 
 + 1.直接检索： 在检索界面，直接输入想要检索的内容即可。比如"mutation"。
-![\pictures\img.png](pictures\img.png)
+![\pictures\img.png](pictures/img.png)
     > 这样直接检索的方式，默认的就是在所有的区域(all fields)进行检索。
 
 + 2.高级检索：点击主页的Advanced就可以进行高级检索。
-![\pictures\img_1.png](pictures\img_1.png)
+![\pictures\img_1.png](pictures/img_1.png)
     > 在高级就检索当中可以选择在哪个类型当中进行检索。比如在题目当中检索mutation。就可以选择好标题区域之后进行输入“mutation”。
 
 + 3.标签检索：标签检索和高级检索是类似的。
     > 高级检索通过鼠标来选择想要检索的类型。而标签则以在检索内容后面输入标签的方式来规定检索范围。pubmed当中支持的标签如下图所示。
- ![\pictures\img_2.png](pictures\img_2.png)
+ ![\pictures\img_2.png](pictures/img_2.png)
 
  
 ### PubMed特有的检索机制：ATM搜索系统
@@ -22,21 +22,21 @@
 > 熟悉的搜索引擎基本上是根据输入的内容返回和输入内容完全匹配的信息，而PubMed则不是这样的。PubMed的检索是基于自动术语映射(Automatic Term Mapping, ATM)系统来进行检索的。
 在ATM系统中，输入的内容不会直接进行检索。而是先在一个包含[Mesh主题词查询数据库](https://www.ncbi.nlm.nih.gov/mesh)，将杂志名以及作者信息的“词典”当中进行匹配。寻找和关键词类似的术语。然后利用匹配到术语进行检索。
 例如"mutation (突变)"这个关键词。在输入到PubMed之后，利用ATM系统，会找到很多和mutaion有关的词语。最终检索的其实是下面的内容：
-![\pictures\img_3.png](pictures\img_3.png)
+![\pictures\img_3.png](pictures/img_3.png)
 
 ### 基本检索要素
 
 + 输入关键词检索：例如想要检索"mutation"。就直接输入即可。
- ![\pictures\img_4.png](pictures\img_4.png)
+ ![\pictures\img_4.png](pictures/img_4.png)
 + 布尔符连接：如果有多个关键词，且关键词之间有一些逻辑关系。那么就可以通过布尔值(AND, OR, NOT)来进行连接。例如：想要检索突变和肿瘤。那就可以输入: "mutation AND cancer"
- ![\pictures\img_5.png](pictures\img_5.png)
+ ![\pictures\img_5.png](pictures/img_5.png)
 + 大小写忽略：在英文检索当中涉及到字母大小写的情况。PubMed会忽略大小写来进行检索。例如: "mutation", "Mutation"以及"MUTATION“检索的结果是一样的。
- ![\pictures\img_6.png](pictures\img_6.png)
+ ![\pictures\img_6.png](pictures/img_6.png)
 + 符号转换：除了大小写转换，一些没意义的符号例如，逗号，等于号等等。在输入之后也会被强制性的转换为空格。例如"mutation = snp"和"mutation snp“检索的结果是一样的。
- ![\pictures\img_7.png](pictures\img_7.png)
+ ![\pictures\img_7.png](pictures/img_7.png)
 + 除了上面常见的输入方式。PubMed也可以进行词组检索。可以避免ATM搜索系统过多匹配。
     > 词组检索
-   >![\pictures\img_8.png](pictures\img_8.png)
+   >![\pictures\img_8.png](pictures/img_8.png)
     > > 1.检索词加双引号;
   >
     > > 2.检索词加标签；
@@ -49,10 +49,10 @@
 
 + 词语在字典中找到对应术语
     > 如果【不使用词组检索】，会拿对应词语术语在特定类型当中进行检索。同时也会把词语拆成单个单词进行检索。例如: "INDEL Mutation"
-    ![\pictures\img_9.png](pictures\img_9.png)
+    ![\pictures\img_9.png](pictures/img_9.png)
 
     > 如果【使用词组检索】的话，则只会在特定的范围内进行检索。
-    ![\pictures\img_10.png](pictures\img_10.png)
+    ![\pictures\img_10.png](pictures/img_10.png)
 
 + 词语在字典中找不到对应术语
 
