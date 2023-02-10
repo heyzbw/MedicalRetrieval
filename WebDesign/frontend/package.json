@@ -1,0 +1,38 @@
+{
+  "name": "all-documents-vue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@vue-office/excel": "0.0.13",
+    "ali-oss": "^6.17.1",
+    "axios": "^0.27.2",
+    "docx-preview": "^0.1.4",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.4.21",
+    "pdfjs-dist": "^2.3.200",
+    "serve": "^14.2.0",
+    "view-design": "^4.7.0",
+    "vue": "^2.6.11",
+    "vue-cropper": "^0.5.8",
+    "vue-router": "^3.2.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-router": "~4.5.13",
+    "@vue/cli-service": "~4.5.13",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.6",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
