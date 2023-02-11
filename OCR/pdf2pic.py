@@ -121,8 +121,9 @@ if __name__ == '__main__':
     path = 'pdf'
     pic_path = 'pic'
     result_path = 'result'
-    shutil.rmtree('pic')  
-    os.mkdir('pic') 
+    if os.path.exists(pic_path):
+        shutil.rmtree(pic_path)  
+    os.mkdir(pic_path) 
     filename = os.listdir(path)
     for file in filename:
         filepath = os.path.join(path, file)
