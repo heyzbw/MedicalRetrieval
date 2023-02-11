@@ -1,0 +1,42 @@
+{
+    "ocrText": "Chinese Gencral Practicebebruary 2012\u3002Vol.15No.zC",
+    "pdfURL": "FOCUS\u8d85\u58f0\u5200\u5f00\u653e\u6027\u7532\u72b6\u817a\u5207\u9664\u672f\u7684\u4e34\u5e8a\u7597\u6548\u8bc4\u4ef7_\u859b\u5bb6\u9e4f.pdf",
+    "textResult": [
+        {
+            "charNum": 24,
+            "isHandwritten": "false",
+            "leftBottom": "77,21",
+            "leftTop": "77,1",
+            "rightBottom": "233,21",
+            "rightTop": "233,1",
+            "text": "Chinese Gencral Practice"
+        },
+        {
+            "charNum": 14,
+            "isHandwritten": "false",
+            "leftBottom": "45,38",
+            "leftTop": "45,23",
+            "rightBottom": "139,38",
+            "rightTop": "139,23",
+            "text": "bebruary 2012\u3002"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "147,37",
+            "leftTop": "147,21",
+            "rightBottom": "189,37",
+            "rightTop": "189,21",
+            "text": "Vol.15"
+        },
+        {
+            "charNum": 5,
+            "isHandwritten": "false",
+            "leftBottom": "193,37",
+            "leftTop": "193,21",
+            "rightBottom": "233,37",
+            "rightTop": "233,21",
+            "text": "No.zC"
+        }
+    ]
+}

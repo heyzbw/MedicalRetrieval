@@ -1,0 +1,249 @@
+{
+    "ocrText": "ALSPVLSPVRSPVRSPV10\u3002ESOESOCSCSB6C07164056Impedance11028Contact Force80\u706bAAAAA5012TSC199",
+    "pdfURL": "2016IJC-\u5bfc\u7ba1\u7ec4\u7ec7\u63a5\u89e6\u5bf9\u4e8e\u6a21\u578b\u7684\u5f71\u54cdPentarRay FAM.pdf",
+    "textResult": [
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "44,42",
+            "leftTop": "44,2",
+            "rightBottom": "76,42",
+            "rightTop": "76,2",
+            "text": "A"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "467,91",
+            "leftTop": "467,51",
+            "rightBottom": "569,91",
+            "rightTop": "569,51",
+            "text": "LSPV"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "1007,91",
+            "leftTop": "1007,53",
+            "rightBottom": "1107,91",
+            "rightTop": "1107,53",
+            "text": "LSPV"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "78,141",
+            "leftTop": "78,105",
+            "rightBottom": "178,141",
+            "rightTop": "178,105",
+            "text": "RSPV"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "1431,157",
+            "leftTop": "1431,121",
+            "rightBottom": "1533,157",
+            "rightTop": "1533,121",
+            "text": "RSPV"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "825,387",
+            "leftTop": "825,325",
+            "rightBottom": "911,387",
+            "rightTop": "911,325",
+            "text": "10\u3002"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "555,611",
+            "leftTop": "555,575",
+            "rightBottom": "635,611",
+            "rightTop": "635,575",
+            "text": "ESO"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1039,611",
+            "leftTop": "1039,571",
+            "rightBottom": "1119,611",
+            "rightTop": "1119,571",
+            "text": "ESO"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "1273,613",
+            "leftTop": "1273,575",
+            "rightBottom": "1329,613",
+            "rightTop": "1329,575",
+            "text": "CS"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "423,633",
+            "leftTop": "423,597",
+            "rightBottom": "479,633",
+            "rightTop": "479,597",
+            "text": "CS"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "37,727",
+            "leftTop": "37,683",
+            "rightBottom": "77,727",
+            "rightTop": "77,683",
+            "text": "B"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "1113,729",
+            "leftTop": "1113,683",
+            "rightBottom": "1157,729",
+            "rightTop": "1157,683",
+            "text": "6"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "1011,757",
+            "leftTop": "1011,743",
+            "rightBottom": "1063,757",
+            "rightTop": "1063,743",
+            "text": "C0"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "1069,757",
+            "leftTop": "1069,743",
+            "rightBottom": "1093,757",
+            "rightTop": "1093,743",
+            "text": "7"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "554,827",
+            "leftTop": "554,789",
+            "rightBottom": "654,827",
+            "rightTop": "654,789",
+            "text": "1640"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "1069,837",
+            "leftTop": "1069,821",
+            "rightBottom": "1091,837",
+            "rightTop": "1091,821",
+            "text": "56"
+        },
+        {
+            "charNum": 9,
+            "isHandwritten": "false",
+            "leftBottom": "215,867",
+            "leftTop": "215,825",
+            "rightBottom": "393,867",
+            "rightTop": "393,825",
+            "text": "Impedance"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1025,997",
+            "leftTop": "1025,979",
+            "rightBottom": "1059,997",
+            "rightTop": "1059,979",
+            "text": "110"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "1069,997",
+            "leftTop": "1069,981",
+            "rightBottom": "1093,997",
+            "rightTop": "1093,981",
+            "text": "28"
+        },
+        {
+            "charNum": 13,
+            "isHandwritten": "false",
+            "leftBottom": "210,1068",
+            "leftTop": "210,1028",
+            "rightBottom": "431,1068",
+            "rightTop": "431,1028",
+            "text": "Contact Force"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "1037,1077",
+            "leftTop": "1037,1061",
+            "rightBottom": "1059,1077",
+            "rightTop": "1059,1061",
+            "text": "80"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "1204,1080",
+            "leftTop": "1204,1056",
+            "rightBottom": "1232,1080",
+            "rightTop": "1232,1056",
+            "text": "\u706b"
+        },
+        {
+            "charNum": 5,
+            "isHandwritten": "false",
+            "leftBottom": "267,1131",
+            "leftTop": "267,1095",
+            "rightBottom": "453,1131",
+            "rightTop": "453,1095",
+            "text": "AAAAA"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "1035,1155",
+            "leftTop": "1035,1137",
+            "rightBottom": "1059,1155",
+            "rightTop": "1059,1137",
+            "text": "50"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "603,1173",
+            "leftTop": "603,1157",
+            "rightBottom": "625,1173",
+            "rightTop": "625,1157",
+            "text": "12"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1015,1173",
+            "leftTop": "1015,1157",
+            "rightBottom": "1067,1173",
+            "rightTop": "1067,1157",
+            "text": "TSC"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "540.1955007924402,998.2352270154415",
+            "leftTop": "548.0939460213589,959.1039678918432",
+            "rightBottom": "617.9060539786411,1009.8960321081568",
+            "rightTop": "624.8044992075598,970.7647729845585",
+            "text": "199"
+        }
+    ]
+}

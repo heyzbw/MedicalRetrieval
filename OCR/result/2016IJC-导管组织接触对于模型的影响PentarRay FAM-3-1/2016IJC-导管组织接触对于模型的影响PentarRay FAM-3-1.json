@@ -1,0 +1,645 @@
+{
+    "ocrText": "ARPVLPVrOofroofSPVSPVSPVSPVanteriorposteriorposterioranteriorcarinacarinacarinacarinaAnteriorAnterioranteriorposteriorPosteriorposterioranteriorIPVIPVIPVIPVanteriorposteriorposterioranteriorfloorfloorrOOf84MMMMI3.53.5SPVant3SPV postSPV post3SPVant2.52.5221.51.5110.50.5CarantCarpostCarantIPVantIPV postIPV postIPVantfIOOrfIOOrConventional FAMHigh-CF (>109) guided FAMTOOf",
+    "pdfURL": "2016IJC-\u5bfc\u7ba1\u7ec4\u7ec7\u63a5\u89e6\u5bf9\u4e8e\u6a21\u578b\u7684\u5f71\u54cdPentarRay FAM.pdf",
+    "textResult": [
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "0,56",
+            "leftTop": "0,2",
+            "rightBottom": "50,56",
+            "rightTop": "50,2",
+            "text": "A"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "372,86",
+            "leftTop": "372,34",
+            "rightBottom": "486,86",
+            "rightTop": "486,34",
+            "text": "RPV"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1230,80",
+            "leftTop": "1230,25",
+            "rightBottom": "1341,80",
+            "rightTop": "1341,25",
+            "text": "LPV"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "393,191",
+            "leftTop": "393,155",
+            "rightBottom": "457,191",
+            "rightTop": "457,155",
+            "text": "rOof"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "1247,185",
+            "leftTop": "1247,149",
+            "rightBottom": "1311,185",
+            "rightTop": "1311,149",
+            "text": "roof"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "301,277",
+            "leftTop": "301,241",
+            "rightBottom": "375,277",
+            "rightTop": "375,241",
+            "text": "SPV"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "497,277",
+            "leftTop": "497,241",
+            "rightBottom": "569,277",
+            "rightTop": "569,241",
+            "text": "SPV"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1151,267",
+            "leftTop": "1151,231",
+            "rightBottom": "1225,267",
+            "rightTop": "1225,231",
+            "text": "SPV"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1349,273",
+            "leftTop": "1349,235",
+            "rightBottom": "1423,273",
+            "rightTop": "1423,235",
+            "text": "SPV"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "291,317",
+            "leftTop": "291,281",
+            "rightBottom": "407,317",
+            "rightTop": "407,281",
+            "text": "anterior"
+        },
+        {
+            "charNum": 9,
+            "isHandwritten": "false",
+            "leftBottom": "439,323",
+            "leftTop": "439,278",
+            "rightBottom": "574,323",
+            "rightTop": "574,278",
+            "text": "posterior"
+        },
+        {
+            "charNum": 9,
+            "isHandwritten": "false",
+            "leftBottom": "1136,315",
+            "leftTop": "1136,267",
+            "rightBottom": "1275,315",
+            "rightTop": "1275,267",
+            "text": "posterior"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "1307,315",
+            "leftTop": "1307,273",
+            "rightBottom": "1425,315",
+            "rightTop": "1425,273",
+            "text": "anterior"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "268,404",
+            "leftTop": "268,368",
+            "rightBottom": "362,404",
+            "rightTop": "362,368",
+            "text": "carina"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "499,405",
+            "leftTop": "499,369",
+            "rightBottom": "593,405",
+            "rightTop": "593,369",
+            "text": "carina"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "1122,394",
+            "leftTop": "1122,358",
+            "rightBottom": "1216,394",
+            "rightTop": "1216,358",
+            "text": "carina"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "1353,397",
+            "leftTop": "1353,361",
+            "rightBottom": "1447,397",
+            "rightTop": "1447,361",
+            "text": "carina"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "1577,416",
+            "leftTop": "1577,376",
+            "rightBottom": "1719,416",
+            "rightTop": "1719,376",
+            "text": "Anterior"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "10,429",
+            "leftTop": "10,384",
+            "rightBottom": "155,429",
+            "rightTop": "155,384",
+            "text": "Anterior"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "269,445",
+            "leftTop": "269,409",
+            "rightBottom": "385,445",
+            "rightTop": "385,409",
+            "text": "anterior"
+        },
+        {
+            "charNum": 9,
+            "isHandwritten": "false",
+            "leftBottom": "461,449",
+            "leftTop": "461,407",
+            "rightBottom": "595,449",
+            "rightTop": "595,407",
+            "text": "posterior"
+        },
+        {
+            "charNum": 9,
+            "isHandwritten": "false",
+            "leftBottom": "769,421",
+            "leftTop": "769,381",
+            "rightBottom": "935,421",
+            "rightTop": "935,381",
+            "text": "Posterior"
+        },
+        {
+            "charNum": 9,
+            "isHandwritten": "false",
+            "leftBottom": "1120,443",
+            "leftTop": "1120,393",
+            "rightBottom": "1257,443",
+            "rightTop": "1257,393",
+            "text": "posterior"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "1333,437",
+            "leftTop": "1333,401",
+            "rightBottom": "1449,437",
+            "rightTop": "1449,401",
+            "text": "anterior"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "279,547",
+            "leftTop": "279,509",
+            "rightBottom": "341,547",
+            "rightTop": "341,509",
+            "text": "IPV"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "511,549",
+            "leftTop": "511,513",
+            "rightBottom": "573,549",
+            "rightTop": "573,513",
+            "text": "IPV"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1135,539",
+            "leftTop": "1135,503",
+            "rightBottom": "1199,539",
+            "rightTop": "1199,503",
+            "text": "IPV"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1365,541",
+            "leftTop": "1365,505",
+            "rightBottom": "1427,541",
+            "rightTop": "1427,505",
+            "text": "IPV"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "290,589",
+            "leftTop": "290,547",
+            "rightBottom": "407,589",
+            "rightTop": "407,547",
+            "text": "anterior"
+        },
+        {
+            "charNum": 9,
+            "isHandwritten": "false",
+            "leftBottom": "440,597",
+            "leftTop": "440,549",
+            "rightBottom": "577,597",
+            "rightTop": "577,549",
+            "text": "posterior"
+        },
+        {
+            "charNum": 9,
+            "isHandwritten": "false",
+            "leftBottom": "1145,583",
+            "leftTop": "1145,541",
+            "rightBottom": "1279,583",
+            "rightTop": "1279,541",
+            "text": "posterior"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "1313,581",
+            "leftTop": "1313,545",
+            "rightBottom": "1429,581",
+            "rightTop": "1429,545",
+            "text": "anterior"
+        },
+        {
+            "charNum": 5,
+            "isHandwritten": "false",
+            "leftBottom": "393,691",
+            "leftTop": "393,655",
+            "rightBottom": "465,691",
+            "rightTop": "465,655",
+            "text": "floor"
+        },
+        {
+            "charNum": 5,
+            "isHandwritten": "false",
+            "leftBottom": "1247,683",
+            "leftTop": "1247,647",
+            "rightBottom": "1319,683",
+            "rightTop": "1319,647",
+            "text": "floor"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "412,848",
+            "leftTop": "412,816",
+            "rightBottom": "482,848",
+            "rightTop": "482,816",
+            "text": "rOOf"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "6,888",
+            "leftTop": "6,836",
+            "rightBottom": "56,888",
+            "rightTop": "56,836",
+            "text": "8"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "397,875",
+            "leftTop": "397,851",
+            "rightBottom": "417,875",
+            "rightTop": "417,851",
+            "text": "4"
+        },
+        {
+            "charNum": 0,
+            "isHandwritten": "false",
+            "leftBottom": "1247,879",
+            "leftTop": "1247,857",
+            "rightBottom": "1263,879",
+            "rightTop": "1263,857",
+            "text": ""
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "440,898",
+            "leftTop": "440,870",
+            "rightBottom": "498,898",
+            "rightTop": "498,870",
+            "text": "MM"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1282,900",
+            "leftTop": "1282,872",
+            "rightBottom": "1340,900",
+            "rightTop": "1340,872",
+            "text": "MMI"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "374,916",
+            "leftTop": "374,888",
+            "rightBottom": "418,916",
+            "rightTop": "418,888",
+            "text": "3.5"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1220,922",
+            "leftTop": "1220,894",
+            "rightBottom": "1264,922",
+            "rightTop": "1264,894",
+            "text": "3.5"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "99,961",
+            "leftTop": "99,925",
+            "rightBottom": "231,961",
+            "rightTop": "231,925",
+            "text": "SPVant"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "397,951",
+            "leftTop": "397,927",
+            "rightBottom": "415,951",
+            "rightTop": "415,927",
+            "text": "3"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "660,969",
+            "leftTop": "660,921",
+            "rightBottom": "815,969",
+            "rightTop": "815,921",
+            "text": "SPV post"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "929,971",
+            "leftTop": "929,929",
+            "rightBottom": "1082,971",
+            "rightTop": "1082,929",
+            "text": "SPV post"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "1247,957",
+            "leftTop": "1247,933",
+            "rightBottom": "1263,957",
+            "rightTop": "1263,933",
+            "text": "3"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "1509,965",
+            "leftTop": "1509,929",
+            "rightBottom": "1641,965",
+            "rightTop": "1641,929",
+            "text": "SPVant"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "376,988",
+            "leftTop": "376,962",
+            "rightBottom": "418,988",
+            "rightTop": "418,962",
+            "text": "2.5"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1222,994",
+            "leftTop": "1222,966",
+            "rightBottom": "1264,994",
+            "rightTop": "1264,966",
+            "text": "2.5"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "399,1027",
+            "leftTop": "399,1003",
+            "rightBottom": "417,1027",
+            "rightTop": "417,1003",
+            "text": "2"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "1245,1029",
+            "leftTop": "1245,1005",
+            "rightBottom": "1263,1029",
+            "rightTop": "1263,1005",
+            "text": "2"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "376,1068",
+            "leftTop": "376,1038",
+            "rightBottom": "420,1068",
+            "rightTop": "420,1038",
+            "text": "1.5"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1222,1070",
+            "leftTop": "1222,1040",
+            "rightBottom": "1266,1070",
+            "rightTop": "1266,1040",
+            "text": "1.5"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "399,1101",
+            "leftTop": "399,1079",
+            "rightBottom": "415,1101",
+            "rightTop": "415,1079",
+            "text": "1"
+        },
+        {
+            "charNum": 1,
+            "isHandwritten": "false",
+            "leftBottom": "1247,1103",
+            "leftTop": "1247,1081",
+            "rightBottom": "1261,1103",
+            "rightTop": "1261,1081",
+            "text": "1"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "374,1140",
+            "leftTop": "374,1110",
+            "rightBottom": "420,1140",
+            "rightTop": "420,1110",
+            "text": "0.5"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "1220,1144",
+            "leftTop": "1220,1114",
+            "rightBottom": "1266,1144",
+            "rightTop": "1266,1114",
+            "text": "0.5"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "24,1180",
+            "leftTop": "24,1148",
+            "rightBottom": "140,1180",
+            "rightTop": "140,1148",
+            "text": "Carant"
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "798,1172",
+            "leftTop": "798,1146",
+            "rightBottom": "852,1172",
+            "rightTop": "852,1146",
+            "text": "Car"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "851,1182",
+            "leftTop": "851,1141",
+            "rightBottom": "930,1182",
+            "rightTop": "930,1141",
+            "text": "post"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "1598,1182",
+            "leftTop": "1598,1150",
+            "rightBottom": "1714,1182",
+            "rightTop": "1714,1150",
+            "text": "Carant"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "109,1401",
+            "leftTop": "109,1365",
+            "rightBottom": "231,1401",
+            "rightTop": "231,1365",
+            "text": "IPVant"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "659,1408",
+            "leftTop": "659,1365",
+            "rightBottom": "802,1408",
+            "rightTop": "802,1365",
+            "text": "IPV post"
+        },
+        {
+            "charNum": 8,
+            "isHandwritten": "false",
+            "leftBottom": "937,1408",
+            "leftTop": "937,1365",
+            "rightBottom": "1082,1408",
+            "rightTop": "1082,1365",
+            "text": "IPV post"
+        },
+        {
+            "charNum": 6,
+            "isHandwritten": "false",
+            "leftBottom": "1505,1401",
+            "leftTop": "1505,1365",
+            "rightBottom": "1629,1401",
+            "rightTop": "1629,1365",
+            "text": "IPVant"
+        },
+        {
+            "charNum": 5,
+            "isHandwritten": "false",
+            "leftBottom": "404,1510",
+            "leftTop": "404,1478",
+            "rightBottom": "486,1510",
+            "rightTop": "486,1478",
+            "text": "fIOOr"
+        },
+        {
+            "charNum": 5,
+            "isHandwritten": "false",
+            "leftBottom": "1252,1510",
+            "leftTop": "1252,1478",
+            "rightBottom": "1332,1510",
+            "rightTop": "1332,1478",
+            "text": "fIOOr"
+        },
+        {
+            "charNum": 16,
+            "isHandwritten": "false",
+            "leftBottom": "713,1585",
+            "leftTop": "713,1547",
+            "rightBottom": "1031,1585",
+            "rightTop": "1031,1547",
+            "text": "Conventional FAM"
+        },
+        {
+            "charNum": 25,
+            "isHandwritten": "false",
+            "leftBottom": "714,1648",
+            "leftTop": "714,1603",
+            "rightBottom": "1178,1648",
+            "rightTop": "1178,1603",
+            "text": "High-CF (>109) guided FAM"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "1256.3678865813429,856.4394370258282",
+            "leftTop": "1253.6027607015021,825.345245332854",
+            "rightBottom": "1327.3972392984979,849.654754667146",
+            "rightTop": "1325.6321134186571,818.5605629741718",
+            "text": "TOOf"
+        }
+    ]
+}
