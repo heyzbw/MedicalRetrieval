@@ -1,0 +1,42 @@
+{
+    "ocrText": "URAHaHeLA",
+    "pdfURL": "ENSITE_NAVX\u548c\u53ccLAS_\u7701\u7565_\u5de6\u5fc3\u623f\u7ebf\u6027\u6d88\u878d\u6cbb\u7597\u9635\u53d1\u6027\u5fc3\u623f\u98a4\u52a8_\u9648\u660e\u9f99.pdf",
+    "textResult": [
+        {
+            "charNum": 0,
+            "isHandwritten": "false",
+            "leftBottom": "53,147",
+            "leftTop": "53,131",
+            "rightBottom": "97,147",
+            "rightTop": "97,131",
+            "text": ""
+        },
+        {
+            "charNum": 3,
+            "isHandwritten": "false",
+            "leftBottom": "547,157",
+            "leftTop": "547,137",
+            "rightBottom": "593,157",
+            "rightTop": "593,137",
+            "text": "URA"
+        },
+        {
+            "charNum": 2,
+            "isHandwritten": "false",
+            "leftBottom": "29,235",
+            "leftTop": "29,215",
+            "rightBottom": "81,235",
+            "rightTop": "81,215",
+            "text": "Ha"
+        },
+        {
+            "charNum": 4,
+            "isHandwritten": "false",
+            "leftBottom": "572,234",
+            "leftTop": "572,210",
+            "rightBottom": "626,234",
+            "rightTop": "626,210",
+            "text": "HeLA"
+        }
+    ]
+}
