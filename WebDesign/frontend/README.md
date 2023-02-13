@@ -1,3 +1,8 @@
+## 如何运行前端项目
+1. 安装依赖``npm install``
+2. 运行serve ``npm run serve``
+> 如何在install时出错，大概率是前端npm里面的各种版本问题
+
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
