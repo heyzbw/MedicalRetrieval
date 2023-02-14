@@ -66,22 +66,33 @@ PUT /docwrite
 
   这样es中的文件就能够被解码存在es中了。
 
-##### 然后再执行下面这一段
+  ##### 通过下面的网站将一个pdf文件转化为`base64`的文本
 
-```json
-POST /docwrite/_doc?pipeline=attachment
-{
-  "name":"人工智能实验安排",
-  "type":"pdf",
-"content":"JVBERi0xLjQKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nK1YS4skNwy+96
+  https://base64.guru/converter/encode/pdf
 
-}
-```
+  pdf不要太大不然很卡
 
-##### 最后用下面这一段查一下可不可以找到解码后的这一段文字
+  然后通过以下请求上传上去，需要指定的是我们刚创建的`pipeline`
 
-```json
-GET /docwrite/_search
-```
+  ![文件上传测试](https://upload-images.jianshu.io/upload_images/9765191-272b7113ae1e3acf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-之后再上传文件应该就可以自动解码了
+  ```json
+  POST /docwrite/_doc?pipeline=attachment
+  {
+    "name":"人工智能实验安排",
+    "type":"pdf",
+  "content":" "
+  
+  }
+  ```
+
+  ##### 最后用下面这一段查一下可不可以找到解码后的这一段文字
+
+  然通过`GET`操作看看我们的文档是否上传成功,如果不指定`pipline`的话，就会出现无法解析的情况。
+
+  ```json
+  GET /docwrite/_search
+  ```
+
+  
+
