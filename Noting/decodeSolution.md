@@ -65,3 +65,23 @@ PUT /docwrite
 * 同时对文件的名字name指定分析器`analyzer`为 `ik_max_word`，以让 `ElasticSearch `在建立全文索引时对它们进行中文分词。
 
   这样es中的文件就能够被解码存在es中了。
+
+##### 然后再执行下面这一段
+
+```json
+POST /docwrite/_doc?pipeline=attachment
+{
+  "name":"人工智能实验安排",
+  "type":"pdf",
+"content":"JVBERi0xLjQKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nK1YS4skNwy+96
+
+}
+```
+
+##### 最后用下面这一段查一下可不可以找到解码后的这一段文字
+
+```json
+GET /docwrite/_search
+```
+
+之后再上传文件应该就可以自动解码了
