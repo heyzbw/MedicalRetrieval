@@ -7,7 +7,7 @@
                 <input type="password" v-model="pwd" name="password" placeholder="密码" class="input-item">
                 <div style="font-size: 12px; color: #2c3e50">
                     试用账号：admin123， 密码：admin123
-                    <Icon type="md-copy" style="cursor: pointer" @click="tian"/>
+                    <span style="cursor: pointer; font-size: 12px; color: blue" @click="tian"><Icon type="md-copy" ></Icon>复制</span>
                 </div>
                 <div class="btn" @click="login">登录</div>
             </div>
@@ -29,7 +29,13 @@ export default {
         return {
             username: "",
             pwd: "",
+            fromRouteName: ""
         }
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+          vm.fromRouteName = from.name
+      })
     },
     methods: {
         tian() {
@@ -44,20 +50,24 @@ export default {
             UserRequest.postUserLogin(params).then(
                 response => {
                     if (response.data == null) {
-                        this.$Message.error('登录失败，请重试！');
+                        this.$Message.error(response.message);
                     } else {
-                        console.log(response.data)
                         localStorage.setItem("token", response.data.token)
                         localStorage.setItem("id", response.data.userId)
                         localStorage.setItem("username", response.data.username)
                         localStorage.setItem("avatar", response.data.avatar)
                         localStorage.setItem("type", response.data['type'] || '普通用户');
-                        this.$router.push({
-                            path: '/',
-                            query: {
-                                userName: this.userName
-                            }
-                        })
+
+                        if (this.fromRouteName === "Registry") {
+                            this.$router.push({
+                                path: '/',
+                                query: {
+                                    userName: this.userName
+                                }
+                            })
+                        } else {
+                            this.$router.back()
+                        }
                     }
                 }
             )
