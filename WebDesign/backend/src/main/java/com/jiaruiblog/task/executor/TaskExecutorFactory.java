@@ -38,9 +38,16 @@ public class TaskExecutorFactory {
                 taskExecutor = new PdfWordTaskExecutor();
                 break;
             case DOCX:
-            case PPTX:
             case XLSX:
                 taskExecutor = new DocxExecutor();
+                break;
+            case PPTX:
+                taskExecutor = new PptxExecutor();
+                break;
+            case MD:
+            case HTML:
+            case TXT:
+                taskExecutor = new TxtExecutor();
                 break;
             default:
                 break;

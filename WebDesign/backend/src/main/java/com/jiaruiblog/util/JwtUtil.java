@@ -38,7 +38,7 @@ public class JwtUtil {
      * 过期时间
      * 单位为秒
      **/
-    private static final long EXPIRATION = 1800L;
+    private static final long EXPIRATION = 18000L;
 
     /**
      * 生成用户token,设置token超时时间
@@ -74,8 +74,6 @@ public class JwtUtil {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
             jwt = verifier.verify(token);
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            logger.error("token解码异常");
             //解码异常则抛出异常
             return Maps.newHashMap();
         }

@@ -44,6 +44,14 @@ spring:
     mode: HTML
     cache: false
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    root: ${LOGGING_LEVEL:ERROR}
+
 cloud:
   elasticsearch:
     host: ${ES_HOST:localhost}
@@ -57,3 +65,6 @@ all-docs:
     adminReview: ${AD_ADMIN_REVIEW:true}
     prohibitedWord: ${AD_PROHIBITED_WORD:true}
     userRegistry: ${AD_USER_REGISTRY:false}
+    initialUsername: ${AD_INITIAL_USERNAME:admin123}
+    initialPassword: ${AD_INITIAL_PASSWORD:admin123}
+    coverAdmin: ${COVER_ADMIN:true}

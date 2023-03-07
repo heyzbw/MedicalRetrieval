@@ -3,13 +3,23 @@ package com.jiaruiblog.service;
 import com.jiaruiblog.auth.PermissionEnum;
 import com.jiaruiblog.entity.User;
 import com.jiaruiblog.entity.dto.BasePageDTO;
+import com.jiaruiblog.entity.dto.RegistryUserDTO;
+import com.jiaruiblog.entity.dto.UserRoleDTO;
 import com.jiaruiblog.util.BaseApiResult;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author jiarui.luo
  */
 public interface IUserService {
+
+    void initFirstUser();
+
+    BaseApiResult login(RegistryUserDTO userDTO);
+
+    BaseApiResult registry(RegistryUserDTO userDTO);
 
     /**
      * @Author luojiarui
@@ -19,6 +29,8 @@ public interface IUserService {
      * @return com.jiaruiblog.util.BaseApiResult
      **/
     BaseApiResult getUserList(BasePageDTO pageDTO);
+
+    BaseApiResult changeUserRole(UserRoleDTO userRoleDTO);
 
     /**
      * @Author luojiarui
@@ -42,6 +54,26 @@ public interface IUserService {
      **/
     BaseApiResult uploadUserAvatar(String userId, MultipartFile file);
 
+    /**
+     * Deleting a user profile picture
+     * @param userId user index
+     * @return BaseApiResult
+     */
     BaseApiResult removeUserAvatar(String userId);
+
+    /**
+     * remove user entity
+     * @param userId user index
+     * @return BaseApiResult
+     */
+    BaseApiResult removeUser(String userId);
+
+    /**
+     * Remove user entities in batches
+     * @param userIdList user index
+     * @param adminUserId administrator index
+     * @return BaseApiResult
+     */
+    BaseApiResult deleteUserByIdBatch(List<String> userIdList, String adminUserId);
 
 }

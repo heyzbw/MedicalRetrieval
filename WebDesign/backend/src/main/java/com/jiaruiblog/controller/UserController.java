@@ -1,18 +1,17 @@
 package com.jiaruiblog.controller;
 
+import com.jiaruiblog.auth.Permission;
+import com.jiaruiblog.auth.PermissionEnum;
+import com.jiaruiblog.common.ConfigConstant;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.entity.User;
-import com.jiaruiblog.entity.dto.BasePageDTO;
-import com.jiaruiblog.entity.dto.UserDTO;
+import com.jiaruiblog.entity.dto.*;
 import com.jiaruiblog.service.IUserService;
 import com.jiaruiblog.util.BaseApiResult;
-import com.jiaruiblog.util.JwtUtil;
-import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -42,21 +41,21 @@ public class UserController {
 
     private static final String COLLECTION_NAME = "user";
 
+    private static final String REQUEST_USER_ID = "id";
+
 
     @Resource
     IUserService userService;
 
 
-    @Autowired
+    @Resource
     private MongoTemplate template;
 
 
     @ApiOperation(value = "新增单个用户", notes = "新增单个用户")
     @PostMapping(value = "/insert")
-    public BaseApiResult insertObj(@RequestBody User user) {
-        user.setCreateDate(new Date());
-        template.save(user, COLLECTION_NAME);
-        return BaseApiResult.success("新增成功");
+    public BaseApiResult insertObj(@RequestBody RegistryUserDTO userDTO) {
+        return userService.registry(userDTO);
     }
 
     @ApiOperation(value = "批量新增用户", notes = "批量新增用户")
@@ -97,37 +96,52 @@ public class UserController {
         update.set("mail", user.getMail());
         update.set("male", user.getMale());
         update.set("description", user.getDescription());
+        update.set("updateDate", new Date());
         UpdateResult updateResult1 = template.updateFirst(query, update, User.class, COLLECTION_NAME);
-        if(updateResult1.getMatchedCount() > 0) {
+        if (updateResult1.getMatchedCount() > 0) {
             return BaseApiResult.success("更新成功！");
         }
         return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
-
-
     }
 
     /**
+     * @return com.jiaruiblog.util.BaseApiResult
      * @Author luojiarui
      * @Description 删除用户的时候必须要删除其头像信息
      * @Date 22:40 2023/1/12
      * @Param [user, request]
-     * @return com.jiaruiblog.util.BaseApiResult
      **/
+    @Permission(PermissionEnum.ADMIN)
     @ApiOperation(value = "根据id删除用户", notes = "根据id删除用户")
     @DeleteMapping(value = "/auth/deleteByID")
-    public BaseApiResult deleteById(@RequestBody User user, HttpServletRequest request) {
+    public BaseApiResult deleteById(@RequestBody User removeUser, HttpServletRequest request) {
+        String userId = (String) request.getAttribute(REQUEST_USER_ID);
+        // 不能删除自己的账号
+        String removeUserId = removeUser.getId();
+        if (userId == null || userId.equals(removeUserId)) {
+            return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
+        }
+        return userService.removeUser(removeUserId);
+    }
+
+    /**
+     * @return com.jiaruiblog.util.BaseApiResult
+     * @Author luojiarui
+     * @Description 管理员批量删除， 注意删除用户的时候必须要删除其头像信息
+     * @Date 22:40 2023/1/12
+     * @Param [user, request]
+     **/
+    @ApiOperation(value = "根据id删除用户", notes = "根据id删除用户")
+    @Permission(value = PermissionEnum.ADMIN)
+    @DeleteMapping(value = "/auth/deleteByIDBatch")
+    public BaseApiResult deleteByIdBatch(@RequestBody BatchIdDTO batchIdDTO, HttpServletRequest request) {
         // 用户只能删除自己，不能删除其他人的信息
-        String userId = (String) request.getAttribute("id");
-        if (!userId.equals(user.getId())) {
-            return BaseApiResult.error(1201, MessageConstant.OPERATE_FAILED);
+        String adminUserId = (String) request.getAttribute(REQUEST_USER_ID);
+        List<String> userIdList = Optional.ofNullable(batchIdDTO.getIds()).orElse(new ArrayList<>());
+        if (userIdList.size() > ConfigConstant.MAX_DELETE_NUM) {
+            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
         }
-        DeleteResult remove = template.remove(user, COLLECTION_NAME);
-        if (remove.getDeletedCount() > 0) {
-            log.warn("[删除警告]正在删除用户：{}", user);
-            return BaseApiResult.success("删除成功");
-        } else {
-            return BaseApiResult.error(1201, MessageConstant.OPERATE_FAILED);
-        }
+        return userService.deleteUserByIdBatch(userIdList, adminUserId);
     }
 
 
@@ -135,21 +149,8 @@ public class UserController {
      * 模拟用户 登录
      */
     @PostMapping("/login")
-    public BaseApiResult login(@RequestBody User user) {
-        Query query = new Query(Criteria.where("username").is(user.getUsername()));
-        User dbUser = template.findOne(query, User.class, COLLECTION_NAME);
-        if (dbUser != null && dbUser.getUsername().equals(user.getUsername())
-                && dbUser.getPassword().equals(user.getPassword())) {
-            String token = JwtUtil.createToken(dbUser);
-            Map<String, String> result = new HashMap<>(8);
-            result.put("token", token);
-            result.put("userId", dbUser.getId());
-            result.put("avatar", dbUser.getAvatar());
-            result.put("username", dbUser.getUsername());
-            result.put("type", dbUser.getPermissionEnum() != null ? dbUser.getPermissionEnum().toString() : null);
-            return BaseApiResult.success(result);
-        }
-        return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
+    public BaseApiResult login(@RequestBody RegistryUserDTO user) {
+        return userService.login(user);
     }
 
     /**
@@ -159,13 +160,42 @@ public class UserController {
      * @Date 21:21 2023/1/10
      * @Param []
      **/
+    @Permission(PermissionEnum.ADMIN)
     @GetMapping("/allUsers")
     public BaseApiResult allUsers(@ModelAttribute("pageDTO") BasePageDTO pageDTO) {
         return userService.getUserList(pageDTO);
     }
 
+
+    @Permission(PermissionEnum.ADMIN)
+    @PutMapping("changeUserRole")
+    public BaseApiResult changeUserRole(@RequestBody UserRoleDTO userRoleDTO, HttpServletRequest request) {
+        String adminUserId = (String) request.getAttribute(REQUEST_USER_ID);
+        // 不能屏蔽自己的账号
+        if (userRoleDTO.getUserId().equals(adminUserId)) {
+            return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
+        }
+        return userService.changeUserRole(userRoleDTO);
+    }
+
+    /**
+     * @return com.jiaruiblog.util.BaseApiResult
+     * @Author luojiarui
+     * @Description 屏蔽用户，使用户不可登录；再次调用此接口则取消屏蔽
+     * @Date 20:30 2023/2/12
+     * @Param [userId]
+     **/
+    @Permission(PermissionEnum.ADMIN)
     @GetMapping("blockUser")
-    public BaseApiResult blockUser(@RequestParam("userId") String userId) {
+    public BaseApiResult blockUser(@RequestParam("userId") String userId, HttpServletRequest request) {
+        if (!StringUtils.hasText(userId)) {
+            return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, MessageConstant.PARAMS_IS_NOT_NULL);
+        }
+        String adminUserId = (String) request.getAttribute(REQUEST_USER_ID);
+        // 不能屏蔽自己的账号
+        if (userId.equals(adminUserId)) {
+            return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
+        }
         return userService.blockUser(userId);
     }
 

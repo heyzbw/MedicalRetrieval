@@ -3,6 +3,7 @@ package com.jiaruiblog.config;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.util.BaseApiResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.auth.AuthenticationException;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 /**
@@ -29,11 +31,11 @@ public class CommonExceptionHandler {
     public BaseApiResult handle(Exception e) {
         e.printStackTrace();
         if (e instanceof MaxUploadSizeExceededException) {
-            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, "上传的文件超过大小限制");
+            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.FILE_SIZE_ERROR);
         } else if (e instanceof HttpRequestMethodNotSupportedException) {
-            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, "请求方法不对！");
+            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.REQUEST_METHOD_ERROR);
         }else {
-            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, "操作失败");
+            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
         }
     }
 
@@ -44,9 +46,6 @@ public class CommonExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public BaseApiResult dealMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String defaultMessage = e.getBindingResult().getFieldError().getDefaultMessage();
-//        List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
-//        String message = allErrors.stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
-//                .collect(Collectors.joining(";"));
         return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, defaultMessage);
     }
 
@@ -60,10 +59,6 @@ public class CommonExceptionHandler {
     @ExceptionHandler(BindException.class)
     public BaseApiResult handleValidation(BindException e) {
         String defaultMessage = e.getFieldError().getDefaultMessage();
-//        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
-//        String messages = fieldErrors.stream()
-//                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-//                .collect(Collectors.joining(";"));
         return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, defaultMessage);
     }
 
@@ -73,9 +68,6 @@ public class CommonExceptionHandler {
     @ExceptionHandler(value = ConstraintViolationException.class)
     public BaseApiResult dealConstraintViolationException(ConstraintViolationException e) {
         String message = e.getMessage();
-//        Set<ConstraintViolation<?>> allErrors = e.getConstraintViolations();
-//        String message = allErrors.stream().map(ConstraintViolation::getMessage)
-//                .collect(Collectors.joining(";"));
         return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, message);
     }
 
@@ -103,6 +95,17 @@ public class CommonExceptionHandler {
         return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, message);
     }
 
+
+    /**
+     * @Author luojiarui
+     * @Description 管理员设置的禁止操作的错误
+     * @Date 21:18 2022/12/9
+     * @Param [e]
+     **/
+    @ExceptionHandler(AuthenticationException.class)
+    public void dealAuthenticationException(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    }
 
 }
 

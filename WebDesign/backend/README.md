@@ -1,29 +1,3 @@
-## 如何运行后端项目
-
-后端使用的依赖相对比较多：
-1. 打开**mongodb** ``mongod --dbpath D:\software\compiler\mongoDB\data``
-2. 打开redis(如果本地redis有密码一定要去yml中配置)
-3. 打开es相关的几个组件
-运行``elasticsearch\bin\elasticsearch.bat``
-在**elasticsearch-head-master**运行``npm run start``
-运行``kibana-7.6.1-windows-x86_64\bin\kibana.bat`` 
-4. 运行springboot项目
-5. es记得要先定义管道``pipeline``，指令如下，数据随便塞点
-```
-PUT _ingest/pipeline/attachment
-{
-  "description" : "describe pipeline",
-  "processors" : [
-    {
-      "set" : {
-        "field": "foo",
-        "value": "bar"
-      }
-    }
-  ]
-}
-```
-
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
@@ -126,11 +100,18 @@ https://github.com/Jarrettluo/all-documents-vue.git
 https://github.com/Jarrettluo/document-sharing-site.git
 </a>
 
-选择MongdoDB作为主要的数据库，存储文档和文件。
+选择MongoDB作为主要的数据库，存储文档和文件。
 
 后端技术：SpringBoot + MongoDB + ES
 
 前端技术：Vue + axios
+
+### 项目部署
+
+- [全文档在Windows环境下部署](https://github.com/Jarrettluo/document-sharing-site/blob/main/deploy/depoly_win_zh.md)
+- [全文档在Linux环境下部署--待补充](https://github.com/Jarrettluo/document-sharing-site/blob/main/deploy/deploy_linux_zh.md)
+- [全文档使用Docker部署--待补充](https://github.com/Jarrettluo/document-sharing-site/blob/main/deploy/deploy_docker_zh.md)
+- [全文档使用Docker-Compose部署--待补充](https://github.com/Jarrettluo/document-sharing-site/blob/main/deploy/deploy_docker_compose_zh.md)
 
 <!-- ROADMAP -->
 ## 路线图
@@ -146,7 +127,7 @@ https://github.com/Jarrettluo/document-sharing-site.git
 
 加入微信群，一起玩😄
 
-<img src="https://github.com/Jarrettluo/document-sharing-site/blob/main/images/imGroup.jpeg" alt="imGroup" width="200">
+<img src="https://github.com/Jarrettluo/document-sharing-site/blob/main/images/WechatGroup.jpeg" alt="imGroup" width="200">
 
 
 1. `Fork` 该项目

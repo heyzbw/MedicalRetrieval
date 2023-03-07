@@ -1,11 +1,8 @@
 package com.jiaruiblog.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,9 +15,9 @@ import java.io.IOException;
  * @Date 2022/8/4 10:43 下午
  * @Version 1.0
  **/
-@WebFilter(filterName = "CORSFilter", urlPatterns = {"/*"})
-@Order(value = 1)
-@Configuration
+//@WebFilter(filterName = "CORSFilter", urlPatterns = {"/*"})
+//@Order(value = 1)
+//@Configuration
 @Slf4j
 public class CorsFilter implements Filter {
 
@@ -35,7 +32,7 @@ public class CorsFilter implements Filter {
      * @throws ServletException
      */
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain){
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;

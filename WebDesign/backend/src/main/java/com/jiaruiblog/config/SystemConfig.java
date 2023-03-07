@@ -24,4 +24,11 @@ public class SystemConfig {
 
     private Boolean userRegistry;
 
+    private String initialUsername;
+
+    private String initialPassword;
+
+    private Boolean coverAdmin;
+
+
 }

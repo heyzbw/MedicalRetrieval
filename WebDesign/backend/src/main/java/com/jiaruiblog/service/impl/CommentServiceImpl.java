@@ -11,6 +11,7 @@ import com.jiaruiblog.entity.vo.CommentWithUserVO;
 import com.jiaruiblog.intercepter.SensitiveFilter;
 import com.jiaruiblog.service.ICommentService;
 import com.jiaruiblog.util.BaseApiResult;
+import com.mongodb.client.result.DeleteResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.BeanUtils;
@@ -47,6 +48,8 @@ public class CommentServiceImpl implements ICommentService {
     private static final String COLLECTION_NAME = "commentCollection";
 
     private static final String DOC_ID = "docId";
+
+    private static final String OBJECT_ID = "_id";
 
     @Autowired
     MongoTemplate template;
@@ -103,13 +106,30 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public BaseApiResult remove(Comment comment, String userId) {
-        Query query = new Query(Criteria.where("_id").is(comment.getId()));
+        Query query = new Query(Criteria.where(OBJECT_ID).is(comment.getId()));
         Comment commentDb = Optional.ofNullable(template.findById(comment.getId(), Comment.class, COLLECTION_NAME))
                 .orElse(new Comment());
         if( !commentDb.getUserId().equals(comment.getUserId())) {
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
         }
         template.remove(query, Comment.class, COLLECTION_NAME);
+        return BaseApiResult.success(MessageConstant.SUCCESS);
+    }
+
+    /**
+     * @Author luojiarui
+     * @Description 删除批量的评论列表
+     * @Date 20:51 2023/2/12
+     * @Param [commentIdList]
+     * @return com.jiaruiblog.util.BaseApiResult
+     **/
+    @Override
+    public BaseApiResult removeBatch(List<String> commentIdList) {
+        Query query = new Query(Criteria.where(OBJECT_ID).in(commentIdList));
+        DeleteResult remove = template.remove(query, Comment.class, COLLECTION_NAME);
+        if (remove.getDeletedCount() < commentIdList.size()) {
+            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
+        }
         return BaseApiResult.success(MessageConstant.SUCCESS);
     }
 
@@ -209,9 +229,13 @@ public class CommentServiceImpl implements ICommentService {
      * @return com.jiaruiblog.util.BaseApiResult
      **/
     @Override
-    public BaseApiResult queryAllComments(BasePageDTO page, String userId) {
+    public BaseApiResult queryAllComments(BasePageDTO page, String userId, Boolean isAdmin) {
 
         log.info("查询的参数是：{}, {}", page, userId);
+        Criteria criteria = new Criteria();
+        if (!isAdmin) {
+            criteria = Criteria.where("userId").is(userId);
+        }
 
         // 通过query进行查找
         Aggregation countAggregation = Aggregation.newAggregation(
@@ -221,7 +245,7 @@ public class CommentServiceImpl implements ICommentService {
                         .as("id")
                         .and(ConvertOperators.Convert.convertValue("$docId").to("objectId")).as("docId")
                 ,//新字段名称,
-                Aggregation.match(Criteria.where("userId").is(userId))
+                Aggregation.match(criteria)
         );
 
         Aggregation aggregation = Aggregation.newAggregation(
@@ -233,10 +257,11 @@ public class CommentServiceImpl implements ICommentService {
                 ,//新字段名称,
 
                 Aggregation.lookup(FileServiceImpl.COLLECTION_NAME, "docId", "_id", "abc"),
-                Aggregation.match(Criteria.where("userId").is(userId)),
+                Aggregation.sort(Sort.Direction.DESC, "createDate"),
+                Aggregation.match(criteria),
                 Aggregation.skip((long) (page.getPage()-1) * page.getRows()),
-                Aggregation.limit(page.getRows()),
-                Aggregation.sort(Sort.Direction.DESC, "createDate")
+                Aggregation.limit(page.getRows())
+
         );
 
         AggregationResults<CommentWithUserDTO> aggregate = template.aggregate(aggregation,

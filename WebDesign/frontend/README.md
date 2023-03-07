@@ -3,23 +3,11 @@
 2. 运行serve ``npm run serve``
 > 如何在install时出错，大概率是前端npm里面的各种版本问题
 
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
--->
+> 注意版本nodejs的版本，前端会有很多问题，不推荐使用最新的版本，我使用的是``nodejs-v12.13.0``与``npm-v6.12.0``,能跑
 
+如果在安装时出现node-sass版本问题的话，可以试试这个指令：(就是换个源，这玩意就是一个坑没办法)  `npm config set sass_binary_site=https://npm.taobao.org/mirrors/node-sass`
+**再遇到问题就上网找吧，你绝对不是那个最倒霉的那个，肯定有人遇到和你一样的错误。**
 
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]

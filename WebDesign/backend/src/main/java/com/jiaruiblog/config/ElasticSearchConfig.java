@@ -25,11 +25,12 @@ public class ElasticSearchConfig {
 
     @Bean
     public RestHighLevelClient restClient() {
-        System.out.println("创建ElasticSearchConfig");
         return new RestHighLevelClient(
                 RestClient.builder(
                         new HttpHost(esHost, esPort)
                 )
         );
     }
+    // 在业务启动的时候进行初始化
+    // https://blog.csdn.net/wdz985721191/article/details/122866091
 }

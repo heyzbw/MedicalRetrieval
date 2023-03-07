@@ -1,11 +1,12 @@
 package com.jiaruiblog.service;
 
-import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.FileDocument;
+import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
 import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.BaseApiResult;
+import org.apache.http.auth.AuthenticationException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
@@ -30,21 +31,24 @@ public interface IFileService {
      */
     FileDocument saveFile(String md5, MultipartFile file);
 
+
+    BaseApiResult documentUpload(MultipartFile file, String userId, String username) throws AuthenticationException;
+
     /**
      * 保存文件 - js文件流
      *
-     * @param fileDocument
-     * @param inputStream
-     * @return
+     * @param fileDocument FileDocument
+     * @param inputStream InputStream
+     * @return FileDocument
      */
     FileDocument saveFile(FileDocument fileDocument, InputStream inputStream);
 
     /**
+     * update file
      * @Author luojiarui
      * @Description 重建索引和缩略图的时候专用的
      * @Date 18:05 2022/11/13
-     * @Param [fileDocument]
-     * @return void
+     * @Param fileDocument FileDocument
      **/
     void updateFile(FileDocument fileDocument);
 
@@ -82,6 +86,14 @@ public interface IFileService {
      * @return
      */
     Optional<FileDocument> getById(String id);
+
+    /**
+     * 根据id获取文件
+     *
+     * @param id
+     * @return
+     */
+    Optional<FileDocument> getPreviewById(String id);
 
     /**
      * 根据md5获取文件对象

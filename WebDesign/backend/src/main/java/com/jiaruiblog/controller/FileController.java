@@ -13,6 +13,7 @@ import com.jiaruiblog.service.TaskExecuteService;
 import com.jiaruiblog.util.BaseApiResult;
 import com.jiaruiblog.util.FileContentTypeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.auth.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -83,6 +84,28 @@ public class FileController {
     }
 
     /**
+     * 在线显示文件
+     *
+     * @param id 文件id
+     * @return
+     */
+    @GetMapping("/view2/{id}")
+    public ResponseEntity<Object> previewFileOnline(@PathVariable String id) throws UnsupportedEncodingException {
+        Optional<FileDocument> file = fileService.getPreviewById(id);
+        if (file.isPresent()) {
+            return ResponseEntity.ok()
+                    // 这里需要进行中文编码
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "fileName=" + URLEncoder.encode(file.get().getName(), "utf-8") + ".pdf")
+                    .header(HttpHeaders.CONTENT_TYPE, FileContentTypeUtils.getContentType("pdf"))
+                    .header(HttpHeaders.CONTENT_LENGTH, file.get().getSize() + "").header("Connection", "close")
+                    .header(HttpHeaders.CONTENT_LENGTH, file.get().getSize() + "")
+                    .body(file.get().getContent());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageConstant.FILE_NOT_FOUND);
+        }
+    }
+
+    /**
      * 下载附件
      *
      * @param id
@@ -115,7 +138,6 @@ public class FileController {
     @Deprecated
     @PostMapping("/upload/{md5}/{ext}")
     public ResponseModel jsUpload(@PathVariable String md5, @PathVariable String ext, HttpServletRequest request, @RequestBody byte[] data) {
-        System.out.println("md5:"+md5+" ext:"+ext);
         ResponseModel model = ResponseModel.getInstance();
         if (StrUtil.isEmpty(md5)) {
             model.setMessage("请传入文件的md5值");
@@ -159,12 +181,15 @@ public class FileController {
      * 表单上传文件
      * 当数据库中存在该md5值时，可以实现秒传功能
      *
+     * 由于增加了用户登录后上传的验证，因此该方法废弃
+     * 最新的上传方式使用：documentUpload
+     *
      * @param file 文件
      * @return
      */
+    @Deprecated
     @PostMapping("/upload")
     public ResponseModel formUpload(@RequestParam("file") MultipartFile file) throws IOException {
-        System.out.println("file"+file);
         List<String> availableSuffixList = Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
         ResponseModel model = ResponseModel.getInstance();
         try {
@@ -206,6 +231,22 @@ public class FileController {
         }
         return model;
     }
+
+    /**
+     * 表单上传文件
+     * 当数据库中存在该md5值时，可以实现秒传功能
+     *
+     * @param file 文件
+     * @return
+     */
+    @PostMapping("auth/upload")
+    public BaseApiResult documentUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request)
+            throws AuthenticationException {
+        String username = (String) request.getAttribute("username");
+        String userId = (String) request.getAttribute("id");
+        return fileService.documentUpload(file, userId, username);
+    }
+
 
 
     /**

@@ -1,9 +1,11 @@
 package com.jiaruiblog.service;
 
-import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.Comment;
+import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.CommentListDTO;
 import com.jiaruiblog.util.BaseApiResult;
+
+import java.util.List;
 
 /**
  * @author jiarui.luo
@@ -33,6 +35,15 @@ public interface ICommentService {
     BaseApiResult remove(Comment comment, String userId);
 
     /**
+     * @Author luojiarui
+     * @Description 批量删除评论列表
+     * @Date 20:49 2023/2/12
+     * @Param [commentIdList]
+     * @return com.jiaruiblog.util.BaseApiResult
+     **/
+    BaseApiResult removeBatch(List<String> commentIdList);
+
+    /**
      * queryById
      * @param comment CommentListDTO
      * @return result
@@ -53,6 +64,6 @@ public interface ICommentService {
      * @Param [pageDTO, userId]
      * @return com.jiaruiblog.util.BaseApiResult
      **/
-    BaseApiResult queryAllComments(BasePageDTO pageDTO, String userId);
+    BaseApiResult queryAllComments(BasePageDTO pageDTO, String userId, Boolean isAdmin);
 
 }

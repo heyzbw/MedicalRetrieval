@@ -25,7 +25,7 @@ import java.util.Map;
 @Slf4j
 @WebFilter(filterName = "JwtFilter", urlPatterns = {
         "/comment/auth/*", "/user/auth/*", "/collect/auth/*", "/document/auth/*",
-        "/docReview/*", "/docLog/*", "/like/*"
+        "/docReview/*", "/docLog/*", "/like/*", "/files/auth/*"
 })
 public class JwtFilter implements Filter
 {
@@ -60,7 +60,6 @@ public class JwtFilter implements Filter
         }
         // Except OPTIONS, other request should be checked by JWT
         else {
-
             if (token == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;

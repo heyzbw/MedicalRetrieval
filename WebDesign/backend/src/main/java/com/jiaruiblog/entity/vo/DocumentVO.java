@@ -42,6 +42,8 @@ public class DocumentVO {
 
     private String txtId;
 
+    private String previewFileId;
+
     private Date createTime;
 
 }

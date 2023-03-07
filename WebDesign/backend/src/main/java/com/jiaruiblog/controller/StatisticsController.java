@@ -5,6 +5,7 @@ import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.Tag;
 import com.jiaruiblog.entity.TagDocRelationship;
+import com.jiaruiblog.entity.dto.SearchKeyDTO;
 import com.jiaruiblog.entity.vo.DocumentVO;
 import com.jiaruiblog.service.IFileService;
 import com.jiaruiblog.service.RedisService;
@@ -18,11 +19,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,17 +78,27 @@ public class StatisticsController {
      * @Param []
      **/
     @GetMapping("getSearchResult")
-    public BaseApiResult getSearchResult(HttpServletRequest request) {
-        String userId = (String) request.getAttribute("id");
+    public BaseApiResult getSearchResult(@RequestHeader HttpHeaders headers) {
         List<String> userSearchList = Lists.newArrayList();
-        if (StringUtils.hasText(userId)) {
-            userSearchList = redisService.getSearchHistoryByUserId("");
+        List<String> stringList = headers.get("id");
+        if (!CollectionUtils.isEmpty(stringList)) {
+            String userId = stringList.get(0);
+            if (StringUtils.hasText(userId)) {
+                userSearchList = redisService.getSearchHistoryByUserId(userId);
+            }
         }
+
         List<String> hotSearchList = redisService.getHotList(null, RedisServiceImpl.SEARCH_KEY);
         Map<String, List<String>> result = Maps.newHashMap();
         result.put("userSearch", userSearchList);
         result.put("hotSearch", hotSearchList);
         return BaseApiResult.success(result);
+    }
+
+    @PutMapping(value = "removeKey")
+    public BaseApiResult removeKey(@RequestBody SearchKeyDTO searchKeyDTO) {
+        redisService.delSearchHistoryByUserId(searchKeyDTO.getUserId(), searchKeyDTO.getSearchWord());
+        return BaseApiResult.success();
     }
 
     /**

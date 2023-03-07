@@ -5,15 +5,22 @@ import com.google.common.collect.Sets;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
 import com.jiaruiblog.service.ElasticService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.lucene.search.function.CombineFunction;
+import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -23,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.*;
 
 /**
@@ -32,12 +40,15 @@ import java.util.*;
  * @Date 2022/7/12 10:54 下午
  * @Version 1.0
  **/
+@Slf4j
 @Service
 public class ElasticServiceImpl implements ElasticService {
 
     private static final String INDEX_NAME = "docwrite";
+//    private static final String INDEX_NAME = "docwrite_new";
 
     private static final String PIPELINE_NAME = "attachment.content";
+
 
     @Autowired
     private RestHighLevelClient client;
@@ -54,10 +65,11 @@ public class ElasticServiceImpl implements ElasticService {
      */
     public void upload(FileObj file) throws IOException {
         IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
+
         //上传同时，使用attachment pipeline 进行提取文件
+        System.out.println("content:"+JSON.toJSONString(file));
         indexRequest.source(JSON.toJSONString(file), XContentType.JSON);
         indexRequest.setPipeline("attachment");
-
         client.index(indexRequest, RequestOptions.DEFAULT);
     }
 
@@ -81,6 +93,7 @@ public class ElasticServiceImpl implements ElasticService {
         SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
         // 使用lk分词器查询，会把插入的字段分词，然后进行处理
         SearchSourceBuilder srb = new SearchSourceBuilder();
+
         srb.query(QueryBuilders.matchQuery(PIPELINE_NAME, keyword));
 
         // 每页10个数据
@@ -104,13 +117,20 @@ public class ElasticServiceImpl implements ElasticService {
         //把刚才设置的值导入进去
         srb.highlighter(highlightBuilder);
         searchRequest.source(srb);
-        SearchResponse res = client.search(searchRequest, RequestOptions.DEFAULT);
+        SearchResponse res;
+        try {
+            res = client.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (ConnectException e) {
+            log.error("连接es失败！", e.getCause());
+            res = null;
+        }
 
         if (res == null || res.getHits() == null) {
             return Lists.newArrayList();
         }
         //获取hits，这样就可以获取查询到的记录了
         SearchHits hits = res.getHits();
+        System.out.println("ES一共查询到了"+hits.getTotalHits().value+"条文档");
 
         //hits是一个迭代器，所以需要迭代返回每一个hits
         Iterator<SearchHit> iterator = hits.iterator();
@@ -122,7 +142,7 @@ public class ElasticServiceImpl implements ElasticService {
 
         while (iterator.hasNext()) {
             SearchHit hit = iterator.next();
-
+            System.out.println("SearcgHit hit score:"+hit.getScore());
             //获取返回的字段
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
 
@@ -163,6 +183,5 @@ public class ElasticServiceImpl implements ElasticService {
         stringBuilder.append("查询到").append(count).append("条记录");
         return fileDocumentList;
     }
-
 
 }
