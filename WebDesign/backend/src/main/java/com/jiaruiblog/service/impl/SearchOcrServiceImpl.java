@@ -1,5 +1,6 @@
 package com.jiaruiblog.service.impl;
 
+import com.jiaruiblog.entity.OcrPosition;
 import com.jiaruiblog.entity.OcrResult;
 import com.jiaruiblog.service.SearchOcrService;
 import com.jiaruiblog.util.BaseApiResult;
@@ -32,14 +33,15 @@ public class SearchOcrServiceImpl implements SearchOcrService {
         Query query = new Query();
         query.addCriteria(Criteria.where("ocrText").regex(Pattern.compile(keyword)));
         List<OcrResult> ocrResults = mongoTemplate.find(query, OcrResult.class,"Ocr_result");
+//        System.out.println("ocrResults"+ocrResults);
         for(int i=0;i<ocrResults.size();i++)
         {
-            System.out.println("这是要给for循环");
+//            OcrPosition ocrPosition = ocrResults.get(i);
             byte[] imageBytes = Base64.getDecoder().decode(ocrResults.get(i).getImage());
-            FileOutputStream fos = new FileOutputStream("D:/test/image"+i+".png");
-            fos.write(imageBytes);
-            fos.close();
+//            FileOutputStream fos = new FileOutputStream("D:/test/image"+i+".png");
+//            fos.write(imageBytes);
+//            fos.close();
         }
-      return null;
+        return BaseApiResult.success(ocrResults.get(0));
     }
 }

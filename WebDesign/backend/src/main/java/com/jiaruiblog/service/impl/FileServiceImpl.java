@@ -14,8 +14,10 @@ import com.jiaruiblog.entity.vo.DocumentVO;
 import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.service.IFileService;
 import com.jiaruiblog.service.RedisService;
+import com.jiaruiblog.service.SearchOcrService;
 import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.BaseApiResult;
+import com.jiaruiblog.util.CallFlask;
 import com.jiaruiblog.util.PdfUtil;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
@@ -93,6 +95,11 @@ public class FileServiceImpl implements IFileService {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private SearchOcrService searchOcrService;
+
+    private CallFlask callFlask = new CallFlask();
 
 
     /**
@@ -198,12 +205,15 @@ public class FileServiceImpl implements IFileService {
             String gridfsId = uploadFileToGridFs(file.getInputStream(), file.getContentType());
             fileDocument.setGridfsId(gridfsId);
             fileDocument = mongoTemplate.save(fileDocument, COLLECTION_NAME);
+
+//            callFlask.doUpload(fileDocument.getMd5());
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         // 异步保存数据标签
         tagServiceImpl.saveTagWhenSaveDoc(fileDocument);
-
+        callFlask.doUpload(fileDocument.getMd5());
         return fileDocument;
     }
 
