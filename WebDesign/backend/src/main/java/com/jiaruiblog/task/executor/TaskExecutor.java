@@ -79,7 +79,11 @@ public abstract class TaskExecutor {
             fileObj.setName(fileDocument.getName());
             fileObj.setType(fileDocument.getContentType());
             fileObj.readFile(textFilePath);
-            System.out.println("fileObj:"+fileObj.getType()+"fileObj_content:"+fileObj.getContent());
+
+//            自己加上去的字段
+            fileObj.setClick_rate(100);
+            fileObj.setLike_num(1000);
+//            System.out.println("fileObj:"+fileObj.getType()+"fileObj_content:"+fileObj.getContent());
             this.upload(fileObj);
 
         } catch (IOException | TaskRunException e) {

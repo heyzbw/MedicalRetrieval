@@ -46,11 +46,18 @@ public class FileObj {
     /**
      * 文件转化成base64编码后所有的内容。
      */
-//    @Field(type = FieldType.Text, analyzer="ik_smart")
-//    private String content;
+
 
     @Field(type = FieldType.Keyword, analyzer="ik_smart")
     private String content;
+
+    @Field(type = FieldType.Integer)
+    private int click_rate;
+
+    @Field(type = FieldType.Integer)
+    private int like_num;
+
+
 
 
     public void readFile(String path){

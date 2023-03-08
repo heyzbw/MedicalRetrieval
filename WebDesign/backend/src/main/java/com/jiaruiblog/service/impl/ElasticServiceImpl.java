@@ -21,6 +21,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
+import org.elasticsearch.index.query.functionscore.ScriptScoreFunctionBuilder;
+import org.elasticsearch.script.Script;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -45,10 +47,14 @@ import java.util.*;
 public class ElasticServiceImpl implements ElasticService {
 
     private static final String INDEX_NAME = "docwrite";
-//    private static final String INDEX_NAME = "docwrite_new";
 
     private static final String PIPELINE_NAME = "attachment.content";
 
+//    点击率字段
+    private static final String CLICK_RATE = "click_rate";
+
+//    点赞量字段
+    private static final String LIKE_NUM = "like_num";
 
     @Autowired
     private RestHighLevelClient client;
@@ -65,13 +71,13 @@ public class ElasticServiceImpl implements ElasticService {
      */
     public void upload(FileObj file) throws IOException {
         IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
-
         //上传同时，使用attachment pipeline 进行提取文件
-        System.out.println("content:"+JSON.toJSONString(file));
         indexRequest.source(JSON.toJSONString(file), XContentType.JSON);
         indexRequest.setPipeline("attachment");
         client.index(indexRequest, RequestOptions.DEFAULT);
     }
+
+//    public
 
 
     /**
@@ -95,6 +101,24 @@ public class ElasticServiceImpl implements ElasticService {
         SearchSourceBuilder srb = new SearchSourceBuilder();
 
         srb.query(QueryBuilders.matchQuery(PIPELINE_NAME, keyword));
+
+//        自定义得分函数，其中内容相关的的得分为60%，点击率的得分为30%，点赞量的得分为10%
+        ScriptScoreFunctionBuilder scriptScoreFunctionBuilder = new ScriptScoreFunctionBuilder(new Script(
+                "double contentScore = _score * 0.6; " +
+                        "long clicks = doc['"+CLICK_RATE+"'].value; " +
+                        "long likes = doc['"+LIKE_NUM+"'].value; " +
+                        "double clickScore = Math.log1p(clicks) * 0.3; double likeScore = Math.log1p(likes) * 0.1; " +
+                        "return contentScore + clickScore + likeScore;")
+        );
+
+        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(
+                srb.query(), scriptScoreFunctionBuilder
+        );
+
+        functionScoreQueryBuilder.boostMode(CombineFunction.SUM);
+//        functionScoreQueryBuilder.boostMode(CombineFunction.valueOf("sum"));
+        srb.query(functionScoreQueryBuilder);
+
 
         // 每页10个数据
         srb.size(10);
@@ -142,7 +166,7 @@ public class ElasticServiceImpl implements ElasticService {
 
         while (iterator.hasNext()) {
             SearchHit hit = iterator.next();
-            System.out.println("SearcgHit hit score:"+hit.getScore());
+            System.out.println("Search Hit hit score:"+hit.getScore());
             //获取返回的字段
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
 
