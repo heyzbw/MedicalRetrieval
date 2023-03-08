@@ -1,14 +1,9 @@
 <template>
   <div id="app">
 <!--    <div id="nav">-->
-<!--      <router-link to="/">Home</router-link> |-->
-<!--      <router-link to="/about">About</router-link>-->
-<!--    </div>-->
-      <div class="information" style="">
-          如果您喜欢这个项目， 拜托给
-          <a href="https://github.com/Jarrettluo/document-sharing-site">https://github.com/Jarrettluo/document-sharing-site</a>
-          点亮star
-      </div>
+      <!--      <router-link to="/">Home</router-link> |-->
+      <!--      <router-link to="/about">About</router-link>-->
+      <!--    </div>-->
     <router-view/>
   </div>
 </template>

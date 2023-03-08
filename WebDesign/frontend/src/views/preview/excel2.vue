@@ -6,14 +6,14 @@
             </div>
             <div style='font-size:16px'>加载中...</div>
         </div>
-        <div v-show="!view_flag">
-            <vue-office-excel :src="excel" @rendered="rendered"/>
+        <div v-show="!view_flag" style="height: 976px; background-color: #fff">
+            <vue-office-excel :src="excel" @rendered="rendered" style="height: 100%"/>
         </div>
     </div>
 </template>
 
 <script>
-
+import { BackendUrl } from '@/api/request'
 //引入VueOfficeExcel组件
 import VueOfficeExcel from '@vue-office/excel'
 //引入相关样式
@@ -38,7 +38,7 @@ export default {
     methods: {
         before() {
             let docId = this.$route.query.docId;
-            this.excel = 'http://81.69.247.172:8082/files/view/' + docId;
+            this.excel =  BackendUrl() + '/files/view/' + docId;
 
         },
         rendered(){
@@ -52,7 +52,8 @@ export default {
 .word-wrap {
     padding: 0;
     margin: -10px 0;
-
+    height: 100vh;
+    overflow: hidden;
     img {
         width: 100%;
     }

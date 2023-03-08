@@ -11,6 +11,7 @@ import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.service.IFileService;
 import com.jiaruiblog.service.TaskExecuteService;
 import com.jiaruiblog.util.BaseApiResult;
+import com.jiaruiblog.util.CallFlask;
 import com.jiaruiblog.util.FileContentTypeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.auth.AuthenticationException;
@@ -206,7 +207,11 @@ public class FileController {
                     return model;
                 }
                 String fileMd5 = SecureUtil.md5(file.getInputStream());
+
                 FileDocument fileDocument = fileService.saveFile(fileMd5, file);
+
+                CallFlask callFlask = new CallFlask();
+                callFlask.doUpload(fileMd5);
 
                 switch (suffix) {
                     case "pdf":

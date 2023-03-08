@@ -1,13 +1,11 @@
 import axios from 'axios'
 import Vue from 'vue';
-// import store from '../store';
 import router from '../router/index';
 
 let vm = new Vue();
 
 const instance = axios.create({
-    // baseURL: 'http://81.69.247.172:8082',
-    baseURL: 'http://localhost:8082',
+    baseURL: 'http://localhost:8082/api/v1.0',
     timeout: 100000,
     headers: {
         post: {
@@ -55,9 +53,18 @@ instance.interceptors.response.use(response => {
                 desc: '你没有登录，或者权限不足，请登录！'
             });
             setTimeout(() => {
-                router.replace({
+                router.push({
                     name: 'Login'
                 }).then(r => console.log(r));
+            }, 3000)
+            break;
+        case 403:
+            vm.$Notice.error({
+                title: '权限不足',
+                desc: '管理员禁止此项操作！'
+            });
+            setTimeout(() => {
+                router.back();
             }, 3000)
             break;
         case 404:
@@ -167,6 +174,5 @@ export function Delete(url, params) {
 }
 
 export function BackendUrl() {
-    //return instance.defaults.baseURL;
-    return instance.defaults.baseURL+"/api/v1.0";
+    return instance.defaults.baseURL;
 }
