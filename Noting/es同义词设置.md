@@ -118,13 +118,13 @@ GET /synonym_test/_search
 
 在syn和no_syn两个字段进行查找，设置权重，最终得到两个字段的综合得分如下，deep的得分最高排在前面，成功解决同义词得分高于原词的问题：
 
-![image-20230309143630289](C:/Users/hw/AppData/Roaming/Typora/typora-user-images/image-20230309143630289.png)
+![image-20230309143630289](image/image-20230309143630289.png)
 
 
 
 ##### 应用于我们的项目思路
 
-![image-20230309144850551](C:/Users/hw/AppData/Roaming/Typora/typora-user-images/image-20230309144850551.png)
+![image-20230309144850551](image/image-20230309144850551.png)
 
 * 我们的项目只将文本存入一个attachment.content字段中，按照上述方法需要再定义一个字段，将文本上传到两个字段中保存；并且按照上面的方法对两个子段设置不同的analyzer，即将第一步的mapping中的syn和no_syn改成我们存储文本的字段，这一步在kibana中配置就行了
 
