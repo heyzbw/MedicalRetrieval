@@ -4,7 +4,7 @@
 
 - 运行 `npm run build` 构建 `build/dev`, `build/web` 和 `build/zotero`
 
-- 运行 `npm start` 可在 http://localhost:3000/dev/viewer.html查看
+- 运行 `npm start` 可在 http://localhost:3000/dev/viewer.html 查看
 
 
 > 若出现`'sh' 不是内部或外部命令，也不是可运行的程序或批处理文件的问题`，
