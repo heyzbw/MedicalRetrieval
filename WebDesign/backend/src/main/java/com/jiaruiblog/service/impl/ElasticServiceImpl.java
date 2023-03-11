@@ -5,19 +5,26 @@ import com.google.common.collect.Sets;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
 import com.jiaruiblog.service.ElasticService;
+import com.jiaruiblog.util.FieldChoice;
+import com.jiaruiblog.util.NumberOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
@@ -26,14 +33,30 @@ import org.elasticsearch.script.Script;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.elasticsearch.common.xcontent.XContentFactory;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.*;
+
+import org.apache.http.HttpHost;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.QueryBuilders;
+
+import javax.naming.directory.SearchResult;
 
 /**
  * @ClassName ElasticServiceImpl
@@ -207,5 +230,116 @@ public class ElasticServiceImpl implements ElasticService {
         stringBuilder.append("查询到").append(count).append("条记录");
         return fileDocumentList;
     }
+    public boolean NumberOperation(String fileId, String operation, String field) throws IOException {
+
+        int increment = 0;
+        if(operation.equals("ADD")) {
+            increment = 1;
+        }
+        else if (operation.equals("MINI")) {
+            increment = -1;
+        }
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termQuery("fileId", fileId));
+        searchRequest.source(searchSourceBuilder);
+
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        SearchHits searchHits = searchResponse.getHits();
+        if (searchHits.getTotalHits().value > 0) {
+            SearchHit hit = searchHits.getAt(0);
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            int Num = (int) sourceAsMap.get(field);
+            Num += increment;
+
+            UpdateRequest updateRequest = new UpdateRequest("docwrite", hit.getId());
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put(field, Num);
+            updateRequest.doc(jsonMap);
+
+            UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
+            System.out.println(updateResponse.getResult().toString());
+        }
+        else {
+            System.out.println("No documents found for fileId " + fileId);
+        }
+
+
+        return false;
+    }
+    @Override
+    public boolean RemoveCollect(String fileId) throws IOException {
+
+        int increment = 1;
+
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termQuery("fileId", fileId));
+        searchRequest.source(searchSourceBuilder);
+
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        SearchHits searchHits = searchResponse.getHits();
+        if (searchHits.getTotalHits().value > 0) {
+            SearchHit hit = searchHits.getAt(0);
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            int collectNum = (int) sourceAsMap.get("collect_num");
+            collectNum += increment;
+
+            UpdateRequest updateRequest = new UpdateRequest("docwrite", hit.getId());
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("collect_num", collectNum);
+            updateRequest.doc(jsonMap);
+
+            UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
+            System.out.println(updateResponse.getResult().toString());
+        }
+        else {
+            System.out.println("No documents found for fileId " + fileId);
+        }
+//        // 按照fileId查询文档
+//        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+//        searchSourceBuilder.query(QueryBuilders.termQuery("fileId", fileId));
+//        searchSourceBuilder.from(0);
+//        searchSourceBuilder.size(1);
+//        searchSourceBuilder.sort("collect_num", SortOrder.DESC);
+//        searchSourceBuilder.fetchSource(new FetchSourceContext(true, new String[]{"collect_num"}, null));
+//        String index = "docwrite";
+//        String type = "_doc";
+//        String id = null;
+//        int num ;
+//
+//        try {
+//            // 执行查询操作
+//            SearchResponse result = client.search(new SearchRequest(index).types(type).source(searchSourceBuilder),RequestOptions.DEFAULT);
+//
+//            // 获取查询结果中的文档ID
+//            if (result.getHits().getHits().length > 0) {
+//                id = result.getHits().getHits()[0].getId();
+//                System.out.println("查出来的id:"+id);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (id != null) {
+//            // 构建更新请求
+//            UpdateRequest updateRequest = new UpdateRequest(index, type, id);
+//            String jsonString = "{\"doc\":{\"collect_num\":3}}";
+//            updateRequest.doc(jsonString, XContentType.JSON);
+//
+//            // 执行更新请求
+//            client.update(updateRequest,RequestOptions.DEFAULT);
+//        }
+
+
+        return false;
+    }
+
+    @Override
+    public boolean addCollect(String docId) {
+        return false;
+    }
 
 }
+
+

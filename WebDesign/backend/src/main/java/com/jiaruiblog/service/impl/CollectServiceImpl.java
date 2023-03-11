@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ import java.util.Optional;
 public class CollectServiceImpl implements CollectService {
 
     private static final String COLLECTION_NAME = "collectCollection";
+    private static final String ES_LIKE_NUM = "like_num";
+    private static final String ES_CILCK_RATE = "click_rate";
+    private static final String ES_COLLECT_NUM = "collect_num";
 
     private static final String DOC_ID = "docId";
 
@@ -36,6 +40,9 @@ public class CollectServiceImpl implements CollectService {
     @Autowired
     FileServiceImpl fileServiceImpl;
 
+    @Autowired
+    ElasticServiceImpl elasticServiceImpl;
+
     /**
      * @return com.jiaruiblog.utils.ApiResult
      * @Author luojiarui
@@ -44,18 +51,25 @@ public class CollectServiceImpl implements CollectService {
      * @Param [collect]
      **/
     @Override
-    public BaseApiResult insert(CollectDocRelationship collect) {
+    public BaseApiResult insert(CollectDocRelationship collect) throws IOException {
         // 必须经过userId和docId的校验，否则不予关注
         if (!userServiceImpl.isExist(collect.getUserId()) || !fileServiceImpl.isExist(collect.getDocId())) {
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
         }
-
+//        如果存在，则取消收藏
         CollectDocRelationship collectDb = getExistRelationship(collect);
         if (collectDb != null) {
-            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
+            //        更新ES库中的文档
+            boolean res = elasticServiceImpl.NumberOperation(collect.getDocId(),"MINI",ES_COLLECT_NUM);
+//            elasticServiceImpl.RemoveCollect(collect.getDocId());
+            return remove(collect);
+//            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
         }
+//        更新ES库中的文档
+        boolean res = elasticServiceImpl.NumberOperation(collect.getDocId(),"ADD",ES_COLLECT_NUM);
+//        如果不存在，则进行收藏
         mongoTemplate.save(collect, COLLECTION_NAME);
-        return BaseApiResult.success(MessageConstant.SUCCESS);
+        return BaseApiResult.success(MessageConstant.SUCCESS_ADD_COLLECT);
     }
 
     /**
@@ -72,7 +86,7 @@ public class CollectServiceImpl implements CollectService {
             mongoTemplate.remove(collect, COLLECTION_NAME);
             collect = getExistRelationship(collect);
         }
-        return BaseApiResult.success(MessageConstant.SUCCESS);
+        return BaseApiResult.success(MessageConstant.SUCCESS_REMOVE_COLLECT);
     }
 
     /**

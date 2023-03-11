@@ -10,11 +10,7 @@ import java.util.List;
  */
 public interface ElasticService {
 
-    /**
-     * search
-     * @param keyword String
-     * @return result
-     */
+
     /**
      * search
      * @param keyword String
@@ -22,5 +18,19 @@ public interface ElasticService {
      * @throws IOException
      */
     List<FileDocument> search(String keyword) throws IOException;
+
+    /**
+     * RemoveCollect
+     * @param docId String
+     * @return boolean
+     */
+    public boolean RemoveCollect(String docId) throws IOException;
+
+    /**
+     * addCollect
+     * @param docId String
+     * @return boolean
+     */
+    public boolean addCollect(String docId);
 
 }

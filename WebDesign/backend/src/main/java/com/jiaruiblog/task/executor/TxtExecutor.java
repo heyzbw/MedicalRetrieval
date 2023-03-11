@@ -36,7 +36,7 @@ public class TxtExecutor extends TaskExecutor{
     public void uploadFileToEs(InputStream is, FileDocument fileDocument, TaskData taskData) {
         try {
             FileObj fileObj = new FileObj();
-            fileObj.setId(fileDocument.getMd5());
+            fileObj.setFileId(fileDocument.getId());
             fileObj.setName(fileDocument.getName());
             fileObj.setType(fileDocument.getContentType());
             fileObj.readFile(is);

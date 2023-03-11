@@ -75,14 +75,14 @@ public abstract class TaskExecutor {
                 throw new TaskRunException("文本文件不存在，需要进行重新提取");
             }
             FileObj fileObj = new FileObj();
-            fileObj.setId(fileDocument.getMd5());
+            fileObj.setFileId(fileDocument.getId());
             fileObj.setName(fileDocument.getName());
             fileObj.setType(fileDocument.getContentType());
             fileObj.readFile(textFilePath);
 
 //            自己加上去的字段
-            fileObj.setClick_rate(100);
-            fileObj.setLike_num(1000);
+//            fileObj.setClick_rate(100);
+//            fileObj.setLike_num(1000);
 //            System.out.println("fileObj:"+fileObj.getType()+"fileObj_content:"+fileObj.getContent());
             this.upload(fileObj);
 

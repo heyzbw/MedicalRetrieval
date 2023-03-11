@@ -31,6 +31,7 @@ public class MessageConstant {
 
     public static final String OPERATE_FAILED = "操作失败！";
     public static final String SUCCESS = "SUCCESS";
-
+    public static final String SUCCESS_ADD_COLLECT = "SUCCESS_ADD_COLLECT";
+    public static final String SUCCESS_REMOVE_COLLECT = "SUCCESS_REMOVE_COLLECT";
     public static final String FILE_NOT_FOUND = "File was not found";
 }
