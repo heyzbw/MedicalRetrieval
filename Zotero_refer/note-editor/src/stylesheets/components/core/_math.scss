@@ -1,0 +1,50 @@
+
+@import "~@benrbray/prosemirror-math/style/math.css";
+@import "~katex/dist/katex.min.css";
+
+.math-node.empty-math .math-render::before {
+	content: "Click to insert LaTex ...";
+    color: black;
+}
+
+.math-node .math-render.parse-error::before {
+	content: "Cannot parse LaTeX.";
+	cursor: help;
+}
+
+.math-node .ProseMirror-focused {
+    outline: none;
+}
+
+math-display {
+    position: relative;
+
+    &:before {
+        position: absolute;
+        width: 64px;
+        height: 85%;
+        margin-left: -64px;
+        content: "";
+    }
+}
+
+math-inline {
+	font-size: 1.1em !important;
+
+	.math-src {
+		div[contenteditable] {
+			white-space: normal;
+			word-break: break-word;
+		}
+	}
+}
+
+math-display {
+	//font-size: 1em !important;
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+}
+
+.math-src {
+	font-size: 0.9rem;
+}

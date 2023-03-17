@@ -3,6 +3,8 @@ package com.jiaruiblog.service;
 import com.jiaruiblog.entity.CollectDocRelationship;
 import com.jiaruiblog.util.BaseApiResult;
 
+import java.io.IOException;
+
 /**
  * @Author Jarrett Luo
  * @Date 2022/6/7 11:39
@@ -15,7 +17,7 @@ public interface CollectService {
      * @param collect -> Collect Doc Relationship
      * @return -> ApiResult
      */
-    BaseApiResult insert(CollectDocRelationship collect);
+    BaseApiResult insert(CollectDocRelationship collect) throws IOException;
 
     /**
      * 移除文档收藏

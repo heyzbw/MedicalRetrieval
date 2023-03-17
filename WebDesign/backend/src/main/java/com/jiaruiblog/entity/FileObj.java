@@ -29,7 +29,7 @@ public class FileObj {
      */
     @Id
     @Field(type = FieldType.Keyword)
-    private String id;
+    private String fileId;
 
     /**
      * 文件名
@@ -52,10 +52,14 @@ public class FileObj {
     private String content;
 
     @Field(type = FieldType.Integer)
-    private int click_rate;
+    private int click_rate = 0;
 
     @Field(type = FieldType.Integer)
-    private int like_num;
+    private int like_num = 0;
+
+    @Field(type = FieldType.Integer)
+    private int collect_num = 0;
+
 
 
 

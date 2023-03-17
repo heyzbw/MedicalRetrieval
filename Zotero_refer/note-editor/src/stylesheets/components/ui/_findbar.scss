@@ -1,0 +1,85 @@
+
+.findbar {
+	font-size: 14px;
+	color: #595959;
+	border-bottom: 1px solid #d9d9d9;
+	padding: 6px 10px;
+
+	.line {
+		display: flex;
+
+		&:nth-child(2) {
+			margin-top: 4px;
+		}
+
+		.input-box {
+			flex-grow: 1;
+			display: flex;
+			height: 32px;
+			border: 1px solid #d9d9d9;
+			border-radius: 4px;
+			padding: 0 4px 0 7px;
+
+			.input {
+				flex-grow: 1;
+				display: flex;
+
+				input {
+					width: 100%;
+					border: none;
+					outline: none;
+					color: inherit;
+				}
+			}
+
+			.buttons {
+				display: flex;
+				align-items: center;
+
+				.button {
+					color: #404040;
+					width: 22px;
+					height: 22px;
+					display: flex;
+					align-items: center;
+					justify-content: space-around;
+					border-radius: 4px;
+
+					&:hover {
+						background-color: #F0F0F0;
+					}
+
+					&:active,
+					&.active {
+						background-color: #404040;
+						color: #ffffff;
+					}
+				}
+
+				.text-button {
+					cursor: default;
+					white-space: nowrap;
+					width: unset;
+					margin-left: 4px;
+					border: 1px solid lightgray;
+					padding: 0 7px;
+				}
+
+			}
+		}
+
+		.check-button {
+			height: 32px;
+			display: flex;
+			align-items: center;
+			cursor: default;
+			white-space: nowrap;
+			margin-left: 4px;
+			padding: 0 7px;
+
+			label {
+				padding-left: 5px;
+			}
+		}
+	}
+}

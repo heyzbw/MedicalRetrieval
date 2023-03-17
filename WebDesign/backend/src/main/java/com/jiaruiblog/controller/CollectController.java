@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -32,9 +33,16 @@ public class CollectController {
 
     @ApiOperation(value = "2.3 新增一个收藏文档", notes = "新增单个收藏文档")
     @PostMapping(value = "/auth/insert")
-    public BaseApiResult insert(@RequestBody CollectDTO collect, HttpServletRequest request) {
+    public BaseApiResult insert(@RequestParam("docId") String docId, HttpServletRequest request) throws IOException {
+        System.out.println("收藏文档"+docId);
+        System.out.println("用户id："+request.getAttribute("id"));
+        CollectDTO collect = new CollectDTO();
+        collect.setDocId(docId);
         return collectServiceImpl.insert(setRelationshipValue(collect, request));
     }
+//    public BaseApiResult insert(@RequestBody CollectDTO collect, HttpServletRequest request) {
+//        return collectServiceImpl.insert(setRelationshipValue(collect, request));
+//    }
 
     @ApiOperation(value = "2.4 根据id移除某个收藏文档", notes = "根据id移除某个文档")
     @DeleteMapping(value = "/auth/remove")

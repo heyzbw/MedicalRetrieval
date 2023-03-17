@@ -10,7 +10,10 @@ import {
     DOC_REBUILD_URL,
 
     ADD_LIKE_URL,
-    GET_LIKE_URL
+    GET_LIKE_URL,
+
+    COLLECT_ADD_URL,
+    COLLECT_REMOVE_URL
 
 } from './url'
 
@@ -59,5 +62,10 @@ export default {
         return Get(GET_LIKE_URL, param)
     },
 
+    addCollect: (param) => {
+        return Post(COLLECT_ADD_URL, null, param)
+    },
+
+    // COLLECT_ADD_URL
 }
 

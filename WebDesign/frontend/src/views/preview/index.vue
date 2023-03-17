@@ -38,7 +38,7 @@
             </div>
             <div class="doc-operation-body">
                 <doc-operation :likeStatus="likeStatus" :collectStatus="collectStatus"
-                               @addLike="addLike"
+                               @addLike="addLike" @addCollect="addCollect"
                 />
             </div>
             <div class="doc-comment">
@@ -183,42 +183,66 @@ export default {
                 this.$Message.info("error")
             })
         },
-        async addLike(entityType) {
-            if (entityType !== 1 && entityType !== 2) {
-                return
+
+      // 添加点赞
+      async addLike(entityType) {
+        if (entityType !== 1) {
+          return
+        }
+
+        let params = {
+          entityType: entityType,
+          entityId: this.docId
+        }
+        await DocRequest.addLike({params}).then(res => {
+          if (res.code == 200) {
+            let result = res.data;
+            this.likeCount = result.likeCount || 0;
+            this.likeStatus = result.likeStatus || 0;
+            if (this.likeStatus === 0) {
+              this.$Message.info("取消点赞！")
+            }
+            else {
+              this.$Message.success("点赞成功！")
             }
 
-            let params = {
-                entityType: entityType,
-                entityId: this.docId
-            }
-            await DocRequest.addLike({params}).then(res => {
-                if (res.code == 200) {
-                    let result = res.data;
-                    if (entityType === 1) {
-                        this.likeCount = result.likeCount || 0;
-                        this.likeStatus = result.likeStatus || 0;
-                        if (this.likeStatus === 0) {
-                            this.$Message.info("取消点赞！")
-                        } else {
-                            this.$Message.success("点赞成功！")
-                        }
-                    } else {
-                        this.collectCount = result.likeCount || 0;
-                        this.collectStatus = result.likeStatus || 0;
-                        if (this.collectStatus === 0) {
-                            this.$Message.info("取消收藏！")
-                        } else {
-                            this.$Message.success("收藏成功！")
-                        }
-                    }
-                } else {
-                    this.$Message.info("error")
-                }
-            }).catch(err => {
-                this.$Message.info("error")
-            })
+          } else {
+            this.$Message.info("error")
+          }
+        }).catch(err => {
+          this.$Message.info("error")
+        })
+      },
+
+      // 添加收藏
+      async addCollect(entityType) {
+        if (entityType !== 2) {
+          return
         }
+
+        let params = {
+          docId: this.docId
+        }
+        await DocRequest.addCollect({params}).then(res => {
+          if (res.code == 200) {
+            let result = res.data;
+            console.log("res data:",res.data)
+
+            // this.collectCount = result.likeCount || 0;
+            // this.collectStatus = result.likeStatus || 0;
+            if (result === "SUCCESS_REMOVE_COLLECT") {
+              this.$Message.info("取消收藏！")
+            } else {
+              this.$Message.success("收藏成功！")
+            }
+
+          } else {
+            this.$Message.info("error")
+          }
+        }).catch(err => {
+          this.$Message.info("error")
+        })
+      }
 
     }
 

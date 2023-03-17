@@ -20,9 +20,6 @@ const DOC_VIEW_URL = '/files/view/'; // 预览文档
 const DOC_TXT_URL = '/files/text/'; // 下载文本文件
 const DOC_REBUILD_URL = '/files/rebuildIndex'; // 重建文档索引
 
-const COLLECT_ADD_URL = '/collect/auth/insert'; // 收藏增加
-const COLLECT_REMOVE_URL = '/collect/auth/remove'; // 收藏减少
-
 const USER_ADD_URL = '/user/insert'; // 用户增加
 const USER_REMOVE_URL = '/user/auth/deleteByID'; // 用户删除
 const USER_LOGIN_URL = '/user/login'; // 用户登录
@@ -67,6 +64,10 @@ const UP_PROHIBITED_WORD_URL = '/system/updateProhibitedWord'; // 更新敏感�
 
 const ADD_LIKE_URL = '/like/';
 const GET_LIKE_URL = '/queryLikeInfo/';
+
+const COLLECT_ADD_URL = '/collect/auth/insert'; // 收藏增加
+const COLLECT_REMOVE_URL = '/collect/auth/remove'; // 收藏减少
+
 
 
 module.exports = {
