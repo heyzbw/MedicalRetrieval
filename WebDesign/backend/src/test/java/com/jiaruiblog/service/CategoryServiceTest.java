@@ -4,6 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jiaruiblog.DocumentSharingSiteApplication;
 import com.jiaruiblog.service.impl.CategoryServiceImpl;
+import org.apache.http.HttpHost;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 
 @RunWith(SpringRunner.class)
@@ -21,11 +28,26 @@ public class CategoryServiceTest {
     CategoryServiceImpl categoryServiceImpl;
 
     @Test
-    public void insert() {
+    public void insert() throws IOException {
+
+        RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(new HttpHost("localhost", 9200, "http"))
+        ); // 连接到Elasticsearch集群
+
+        GetResponse response = client.get(
+                new GetRequest("synonym_test", "_doc", "Hskg0oYBtyzfqskMJwlG"), RequestOptions.DEFAULT); // 根据文档ID查询
+
+        System.out.println(response.getSourceAsString()); // 输出查询结果
+
+        client.close(); // 关闭客户端连接
     }
 
     @Test
     public void update() {
+        RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(new HttpHost("localhost", 9200, "http")));
+
+
     }
 
     @Test

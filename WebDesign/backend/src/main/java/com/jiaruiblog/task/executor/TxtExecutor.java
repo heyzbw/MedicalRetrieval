@@ -36,11 +36,14 @@ public class TxtExecutor extends TaskExecutor{
     public void uploadFileToEs(InputStream is, FileDocument fileDocument, TaskData taskData) {
         try {
             FileObj fileObj = new FileObj();
+            fileObj.setId(fileDocument.getMd5());
+            System.out.println("fileObj_Id:"+fileObj.getId());
             fileObj.setFileId(fileDocument.getId());
             fileObj.setName(fileDocument.getName());
             fileObj.setType(fileDocument.getContentType());
             fileObj.readFile(is);
             this.upload(fileObj);
+
         } catch (IOException | TaskRunException e) {
             throw new TaskRunException("存入es的过程中报错了", e);
         }

@@ -32,6 +32,8 @@ public abstract class TaskExecutor {
         FileDocument fileDocument = taskData.getFileDocument();
         InputStream docInputStream = new ByteArrayInputStream(downFileBytes(fileDocument.getGridfsId()));
 
+//        System.out.println("ocrList:"+fileDocument.getOcrResultList());
+
         // 第二步 将文本索引到es中
         try {
             uploadFileToEs(docInputStream, fileDocument, taskData);
@@ -75,16 +77,18 @@ public abstract class TaskExecutor {
                 throw new TaskRunException("文本文件不存在，需要进行重新提取");
             }
             FileObj fileObj = new FileObj();
+            fileObj.setId(fileDocument.getMd5());
             fileObj.setFileId(fileDocument.getId());
             fileObj.setName(fileDocument.getName());
             fileObj.setType(fileDocument.getContentType());
             fileObj.readFile(textFilePath);
+            fileObj.setOcrResultList(fileDocument.getOcrResultList());
 
 //            自己加上去的字段
 //            fileObj.setClick_rate(100);
 //            fileObj.setLike_num(1000);
-//            System.out.println("fileObj:"+fileObj.getType()+"fileObj_content:"+fileObj.getContent());
             this.upload(fileObj);
+//            this.
 
         } catch (IOException | TaskRunException e) {
             throw new TaskRunException("存入es的过程中报错了", e);
@@ -169,6 +173,7 @@ public abstract class TaskExecutor {
     public void upload(FileObj fileObj) throws IOException {
         ElasticServiceImpl elasticService = SpringApplicationContext.getBean(ElasticServiceImpl.class);
         elasticService.upload(fileObj);
+//        elasticService.addSyno_NoSyno(fileObj);
     }
 
     /**

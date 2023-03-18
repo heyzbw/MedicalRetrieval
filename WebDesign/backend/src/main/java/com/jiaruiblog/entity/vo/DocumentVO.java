@@ -1,5 +1,6 @@
 package com.jiaruiblog.entity.vo;
 
+import com.jiaruiblog.entity.OcrResult;
 import com.jiaruiblog.enums.DocStateEnum;
 import lombok.Data;
 
@@ -14,13 +15,16 @@ import java.util.List;
  * @Version 1.0
  **/
 @Data
-public class DocumentVO {
+public class
+DocumentVO {
 
     private String id;
 
     private String title;
 
     private String description;
+
+    private List<String> stringList;
 
     private Long size;
 
@@ -45,5 +49,8 @@ public class DocumentVO {
     private String previewFileId;
 
     private Date createTime;
+
+//    ocr结果list
+    private List<OcrResult>ocrResultList;
 
 }

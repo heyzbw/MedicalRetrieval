@@ -10,6 +10,7 @@ import org.apache.http.auth.AuthenticationException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
@@ -150,7 +151,7 @@ public interface IFileService {
      * @param id ->Long
      * @return ApiResult
      */
-    BaseApiResult detail(String id);
+    BaseApiResult detail(String id) throws IOException;
 
     /**
      * 删除掉已经存在的文档

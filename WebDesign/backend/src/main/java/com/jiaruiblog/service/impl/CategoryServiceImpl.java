@@ -387,8 +387,6 @@ public class CategoryServiceImpl implements CategoryService {
         result.put("pageSize", pageSize);
 
         return BaseApiResult.success(result);
-
-
     }
 
 }

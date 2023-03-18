@@ -211,7 +211,7 @@ public class FileController {
                 FileDocument fileDocument = fileService.saveFile(fileMd5, file);
 
                 CallFlask callFlask = new CallFlask();
-                callFlask.doUpload(fileMd5);
+//                callFlask.doUpload(fileMd5);
 
                 switch (suffix) {
                     case "pdf":

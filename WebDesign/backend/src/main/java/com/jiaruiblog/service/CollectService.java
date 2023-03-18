@@ -25,4 +25,6 @@ public interface CollectService {
      * @return -> ApiResult
      */
     BaseApiResult remove(CollectDocRelationship collect);
+
+    public BaseApiResult getDocByTagAndCateAndUserid(String cateId, String tagId, String keyword, Long pageNum, Long pageSize,String userId);
 }

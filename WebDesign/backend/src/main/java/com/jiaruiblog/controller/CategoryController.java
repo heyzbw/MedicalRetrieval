@@ -175,6 +175,7 @@ public class CategoryController {
     @ApiOperation(value = "根据分类、标签查询", notes = "查询文档列表信息")
     @GetMapping(value = "getDocByTagCateKeyWord")
     public BaseApiResult getDocByTagCateKeyWord(@ModelAttribute("pageDTO") QueryDocByTagCateDTO pageDTO) {
+        System.out.println("getDocByTagCateKeyWord!!");
         return categoryService.getDocByTagAndCate(pageDTO.getCateId(), pageDTO.getTagId(), pageDTO.getKeyword(),
                 Integer.toUnsignedLong(pageDTO.getPage() - 1), Integer.toUnsignedLong(pageDTO.getRows()));
     }

@@ -62,6 +62,11 @@ public class FileDocument {
     private String description;
 
     /**
+     * 文件高亮描述，由list组成
+     */
+    private List<String> description_highLighter;
+
+    /**
      * 大文件管理GridFS的ID
      */
     private String gridfsId;
@@ -103,5 +108,12 @@ public class FileDocument {
 
     private String userName;
 
+    private List<OcrResult> ocrResultList;
 
+//    来自文本的检索分数
+    private double contentScore;
+//    来做点击率的分数
+    private double clickScore;
+//    来做点赞数量的分数
+    private double likeScore;
 }

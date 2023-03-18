@@ -75,7 +75,8 @@ public class DocumentController {
 
     @ApiOperation(value = "2.2 查询文档的详细信息", notes = "查询文档的详细信息")
     @GetMapping(value = "/detail")
-    public BaseApiResult detail(@RequestParam(value = "docId") String id) {
+    public BaseApiResult detail(@RequestParam(value = "docId") String id) throws IOException {
+
         return iFileService.detail(id);
     }
 

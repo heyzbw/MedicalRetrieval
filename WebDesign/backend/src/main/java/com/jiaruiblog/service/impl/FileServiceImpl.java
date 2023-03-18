@@ -7,10 +7,7 @@ import com.google.common.collect.Maps;
 import com.jiaruiblog.auth.PermissionEnum;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.config.SystemConfig;
-import com.jiaruiblog.entity.Category;
-import com.jiaruiblog.entity.FileDocument;
-import com.jiaruiblog.entity.Tag;
-import com.jiaruiblog.entity.User;
+import com.jiaruiblog.entity.*;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
 import com.jiaruiblog.entity.vo.DocWithCateVO;
@@ -19,6 +16,7 @@ import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.service.*;
 import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.BaseApiResult;
+import com.jiaruiblog.util.CallFlask;
 import com.jiaruiblog.util.PdfUtil;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
@@ -111,6 +109,8 @@ public class FileServiceImpl implements IFileService {
 
     @Resource
     private File2OcrService file2OcrService;
+
+    CallFlask callFlask = new CallFlask();
 
 
     /**
@@ -276,20 +276,39 @@ public class FileServiceImpl implements IFileService {
                 }
                 FileDocument fileDocument = saveToDb(fileMd5, file, userId, username);
 
+                //  取ocr结果
+                CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
+                    try {
+                        List<OcrResult> ocrResultList = file2OcrService.getOcrByPY(fileMd5);
+
+                        fileDocument.setOcrResultList(ocrResultList);
+
+                        System.out.println("处理完了OCR");
+
+                        switch (suffix) {
+                            case "pdf":
+                            case "docx":
+                            case "pptx":
+                            case "xlsx":
+                            case "html":
+                            case "md":
+                            case "txt":
+                                taskExecuteService.execute(fileDocument);
+                                break;
+                            default:
+                                break;
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                });
+
+//                callFlask.doUpload(fileMd5);
+
                 // 目前支持这一类数据进行预览
-                switch (suffix) {
-                    case "pdf":
-                    case "docx":
-                    case "pptx":
-                    case "xlsx":
-                    case "html":
-                    case "md":
-                    case "txt":
-                        taskExecuteService.execute(fileDocument);
-                        break;
-                    default:
-                        break;
-                }
+
                 return BaseApiResult.success(fileDocument.getId());
             } else {
                 return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, MessageConstant.PARAMS_IS_NOT_NULL);
@@ -626,8 +645,9 @@ public class FileServiceImpl implements IFileService {
      * @Param [id]
      **/
     @Override
-    public BaseApiResult detail(String id) {
+    public BaseApiResult detail(String id) throws IOException {
         FileDocument fileDocument = queryById(id);
+        elasticServiceImpl.NumberOperation(id,"ADD","click_rate");
         if (fileDocument == null) {
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.PARAMS_LENGTH_REQUIRED);
         } else {
@@ -795,6 +815,9 @@ public class FileServiceImpl implements IFileService {
         documentVO.setUserName(username);
         documentVO.setCreateTime(fileDocument.getUploadDate());
         documentVO.setThumbId(fileDocument.getThumbId());
+
+        documentVO.setStringList(fileDocument.getDescription_highLighter());
+
         // 根据文档的id进行查询 评论， 收藏，分类， 标签
         String docId = fileDocument.getId();
         documentVO.setCommentNum(commentServiceImpl.commentNum(docId));
@@ -806,6 +829,8 @@ public class FileServiceImpl implements IFileService {
         documentVO.setErrorMsg(fileDocument.getErrorMsg());
         documentVO.setTxtId(fileDocument.getTextFileId());
         documentVO.setPreviewFileId(fileDocument.getPreviewFileId());
+
+        documentVO.setOcrResultList(fileDocument.getOcrResultList());
 
         return documentVO;
     }

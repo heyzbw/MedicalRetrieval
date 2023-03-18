@@ -2,6 +2,8 @@ package com.jiaruiblog.controller;
 
 import com.jiaruiblog.entity.CollectDocRelationship;
 import com.jiaruiblog.entity.dto.CollectDTO;
+import com.jiaruiblog.entity.dto.QueryDocByTagCateDTO;
+import com.jiaruiblog.service.impl.CategoryServiceImpl;
 import com.jiaruiblog.service.impl.CollectServiceImpl;
 import com.jiaruiblog.util.BaseApiResult;
 import io.swagger.annotations.Api;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Enumeration;
 
 /**
  * @ClassName CollectController
@@ -31,6 +34,9 @@ public class CollectController {
     @Autowired
     CollectServiceImpl collectServiceImpl;
 
+//    @Autowired
+//    CategoryServiceImpl categoryService;
+
     @ApiOperation(value = "2.3 新增一个收藏文档", notes = "新增单个收藏文档")
     @PostMapping(value = "/auth/insert")
     public BaseApiResult insert(@RequestParam("docId") String docId, HttpServletRequest request) throws IOException {
@@ -40,15 +46,31 @@ public class CollectController {
         collect.setDocId(docId);
         return collectServiceImpl.insert(setRelationshipValue(collect, request));
     }
-//    public BaseApiResult insert(@RequestBody CollectDTO collect, HttpServletRequest request) {
-//        return collectServiceImpl.insert(setRelationshipValue(collect, request));
-//    }
 
     @ApiOperation(value = "2.4 根据id移除某个收藏文档", notes = "根据id移除某个文档")
     @DeleteMapping(value = "/auth/remove")
     public BaseApiResult remove(@RequestBody CollectDTO collect, HttpServletRequest request) {
         return collectServiceImpl.remove(setRelationshipValue(collect, request));
     }
+
+    @ApiOperation(value = "根据分类、标签查询", notes = "查询文档列表信息")
+    @PostMapping(value = "/getDocByUserId")
+//    public BaseApiResult getDocByTagCateKeyWord(@ModelAttribute("pageDTO") QueryDocByTagCateDTO pageDTO, HttpServletRequest request) {
+    public BaseApiResult getDocByTagCateKeyWord(@RequestParam("cateId") String cateId,
+                                                @RequestParam("tagId") String tagId,
+                                                @RequestParam("keyword") String keyword,
+                                                @RequestParam("page") int page,
+                                                @RequestParam("rows") int rows,
+                                                HttpServletRequest request) {
+        System.out.println("request:"+request);
+        String userId = (String) request.getAttribute("id");
+        System.out.println("userId_origin:"+userId);
+        return null;
+//        System.out.println("");
+//        return collectServiceImpl.getDocByTagAndCateAndUserid(pageDTO.getCateId(), pageDTO.getTagId(), pageDTO.getKeyword(),
+//                Integer.toUnsignedLong(pageDTO.getPage() - 1), Integer.toUnsignedLong(pageDTO.getRows()),userId);
+    }
+
 
     /**
      * @return com.jiaruiblog.entity.CollectDocRelationship

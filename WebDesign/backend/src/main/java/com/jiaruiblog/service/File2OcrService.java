@@ -1,5 +1,9 @@
 package com.jiaruiblog.service;
 
+import com.jiaruiblog.entity.OcrResult;
+
+import java.util.List;
+
 public interface File2OcrService {
-    public void getOcrByPY(String md5);
+    public List<OcrResult> getOcrByPY(String md5);
 }

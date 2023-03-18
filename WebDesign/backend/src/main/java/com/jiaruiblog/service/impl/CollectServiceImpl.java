@@ -2,18 +2,27 @@ package com.jiaruiblog.service.impl;
 
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.entity.CollectDocRelationship;
+import com.jiaruiblog.entity.dto.FileDocumentDTO;
 import com.jiaruiblog.service.CollectService;
 import com.jiaruiblog.util.BaseApiResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.ConvertOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * @Author Jarrett Luo
@@ -25,6 +34,10 @@ import java.util.Optional;
 public class CollectServiceImpl implements CollectService {
 
     private static final String COLLECTION_NAME = "collectCollection";
+    private static final String COLLECTION_NAME_USER_ID = "userId";
+
+    private static final String COLLECTION_NAME_DOC_ID = "docId";
+    private static final String RELATE_COLLECTION_NAME = "relateCateCollection";
     private static final String ES_LIKE_NUM = "like_num";
     private static final String ES_CILCK_RATE = "click_rate";
     private static final String ES_COLLECT_NUM = "collect_num";
@@ -52,6 +65,9 @@ public class CollectServiceImpl implements CollectService {
      **/
     @Override
     public BaseApiResult insert(CollectDocRelationship collect) throws IOException {
+
+
+
         // 必须经过userId和docId的校验，否则不予关注
         if (!userServiceImpl.isExist(collect.getUserId()) || !fileServiceImpl.isExist(collect.getDocId())) {
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
@@ -132,6 +148,78 @@ public class CollectServiceImpl implements CollectService {
                 COLLECTION_NAME);
         relationships.forEach(this::remove);
     }
+
+
+//    根据用户id去搜索用户收藏的文档
+    @Override
+    public BaseApiResult getDocByTagAndCateAndUserid(String cateId, String tagId, String keyword, Long pageNum, Long pageSize,String userId) {
+        System.out.println("userId:"+userId);
+        Query queryCollect = new Query(Criteria.where(COLLECTION_NAME_USER_ID).is(userId));
+//        queryCollect.fields().include(COLLECTION_NAME_DOC_ID);
+        List<CollectDocRelationship> collectDocRelationships = mongoTemplate.find(queryCollect, CollectDocRelationship.class,COLLECTION_NAME);
+        System.out.println("size:"+collectDocRelationships.size());
+
+
+
+
+        Criteria criteria = new Criteria();
+        if (StringUtils.hasText(cateId) && StringUtils.hasText(tagId)) {
+            criteria = Criteria.where("abc.categoryId").is(cateId).and("xyz.tagId").is(tagId);
+        } else if (StringUtils.hasText(cateId) && !StringUtils.hasText(tagId)){
+            criteria = Criteria.where("abc.categoryId").is(cateId);
+        } else if (StringUtils.hasText(tagId) && !StringUtils.hasText(cateId)) {
+            criteria = Criteria.where("xyz.tagId").is(tagId);
+        }
+
+        if (StringUtils.hasText(keyword)) {
+            criteria.andOperator(Criteria.where("name").regex(Pattern.compile(keyword, Pattern.CASE_INSENSITIVE)));
+        }
+
+        // 查询审核完毕的文档
+//        criteria.and("reviewing").is(false);
+
+        Aggregation countAggregation = Aggregation.newAggregation(
+                // 选择某些字段
+                Aggregation.project("id", "name", "uploadDate", "thumbId")
+                        .and(ConvertOperators.Convert.convertValue("$_id").to("string"))//将主键Id转换为objectId
+                        .as("id"),//新字段名称,
+                Aggregation.lookup(RELATE_COLLECTION_NAME, "id", "fileId", "abc"),
+                Aggregation.lookup(TagServiceImpl.RELATE_COLLECTION_NAME, "id", "fileId", "xyz"),
+                Aggregation.match(criteria)
+        );
+
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                // 选择某些字段
+                Aggregation.project("id", "name", "uploadDate", "thumbId")
+                        .and(ConvertOperators.Convert.convertValue("$_id").to("string"))//将主键Id转换为objectId
+                        .as("id"),//新字段名称,
+                Aggregation.lookup(RELATE_COLLECTION_NAME, "id", "fileId", "abc"),
+                Aggregation.lookup(TagServiceImpl.RELATE_COLLECTION_NAME, "id", "fileId", "xyz"),
+                Aggregation.match(criteria),
+                Aggregation.sort(Sort.Direction.DESC, "uploadDate"),
+                Aggregation.skip(pageNum*pageSize),
+                Aggregation.limit(pageSize)
+        );
+
+        int count = mongoTemplate.aggregate(countAggregation, FileServiceImpl.COLLECTION_NAME, FileDocumentDTO.class)
+                .getMappedResults().size();
+
+        AggregationResults<FileDocumentDTO> aggregate = mongoTemplate.aggregate(aggregation,
+                FileServiceImpl.COLLECTION_NAME, FileDocumentDTO.class);
+        List<FileDocumentDTO> mappedResults = aggregate.getMappedResults();
+        System.out.println("mappedResults:"+mappedResults);
+
+
+        Map<String, Object> result = new HashMap<>(20);
+        result.put("data", mappedResults);
+        result.put("total", count);
+        result.put("pageNum", pageNum);
+        result.put("pageSize", pageSize);
+
+        return BaseApiResult.success(result);
+    }
+
 
 
 }

@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
+import java.util.List;
 
 /**
  * @ClassName FileObj
@@ -28,6 +29,9 @@ public class FileObj {
      * 用于存储文件id
      */
     @Id
+    @Field(type = FieldType.Keyword)
+    private String id;
+
     @Field(type = FieldType.Keyword)
     private String fileId;
 
@@ -48,8 +52,15 @@ public class FileObj {
      */
 
 
-    @Field(type = FieldType.Keyword, analyzer="ik_smart")
+    @Field(type = FieldType.Text, analyzer="ik_smart")
     private String content;
+
+    @Field(type = FieldType.Text, analyzer="synonyms")
+    private String syn;
+
+    @Field(type = FieldType.Text, analyzer="no_synonyms")
+    private String no_syn;
+
 
     @Field(type = FieldType.Integer)
     private int click_rate = 0;
@@ -59,6 +70,10 @@ public class FileObj {
 
     @Field(type = FieldType.Integer)
     private int collect_num = 0;
+
+//    OCR结果的字段
+    @Field(type = FieldType.Nested, analyzer="ik_max_word")
+    private List<OcrResult> ocrResultList;
 
 
 
