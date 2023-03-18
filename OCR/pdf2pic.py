@@ -65,8 +65,6 @@ def pdf2pic(doc):
 
 def pic2json(image_np, pageNum, pdfname):
     img_base64 = numpy_to_base64(image_np)
-    # img_bytes = image_np.tobytes()
-    # img_base64 = base64.b64encode(img_bytes)
     reader = easyocr.Reader(['ch_sim', 'en'])
     result = reader.readtext(image_np)
     text = {}
@@ -91,6 +89,9 @@ def pic2json(image_np, pageNum, pdfname):
     if len(text["ocrText"]) > 0:
         mongdbOcrUtil.write_result(text)
 
+        return text
+    else:
+        return False
 
 # numpy 转 base64
 def numpy_to_base64(image_np):
@@ -104,10 +105,13 @@ def fromMD5(md5):
     mongoFIleDataUtil = MongoFileDataUtil()
     doc = mongoFIleDataUtil.getFileByMD5(md5)
     images = pdf2pic(doc)
+    texts = []
     for image in images:
-        pic2json(image.image_np, image.pageNum, image.filename)
+        text = pic2json(image.image_np, image.pageNum, image.filename)
+        if text != False:
+            texts.append(text)
 
-    return 1
+    return texts
 
 
 if __name__ == '__main__':

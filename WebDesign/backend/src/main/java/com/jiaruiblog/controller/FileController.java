@@ -249,6 +249,7 @@ public class FileController {
             throws AuthenticationException {
         String username = (String) request.getAttribute("username");
         String userId = (String) request.getAttribute("id");
+        System.out.println("用户"+userId+"上传了"+file.getOriginalFilename());
         return fileService.documentUpload(file, userId, username);
     }
 

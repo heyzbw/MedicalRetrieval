@@ -20,6 +20,11 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.QueryBuilder;
+
+
 public class CollectServiceTest {
 
 //    @Test
@@ -79,6 +84,26 @@ public class CollectServiceTest {
 
     @Test
     public void remove() {
+
+// 创建查询
+        BoolQueryBuilder query = QueryBuilders.boolQuery()
+                .should(QueryBuilders.matchQuery("content", "dqx"))
+                .should(QueryBuilders.boolQuery()
+                        .must(QueryBuilders.matchQuery("content", "zbw"))
+                        .must(QueryBuilders.matchQuery("content", "PYB")));
+
+// 执行查询
+        SearchResponse response = client.prepareSearch("my-index")
+                .setQuery(query)
+                .get();
+
+// 处理结果
+        SearchHits hits = response.getHits();
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            String content = hit.getSource().get("content").toString();
+            // 处理匹配的文档
+        }
 
         System.out.println("score:"+Math.log1p(100));
     }

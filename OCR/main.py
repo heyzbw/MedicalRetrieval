@@ -13,11 +13,14 @@ def call_pdf2pic():
     data = request.get_json()
     md5 = data.get("md5")
     # 读取文件，并进行处理
-    fromMD5(md5)
-    # 返回成功
-    json_obj = {"response": "success"}
-    return json_obj
+    texts = fromMD5(md5)
 
+    # 去除object_id
+    json_data = [{'ocrText': text['ocrText'], 'pdfURL': text['pdfURL'], 'pdfPage': text['pdfPage'],
+                  'textResult': text['textResult']} for text in texts]
+    # 返回成功
+    json_obj = {"data": json_data}
+    return json_obj
 
 
 if __name__ == '__main__':

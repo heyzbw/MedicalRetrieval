@@ -280,7 +280,7 @@ public class FileServiceImpl implements IFileService {
                 CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
                     try {
                         List<OcrResult> ocrResultList = file2OcrService.getOcrByPY(fileMd5);
-
+                        System.out.println("异步获取ocr数据");
                         fileDocument.setOcrResultList(ocrResultList);
 
                         System.out.println("处理完了OCR");
@@ -347,6 +347,7 @@ public class FileServiceImpl implements IFileService {
             String gridfsId = uploadFileToGridFs(file.getInputStream(), file.getContentType());
             fileDocument.setGridfsId(gridfsId);
             fileDocument = mongoTemplate.save(fileDocument, COLLECTION_NAME);
+            System.out.println("成功将文件"+file.getOriginalFilename()+"上传到了mongodb中");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
