@@ -47,6 +47,7 @@ public class CallFlask {
                 String rightTop = textResultObj.getString("rightTop");
                 String text = textResultObj.getString("text");
 
+
                 OcrPosition textResult = new OcrPosition(charNum, isHandwritten, leftBottom, leftTop, rightBottom, rightTop, text);
                 textResults.add(textResult);
             }

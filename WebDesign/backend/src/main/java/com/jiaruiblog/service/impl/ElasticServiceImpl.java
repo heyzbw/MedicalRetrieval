@@ -122,9 +122,8 @@ public class ElasticServiceImpl implements ElasticService {
         System.out.println(response.getSourceAsString()); // 输出查询结果
         JSONObject jsonObject = JSON.parseObject(response.getSourceAsString());
         JSONObject attachment = jsonObject.getJSONObject("attachment");
-        System.out.println("attachment:"+attachment);
+
         String content = attachment.getString("content");
-        System.out.println("content:"+content);
 
         UpdateRequest updateRequest = new UpdateRequest(INDEX_NAME, "_doc", id);
 
@@ -138,7 +137,6 @@ public class ElasticServiceImpl implements ElasticService {
 
     }
 
-//    多个摘要版本
     @Override
     public List<FileDocument> search(String keyword) throws IOException {
 
@@ -151,22 +149,6 @@ public class ElasticServiceImpl implements ElasticService {
         MatchQueryBuilder matchQueryBuilder_ocr = QueryBuilders.matchQuery(OCR_RESULT_LIST_TEXT,keyword);
         MatchPhraseQueryBuilder matchQueryBuilder_content = QueryBuilders.matchPhraseQuery(PIPELINE_NAME, keyword);
         boolQueryBuilder.should(matchQueryBuilder_ocr).should(matchQueryBuilder_content);
-
-        // 自定义得分函数，其中内容相关的的得分为60%，点击率的得分为30%，点赞量的得分为10%
-//        ScriptScoreFunctionBuilder scriptScoreFunctionBuilder = new ScriptScoreFunctionBuilder(new Script(
-//                "double contentScore = _score * 0.6; " +
-//                        "long clicks = doc['"+CLICK_RATE+"'].value; " +
-//                        "long likes = doc['"+LIKE_NUM+"'].value; " +
-//                        "double clickScore = Math.log1p(clicks) * 0.3; double likeScore = Math.log1p(likes) * 0.1; " +
-//                        "return contentScore + clickScore + likeScore;")
-//        );
-//
-//        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(
-//                QueryBuilders.matchAllQuery(), scriptScoreFunctionBuilder
-//        );
-
-//        functionScoreQueryBuilder.boostMode(CombineFunction.SUM);
-//        srb.query(functionScoreQueryBuilder);
 
         srb.query(boolQueryBuilder);
         // 每页10个数据
@@ -235,8 +217,6 @@ public class ElasticServiceImpl implements ElasticService {
             //根据内容去检索，得到的得分
             float score = hit.getScore();
 
-//            System.out.println("click_num"+hit.getSourceAsMap().get(CLICK_RATE));
-//            System.out.println("like_num"+hit.getSourceAsMap().get(LIKE_NUM));
 //            分别以60、30、10来计算三个得分
 //            后期可能会加上源自于图片的得分与源自于content的得分
             double contentScore = score / max_content_score * CONTENT_WEIGHT;
@@ -263,9 +243,6 @@ public class ElasticServiceImpl implements ElasticService {
             System.out.println("clickScore:"+clickScore);
             System.out.println("likeScore:"+likeScore);
 
-            //获取返回的字段
-            //Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-
             //统计找到了几条
             count++;
 
@@ -277,13 +254,15 @@ public class ElasticServiceImpl implements ElasticService {
             StringBuilder stringBuilder1 = new StringBuilder();
 //            有很多条，然后每一条
             List<String> stringList = new ArrayList<>();
-            for (Text fragment : highlightField.getFragments()) {
-                String fragmentString = fragment.toString();
-                fragmentString = fragmentString.replace(em_front,"");
-                fragmentString = fragmentString.replace(em_last,"");
-                stringList.add(fragmentString);
-//                System.out.println("fragmentString长度为："+fragmentString.length());
-                stringBuilder1.append(fragment.toString());
+            if(highlightField!=null)
+            {
+                for (Text fragment : highlightField.getFragments()) {
+                    String fragmentString = fragment.toString();
+                    fragmentString = fragmentString.replace(em_front,"");
+                    fragmentString = fragmentString.replace(em_last,"");
+                    stringList.add(fragmentString);
+                    stringBuilder1.append(fragment.toString());
+                }
             }
             String abstractString = stringBuilder1.toString();
             if (abstractString.length() > 500) {
@@ -320,6 +299,176 @@ public class ElasticServiceImpl implements ElasticService {
         stringBuilder.append("查询到").append(count).append("条记录");
         return fileDocumentList;
     }
+
+//    3.18版本
+//    @Override
+//    public List<FileDocument> search(String keyword) throws IOException {
+//
+//        List<FileDocument> fileDocumentList = new ArrayList<>();
+//        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+//        // 使用lk分词器查询，会把插入的字段分词，然后进行处理
+//        SearchSourceBuilder srb = new SearchSourceBuilder();
+//
+//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+//        MatchQueryBuilder matchQueryBuilder_ocr = QueryBuilders.matchQuery(OCR_RESULT_LIST_TEXT,keyword);
+//        MatchPhraseQueryBuilder matchQueryBuilder_content = QueryBuilders.matchPhraseQuery(PIPELINE_NAME, keyword);
+//        boolQueryBuilder.should(matchQueryBuilder_ocr).should(matchQueryBuilder_content);
+//
+//        srb.query(boolQueryBuilder);
+//        // 每页10个数据
+//        srb.size(10);
+//        // 起始位置从0开始
+//        srb.from(0);
+//
+//        //设置highlighting
+//        HighlightBuilder highlightBuilder = new HighlightBuilder();
+//        HighlightBuilder.Field highlightContent = new HighlightBuilder.Field(PIPELINE_NAME);
+//        highlightContent.highlighterType();
+//        highlightBuilder.field(highlightContent).fragmentSize(FRAGMENTSIZE).numOfFragments(FRAGMENTNUMS);
+//        highlightBuilder.preTags("<em>");
+//        highlightBuilder.postTags("</em>");
+//
+//        //highlighting会自动返回匹配到的文本，所以就不需要再次返回文本了
+//        String[] includeFields = new String[]{"name", "id", LIKE_NUM, CLICK_RATE, COLLECT_NUM, OCR_RESULT_LIST};
+//        String[] excludeFields = new String[]{PIPELINE_NAME};
+//        srb.fetchSource(includeFields, excludeFields);
+//
+//        //把刚才设置的值导入进去
+//        srb.highlighter(highlightBuilder);
+//
+//        //查询
+//        searchRequest.source(srb);
+//        SearchResponse res;
+//        try {
+//            res = client.search(searchRequest, RequestOptions.DEFAULT);
+//        } catch (ConnectException e) {
+//            log.error("连接es失败！", e.getCause());
+//            res = null;
+//        }
+//
+//        if (res == null || res.getHits() == null) {
+//            return Lists.newArrayList();
+//        }
+//        //获取hits，这样就可以获取查询到的记录了
+//        SearchHits hits = res.getHits();
+//
+//        //hits是一个迭代器，所以需要迭代返回每一个hits
+//        Iterator<SearchHit> iterator = hits.iterator();
+//        int count = 0;
+//
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        Set<String> idSet = Sets.newHashSet();
+//
+////        三个值分别代表最大的内容得分、点击量得分与点赞量得分
+//        double max_content_score = getMaxScore(hits);
+//        int max_click_num = getMaxValue(hits, CLICK_RATE);
+//        int max_like_num = getMaxValue(hits, LIKE_NUM);
+//
+//        System.out.println("max_content_score:"+max_content_score);
+//        System.out.println("max_click_num:"+max_click_num);
+//        System.out.println("max_like_num:"+max_like_num);
+//
+//        while (iterator.hasNext()) {
+//            SearchHit hit = iterator.next();
+//
+//            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+//            List<Map<String, Object>> ocrResultListMaps = (List<Map<String, Object>>) hit.getSourceAsMap().get("ocrResultList");
+//
+//            //从es中读取ocr结果
+//            List<OcrResult> ocrResultList = readFromES(ocrResultListMaps,keyword);
+//
+//            //根据内容去检索，得到的得分
+//            float score = hit.getScore();
+//
+////            System.out.println("click_num"+hit.getSourceAsMap().get(CLICK_RATE));
+////            System.out.println("like_num"+hit.getSourceAsMap().get(LIKE_NUM));
+////            分别以60、30、10来计算三个得分
+////            后期可能会加上源自于图片的得分与源自于content的得分
+//            double contentScore = score / max_content_score * CONTENT_WEIGHT;
+//            double clickScore = 0;
+//            double likeScore = 0;
+//
+//            if(max_click_num > 0)
+//            {
+//                clickScore = ((int) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
+//            }
+//            else {
+//                clickScore = 0;
+//            }
+//
+//            if(max_like_num > 0)
+//            {
+//                likeScore = ((int) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
+//            }
+//            else {
+//                likeScore = 0;
+//            }
+//
+//            System.out.println("score:"+contentScore);
+//            System.out.println("clickScore:"+clickScore);
+//            System.out.println("likeScore:"+likeScore);
+//
+//            //获取返回的字段
+//            //Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+//
+//            //统计找到了几条
+//            count++;
+//
+//            //这个就会把匹配到的文本返回，而且只返回匹配到的部分文本docId = -1
+//            Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+//            System.out.println("highlightFields:"+highlightFields);
+//            HighlightField highlightField = highlightFields.get(PIPELINE_NAME);
+////            float[] scores = highlightField.
+//            StringBuilder stringBuilder1 = new StringBuilder();
+////            有很多条，然后每一条
+//            List<String> stringList = new ArrayList<>();
+//            if(highlightField!=null)
+//            {
+//                for (Text fragment : highlightField.getFragments()) {
+//                    String fragmentString = fragment.toString();
+//                    fragmentString = fragmentString.replace(em_front,"");
+//                    fragmentString = fragmentString.replace(em_last,"");
+//                    stringList.add(fragmentString);
+////                System.out.println("fragmentString长度为："+fragmentString.length());
+//                    stringBuilder1.append(fragment.toString());
+//                }
+//            }
+//            String abstractString = stringBuilder1.toString();
+//            if (abstractString.length() > 500) {
+//                abstractString = abstractString.substring(0, 500);
+//            }
+//
+//            if (sourceAsMap.containsKey("id")) {
+//                String id = (String) sourceAsMap.get("id");
+//                if (id != null && !idSet.contains(id)) {
+//                    idSet.add(id);
+//                    FileDocument fileDocument = fileServiceImpl.getByMd5(id);
+//
+//                    // 得分
+//                    fileDocument.setContentScore(contentScore);
+//                    fileDocument.setClickScore(clickScore);
+//                    fileDocument.setLikeScore(likeScore);
+//
+//                    if (fileDocument == null) {
+//                        System.out.println("mongodb没有这个md5对应的文件信息");
+//                        //从redis中剔除该doc，并跳过循环
+//                        continue;
+//                    }
+//                    fileDocument.setDescription(abstractString);
+//                    fileDocument.setDescription_highLighter(stringList);
+//                    fileDocument.setOcrResultList(ocrResultList);
+//
+//                    fileDocumentList.add(fileDocument);
+//                }
+//            }
+//
+//            stringBuilder.append(highlightFields);
+//        }
+//
+//        stringBuilder.append("查询到").append(count).append("条记录");
+//        return fileDocumentList;
+//    }
 
 //    原作者的版本
 //    @Override
@@ -598,6 +747,8 @@ public class ElasticServiceImpl implements ElasticService {
                 String pdfURL = (String) ocrResultMap.get("pdfUrl");
                 int pdfPage = (Integer) ocrResultMap.get("pdfPage");
 
+                String image = (String) ocrResultMap.get("image");
+
                 List<OcrPosition> textResult = new ArrayList<>();
                 List<Map<String, Object>> textResultMaps = (List<Map<String, Object>>) ocrResultMap.get("textResult");
                 if (textResultMaps != null) {
@@ -618,7 +769,7 @@ public class ElasticServiceImpl implements ElasticService {
                         textResult.add(ocrPosition);
                     }
                 }
-                OcrResult ocrResult = new OcrResult(ocrText, pdfURL, pdfPage, textResult, null);
+                OcrResult ocrResult = new OcrResult(ocrText, pdfURL, pdfPage, textResult, image);
                 ocrResultList.add(ocrResult);
             }
         }
