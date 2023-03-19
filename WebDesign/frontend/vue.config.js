@@ -19,6 +19,27 @@ module.exports = {
             .set('base', resolve('src/base'))
             .set('static', resolve('src/static'))
     },
+    devServer: {  //开发环境的服务器配置
+        // 是否自动弹出浏览器，默认false
+        open: false,
+        // 修改默认端口，默认8080
+        // port: 9090,
+        port: 8080,
+        proxy: {  //进行代理转发
+            '/api': {
+                // 转发的网址
+                target: "http://api.fanyi.baidu.com/api",
+                // 是否开启本地代理 默认true
+                changeOrigin: true,
+                // 重要点
+                ws: false,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        }
+
+    },
 
     // 项目部署的基础路径
     // 我们默认假设你的应用将会部署在域名的根部，

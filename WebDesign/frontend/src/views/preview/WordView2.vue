@@ -15,7 +15,7 @@ export default {
         handleView(record) {
             let docId = this.$route.query.docId;
 
-            let wordURL = 'http://81.69.247.172:8082/files/view/' + docId
+            let wordURL = 'http://localhost:8082/files/view/' + docId
 
 
             const onlineList = ['png','xls','docx','jpg','pdf']

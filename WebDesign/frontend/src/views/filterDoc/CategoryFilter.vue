@@ -4,10 +4,7 @@
             <div class="category-title">
                 <p>{{ checkedCategory.name }}</p>
                 <div class="category-title-tip">
-                    <Tooltip :content="checkedCategory.name" theme="light"
-                             placement="top"
-                             max-width="200"
-                    >
+                    <Tooltip :content="checkedCategory.name" theme="light" placement="top" max-width="200">
                     </Tooltip>
                 </div>
             </div>
@@ -19,10 +16,7 @@
                     </a>
                     <template #list>
                         <DropdownMenu>
-                            <DropdownItem
-                                v-for="item in categoryOption"
-                                :name="item.id"
-                            >
+                            <DropdownItem v-for="item in categoryOption" :name="item.id">
                                 {{ item.seeName }}
                             </DropdownItem>
                         </DropdownMenu>
@@ -32,13 +26,11 @@
         </div>
         <div class="cate-right">
             <div class="search-input-top">
-                <input :placeholder="placeholder" v-model="searchValue"
-                       @keyup.enter="clickToSearch(searchValue)"></input>
+                <input :placeholder="placeholder" v-model="searchValue" @keyup.enter="clickToSearch(searchValue)">
                 <div class="search-button"
-                     style="width: 100px; line-height: 45px; display: flex; align-content: center; flex-wrap: wrap; justify-content: center;"
-                     @click="clickToSearch(searchValue)"
-                >
-                    <img :src="searchSrc" width="16px" height="16px" alt="" style="display: inline-block;"/>
+                    style="width: 100px; line-height: 45px; display: flex; align-content: center; flex-wrap: wrap; justify-content: center;"
+                    @click="clickToSearch(searchValue)">
+                    <img :src="searchSrc" width="16px" height="16px" alt="" style="display: inline-block;" />
                 </div>
             </div>
         </div>
@@ -59,7 +51,7 @@ export default {
             categoryType: 'CATEGORY',
             searchValue: '',
             categoryOption: [],
-            checkedCategory: {id: "ALL", name: "全部分类"},
+            checkedCategory: { id: "ALL", name: "全部分类" },
 
         }
     },
@@ -89,7 +81,7 @@ export default {
                     return;
                 }
                 this.listLoading = false
-                this.categoryOption = [{id: "ALL", name: "全部分类", seeName: '全部分类', createDate: '', updateDate: ''}]
+                this.categoryOption = [{ id: "ALL", name: "全部分类", seeName: '全部分类', createDate: '', updateDate: '' }]
                 if (response.data.length > 0) {
                     response.data.forEach(item => {
                         if (item.name.length > 8) {
@@ -111,7 +103,8 @@ export default {
     line-height: 45px;
     width: 100%;
     display: flex;
-    display: -webkit-flex; /* Safari */
+    display: -webkit-flex;
+    /* Safari */
     justify-content: space-between;
 
     .cate-left {
@@ -132,9 +125,12 @@ export default {
 
             p {
                 -o-text-overflow: ellipsis;
-                overflow: hidden; /*超出部分隐藏*/
-                text-overflow: ellipsis; /* 超出部分显示省略号 */
-                white-space: nowrap; /*规定段落中的文本不进行换行 */
+                overflow: hidden;
+                /*超出部分隐藏*/
+                text-overflow: ellipsis;
+                /* 超出部分显示省略号 */
+                white-space: nowrap;
+                /*规定段落中的文本不进行换行 */
             }
 
             .category-title-tip {

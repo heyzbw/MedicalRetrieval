@@ -16,6 +16,7 @@
 </template>
 
 <script>
+
 import Nav from "@/components/Nav";
 import Banner from "./Banner";
 import Category from "@/views/homePage/Category";

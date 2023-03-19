@@ -1,10 +1,11 @@
 <template>
     <div class="search-zone">
-        <Input search enter-button="搜索" :value="keyWord" placeholder="请输入文档关键字" @on-search="searchValue"/>
+        <Input search enter-button="搜索" :value="keyWord" placeholder="请输入文档关键字" @on-search="searchValue" />
     </div>
 </template>
 
 <script>
+
 export default {
     name: "SearchInput",
     data() {
@@ -14,10 +15,10 @@ export default {
     },
     methods: {
         searchValue(value) {
-            if( value !== "" ) {
+            if (value !== "") {
                 this.$router.push({
-                    path:'/searchResult',
-                    query:{
+                    path: '/searchResult',
+                    query: {
                         keyWord: value
                     }
                 })

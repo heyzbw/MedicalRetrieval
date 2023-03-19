@@ -13,19 +13,13 @@
                         <div class="add-doc">
                             <Button type="text" @click="addDoc">添加文档</Button>
                         </div>
-                        <doc-table ref="docTable" type="CATEGORY" cateId=""
-                                   @removeDoc="removeDoc"
-                                   @on-page-change="queryTable"
-                                   class="table-panel"
-                        ></doc-table>
+                        <doc-table ref="docTable" type="CATEGORY" cateId="" @removeDoc="removeDoc"
+                            @on-page-change="queryTable" class="table-panel"></doc-table>
                     </div>
                 </div>
             </template>
         </Split>
-        <Modal v-model="modal" fullscreen title="添加文档"
-               @on-ok="saveEditor"
-               @on-cancel="cancelEditor"
-        >
+        <Modal v-model="modal" fullscreen title="添加文档" @on-ok="saveEditor" @on-cancel="cancelEditor">
             <div>
                 <check-table ref="addDocTable" type="CATEGORY" :cateId="cateId"></check-table>
             </div>
@@ -105,7 +99,7 @@ export default {
                 type: "CATEGORY"
             };
             CategoryRequest.deleteRelateData(params).then(res => {
-                if (res.code === 200){
+                if (res.code === 200) {
                     // 删除以后再发起请求
                     this.$refs.docTable.getListData(this.cateId);
                 }

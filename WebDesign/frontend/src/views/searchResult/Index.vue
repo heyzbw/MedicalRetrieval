@@ -7,25 +7,12 @@
             <div style="background-color: #fff">
                 <SearchInput ref="searchInput" @on-search="getListData"></SearchInput>
             </div>
-            <SearchItem v-for="item in data.slice((currentPage-1)*pageSize, (currentPage)*pageSize)"
-                        :id="item.id"
-                        :thumbId="item.thumbId"
-                        :title="item.title"
-                        :description="item.description"
-                        :time="item.createTime"
-                        :user-name="item.userName"
-                        :category="item.categoryVO"
-                        :tags="item.tagVOList"
-                        :collect-num="item.collectNum"
-                        :comment-num="item.commentNum"
-            ></SearchItem>
-            <div class="page-container" v-show="data.length > 0 ">
-                <Page
-                    :model-value="currentPage"
-                    :total="totalItems"
-                    :page-size="pageSize"
-                    @on-change="pageChange"
-                />
+            <SearchItem v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)" :id="item.id"
+                :thumbId="item.thumbId" :title="item.title" :description="item.description" :time="item.createTime"
+                :user-name="item.userName" :category="item.categoryVO" :tags="item.tagVOList" :stringList="item.stringList"
+                :collect-num="item.collectNum" :comment-num="item.commentNum" :keyword="keyword"></SearchItem>
+            <div class="page-container" v-show="data.length > 0">
+                <Page :model-value="currentPage" :total="totalItems" :page-size="pageSize" @on-change="pageChange" />
             </div>
             <div style="padding: 30px 10px; color: #555" v-show="data.length < 1">
                 <span v-if="!loading">暂无内容，试试其他呢～</span>
@@ -37,6 +24,7 @@
 </template>
 
 <script>
+
 import Nav from "@/components/Nav";
 import SearchItem from "@/views/searchResult/SearchItem";
 import DocItem from "@/views/searchResult/DocItem";
@@ -55,6 +43,7 @@ export default {
             totalItems: 4,
             pageSize: 6,
             loading: true,
+            keyword: "1"
         }
     },
     components: {
@@ -67,6 +56,7 @@ export default {
         getListData() {
             this.loading = true
             let keyword = this.$route.query.keyWord
+            this.keyword = keyword
             if (keyword === "") return;
             const params = {
                 "categoryId": "",
@@ -74,14 +64,14 @@ export default {
                 "page": this.currentPage - 1,
                 "rows": this.pageSize,
                 "tagId": "",
-                "type": "FILTER",
-                "userId": localStorage.getItem("id")
+                "type": "FILTER"
             }
             DocumentRequest.getListData(params).then(res => {
                 this.loading = false;
                 if (res.code === 200) {
                     this.totalItems = res.data.totalNum;
                     this.data = res.data.documents;
+                    console.log(res.data);
                 } else {
                     this.data = []
                 }
@@ -105,7 +95,6 @@ export default {
 </script>
 
 <style scoped>
-
 .nav {
     background-color: #ffcc4f;
     width: 100%;
@@ -128,6 +117,4 @@ export default {
     text-align: left;
     padding: 25px;
 }
-
-
 </style>

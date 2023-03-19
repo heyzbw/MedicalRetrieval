@@ -1,14 +1,16 @@
 <template>
     <div class="docTable">
         <div class="table-container" ref="docTable">
-            <Table border ref="selection" width="100%" :height="height" :columns="filterColumns||columns" :data="data" :loading="loading">
+            <Table border ref="selection" width="100%" :height="height" :columns="filterColumns || columns" :data="data"
+                :loading="loading">
                 <template #name="{ row }">
                     <p class="doc-title" @click="preview(row.id)">
-                        <Badge status="error" v-if="row['docState']==='FAIL'"/>
-                        <Badge status="warning" v-else-if="row['docState']==='ON_PROCESS'"/>
-                        <Badge status="processing"  v-else-if="row['docState']==='WAITE'" />
-                        <Badge status="success"  v-else />
-                        {{ row.title }}</p>
+                        <Badge status="error" v-if="row['docState'] === 'FAIL'" />
+                        <Badge status="warning" v-else-if="row['docState'] === 'ON_PROCESS'" />
+                        <Badge status="processing" v-else-if="row['docState'] === 'WAITE'" />
+                        <Badge status="success" v-else />
+                        {{ row.title }}
+                    </p>
                 </template>
                 <template #action="{ row, index }">
                     <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">详情</Button>
@@ -18,26 +20,17 @@
             <div class="bottom-zone">
                 <Row>
                     <Col span="12" class="bottom-zone-left">
-                        <Button type="primary" ghost @click="removeBatch">全部删除</Button>
+                    <Button type="primary" ghost @click="removeBatch">全部删除</Button>
                     </Col>
                     <Col span="12" class="bottom-zone-right">
-                        <Page
-                            :model-value="currentPage"
-                            :total="totalItems"
-                            :page-size="pageSize"
-                            @on-change="pageChange"
-                        />
+                    <Page :model-value="currentPage" :total="totalItems" :page-size="pageSize" @on-change="pageChange" />
                     </Col>
                 </Row>
             </div>
 
         </div>
 
-        <Modal
-            v-model="action_modal"
-            title="文档详情"
-            :loading="action_loading"
-            @on-ok="asyncOK">
+        <Modal v-model="action_modal" title="文档详情" :loading="action_loading" @on-ok="asyncOK">
             <div>
                 <p><strong>标题</strong> {{ document_info.title }}</p>
             </div>
@@ -46,47 +39,42 @@
             </div>
             <div style="padding-top: 10px">
                 <p><strong style="vertical-align: bottom;">索引状态</strong>
-                    <span>  </span>
+                    <span> </span>
                     <Button style="margin-left: 10px" v-if="document_info['docState'] === 'SUCCESS'" type='success'
-                            size="small"
-                            @click="infoVisible ? infoVisible=false:infoVisible=true">
+                        size="small" @click="infoVisible ? infoVisible = false : infoVisible = true">
                         成功
                     </Button>
                     <Button style="margin-left: 10px" v-else-if="document_info['docState'] === 'WAITE'" type='info'
-                            size="small"
-                            @click="infoVisible ? infoVisible=false:infoVisible=true">
+                        size="small" @click="infoVisible ? infoVisible = false : infoVisible = true">
                         等待中
                     </Button>
-                    <Button style="margin-left: 10px" v-else-if="document_info['docState'] === 'ON_PROCESS'"
-                            type='warning' size="small"
-                            @click="infoVisible ? infoVisible=false:infoVisible=true">
+                    <Button style="margin-left: 10px" v-else-if="document_info['docState'] === 'ON_PROCESS'" type='warning'
+                        size="small" @click="infoVisible ? infoVisible = false : infoVisible = true">
                         进行中
                     </Button>
                     <Button style="margin-left: 10px" v-else type='error' size="small"
-                            @click="infoVisible ? infoVisible=false:infoVisible=true">
+                        @click="infoVisible ? infoVisible = false : infoVisible = true">
                         失败
                     </Button>
                 </p>
-                <div v-show="infoVisible"
-                     style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
-                margin-top: 8px;
-">
+                <div v-show="infoVisible" style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
+                    margin-top: 8px;
+    ">
                     <span v-if="document_info['docState'] === 'SUCCESS'">
                         索引建立成功，可以下载<span style="color: #408FFF; cursor: pointer"
-                                         @click="downloadTxt(document_info)">文本文件</span>。
+                            @click="downloadTxt(document_info)">文本文件</span>。
                         您可以选择 <span style="color: #dc4e2b; cursor: pointer"
-                                    @click="rebuildIndex(document_info)">重建索引</span>。
+                            @click="rebuildIndex(document_info)">重建索引</span>。
                     </span>
                     <span v-else-if="document_info['docState'] === 'WAITE'">
                         等待中，请稍等。您可以选择 <span style="color: #dc4e2b; cursor: pointer"
-                                            @click="rebuildIndex(document_info)">重建索引</span>。
+                            @click="rebuildIndex(document_info)">重建索引</span>。
                     </span>
                     <span v-else-if="document_info['docState'] === 'ON_PROCESS'">
                         正在进行中，请稍等
                     </span>
                     <span v-else>
-                        立即<span style="color: #dc4e2b; cursor: pointer"
-                                @click="rebuildIndex(document_info)">重建索引</span>。
+                        立即<span style="color: #dc4e2b; cursor: pointer" @click="rebuildIndex(document_info)">重建索引</span>。
                         错误信息：{{ document_info["errorMsg"] }}
                     </span>
                 </div>
@@ -101,8 +89,8 @@
                 <p><strong style="padding-top: 10px;">标签</strong></p>
                 <p v-if="document_info['tags'] === undefined || document_info['tags'].length < 1">无标签</p>
                 <Tag :color="item.color" v-else v-for="item in document_info['tags']" :index="item.index">{{
-                        item.name
-                    }}
+                    item.name
+                }}
                 </Tag>
             </div>
             <div style="padding-top: 10px">
@@ -132,12 +120,11 @@
             </template>
         </Modal>
     </div>
-
 </template>
 
 <script>
 import DocumentRequest from "@/api/document"
-import {parseTime} from "@/utils"
+import { parseTime } from "@/utils"
 import fileTool from "@/utils/fileUtil"
 
 const stateMap = {
@@ -285,9 +272,9 @@ export default {
         }
     },
     props: {
-        type: {type: String, requires: true, default: 'ALL'},
-        keyword: {type: String, requires: false},
-        cateId: {type: String, requires: true}
+        type: { type: String, requires: true, default: 'ALL' },
+        keyword: { type: String, requires: false },
+        cateId: { type: String, requires: true }
     },
     created() {
         this.initHeight()
@@ -423,7 +410,7 @@ export default {
             if (docId === null || docId === '') {
                 return;
             }
-            DocumentRequest.getRebuildIndex({docId: docId}).then(res => {
+            DocumentRequest.getRebuildIndex({ docId: docId }).then(res => {
                 if (res.code === 200) {
                     this.action_modal = false
                 } else {
@@ -441,9 +428,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-
-
 .docTable {
     width: calc(100% - 16px);
     height: calc(100% - 16px);
@@ -470,9 +454,7 @@ export default {
             height: 80px;
             line-height: 80px;
 
-            .bottom-zone-left {
-
-            }
+            .bottom-zone-left {}
 
             .bottom-zone-right {
                 text-align: right;

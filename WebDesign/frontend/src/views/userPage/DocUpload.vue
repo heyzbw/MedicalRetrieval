@@ -5,82 +5,78 @@
         </div>
         <Row>
             <Col span="1" class="star-tag">
-                <span>*</span>
+            <span>*</span>
             </Col>
             <Col span="12" style="text-align: left">
-                <div class="upload-panel" @click="uploadDialogShow">
-                    <div style="padding: 30px 0;">
-                        <div style="padding: 5px; line-height: 45px;">
-                            <img :src="buttonSrc" width="68px" height="68px" alt="upload-pic"/>
-                        </div>
-                        <p>支持Word/Excel/PPT/PDF，不超过100M</p>
+            <div class="upload-panel" @click="uploadDialogShow">
+                <div style="padding: 30px 0;">
+                    <div style="padding: 5px; line-height: 45px;">
+                        <img :src="buttonSrc" width="68px" height="68px" alt="upload-pic" />
                     </div>
-                    <input type="file" ref="fileToUpload" id="fileToUpload" style="display: none"
-                           @change="changeFile">
+                    <p>支持Word/Excel/PPT/PDF，不超过100M</p>
                 </div>
+                <input type="file" ref="fileToUpload" id="fileToUpload" style="display: none" @change="changeFile">
+            </div>
             </Col>
         </Row>
         <Row v-show="true">
             <Col span="1" class="star-tag">
             </Col>
             <Col span="20" style="text-align: left">
-                <div class="file-title">
-                    <span>{{ filename }}</span>
-                </div>
-                <div class="progress-wrapper" v-if="processFlag">
-                    <div class="pro" :style="uploadProcess | processToStr"></div>
-                </div>
+            <div class="file-title">
+                <span>{{ filename }}</span>
+            </div>
+            <div class="progress-wrapper" v-if="processFlag">
+                <div class="pro" :style="uploadProcess | processToStr"></div>
+            </div>
             </Col>
         </Row>
 
-        <Row style="padding: 5px 0; margin-top: 8px;" v-show="false">
+        <Row style="padding: 5px 0; margin-top: 8px;" v-show="true">
             <Col span="1" class="star-tag">
-                <span>*</span>
+            <span>*</span>
             </Col>
             <Col span="20">
-                <div class="search-input-top">
-                    <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">标签{{
-                            item + 1
-                        }}
-                    </Tag>
-                    <Button icon="ios-add" type="dashed" size="small" @click="handleAdd">添加标签</Button>
+            <div class="search-input-top">
+                <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">标签{{
+                    item + 1
+                }}
+                </Tag>
+                <Button icon="ios-add" type="dashed" size="small" @click="handleAdd">添加标签</Button>
 
-                </div>
+            </div>
             </Col>
         </Row>
-        <Row style="padding: 5px 0;" v-show="false">
-            <Col span="1" class="star-tag" >
-                <span>*</span>
+        <Row style="padding: 5px 0;" v-show="true">
+            <Col span="1" class="star-tag">
+            <span>*</span>
             </Col>
             <Col span="6">
-                <div class="cate-dropdown">
-                    <Dropdown @on-click="switchCategory">
-                        <a href="javascript:void(0)">
-                            切换分类
-                            <Icon type="ios-arrow-down"></Icon>
-                        </a>
-                        <template #list>
-                            <DropdownMenu>
-                                <DropdownItem
-                                    v-for="item in categoryOption"
-                                    :name="item.id"
-                                >
-                                    {{ item.seeName }}
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </template>
-                    </Dropdown>
-                </div>
+            <div class="cate-dropdown">
+                <Dropdown @on-click="switchCategory">
+                    <a href="javascript:void(0)">
+                        {{ checkedCategory.name }}
+                        <Icon type="ios-arrow-down"></Icon>
+                    </a>
+                    <template #list>
+                        <DropdownMenu>
+                            <DropdownItem v-for="item in categoryOption" :name="item.id">
+                                {{ item.seeName }}
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </template>
+                </Dropdown>
+            </div>
             </Col>
         </Row>
-        <Row style="padding: 5px 0;" v-show="false">
+        <Row style="padding: 5px 0;" v-show="true">
             <Col span="1" class="star-tag">
-                <span>*</span>
+            <span>*</span>
             </Col>
             <Col span="20" class="description-area">
 
-                <Input v-model="value1" maxlength="140" type="textarea" placeholder="请输入文档的描述信息"
-                       :autosize="{minRows: 2,maxRows: 5}"/>
+            <Input v-model="value1" maxlength="140" type="textarea" placeholder="请输入文档的描述信息"
+                :autosize="{ minRows: 2, maxRows: 5 }" />
             </Col>
         </Row>
 
@@ -89,31 +85,27 @@
 
             </Col>
             <Col>
-                <div class="upload-button" style="width: 180px; height: 45px; border: 2px solid #000;
-                    background: #FFF7D6;
-                    box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
-                    border-radius: 8px;
-                    display: flex;
-                    justify-content: center;
-                    "
-                     @click="uploadFile"
-                >
-                    <div style="padding: 5px; line-height: 45px;">
-                        <img :src="buttonSrc" width="24px" height="28px" alt="pic"/>
-                    </div>
-                    <span
-                        style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;"
-                    >点我上传文档</span>
+            <div class="upload-button" style="width: 180px; height: 45px; border: 2px solid #000;
+                                                                                    background: #FFF7D6;
+                                                                                    box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
+                                                                                    border-radius: 8px;
+                                                                                    display: flex;
+                                                                                    justify-content: center;
+                                                                                    " @click="uploadFile">
+                <div style="padding: 5px; line-height: 45px;">
+                    <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
                 </div>
+
+                <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">点我上传文档</span>
+            </div>
             </Col>
         </Row>
     </div>
 </template>
 
 <script>
-import {BackendUrl} from '@/api/request'
-
-import DocRequest from '@/api/document'
+import { BackendUrl } from '@/api/request'
+import CategoryRequest from "@/api/category";
 
 import axios from "axios";
 
@@ -123,22 +115,35 @@ export default {
         return {
             placeholder: "输入一些内容",
             buttonSrc: require("@/assets/source/folder.png"),
-            actionUrl: BackendUrl() + "/files/auth/upload",
+            actionUrl: BackendUrl() + "/files/upload",
             filename: '',
             uploadProcess: 0.00,
-            count: [0, ],
+            count: [0,],
             processFlag: false,
-            uploadParam: {}
+            uploadParam: {},
+            categoryOption: [],
+            checkedCategory: { id: "ALL", name: "全部分类" },
+            categoryType: 'CATEGORY',
         }
 
+    },
+    mounted() {
+        this.getAllItems()
     },
     filters: {
         processToStr(uploadProcess) {
             let width = "" + uploadProcess * 100 + "%";
-            return {'width': width}
+            return { 'width': width }
         }
     },
     methods: {
+        switchCategory(param) {
+            this.checkedCategory = this.categoryOption.find(item => item.id === param)
+            if (param === 'ALL') {
+                param = ''
+            }
+            this.$emit("changeCate", param)
+        },
         uploadDialogShow() {
             this.$refs.fileToUpload.dispatchEvent(new MouseEvent("click"));
         },
@@ -155,7 +160,7 @@ export default {
             this.uploadProcess = 0
         },
         // 最后上传
-        async uploadFile() {
+        uploadFile() {
             let param = this.uploadParam
 
             if (param === {} || param.file === undefined || param.fileId === undefined) {
@@ -174,13 +179,13 @@ export default {
                 },
             };
             this.progressFlag = true;
-            // axios.post(this.actionUrl, formData, config)
-            await DocRequest.docUpload(formData, config).then(res => {
-                if (res.code === 200) {
+            axios.post(this.actionUrl, formData, config).then(res => {
+                let { data } = res
+                if (data['code'] === 200 || data['code'] === 'success') {
                     this.uploadProcess = 1;
                     this.$Message.success("成功！")
                 } else {
-                    this.$Message.error("上传出错：" + res.message)
+                    this.$Message.error("出错：" + data['message'])
                     this.uploadProcess = 0.00
                 }
 
@@ -207,13 +212,36 @@ export default {
         handleClose2(event, name) {
             const index = this.count.indexOf(name);
             this.count.splice(index, 1);
+        },
+        getAllItems() {
+            this.loading = true
+            const params = {
+                type: this.categoryType
+            };
+            CategoryRequest.getListData(params).then(response => {
+                this.loading = false;
+                if (response.code !== 200) {
+                    return;
+                }
+                this.listLoading = false
+                this.categoryOption = [{ id: "ALL", name: "全部分类", seeName: '全部分类', createDate: '', updateDate: '' }]
+                if (response.data.length > 0) {
+                    response.data.forEach(item => {
+                        if (item.name.length > 8) {
+                            item['seeName'] = item.name.slice(0, 8) + "..."
+                        } else {
+                            item['seeName'] = item.name
+                        }
+                        this.categoryOption.push(item)
+                    })
+                }
+            })
         }
     }
 }
 </script>
 
 <style scoped lang="scss">
-
 .main-container {
     padding: 30px;
 
@@ -280,6 +308,7 @@ export default {
             0% {
                 background-position: 40px 0
             }
+
             100% {
                 background-position: 0 0
             }
@@ -348,6 +377,4 @@ export default {
         padding: 1px 0 0 1px;
     }
 }
-
-
 </style>

@@ -3,7 +3,8 @@
         <div style="line-height: 48px;">
             <Space>
                 筛选:
-                <Input v-model="filterWord" prefix="ios-search" placeholder="输入关键字" style="width: auto;margin-right: 12px;"/>
+                <Input v-model="filterWord" prefix="ios-search" placeholder="输入关键字"
+                    style="width: auto;margin-right: 12px;" />
                 <Button @click="search">搜索</Button>
             </Space>
         </div>
@@ -11,27 +12,21 @@
             <div class="table-container">
                 <Table border ref="selection" :columns="columns" :data="data" :loading="loading">
                     <template #name="{ row }">
-                        <p>{{row.title}}</p>
+                        <p>{{ row.title }}</p>
                     </template>
                 </Table>
             </div>
             <div class="page-container">
-                <Page
-                    :model-value="currentPage"
-                    :total="totalItems"
-                    :page-size="pageSize"
-                    @on-change="pageChange"
-                />
+                <Page :model-value="currentPage" :total="totalItems" :page-size="pageSize" @on-change="pageChange" />
             </div>
         </div>
 
     </div>
-
 </template>
 
 <script>
 import DocumentRequest from "@/api/document"
-import {parseTime} from "@/utils"
+import { parseTime } from "@/utils"
 import fileTool from "@/utils/fileUtil"
 
 export default {
@@ -133,9 +128,9 @@ export default {
         }
     },
     props: {
-        type: {type: String, requires: true, default: 'ALL'},
-        keyword: {type: String, requires: false},
-        cateId: {type: String, requires: true}
+        type: { type: String, requires: true, default: 'ALL' },
+        keyword: { type: String, requires: false },
+        cateId: { type: String, requires: true }
     },
     mounted() {
         // this.getListData()
@@ -210,8 +205,8 @@ export default {
                 this.loading = false
                 if (res.code === 200) {
                     let documents = res.data['documents'];
-                    documents.forEach( item => {
-                        if(item.checked === true) {
+                    documents.forEach(item => {
+                        if (item.checked === true) {
                             item['_checked'] = true
                             item['_disabled'] = true
                         }
@@ -249,7 +244,6 @@ export default {
 </script>
 
 <style scoped>
-
 .page-container {
     text-align: right;
     padding: 5px;

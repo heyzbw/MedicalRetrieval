@@ -2,7 +2,7 @@
     <div class="home_wrap">
         <div v-show="view_flag" style="padding: 400px; color: #ffcc4f;">
             <div class="demo-spin-icon-load">
-                <Icon type="md-refresh" style="font-size: 48px;" />
+                <Icon type="md-refresh" style="font-size: 48px;"/>
             </div>
             <div style='font-size:16px'>加载中...</div>
         </div>
@@ -21,13 +21,14 @@
 </template>
 
 <script>
+
 import { BackendUrl } from '@/api/request'
 let PDFJS = require('pdfjs-dist');
 PDFJS.GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
 export default {
     data() {
         return {
-            pdf_scale: 0.8,//pdf放大系数
+            pdf_scale: 1.5,//pdf放大系数
             pdf_pages: [],
             pdf_div_width: '',
             pdf_src: null,
@@ -35,15 +36,13 @@ export default {
 
             view_flag: true,
 
-            url: null,
-
             docId: this.$route.query.docId,
         }
     },
     mounted() {
         this.get_pdfurl()
     },
-    props: ["previewId"],
+
     methods: {
         scaleD() {  //放大
             let max = 0
@@ -59,7 +58,7 @@ export default {
             this._loadFile(this.pdf_src)
         },
         scaleX() {  //缩小
-            let min = 0.5
+            let min = 1.0
             if (this.pdf_scale <= min) {
                 return
             }
@@ -68,14 +67,14 @@ export default {
         },
         get_pdfurl() {  //获得pdf教案
             this.loading = true
-            let docId = this.previewId
+            let docId = this.docId
 
             //加载本地
             //  this.pdf_src = 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
             // this.pdf_src = 'http://81.69.247.172:8082/files/view/62cee7d6ff703f08647e0bbe'
             // this.pdf_src = 'http://81.69.247.172:8082/files/view/62ba6d2c845f9a73b891bdc4'
             // this.pdf_src = 'adminapi/blogs/%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95/4%E3%80%81%E7%AC%AC%E5%9B%9B%E9%83%A8%E5%88%86%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%2814%E9%A2%98%29.pdf'
-            this.pdf_src = BackendUrl() + '/files/view2/' + docId
+            this.pdf_src = BackendUrl() + '/files/view/' + docId
             this._loadFile(this.pdf_src)
             return
 
@@ -112,7 +111,7 @@ export default {
                         ctx.oBackingStorePixelRatio ||
                         ctx.backingStorePixelRatio || 1
                     let ratio = dpr / bsr
-                    let viewport = page.getViewport({ scale: this.pdf_scale })
+                    let viewport = page.getViewport({scale: this.pdf_scale})
 
                     canvas.width = viewport.width * ratio
                     canvas.height = viewport.height * ratio
@@ -186,11 +185,9 @@ export default {
     from {
         transform: rotate(0deg);
     }
-
     50% {
         transform: rotate(180deg);
     }
-
     to {
         transform: rotate(360deg);
     }

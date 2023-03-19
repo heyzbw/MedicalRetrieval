@@ -5,75 +5,69 @@
         </div>
         <Row>
             <Col span="1" class="star-tag">
-                <span>*</span>
+            <span>*</span>
             </Col>
             <Col span="12">
-                <div class="upload-panel">
-                    <Upload
-                        type="drag"
-                        :action="actionUrl">
-                        <div style="padding: 30px 0;">
-                            <div style="padding: 5px; line-height: 45px;">
-                                <img :src="buttonSrc" width="68px" height="68px" alt="pic"/>
-                            </div>
-                            <!--                            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>-->
-                            <p>支持Word/Excel/PPT/PDF，不超过100M</p>
+            <div class="upload-panel">
+                <Upload type="drag" :action="actionUrl">
+                    <div style="padding: 30px 0;">
+                        <div style="padding: 5px; line-height: 45px;">
+                            <img :src="buttonSrc" width="68px" height="68px" alt="pic" />
                         </div>
-                    </Upload>
+                        <!--                            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>-->
+                        <p>支持Word/Excel/PPT/PDF，不超过100M</p>
+                    </div>
+                </Upload>
 
-                </div>
+            </div>
             </Col>
         </Row>
 
         <Row style="padding: 5px 0; margin-top: 38px;">
             <Col span="1" class="star-tag">
-                <span>*</span>
+            <span>*</span>
             </Col>
             <Col span="20">
-                <div class="search-input-top">
-                    <input :placeholder="placeholder" v-model="searchValue"
-                           @keyup.enter="clickToSearch(searchValue)"></input>
-                </div>
+            <div class="search-input-top">
+                <input :placeholder="placeholder" v-model="searchValue" @keyup.enter="clickToSearch(searchValue)">
+            </div>
             </Col>
         </Row>
         <Row style="padding: 5px 0;">
             <Col span="1" class="star-tag">
-                <span>*</span>
+            <span>*</span>
             </Col>
             <Col span="6">
-                <div class="cate-dropdown">
+            <div class="cate-dropdown">
 
-<!--                    <Select v-model="model" style="width:200px">-->
-<!--                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
-<!--                    </Select>-->
+                <!--                    <Select v-model="model" style="width:200px">-->
+                <!--                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+                <!--                    </Select>-->
 
-                    <Dropdown @on-click="switchCategory">
-                        <a href="javascript:void(0)">
-                            切换分类
-                            <Icon type="ios-arrow-down"></Icon>
-                        </a>
-                        <template #list>
-                            <DropdownMenu>
-                                <DropdownItem
-                                    v-for="item in categoryOption"
-                                    :name="item.id"
-                                >
-                                    {{ item.seeName }}
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </template>
-                    </Dropdown>
-                </div>
+                <Dropdown @on-click="switchCategory">
+                    <a href="javascript:void(0)">
+                        切换分类
+                        <Icon type="ios-arrow-down"></Icon>
+                    </a>
+                    <template #list>
+                        <DropdownMenu>
+                            <DropdownItem v-for="item in categoryOption" :name="item.id">
+                                {{ item.seeName }}
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </template>
+                </Dropdown>
+            </div>
             </Col>
         </Row>
         <Row style="padding: 5px 0;">
             <Col span="1" class="star-tag">
-                <span>*</span>
+            <span>*</span>
             </Col>
             <Col span="20" class="description-area">
 
-                <Input v-model="value1" maxlength="140" type="textarea" placeholder="Enter something..."
-                       :autosize="{minRows: 2,maxRows: 5}"/>
+            <Input v-model="value1" maxlength="140" type="textarea" placeholder="Enter something..."
+                :autosize="{ minRows: 2, maxRows: 5 }" />
             </Col>
         </Row>
 
@@ -82,25 +76,20 @@
 
             </Col>
             <Col>
-                <div class="upload-button" style="width: 180px; height: 45px; border: 2px solid #000;
+            <div class="upload-button" style="width: 180px; height: 45px; border: 2px solid #000;
                                     background: #FFF7D6;
 box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
 border-radius: 8px;
 display: flex;
 justify-content: center;
-"
-                     @click="selected(uploadRoute)"
-                >
-                    <div style="padding: 5px; line-height: 45px;">
-                        <img :src="buttonSrc" width="24px" height="28px" alt="pic"/>
-                    </div>
-                    <span
-                        style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;"
-
-                    >
-                                            点我上传文档</span>
-
+" @click="selected(uploadRoute)">
+                <div style="padding: 5px; line-height: 45px;">
+                    <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
                 </div>
+                <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">
+                    点我上传文档</span>
+
+            </div>
             </Col>
         </Row>
     </div>
@@ -123,7 +112,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .main-container {
     padding: 30px;
 
@@ -131,7 +119,7 @@ export default {
         width: 96px;
         height: 33px;
         font-size: 24px;
-        font-family: PingFangSC-Medium, PingFang SC,serif;
+        font-family: PingFangSC-Medium, PingFang SC, serif;
         font-weight: 500;
         color: #000000;
         line-height: 33px;
@@ -208,6 +196,4 @@ export default {
 /deep/ .ivu-upload-drag {
     border: none;
 }
-
-
 </style>

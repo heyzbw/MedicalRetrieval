@@ -2,7 +2,8 @@
     <div class="search-doc">
         <div class="doc-title-group">
             <div class="doc-pic" style="text-align: center;">
-                <img :src=" thumbId | imgSrc " alt="thumb" style="width: 36px;max-height: 48px;border: 1px solid #dcdee2; border-radius: 2px">
+                <img :src="thumbId | imgSrc" alt="thumb"
+                    style="width: 36px;max-height: 48px;border: 1px solid #dcdee2; border-radius: 2px">
             </div>
             <div class="title-group">
                 <div class="doc-title-info" @click="getDocView()">
@@ -18,38 +19,40 @@
                     <div class="description-item" v-show="categoryIn">
                         {{ categoryIn }}
                     </div>
-                    <Tag color="blue" v-for="item in tagsIn">{{item}}</Tag>
+                    <Tag color="blue" v-for="item in tagsIn">{{ item }}</Tag>
                 </div>
             </div>
         </div>
-        <div class="doc-abstract">
-            <p v-html="description"></p>
+        <div class="doc-abstract" v-show="stringListin" v-for="(item, index) in stringList">
+            {{ index + 1 }}.来源于文本<p v-html=item class="sl-abstract" @click="getDocView()"></p>
+
         </div>
-            <ul class="ivu-list-item-action">
-                <li>
-                    <i class="ivu-icon ivu-icon-ios-star-outline"></i>
-                    {{collectNum}}
-                </li>
-                <li>
-                    <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>889
-                </li>
-                <li>
-                    <i class="ivu-icon ivu-icon-ios-chatbubbles-outline"></i>
-                    {{commentNum}}
-                </li>
-            </ul>
-<!--        </div>-->
+        <ul class="ivu-list-item-action">
+            <li>
+                <i class="ivu-icon ivu-icon-ios-star-outline"></i>
+                {{ collectNum }}
+            </li>
+            <li>
+                <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>889
+            </li>
+            <li>
+                <i class="ivu-icon ivu-icon-ios-chatbubbles-outline"></i>
+                {{ commentNum }}
+            </li>
+        </ul>
+        <!--        </div>-->
     </div>
 </template>
 
 <script>
-import {parseTime} from "@/utils/index"
+import { parseTime } from "@/utils/index"
 import { BackendUrl } from '@/api/request'
 
 export default {
     name: "SearchItem",
     data() {
         return {
+
         }
     },
     props: {
@@ -57,34 +60,37 @@ export default {
         thumbId: { type: String, requires: true },
         title: { type: String, requires: true },
         description: { type: String, requires: true },
-        time: { type: String, requires: true, default: "232"},
-        userName: { type: String, requires: true, default: 'admin'},
-        category: { type: Object, requires: false,default: ''},
-        tags: { type: Array, requires: false, default: []},
-        collectNum: { type: Number, requires: false, default: 0},
-        commentNum: { type: Number, requires: false, default: 0}
+        time: { type: String, requires: true, default: "232" },
+        userName: { type: String, requires: true, default: 'admin' },
+        category: { type: Object, requires: true, default: '' },
+        tags: { type: Array, requires: true, default: [] },
+        collectNum: { type: Number, requires: false, default: 0 },
+        commentNum: { type: Number, requires: false, default: 0 },
+        keyword: { type: String, requires: true, default: '11' },
+        stringList: { type: Array, requires: true, default: [] }
     },
     // 将 prop 数据转换为本地数据
     computed: {
         categoryIn: function () {
-            if( this.category === null || this.category.name === null ){
+            if (this.category === null || this.category.name === null) {
                 return null;
             } else {
                 let temp = this.category.name
-                if ( temp.length > 6) {
+                if (temp.length > 6) {
                     temp = temp.substring(0, 6) + '...'
                 }
                 return temp;
             }
         },
         tagsIn: function () {
-            if ( this.tags === null || this.tags.length === 0) {
+            if (this.tags === null || this.tags.length === 0) {
                 return []
             } else {
                 let temp = []
+                console.log(this.stringList)
                 this.tags.forEach(item => {
                     let temp1 = item.name
-                    if ( temp1.length > 8) {
+                    if (temp1.length > 8) {
                         temp1 = temp1.substring(0, 8) + '...'
                     }
                     temp.push(temp1)
@@ -92,21 +98,33 @@ export default {
                 return temp
             }
         },
-        timeIn: function() {
+        timeIn: function () {
             return parseTime(new Date(this.time), '{y}年{m}月{d}日 {h}:{i}:{s}');
+        },
+
+        stringListin: function () {
+            if (this.stringList === null || this.stringList.length === 0) {
+                return this.description
+            } else {
+                let sl = []
+                return this.stringList
+            }
         },
         getDocView() {
             this.$router.push({
-                path:'/preview',
-                query:{
-                    docId: this.id
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword
+
                 }
             })
+
         }
     },
     filters: {
         imgSrc(value) {
-            if(value === "" || value === undefined || value == null) {
+            if (value === "" || value === undefined || value == null) {
                 return BackendUrl() + "/files/image2/d2d9933cf295443990b2bed036a534ec";
             } else {
                 return BackendUrl() + "/files/image2/" + value;
@@ -136,6 +154,7 @@ export default {
     /*align-items: flex-start;*/
     display: block;
 }
+
 .doc-pic {
     height: 48px;
     width: 48px;
@@ -143,11 +162,13 @@ export default {
     line-height: 48px;
     margin: auto;
 }
+
 .title-group {
     height: 48px;
     float: left;
-    width: calc( 100% - 60px);
+    width: calc(100% - 60px);
 }
+
 .doc-title-info {
     height: 22px;
     /*line-height: 36px;*/
@@ -166,25 +187,31 @@ export default {
     height: 26px;
     line-height: 26px;
     display: block;
-    color: rgba(0,0,0,.45);
+    color: rgba(0, 0, 0, .45);
     font-size: 14px;
     float: left;
 }
+
 .description-item {
     width: 200px;
     line-height: 24px;
     padding-top: 2px;
     float: left;
 }
+
 ul {
     margin: 16px 0 0;
 }
+
 li {
     padding: 0 20px;
 }
 
-.doc-abstract >>> em {
+.doc-abstract>>>em {
     background-color: yellow;
 }
 
+.sl-abstract {
+    margin: 2px 0 0 0;
+}
 </style>
