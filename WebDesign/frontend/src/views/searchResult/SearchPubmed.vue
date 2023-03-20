@@ -1,13 +1,13 @@
 <template>
     <div class="search-zone">
-        <Input search enter-button="搜索" :value="keyWord" placeholder="请输入文档关键字" @on-search="searchValue" />
+        <button @click="searchValue">Pubmed搜索</button>
     </div>
 </template>
 
 <script>
 
 export default {
-    name: "SearchInput",
+    name: "SearchPubmed",
     data() {
         return {
             keyWord: this.$route.query.keyWord,
@@ -39,11 +39,11 @@ export default {
     /*background-color: #f1db77;*/
 }
 
-/deep/ .ivu-input-group {
+div /deep/ .ivu-input-group {
     box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
 }
 
-/deep/ .ivu-input {
+div /deep/ .ivu-input {
     border-top-left-radius: 60px;
     border-bottom-left-radius: 60px;
     border: none;
@@ -51,18 +51,18 @@ export default {
     /*background-color: #f1db77;*/
 }
 
-/deep/ .ivu-input:focus {
+div /deep/ .ivu-input:focus {
     border: none;
     outline: none;
 }
 
-/deep/ .ivu-input-group-append {
+div /deep/ .ivu-input-group-append {
     border-top-right-radius: 60px;
     border-bottom-right-radius: 60px;
     border: none !important;
 }
 
-/deep/ .ivu-input-group-append::before {
+div /deep/ .ivu-input-group-append::before {
     display: block;
     width: 1px;
     position: absolute;
@@ -73,7 +73,7 @@ export default {
     background-color: #f1db77;
 }
 
-/deep/ .ivu-input-search {
+div /deep/ .ivu-input-search {
     background-color: #ffffff !important;
     color: #f1db77 !important;
 }

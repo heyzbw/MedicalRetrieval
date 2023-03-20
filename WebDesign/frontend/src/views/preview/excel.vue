@@ -49,7 +49,7 @@ export default {
 
             let docId = this.$route.query.docId;
 
-            let wordURL = 'http://81.69.247.172:8082/files/view/' + docId
+            let wordURL = 'http://localhost:8082/files/view/' + docId
 
             axios({
                 method: 'get',
@@ -135,7 +135,7 @@ export default {
             const xhr = new XMLHttpRequest();
             let docId = this.$route.query.docId;
 
-            this.wordURL = 'http://81.69.247.172:8082/files/view/' + docId
+            this.wordURL = 'http://localhost:8082/files/view/' + docId
 
             xhr.open("get", this.wordURL, true);
             // xhr.responseType = "arraybuffer";

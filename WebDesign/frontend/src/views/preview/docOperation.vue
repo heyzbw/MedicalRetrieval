@@ -1,8 +1,6 @@
 <template>
     <div class="operation-container">
-        <div class="item" :class="(item.index === '1' && likeStatus === 1)
-        || (item.index === '2' && collectStatus===1) ? 'pushed' : '' "
-             v-for="item in data" @click="operate(item)">
+        <div class="item" v-for="item in data" @click="operate(item)">
             <div class="item-logo">
                 <img :src="item.src" :alt="item.src">
             </div>
@@ -23,13 +21,13 @@ export default {
         return {
             data: [
                 {
-                    name: "竖个大拇指",
-                    src: require("@/assets/source/like.png"),
+                    name: "马上收藏",
+                    src: require("@/assets/source/heart.png"),
                     index: "1"
                 },
                 {
-                    name: "马上收藏",
-                    src: require("@/assets/source/heart.png"),
+                    name: "竖个大拇指",
+                    src: require("@/assets/source/like.png"),
                     index: "2"
                 },
                 {
@@ -41,10 +39,6 @@ export default {
             docId: this.$route.query.docId,
         }
     },
-    props: {
-        likeStatus: Number,
-        collectStatus: Number
-    },
     mounted() {
 
     },
@@ -52,39 +46,30 @@ export default {
         operate(item) {
             if (item.index === "3") {
                 window.open(BackendUrl() + "/files/view/" + this.docId, "_blank");
+            } else if (item.index === "1" || item.index === "2") {
+
+                if (!localStorage.getItem('token')) {
+                    this.$Message.error('跳转到登录页面，请先登录！');
+                    this.$router.push({
+                        path: '/login',
+                        query: {
+                            userName: this.userName
+                        }
+                    })
+                }
+
+                let params = {
+                    docId: this.docId
+                }
+                CollectRequest.postData(params).then(res => {
+                    this.$Notice.info({
+                        title: '通知信息',
+                        desc: '收藏点赞成功！'
+                    });
+                }).catch(res => {
+                    console.log(res)
+                })
             }
-            else if (item.index === "1") {
-              this.$emit("addLike", Number(item.index))
-            }
-            else if (item.index === "2"){
-              this.$emit("addCollect", Number(item.index))
-            }
-            // else if (item.index === "1" || item.index === "2") {
-            //
-            //     this.$emit("addLike", Number(item.index))
-            //
-            //     // if (!localStorage.getItem('token')) {
-            //     //     this.$Message.error('跳转到登录页面，请先登录！');
-            //     //     this.$router.push({
-            //     //         path: '/login',
-            //     //         query: {
-            //     //             userName: this.userName
-            //     //         }
-            //     //     })
-            //     // }
-            //     //
-            //     // let params = {
-            //     //     docId: this.docId
-            //     // }
-            //     // CollectRequest.postData(params).then(res => {
-            //     //     this.$Notice.info({
-            //     //         title: '通知信息',
-            //     //         desc: '收藏点赞成功！'
-            //     //     });
-            //     // }).catch(res => {
-            //     //     console.log(res)
-            //     // })
-            // }
         }
     }
 }
@@ -115,10 +100,6 @@ export default {
     background-color: #f1db77;
     cursor: pointer;
     border: 2px #2d2c2b solid;
-}
-
-.pushed {
-    background-color: #f1db77;
 }
 
 .operation-title {

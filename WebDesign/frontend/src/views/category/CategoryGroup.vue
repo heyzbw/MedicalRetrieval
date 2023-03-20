@@ -3,7 +3,7 @@
         style="padding: 0;background: #f8f8f9; text-align: left; position: absolute; left: 0; top: 0; height: calc( 100vh - 180px); width: 100%;">
         <Card :title=name icon="ios-options" :padding="0" style="width: 100%;">
             <CellGroup>
-                <Cell v-for="item in listData" :title="item.name" on-click="changeCategoryValue"/>
+                <Cell v-for="item in listData" :title="item.name" on-click="changeCategoryValue" />
                 <!--                <Cell title="Only show titles" />-->
                 <!--                <Cell title="Only show titles" >-->
                 <!--                    <template #extra>-->
@@ -46,8 +46,8 @@ export default {
         }
     },
     props: {
-        titleName: {type: String, requires: true},
-        categoryType: {type: String, requires: true}
+        titleName: { type: String, requires: true },
+        categoryType: { type: String, requires: true }
     },
     created() {
         this.getAllItems()
@@ -80,6 +80,4 @@ export default {
 </script>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

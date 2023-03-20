@@ -60,7 +60,7 @@ export default {
                 },
                 {
                     title: '提交用户',
-                    key: 'userName',
+                    key: 'user',
                     width: 200
                 },
                 {
@@ -125,17 +125,17 @@ export default {
                         let viewInfo = resultElement['reviewLog']
                         obj['viewInfo'] = viewInfo
                         obj['readState'] = resultElement['readState']
-                        obj['userName'] = resultElement['userName'] || '未知'
                         this.data.push(obj)
                         obj = {}
                     }
                     this.totalItems = result.total
                 }
             }).catch(err => {
-                this.$Message.warning("操作失败！")
+                console.log(err)
             })
         },
         async remove(index) {
+            this.$Message.info('remove cancel');
             let item = this.data[index]
             let param = {
                 ids: [item.id]
@@ -143,39 +143,13 @@ export default {
             reviewRequest.removeReviewLog(param).then(res => {
                 if (res.code === 200) {
                     this.getDocData()
-                    this.$Message.success("清除成功！")
-                } else {
-                    this.$Message.warning("操作失败！")
                 }
             }).catch(err => {
-                this.$Message.warning("操作失败！")
+                console.log(err)
             })
         },
-        async removeBatch() {
-            let currentSelection = this.$refs.reviewInfoTable.getSelection();
-            if (currentSelection.length < 1) {
-                this.$Message.warning("请勾选！")
-                return
-            }
-
-            let ids = []
-            for (let item of currentSelection) {
-                ids.push(item.id)
-            }
-            let param = {
-                ids: ids
-            }
-            await reviewRequest.removeReviewLog(param).then(res => {
-                if (res.code === 200) {
-                    this.$Message.success("清除成功！")
-                } else {
-                    this.$Message.error("操作失败!")
-                }
-                this.getDocData()
-            }).catch(err => {
-                this.$Message.error("操作失败:" + err)
-            })
-
+        removeBatch() {
+            let selection = this.$refs.reviewInfoTable.getSelection();
         },
         pageChange(page) {
             this.currentPage = page

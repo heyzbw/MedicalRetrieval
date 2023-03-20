@@ -103,7 +103,7 @@ export default {
                 page: this.currentPage,
                 rows: this.pageSize
             }
-            docReviewRequest.getMyReviewLog(param).then(res => {
+            docReviewRequest.getReviewLog(param).then(res => {
                 if (res.code === 200) {
                     let result = res.data.data
                     this.totalItems = res.data.total
@@ -131,7 +131,7 @@ export default {
                 page: this.commentCurrentPage,
                 rows: this.commentPageSize
             }
-            commentRequest.getMyComments(param).then(res => {
+            commentRequest.getAllComments(param).then(res => {
                 if (res.code === 200) {
                     let result = res.data.data
 

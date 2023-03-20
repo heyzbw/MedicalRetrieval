@@ -1,10 +1,22 @@
 from flask import Flask, request, jsonify  # flask库
 from flask_cors import CORS
 from pdf2pic import *
+from Bio import Entrez
+from Bio import Medline
+import json
+import os
+import re
+import urllib.request
+import requests
+from flask import Flask, send_from_directory, send_file
 
 # 创建一个服务，赋值给APP
 app = Flask(__name__)
 CORS(app, resource=r'/*')
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36',
+}
 
 
 @app.route('/pdf2pic', methods=['POST'])  # 指定接口访问的路径，支持什么请求方式get，post
@@ -24,6 +36,71 @@ def call_pdf2pic():
     # 返回成功
     json_obj = {"data": json_data}
     return json_obj
+
+
+@app.route('/getpubmed', methods=['POST'])
+def call_getpubmed():
+    Entrez.email = 'p1844483019@outlook.com'
+    data = request.get_json(silent=True)
+    print(request.get_json(silent=True))
+    terms = data['keyword']
+    handle = Entrez.esearch(db='pubmed', term=terms, sort='relevance')
+    record = Entrez.read(handle)
+    idlist = record['IdList']
+    handle1 = Entrez.efetch(db='pubmed', id=idlist,
+                            rettype='medline', retmode='text')
+    record1 = Medline.parse(handle1)
+
+    text = {}
+    text['Papers'] = []
+
+    for i in record1:
+        textarr = {}
+        textarr['Title'] = i.get('TI')
+        textarr['Author'] = i.get('AU')
+        textarr['Journal'] = i.get('JT')
+        textarr['ISSN'] = i.get('IS')
+        textarr['Source'] = i.get('SO')
+        textarr['doi'] = re.findall(r"10\.[0-9]+/\S+", i.get('SO'))[0][:-1]
+        textarr['Abstract'] = i.get('AB')
+        text['Papers'].append(textarr)
+    jtext = json.dumps(text, indent=4, ensure_ascii=False)
+    return jtext
+
+
+@app.route('/PDFdownload', methods=['POST'])
+def pdfdownload():
+    sci_Hub_Url = "https://sci-hub.ren/"
+    data = request.get_json(silent=True)
+    print(data)
+    doi = data['doi']
+    print(doi)
+    Title = data['Title']
+    url = sci_Hub_Url + doi
+    pattern = '/.*?\.pdf'
+    content = requests.get(url, headers=headers)
+    download_url = re.findall(pattern, content.text)
+    # print(download_url)
+    download_url[1] = "https:" + download_url[1]
+    print(download_url[1])
+    path = r"papers"
+    # 使用 urllib.request 来包装请求
+    req = urllib.request.Request(download_url[1], headers=headers)
+    # 使用 urllib.request 模块中的 urlopen方法获取页面
+    u = urllib.request.urlopen(req, timeout=5)
+
+    file_name = Title + '.pdf'
+    f = open(path + '/' + file_name, 'wb')
+
+    block_sz = 8192
+    while True:
+        buffer = u.read(block_sz)
+        if not buffer:
+            break
+        f.write(buffer)
+    f.close()
+    print("Sucessful to download" + " " + file_name)
+    return send_file(f)
 
 
 if __name__ == '__main__':

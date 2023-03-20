@@ -3,7 +3,7 @@
         <Split v-model="split" min="180px" max="900px">
             <template #left>
                 <div class="demo-split-pane">
-                    <CategoryItems titleName="文档标签" category-type="TAG" @categoryChange="handleChange"/>
+                    <CategoryItems titleName="文档标签" category-type="TAG" @categoryChange="handleChange" />
                 </div>
             </template>
             <template #right>
@@ -12,23 +12,17 @@
                         <div class="add-doc">
                             <Button type="text" @click="addDoc">添加文档</Button>
                         </div>
-                        <doc-table ref="docTable" type="TAG" cateId=""
-                                   @removeDoc="removeDoc"
-                                   @on-page-change="queryTable"
-                                   class="table-panel"
-                        ></doc-table>
+                        <doc-table ref="docTable" type="TAG" cateId="" @removeDoc="removeDoc" @on-page-change="queryTable"
+                            class="table-panel"></doc-table>
                     </div>
 
                 </div>
             </template>
         </Split>
-        <Modal v-model="modal" fullscreen title="Fullscreen Modal"
-               @on-ok="saveEditor"
-               @on-cancel="cancelEditor"
-        >
-            <div>
+        <Modal v-model="modal" fullscreen title="Fullscreen Modal" @on-ok="saveEditor" @on-cancel="cancelEditor">
+            <!-- <div>
                 <check-table ref="addDocTable" type="TAG" :cateId="cateId"></check-table>
-            </div>
+            </div> -->
         </Modal>
     </div>
 </template>
@@ -85,7 +79,7 @@ export default {
                         console.log(response.data)
                         this.handleChange(cateId)
                     } else {
-                        this.$Message.info("错误：" + response.message)
+                        this.$Message.info("错误tag：" + response.message)
                     }
 
                 }
