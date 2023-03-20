@@ -13,10 +13,10 @@ import axios from 'axios'
 Vue.use(VueRouter);
 Vue.use(iView);
 Vue.use(ElementUI);
+Vue.prototype.$axios = axios
 
 
-
-Vue.prototype.$axios = Api;
+// Vue.prototype.$axios = Api;
 
 // The routing configuration
 // const RouterConfig = {

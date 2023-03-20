@@ -23,8 +23,9 @@
                 </div>
             </div>
         </div>
-        <div class="doc-abstract" v-show="stringListin" v-for="(item, index) in stringList">
-            {{ index + 1 }}.来源于文本<p v-html=item class="sl-abstract" @click="getDocView()"></p>
+        <div class="doc-abstract">
+
+            <p v-html="description"></p>
 
         </div>
         <ul class="ivu-list-item-action">
