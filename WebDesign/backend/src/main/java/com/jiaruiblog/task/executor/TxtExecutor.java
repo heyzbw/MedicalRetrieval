@@ -37,7 +37,6 @@ public class TxtExecutor extends TaskExecutor{
         try {
             FileObj fileObj = new FileObj();
             fileObj.setId(fileDocument.getMd5());
-            System.out.println("fileObj_Id:"+fileObj.getId());
             fileObj.setFileId(fileDocument.getId());
             fileObj.setName(fileDocument.getName());
             fileObj.setType(fileDocument.getContentType());

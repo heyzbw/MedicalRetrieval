@@ -225,7 +225,7 @@ public class FileServiceImpl implements IFileService {
 
         CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
             try {
-                file2OcrService.getOcrByPY(md5);
+//                file2OcrService.getOcrByPY(md5);
                 System.out.println("处理完了OCR");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -279,9 +279,9 @@ public class FileServiceImpl implements IFileService {
                 //  取ocr结果
                 CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
                     try {
-                        List<OcrResult> ocrResultList = file2OcrService.getOcrByPY(fileMd5);
+//                        List<OcrResult> ocrResultList = file2OcrService.getOcrByPY(fileMd5);
                         System.out.println("异步获取ocr数据");
-                        fileDocument.setOcrResultList(ocrResultList);
+//                        fileDocument.setOcrResultList(ocrResultList);
 
                         System.out.println("处理完了OCR");
 

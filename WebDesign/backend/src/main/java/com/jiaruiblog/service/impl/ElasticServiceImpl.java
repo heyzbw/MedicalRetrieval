@@ -119,7 +119,7 @@ public class ElasticServiceImpl implements ElasticService {
         // 立即使用相同的 ID 搜索刚插入的文档
         GetResponse response = client.get(
                 new GetRequest(INDEX_NAME, "_doc", id), RequestOptions.DEFAULT); // 根据文档ID查询
-        System.out.println(response.getSourceAsString()); // 输出查询结果
+        System.out.println("插入到es中"+response.getSourceAsString()); // 输出查询结果
         JSONObject jsonObject = JSON.parseObject(response.getSourceAsString());
         JSONObject attachment = jsonObject.getJSONObject("attachment");
 

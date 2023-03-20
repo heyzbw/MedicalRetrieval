@@ -11,6 +11,8 @@ import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.SpringApplicationContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.tika.exception.TikaException;
+import org.xml.sax.SAXException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -66,7 +68,7 @@ public abstract class TaskExecutor {
         return fileService.getFileBytes(gridFsId);
     }
 
-    public void uploadFileToEs(InputStream is, FileDocument fileDocument, TaskData taskData) {
+    public void uploadFileToEs(InputStream is, FileDocument fileDocument, TaskData taskData) throws TikaException, SAXException {
         String textFilePath = "./" + fileDocument.getMd5() + fileDocument.getName() + ".txt";
         taskData.setTxtFilePath(textFilePath);
 
