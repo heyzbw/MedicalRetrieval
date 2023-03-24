@@ -90,9 +90,9 @@ public class ElasticServiceImpl implements ElasticService {
     private static String CONTENT_EACH_PAGE_LIST = "contentEachPageList";
     private static String  CONTENT_EACH_PAGE_LIST_CONTENT = "contentEachPageList.content";
     private static String  CONTENT_EACH_PAGE_LIST_PAGE_NUM = "contentEachPageList.pageNum";
-    private static String OCR_RESULT__NEW_LIST = "ocrResultNewList";
-    private static String OCR_RESULT_LIST_OCRTEXT = "ocrResultNewList.octText";
-    private static String OCRRESULTLIST_MONGODB_ID = "ocrResultNewList.mongodb_id";
+    private static String OCR_RESULT_NEW_LIST = "ocrResultNewList";
+    private static String OCR_RESULT_LIST_OCRTEXT = "ocrResultNewList.ocrText";
+    private static String OCR_RESULT_LIST_MONGODB_ID = "ocrResultNewList.mongodb_id";
 
     @Resource
     private MongoTemplate mongoTemplate;
@@ -165,13 +165,13 @@ public class ElasticServiceImpl implements ElasticService {
         );
 
 //        ocr文本匹配
-        MatchQueryBuilder matchOcrText = QueryBuilders.matchQuery("ocrResultNewList.ocrText", keyword);
+        MatchQueryBuilder matchOcrText = QueryBuilders.matchQuery(OCR_RESULT_LIST_OCRTEXT, keyword);
         matchOcrText.boost(0.3f);
 
-        NestedQueryBuilder nestedOcrText = QueryBuilders.nestedQuery("ocrResultNewList", matchOcrText, ScoreMode.Total);
+        NestedQueryBuilder nestedOcrText = QueryBuilders.nestedQuery(OCR_RESULT_NEW_LIST, matchOcrText, ScoreMode.Total);
         nestedOcrText.innerHit(
                 new InnerHitBuilder().setFetchSourceContext(
-                        new FetchSourceContext(true, new String[]{"ocrResultNewList.ocrText", "ocrResultNewList.mongodb_id"}, null
+                        new FetchSourceContext(true, new String[]{OCR_RESULT_LIST_OCRTEXT, OCR_RESULT_LIST_MONGODB_ID}, null
                         )
                 )
         );
@@ -203,21 +203,55 @@ public class ElasticServiceImpl implements ElasticService {
 //            获取到content的hit内容
             SearchHits innerContentHits = hit.getInnerHits().get(CONTENT_EACH_PAGE_LIST);
 //            获取到ocrList内容
-            SearchHits innerOcrHits = hit.getInnerHits().get(OCR_RESULT__NEW_LIST);
+            SearchHits innerOcrHits = hit.getInnerHits().get(OCR_RESULT_NEW_LIST);
 
             Map<String,Object> objectMap = hit.getSourceAsMap();
 
+            float score = hit.getScore();
+
+            double contentScore = 0;
+
+            if(max_content_score > 0){
+                contentScore = score / max_content_score * CONTENT_WEIGHT;
+            }
+            else {
+                contentScore = 0;
+            }
+
+            double clickScore = 0;
+
+
+            if(max_click_num > 0)
+            {
+                clickScore = ((int) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
+            }
+            else {
+                clickScore = 0;
+            }
+
+            double likeScore = 0;
+
+            if(max_like_num > 0)
+            {
+                likeScore = ((int) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
+            }
+            else {
+                likeScore = 0;
+            }
+
+
 //           查询返回的字段为： "click_rate", "collect_num", "collect_num","name", "type","md5","fileId","id",
-//            esSearch.setLikeNum((int) objectMap.get("like_num"));
-//            esSearch.setClickRate((int) objectMap.get("click_rate"));
-//            esSearch.setCollectNum((int) objectMap.get("collect_num"));
+
+            esSearch.setClickScore(clickScore);
+            esSearch.setLikeScore(likeScore);
+            esSearch.setContentScore(contentScore);
             esSearch.setName((String) objectMap.get("name"));
             esSearch.setType((String) objectMap.get("type"));
             esSearch.setFileId((String) objectMap.get("fileId"));
             esSearch.setId((String) objectMap.get("id"));
 
 //            从innerhit中获取文本内容
-            if(innerContentHits != null){
+            if(innerContentHits.getTotalHits().value != 0){
                 for (SearchHit contentHit : innerContentHits){
                     EsSearchContent  esSearchContent = new EsSearchContent();
 //                    保存高亮内容的
@@ -236,25 +270,40 @@ public class ElasticServiceImpl implements ElasticService {
 
                     esSearchContentList.add(esSearchContent);
                 }
+                esSearch.setEsSearchContentList(esSearchContentList);
             }
-            esSearch.setEsSearchContentList(esSearchContentList);
+            else {
+                esSearch.setEsSearchContentList(null);
+            }
+
 
 //            从ocr中获取图片内容
-            if(innerOcrHits != null){
+            if(innerOcrHits.getTotalHits().value != 0){
                 for(SearchHit ocrHit:innerOcrHits){
                     EsSearchOcrOutcome esSearchOcrOutcome = new EsSearchOcrOutcome();
-                    esSearchOcrOutcome.setOcrText((String) ocrHit.getSourceAsMap().get("ocrText"));
-                    esSearchOcrOutcome.setMongoDbId((String) ocrHit.getSourceAsMap().get("mongodb_id"));
-
-                    esSearchOcrOutcomeList.add(esSearchOcrOutcome);
+                    String ocrText = (String) ocrHit.getSourceAsMap().get("ocrText");
+                    if(ocrText.contains(keyword)){
+                        esSearchOcrOutcome.setOcrText(ocrText);
+                        esSearchOcrOutcome.setMongoDbId((String) ocrHit.getSourceAsMap().get("mongodb_id"));
+                        esSearchOcrOutcomeList.add(esSearchOcrOutcome);
+                    }
                 }
+                esSearch.setEsSearchOcrOutcomeList(esSearchOcrOutcomeList);
             }
-            esSearch.setEsSearchOcrOutcomeList(esSearchOcrOutcomeList);
-
-            esSearchList.add(esSearch);
+            else {
+                esSearch.setEsSearchOcrOutcomeList(null);
+            }
+            if(esSearch.getOcrResultList() != null || esSearch.getEsSearchContentList() != null)
+            {
+                esSearchList.add(esSearch);
+            }
         }
         return esSearchList;
     }
+
+//    public List<FileDocument> advanced_search{
+//        return null;
+//    }
 
     @Override
     public List<FileDocument> search(String keyword) throws IOException {

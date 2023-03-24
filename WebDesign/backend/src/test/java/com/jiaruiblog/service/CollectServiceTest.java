@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 
 import org.elasticsearch.index.query.QueryBuilders;
 
+import java.util.*;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
@@ -136,4 +137,80 @@ public class CollectServiceTest {
 
         client.close();
     }
+
+    @Test
+    public void remove_111(){
+        //表达式
+        String suffixExpression = "1+((2+3)*4)-5";
+        //中缀表达式对应的List
+        System.out.println("中缀表达式对应的List");
+        List<String> infixExpressionList = toInfixExpressionList(suffixExpression);
+        System.out.println(infixExpressionList);
+        //后缀表达式对应的List
+        System.out.println("后缀表达式对应的List");
+        List<String> suffixExpressionList = parseSuffixExpressionList(infixExpressionList);
+        System.out.println(suffixExpressionList);
+
+//        计算逆波兰表达式
+//        System.out.printf("suffixExpression=%d", calculate(suffixExpressionList));
+    }
+
+    private static boolean isOperator(String token) {
+        return token.equals("OR") || token.equals("AND");
+    }
+
+    //将中缀表达式转换成list
+    public static List<String> toInfixExpressionList(String s) {
+        List<String> ls = new ArrayList<String>();
+        int i = 0;
+        String str;  //多位数
+        char c;
+        do {
+            //非数字
+            if ((c = s.charAt(i)) < 48 || (c = s.charAt(i)) > 57) {
+                ls.add("" + c);
+                i++;
+            } else { //数字，但是考虑到多位数
+                str = "";
+                while (i < s.length() && (c = s.charAt(i)) >= 48 && (c = s.charAt(i)) <= 57) {
+                    str += c;
+                    i++;
+                }
+                ls.add(str);
+            }
+        } while (i < s.length());
+        return ls;
+    }
+
+
+    public static List<String> parseSuffixExpressionList(List<String> ls) {
+        //定义两个栈
+        Stack<String> s1 = new Stack<String>();  //符号栈
+        List<String> s2 = new ArrayList<String>();  //结果
+
+        for (String item : ls) {
+            //如果是一个数
+            if (item.matches("\\d+")) {
+                s2.add(item);
+            } else if (item.equals("(")) {
+                s1.push(item);
+            } else if (item.equals(")")) {
+                while (!s1.peek().equals("(")) {
+                    s2.add(s1.pop());
+                }
+                s1.pop();
+            } else {
+                while (s1.size() != 0 && Operation.getValue(s1.peek()) >= Operation.getValue(item)) {
+                    s2.add(s1.pop());
+                }
+                s1.push(item);
+            }
+        }
+        while (s1.size() != 0) {
+            s2.add(s1.pop());
+        }
+        return s2;
+    }
+
 }
+

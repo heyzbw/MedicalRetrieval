@@ -645,7 +645,10 @@ public class FileServiceImpl implements IFileService {
                     List<EsSearch> esSearchList = elasticServiceImpl.search_new(keyWord);
                     for(EsSearch esSearch:esSearchList)
                     {
-                        esSearch.setOcrResultList(OcrResultFromDB(esSearch));
+                        if(esSearch.getOcrResultList() != null)
+                        {
+                            esSearch.setOcrResultList(OcrResultFromDB(esSearch));
+                        }
                     }
 
 //                    将es的查询结果转为一个List<fileDocument>
@@ -1113,6 +1116,7 @@ public class FileServiceImpl implements IFileService {
     private List<OcrResult> OcrResultFromDB(EsSearch esSearch){
         List<EsSearchOcrOutcome> esSearchOcrOutcomeList = esSearch.getEsSearchOcrOutcomeList();
         List<OcrResult> list = new ArrayList<>();
+
         for(EsSearchOcrOutcome esSearchOcrOutcome:esSearchOcrOutcomeList)
         {
             if(esSearchOcrOutcome.getOcrText() != null)

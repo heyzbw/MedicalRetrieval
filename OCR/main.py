@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify  # flask库
 from flask_cors import CORS
 from pdf2pic import *
-from Bio import Entrez
-from Bio import Medline
+# from Bio import Entrez
+# from Bio import Medline
 import json
 import os
 import re
