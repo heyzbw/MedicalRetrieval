@@ -165,7 +165,7 @@ public class ElasticServiceImpl implements ElasticService {
         );
 
 //        ocr文本匹配
-        MatchQueryBuilder matchOcrText = QueryBuilders.matchQuery(OCR_RESULT_LIST_OCRTEXT, keyword);
+        MatchPhraseQueryBuilder matchOcrText = QueryBuilders.matchPhraseQuery(OCR_RESULT_LIST_OCRTEXT, keyword);
         matchOcrText.boost(0.3f);
 
         NestedQueryBuilder nestedOcrText = QueryBuilders.nestedQuery(OCR_RESULT_NEW_LIST, matchOcrText, ScoreMode.Total);
@@ -279,21 +279,27 @@ public class ElasticServiceImpl implements ElasticService {
 
 //            从ocr中获取图片内容
             if(innerOcrHits.getTotalHits().value != 0){
+                boolean flag = false;
                 for(SearchHit ocrHit:innerOcrHits){
                     EsSearchOcrOutcome esSearchOcrOutcome = new EsSearchOcrOutcome();
                     String ocrText = (String) ocrHit.getSourceAsMap().get("ocrText");
+
                     if(ocrText.contains(keyword)){
+                        flag = true;
                         esSearchOcrOutcome.setOcrText(ocrText);
                         esSearchOcrOutcome.setMongoDbId((String) ocrHit.getSourceAsMap().get("mongodb_id"));
                         esSearchOcrOutcomeList.add(esSearchOcrOutcome);
                     }
                 }
-                esSearch.setEsSearchOcrOutcomeList(esSearchOcrOutcomeList);
+                if(flag)
+                {
+                    esSearch.setEsSearchOcrOutcomeList(esSearchOcrOutcomeList);
+                }
             }
             else {
                 esSearch.setEsSearchOcrOutcomeList(null);
             }
-            if(esSearch.getOcrResultList() != null || esSearch.getEsSearchContentList() != null)
+            if(esSearch.getEsSearchOcrOutcomeList() != null || esSearch.getEsSearchContentList() != null)
             {
                 esSearchList.add(esSearch);
             }

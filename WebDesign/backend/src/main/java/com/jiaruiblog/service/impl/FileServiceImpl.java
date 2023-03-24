@@ -636,8 +636,10 @@ public class FileServiceImpl implements IFileService {
                 // 模糊查询 文件标题
                 docIdSet.addAll(fuzzySearchDoc(keyWord));
                 // 模糊查询 评论内容
+
                 docIdSet.addAll(commentServiceImpl.fuzzySearchDoc(keyWord));
                 List<FileDocument> esDoc = null;
+
                 try {
                     List<EsSearch> esSearchList = elasticServiceImpl.search_new(keyWord);
                     for(EsSearch esSearch:esSearchList)
@@ -651,7 +653,8 @@ public class FileServiceImpl implements IFileService {
 //                    将es的查询结果转为一个List<fileDocument>
                     esDoc = getListFileDocumentFromEsOutcome(esSearchList);
                     if (!CollectionUtils.isEmpty(esDoc)) {
-                        Set<String> existIds = esDoc.stream().map(FileDocument::getId).collect(Collectors.toSet());
+                        Set<String> existIds = esDoc.stream().map(FileDocument::getMd5).collect(Collectors.toSet());
+
                         docIdSet.removeAll(existIds);
                     }
                 } catch (Exception e) {
