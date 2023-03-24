@@ -75,7 +75,7 @@ export default {
             this.$axios({
                 method: "post",
                 url: "http://127.0.0.1:8083/PDFdownload",
-                type: "application/pdf",
+                type: "blob",
                 data: {
                     'doi': this.doi,
                     'Title': this.Title
@@ -84,9 +84,13 @@ export default {
                 console.log(typeof (response.data))
                 // const json = JSON.parse(response.data);
                 // console.log(typeof (json))
-                // console.log(json)
-                const inputFile = response.data
-                const blob = new File([inputFile], this.Title + 'pdf', { type: 'application/pdf' });
+                console.log(response)
+                let inputFile = response.data
+                let bblob = new Blob([inputFile], { type: 'application/pdf' })
+                let blob = new File([bblob], this.Title + '.pdf', { type: 'application/pdf' });
+                window.URL.createObjectURL(blob)
+                window.URL.createObjectURL(bblob)
+
                 this.uploadParam = {
                     fileId: this.Title,
                     file: blob

@@ -2,37 +2,29 @@
     <div class="search-group">
         <div class="search-zone">
             <div class="logo">
-                <img :src="logoSrc" width="100%" height="100%" alt=""/>
+                <img :src="logoSrc" width="100%" height="100%" alt="" />
             </div>
             <div class="search-input">
                 <div class="search-input-top">
                     <div class="search-selection" @click="routeTo">
                         <span>全部</span>
                     </div>
-                    <input :placeholder="placeholder" v-model="searchValue"
-                           @focus="userInputFlag = true"
-                           @blur="whenInputBlur"
-                           @keyup.enter="clickToSearch(searchValue)"
-                           @input="changeItem"
-                           ref="input"
-                    ></input>
+                    <input :placeholder="placeholder" v-model="searchValue" @focus="userInputFlag = true"
+                        @blur="whenInputBlur" @keyup.enter="clickToSearch(searchValue)" @input="changeItem"
+                        ref="input"></input>
                     <div class="search-button"
-                         style="width: 100px; line-height: 45px; display: flex; align-content: center; flex-wrap: wrap; justify-content: center;"
-                         @click="clickToSearch(searchValue)"
-                    >
-                        <img :src="searchSrc" width="16px" height="16px" alt="" style="display: inline-block;"/>
+                        style="width: 100px; line-height: 45px; display: flex; align-content: center; flex-wrap: wrap; justify-content: center;"
+                        @click="clickToSearch(searchValue)">
+                        <img :src="searchSrc" width="16px" height="16px" alt="" style="display: inline-block;" />
                     </div>
                 </div>
                 <div class="search-input-bottom" v-show="hotSearch.length">
                     <span class="title" style="font-width: 500;">推荐搜索：</span>
-                    <span class="search-tag" style="margin-left: 20px;"
-                          v-for="item in hotSearch"
-                          @click="clickToSearch(item)"
-                    >{{ item }}</span>
+                    <span class="search-tag" style="margin-left: 20px;" v-for="item in hotSearch"
+                        @click="clickToSearch(item)">{{ item }}</span>
                 </div>
                 <div class="user-search-result" v-show="userInputFlag && userSearch.length > 0">
-                    <div class="user-search-item" v-for="item in userSearch"
-                         @mousedown="preventBlur($event)">
+                    <div class="user-search-item" v-for="item in userSearch" @mousedown="preventBlur($event)">
                         <p @click="clickToUserSearch(item)">{{ item }}</p>
                         <div class="user-search-remove" @click="removeUserSearch(item)">删除</div>
                     </div>
@@ -64,9 +56,9 @@ export default {
         this.init();
     },
     mounted() {
-      // this.$nextTick(() => {
-      //     this.$refs.input.focus()
-      // })
+        // this.$nextTick(() => {
+        //     this.$refs.input.focus()
+        // })
     },
     methods: {
         routeTo() {
@@ -112,8 +104,8 @@ export default {
             this.userSearch = this.originUserSearch.filter((el) => el.toLowerCase().includes(this.searchValue)).slice(0, 10);
         },
 
-        preventBlur(e){
-            if ( e && e.preventDefault ) {
+        preventBlur(e) {
+            if (e && e.preventDefault) {
                 e.preventDefault(); //阻止默认浏览器动作(W3C)
             }
         },
@@ -169,6 +161,7 @@ export default {
 
         .search-input {
             position: relative;
+
             .search-input-top {
                 width: 560px;
                 height: 45px;
@@ -199,6 +192,7 @@ export default {
                         font-weight: 500;
                         color: #000000;
                         line-height: 20px;
+
                         &:hover {
                             color: #8d7b25;
                         }
@@ -245,7 +239,7 @@ export default {
 
             .user-search-result {
                 position: absolute;
-                background-color: rgba(255,255,255, 0.8);
+                background-color: rgba(255, 255, 255, 0.8);
                 width: 440px;
                 border-radius: 12px;
                 left: 120px;
@@ -254,6 +248,7 @@ export default {
                 text-align: left;
 
                 z-index: 100;
+
                 .user-search-item {
                     line-height: 24px;
                     font-size: 14px;
@@ -270,10 +265,11 @@ export default {
                         width: calc(100% - 20px);
                     }
 
-                    &:hover{
+                    &:hover {
                         background-color: #fff;
                         cursor: pointer;
                     }
+
                     .user-search-remove {
                         position: absolute;
                         right: 0px;
