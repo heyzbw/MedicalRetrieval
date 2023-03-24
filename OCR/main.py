@@ -103,9 +103,10 @@ def pdfdownload():
     downloadpath = 'papers/' + file_name
     print("Sucessful to download" + " " + file_name)
     response = make_response(
-        send_file(downloadpath, mimetype='application/pdf', as_attachment=True))
-    response.headers['Content-Type'] = 'application/pdf'
-    print(type(send_file(downloadpath, mimetype='application/pdf', as_attachment=True)))
+        send_file(downloadpath, as_attachment=True))
+    response.headers['Content-Type'] = 'blob'
+    # print(type(send_file(downloadpath,
+    #       mimetype='application/pdf;chartset=UTF-8', as_attachment=True)))
     return response
 
 

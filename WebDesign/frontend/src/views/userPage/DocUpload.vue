@@ -86,12 +86,12 @@
             </Col>
             <Col>
             <div class="upload-button" style="width: 180px; height: 45px; border: 2px solid #000;
-                                                                                    background: #FFF7D6;
-                                                                                    box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
-                                                                                    border-radius: 8px;
-                                                                                    display: flex;
-                                                                                    justify-content: center;
-                                                                                    " @click="uploadFile">
+                                                                                                    background: #FFF7D6;
+                                                                                                    box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
+                                                                                                    border-radius: 8px;
+                                                                                                    display: flex;
+                                                                                                    justify-content: center;
+                                                                                                    " @click="uploadFile">
                 <div style="padding: 5px; line-height: 45px;">
                     <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
                 </div>
@@ -149,6 +149,7 @@ export default {
         },
         changeFile() {
             const inputFile = this.$refs.fileToUpload.files[0];
+            console.log(inputFile)
             let filename = inputFile.name;
             // 此处应向后台请求 后台保存上传文件名称返回fileId作为文件标识
             this.uploadParam = {
@@ -169,6 +170,7 @@ export default {
             let formData = new FormData();
             formData.set("fileName", param.fileId);
             formData.set("file", param.file);
+            console.log(param.file)
             const config = {
                 onUploadProgress: (progressEvent) => {
                     // progressEvent.loaded:已上传文件大小
@@ -179,11 +181,13 @@ export default {
                 },
             };
             this.progressFlag = true;
+            console.log(formData)
             axios.post(this.actionUrl, formData, config).then(res => {
                 let { data } = res
                 if (data['code'] === 200 || data['code'] === 'success') {
                     this.uploadProcess = 1;
                     this.$Message.success("成功！")
+                    console.log(res)
                 } else {
                     this.$Message.error("出错：" + data['message'])
                     this.uploadProcess = 0.00
