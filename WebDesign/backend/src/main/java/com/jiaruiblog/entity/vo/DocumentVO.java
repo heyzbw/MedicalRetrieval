@@ -56,4 +56,10 @@ DocumentVO {
 
     private List<EsSearchContent> esSearchContentList;
 
+//    得分
+    private double content_score;
+
+    private double click_score;
+
+    private double like_score;
 }

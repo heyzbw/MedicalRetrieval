@@ -10,10 +10,7 @@ import com.jiaruiblog.config.SystemConfig;
 import com.jiaruiblog.entity.*;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
-import com.jiaruiblog.entity.ocrResult.EsSearch;
-import com.jiaruiblog.entity.ocrResult.EsSearchOcrOutcome;
-import com.jiaruiblog.entity.ocrResult.OcrResult;
-import com.jiaruiblog.entity.ocrResult.OcrResultNew;
+import com.jiaruiblog.entity.ocrResult.*;
 import com.jiaruiblog.entity.vo.DocWithCateVO;
 import com.jiaruiblog.entity.vo.DocumentVO;
 import com.jiaruiblog.enums.DocStateEnum;
@@ -645,9 +642,9 @@ public class FileServiceImpl implements IFileService {
                     List<EsSearch> esSearchList = elasticServiceImpl.search_new(keyWord);
                     for(EsSearch esSearch:esSearchList)
                     {
-                        if(esSearch.getOcrResultList() != null)
+                        if(esSearch.getEsSearchOcrOutcomeList() != null)
                         {
-                            esSearch.setOcrResultList(OcrResultFromDB(esSearch));
+                            esSearch.setOcrResultList(OcrResultFromDB(esSearch,keyWord));
                         }
                     }
 
@@ -890,6 +887,10 @@ public class FileServiceImpl implements IFileService {
         documentVO.setOcrResultList(fileDocument.getOcrResultList());
         documentVO.setEsSearchContentList(fileDocument.getEsSearchContentList());
 
+//      得分
+        documentVO.setContent_score(fileDocument.getContentScore());
+        documentVO.setClick_score(fileDocument.getClickScore());
+        documentVO.setLike_score(fileDocument.getLikeScore());
 
         return documentVO;
     }
@@ -1113,7 +1114,7 @@ public class FileServiceImpl implements IFileService {
         return BaseApiResult.success(result);
     }
 
-    private List<OcrResult> OcrResultFromDB(EsSearch esSearch){
+    private List<OcrResult> OcrResultFromDB(EsSearch esSearch,String keyword){
         List<EsSearchOcrOutcome> esSearchOcrOutcomeList = esSearch.getEsSearchOcrOutcomeList();
         List<OcrResult> list = new ArrayList<>();
 
@@ -1124,8 +1125,21 @@ public class FileServiceImpl implements IFileService {
                 String mongoDB_id = esSearchOcrOutcome.getMongoDbId();
 
                 Query query = new Query(Criteria.where("_id").in(mongoDB_id));
-                OcrResult ocrResult = mongoTemplate.findOne(query, OcrResult.class, OCR_RESULT_NAME);
-                list.add(ocrResult);
+                OcrResult ocrResults = mongoTemplate.findOne(query, OcrResult.class, OCR_RESULT_NAME);
+
+                List<OcrPosition> ocrPositionList = ocrResults.getTextResult();
+                List<OcrPosition> ocrPositionList_new = new ArrayList<>();
+                for(int i=0;i<ocrPositionList.size();i++)
+                {
+                    String ocrPositionTemp = ocrPositionList.get(i).getText();
+//                    如果不包括关键字，则剔除该项
+                    if(ocrPositionTemp.contains(keyword))
+                    {
+                        ocrPositionList_new.add(ocrPositionList.get(i));
+                    }
+                }
+                ocrResults.setTextResult(ocrPositionList_new);
+                list.add(ocrResults);
             }
         }
         return list;
