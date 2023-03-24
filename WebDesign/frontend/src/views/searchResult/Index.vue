@@ -121,7 +121,8 @@ export default {
                 if (res.code === 200) {
                     this.totalItems = res.data.totalNum;
                     this.data = res.data.documents;
-                    console.log(res.data);
+                    console.log("关键字查询成功，返回内容为：");
+                    console.log("data:",res.data)
                 } else {
                     this.data = []
                 }

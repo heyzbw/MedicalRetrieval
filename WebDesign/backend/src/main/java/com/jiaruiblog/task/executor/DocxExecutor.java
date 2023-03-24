@@ -1,10 +1,12 @@
 package com.jiaruiblog.task.executor;
 
+import com.jiaruiblog.entity.ContentEachPage;
 import com.jiaruiblog.task.data.TaskData;
 import com.jiaruiblog.util.MsExcelParse;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @Author Jarrett Luo
@@ -16,6 +18,11 @@ public class DocxExecutor extends TaskExecutor{
     @Override
     protected void readText(InputStream is, String textFilePath) throws IOException {
         MsExcelParse.readPdfText(is, textFilePath);
+    }
+
+    @Override
+    protected List<ContentEachPage> readTextEachPage(InputStream is) throws IOException {
+        return null;
     }
 
     @Override

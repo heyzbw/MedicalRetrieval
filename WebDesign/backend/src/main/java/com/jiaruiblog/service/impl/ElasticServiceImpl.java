@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Sets;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
-import com.jiaruiblog.entity.OcrPosition;
-import com.jiaruiblog.entity.OcrResult;
+import com.jiaruiblog.entity.ocrResult.*;
 import com.jiaruiblog.service.ElasticService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -21,39 +21,25 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
-import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
-import org.elasticsearch.index.query.functionscore.ScriptScoreFunctionBuilder;
-import org.elasticsearch.script.Script;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
-import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import org.elasticsearch.common.xcontent.XContentFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import org.apache.http.HttpHost;
-import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.update.UpdateRequest;
-import org.elasticsearch.action.update.UpdateResponse;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilders;
 
-import javax.naming.directory.SearchResult;
+import javax.annotation.Resource;
 //import org.apache.lucene.search.join;
 
 /**
@@ -73,7 +59,7 @@ public class ElasticServiceImpl implements ElasticService {
     private static final String PIPELINE_NAME = "attachment.content";
 
     //ocr结果的字段
-    private static final String OCR_RESULT_LIST = "ocrResultList";
+//    private static final String OCR_RESULT_LIST = "ocrResultList";
     private static final String OCR_RESULT_LIST_TEXT = "ocrResultList.ocrText";
 
 
@@ -101,6 +87,17 @@ public class ElasticServiceImpl implements ElasticService {
     private static String em_last = "</em>";
     private static String zhuanyizfu = "/r";
 
+    private static String CONTENT_EACH_PAGE_LIST = "contentEachPageList";
+    private static String  CONTENT_EACH_PAGE_LIST_CONTENT = "contentEachPageList.content";
+    private static String  CONTENT_EACH_PAGE_LIST_PAGE_NUM = "contentEachPageList.pageNum";
+    private static String OCR_RESULT__NEW_LIST = "ocrResultNewList";
+    private static String OCR_RESULT_LIST_OCRTEXT = "ocrResultNewList.octText";
+    private static String OCRRESULTLIST_MONGODB_ID = "ocrResultNewList.mongodb_id";
+
+    @Resource
+    private MongoTemplate mongoTemplate;
+//    private static float CONTENT_WEIGHT = 0.7f;
+
 
     /**
      * 有三种类型
@@ -112,29 +109,151 @@ public class ElasticServiceImpl implements ElasticService {
         IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
         //上传同时，使用attachment pipeline 进行提取文件
         indexRequest.source(JSON.toJSONString(file), XContentType.JSON);
-        indexRequest.setPipeline("attachment");
+//        indexRequest.setPipeline("attachment");
 
         IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-        String id = indexResponse.getId();
-        // 立即使用相同的 ID 搜索刚插入的文档
-        GetResponse response = client.get(
-                new GetRequest(INDEX_NAME, "_doc", id), RequestOptions.DEFAULT); // 根据文档ID查询
-        System.out.println("插入到es中"+response.getSourceAsString()); // 输出查询结果
-        JSONObject jsonObject = JSON.parseObject(response.getSourceAsString());
-        JSONObject attachment = jsonObject.getJSONObject("attachment");
+//        String id = indexResponse.getId();
+//         立即使用相同的 ID 搜索刚插入的文档
+//        GetResponse response = client.get(
+//                new GetRequest(INDEX_NAME, "_doc", id), RequestOptions.DEFAULT); // 根据文档ID查询
+//        System.out.println("插入到es中"+response.getSourceAsString()); // 输出查询结果
+//        JSONObject jsonObject = JSON.parseObject(response.getSourceAsString());
+//        JSONObject attachment = jsonObject.getJSONObject("attachment");
 
-        String content = attachment.getString("content");
+//        String content = attachment.getString("content");
 
-        UpdateRequest updateRequest = new UpdateRequest(INDEX_NAME, "_doc", id);
+//        UpdateRequest updateRequest = new UpdateRequest(INDEX_NAME, "_doc", id);
+//
+//        Map<String, Object> updateFields = new HashMap<>();
+//        updateFields.put("nosyn", content);
+//        updateFields.put("syn", content);
 
-        Map<String, Object> updateFields = new HashMap<>();
-        updateFields.put("nosyn", content);
-        updateFields.put("syn", content);
+//        updateRequest.doc(updateFields);
 
-        updateRequest.doc(updateFields);
+//        UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
 
-        UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
+    }
 
+    public List<EsSearch> search_new(String keyword) throws IOException {
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+//      加高亮
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.field(CONTENT_EACH_PAGE_LIST_CONTENT);
+        highlightBuilder.preTags("<em>").postTags("</em>");
+        highlightBuilder.fragmentSize(150);
+        searchSourceBuilder.highlighter(highlightBuilder);
+
+//        要返回的字段的名称
+        String[] include = {CLICK_RATE, LIKE_NUM,COLLECT_NUM, "name", "type","md5","fileId","id"};
+        searchSourceBuilder.fetchSource(include,null);
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+
+//        根据内容去匹配
+        MatchPhraseQueryBuilder matchContent = QueryBuilders.matchPhraseQuery(CONTENT_EACH_PAGE_LIST_CONTENT, keyword);
+        matchContent.boost(0.7f);
+
+        NestedQueryBuilder nestedContent = QueryBuilders.nestedQuery(CONTENT_EACH_PAGE_LIST, matchContent,ScoreMode.Total);
+        nestedContent.innerHit(
+                new InnerHitBuilder().setFetchSourceContext(
+                        new FetchSourceContext(
+                                true,new String[]{CONTENT_EACH_PAGE_LIST_PAGE_NUM},null
+                        )
+            ).setHighlightBuilder(highlightBuilder)
+        );
+
+//        ocr文本匹配
+        MatchQueryBuilder matchOcrText = QueryBuilders.matchQuery("ocrResultNewList.ocrText", keyword);
+        matchOcrText.boost(0.3f);
+
+        NestedQueryBuilder nestedOcrText = QueryBuilders.nestedQuery("ocrResultNewList", matchOcrText, ScoreMode.Total);
+        nestedOcrText.innerHit(
+                new InnerHitBuilder().setFetchSourceContext(
+                        new FetchSourceContext(true, new String[]{"ocrResultNewList.ocrText", "ocrResultNewList.mongodb_id"}, null
+                        )
+                )
+        );
+
+//        查询条件，二者满足一个
+        boolQueryBuilder.should(nestedContent);
+        boolQueryBuilder.should(nestedOcrText);
+        boolQueryBuilder.minimumShouldMatch(1);
+
+//        查询并返回结果
+        searchSourceBuilder.query(boolQueryBuilder);
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
+
+        SearchHits hits = searchResponse.getHits();
+
+        List<EsSearch> esSearchList = new ArrayList<>();
+        List<EsSearchContent> esSearchContentList = new ArrayList<>();
+        List<EsSearchOcrOutcome> esSearchOcrOutcomeList = new ArrayList<>();
+
+        double max_content_score = getMaxScore(hits);
+        int max_click_num = getMaxValue(hits, CLICK_RATE);
+        int max_like_num = getMaxValue(hits, LIKE_NUM);
+
+        for (SearchHit hit : hits) {
+            EsSearch esSearch = new EsSearch();
+
+            List<Map<String, Object>> contentResultList = new ArrayList<>();
+//            获取到content的hit内容
+            SearchHits innerContentHits = hit.getInnerHits().get(CONTENT_EACH_PAGE_LIST);
+//            获取到ocrList内容
+            SearchHits innerOcrHits = hit.getInnerHits().get(OCR_RESULT__NEW_LIST);
+
+            Map<String,Object> objectMap = hit.getSourceAsMap();
+
+//           查询返回的字段为： "click_rate", "collect_num", "collect_num","name", "type","md5","fileId","id",
+//            esSearch.setLikeNum((int) objectMap.get("like_num"));
+//            esSearch.setClickRate((int) objectMap.get("click_rate"));
+//            esSearch.setCollectNum((int) objectMap.get("collect_num"));
+            esSearch.setName((String) objectMap.get("name"));
+            esSearch.setType((String) objectMap.get("type"));
+            esSearch.setFileId((String) objectMap.get("fileId"));
+            esSearch.setId((String) objectMap.get("id"));
+
+//            从innerhit中获取文本内容
+            if(innerContentHits != null){
+                for (SearchHit contentHit : innerContentHits){
+                    EsSearchContent  esSearchContent = new EsSearchContent();
+//                    保存高亮内容的
+                    List<String> highLightList = new ArrayList<>();
+
+                    Map<String, HighlightField> highlightFields = contentHit.getHighlightFields();
+                    HighlightField highlightedContent = highlightFields.get(CONTENT_EACH_PAGE_LIST_CONTENT);
+                    for(Text highlightedText:highlightedContent.fragments()){
+                        String highlightedText_string = highlightedText.toString();
+                        highLightList.add(highlightedText_string);
+                    }
+//                    设置高亮
+                    esSearchContent.setContentHighLight(highLightList);
+//                    设置页码
+                    esSearchContent.setPageNum((int)contentHit.getSourceAsMap().get("pageNum"));
+
+                    esSearchContentList.add(esSearchContent);
+                }
+            }
+            esSearch.setEsSearchContentList(esSearchContentList);
+
+//            从ocr中获取图片内容
+            if(innerOcrHits != null){
+                for(SearchHit ocrHit:innerOcrHits){
+                    EsSearchOcrOutcome esSearchOcrOutcome = new EsSearchOcrOutcome();
+                    esSearchOcrOutcome.setOcrText((String) ocrHit.getSourceAsMap().get("ocrText"));
+                    esSearchOcrOutcome.setMongoDbId((String) ocrHit.getSourceAsMap().get("mongodb_id"));
+
+                    esSearchOcrOutcomeList.add(esSearchOcrOutcome);
+                }
+            }
+            esSearch.setEsSearchOcrOutcomeList(esSearchOcrOutcomeList);
+
+            esSearchList.add(esSearch);
+        }
+        return esSearchList;
     }
 
     @Override
@@ -165,7 +284,7 @@ public class ElasticServiceImpl implements ElasticService {
         highlightBuilder.postTags("</em>");
 
         //highlighting会自动返回匹配到的文本，所以就不需要再次返回文本了
-        String[] includeFields = new String[]{"name", "id", LIKE_NUM, CLICK_RATE, COLLECT_NUM, OCR_RESULT_LIST};
+        String[] includeFields = new String[]{"name", "id", LIKE_NUM, CLICK_RATE, COLLECT_NUM};
         String[] excludeFields = new String[]{PIPELINE_NAME};
         srb.fetchSource(includeFields, excludeFields);
 
@@ -287,6 +406,7 @@ public class ElasticServiceImpl implements ElasticService {
                     }
                     fileDocument.setDescription(abstractString);
                     fileDocument.setDescription_highLighter(stringList);
+//                    fileDocument.setOcrResultNewList();
                     fileDocument.setOcrResultList(ocrResultList);
 
                     fileDocumentList.add(fileDocument);

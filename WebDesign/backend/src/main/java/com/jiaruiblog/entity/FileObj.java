@@ -1,13 +1,10 @@
 package com.jiaruiblog.entity;
 
+import com.jiaruiblog.entity.ocrResult.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrResultNew;
 import lombok.Data;
 
 import org.apache.tika.exception.TikaException;
-import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -16,9 +13,7 @@ import org.xml.sax.SAXException;
 
 import java.io.*;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName FileObj
@@ -81,7 +76,12 @@ public class FileObj {
     @Field(type = FieldType.Nested, analyzer="ik_max_word")
     private List<OcrResult> ocrResultList;
 
-    private Map<String, Object> jsonMap = new HashMap<>();
+    @Field(type = FieldType.Nested, analyzer="ik_max_word")
+    private List<OcrResultNew> ocrResultNewList;
+
+    @Field(type = FieldType.Nested, analyzer="ik_max_word")
+    private List<ContentEachPage> contentEachPageList;
+
 
 
     public void readFile(String path) throws TikaException, IOException, SAXException {
@@ -91,13 +91,6 @@ public class FileObj {
         //将文件内容转化为base64编码
         this.content = Base64.getEncoder().encodeToString(bytes);
 
-        Parser parser = new AutoDetectParser();
-        Metadata metadata = new Metadata();
-        BodyContentHandler handler = new BodyContentHandler(-1); // 设置字符数限制为-1，以获取所有内容
-        parser.parse(new ByteArrayInputStream(bytes), handler, metadata,new ParseContext());
-        jsonMap.put("content", handler.toString());
-        jsonMap.put("attachment", bytes);
-        jsonMap.put("metadata", metadata);
     }
 
     public void readFile(InputStream inputStream) {

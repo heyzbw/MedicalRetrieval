@@ -1,6 +1,7 @@
 package com.jiaruiblog.service.impl;
 
-import com.jiaruiblog.entity.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrResultNew;
 import com.jiaruiblog.service.File2OcrService;
 import com.jiaruiblog.util.CallFlask;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +15,8 @@ public class File2OcrServiceImpl implements File2OcrService {
     private CallFlask callFlask = new CallFlask();
 
     @Override
-    public List<OcrResult> getOcrByPY(String md5) {
-        List<OcrResult> ocrResultList = callFlask.doUpload(md5);
-        return ocrResultList;
+    public List<OcrResultNew> getOcrByPY(String md5) {
+        List<OcrResultNew> ocrResultNewList = callFlask.doUpload(md5);
+        return ocrResultNewList;
     }
 }

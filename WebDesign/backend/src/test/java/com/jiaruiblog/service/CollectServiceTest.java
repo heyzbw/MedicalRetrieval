@@ -1,14 +1,14 @@
 package com.jiaruiblog.service;
 
 import org.apache.http.HttpHost;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.text.Text;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -16,14 +16,24 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.QueryBuilder;
 
+
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+
+import java.io.IOException;
 
 public class CollectServiceTest {
 
@@ -83,28 +93,47 @@ public class CollectServiceTest {
 //    }
 
     @Test
-    public void remove() {
+    public void remove() throws IOException {
+        RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(new HttpHost("localhost", 9200, "http")));
 
-// 创建查询
-        BoolQueryBuilder query = QueryBuilders.boolQuery()
-                .should(QueryBuilders.matchQuery("content", "dqx"))
-                .should(QueryBuilders.boolQuery()
-                        .must(QueryBuilders.matchQuery("content", "zbw"))
-                        .must(QueryBuilders.matchQuery("content", "PYB")));
+        SearchRequest searchRequest = new SearchRequest("docwrite");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-// 执行查询
-        SearchResponse response = client.prepareSearch("my-index")
-                .setQuery(query)
-                .get();
+        String nestedPath = "contentEachPageList";
+        String keyword = "癌症";
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        MatchQueryBuilder matchQuery1 =
+                QueryBuilders.matchQuery("contentEachPageList.content", "ruby");
 
-// 处理结果
-        SearchHits hits = response.getHits();
-        for (SearchHit hit : hits) {
-            String id = hit.getId();
-            String content = hit.getSource().get("content").toString();
-            // 处理匹配的文档
+        NestedQueryBuilder nestedQueryBuilder = QueryBuilders.nestedQuery(nestedPath,boolQueryBuilder.must(matchQuery1), ScoreMode.None);
+
+        searchSourceBuilder.query(nestedQueryBuilder);
+        searchRequest.source(searchSourceBuilder);
+
+        Map<String, Object> map = null;
+        try{
+            SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
+            if (searchResponse.getHits().getTotalHits().value > 0) {
+                SearchHit[] searchHit = searchResponse.getHits().getHits();
+                for(SearchHit hit:searchHit){
+                    map = hit.getSourceAsMap();
+                    System.out.println("output::"+ Arrays.toString(map.entrySet().toArray()));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        System.out.println("score:"+Math.log1p(100));
+
+
+
+//        for (SearchHit hit : searchResponse.getHits()) {
+//            int pageNum = (int) hit.getSourceAsMap().get("pageNum");
+//            String content = (String) hit.getSourceAsMap().get("content");
+//            System.out.println("pageNum: " + pageNum + ", content: " + content);
+//        }
+
+        client.close();
     }
 }

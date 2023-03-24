@@ -1,5 +1,8 @@
 package com.jiaruiblog.entity;
 
+import com.jiaruiblog.entity.ocrResult.EsSearchContent;
+import com.jiaruiblog.entity.ocrResult.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrResultNew;
 import com.jiaruiblog.enums.DocStateEnum;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -66,6 +69,8 @@ public class FileDocument {
      */
     private List<String> description_highLighter;
 
+    private List<EsSearchContent> esSearchContentList;
+
     /**
      * 大文件管理GridFS的ID
      */
@@ -109,6 +114,7 @@ public class FileDocument {
     private String userName;
 
     private List<OcrResult> ocrResultList;
+    private List<OcrResultNew> ocrResultNewList;
 
 //    来自文本的检索分数
     private double contentScore;
@@ -116,4 +122,5 @@ public class FileDocument {
     private double clickScore;
 //    来做点赞数量的分数
     private double likeScore;
+
 }

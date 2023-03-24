@@ -53,6 +53,10 @@ public class DocumentController {
     @PostMapping(value = "/list")
     public BaseApiResult list(@RequestBody DocumentDTO documentDTO)
             throws IOException {
+
+//        long startTime = System.currentTimeMillis();
+
+//        System.out.println("进入了查询方法");
         String userId = documentDTO.getUserId();
         if (StringUtils.hasText(documentDTO.getFilterWord()) &&
                 documentDTO.getType() == FilterTypeEnum.FILTER) {

@@ -1,5 +1,6 @@
 package com.jiaruiblog.util;
 
+import com.jiaruiblog.entity.ContentEachPage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
@@ -10,7 +11,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName PDFUtil
@@ -31,8 +34,9 @@ public class PdfUtil {
             log.error("inputStream is null");
             return;
         }
-        try (PDDocument document = PDDocument.load(file);
-             FileWriter fileWriter = new FileWriter(textPath, true)
+        try (
+                PDDocument document = PDDocument.load(file);
+                FileWriter fileWriter = new FileWriter(textPath, true)
         ) {
             AccessPermission ap = document.getCurrentAccessPermission();
             if (!ap.canExtractContent()) {
@@ -40,20 +44,61 @@ public class PdfUtil {
             }
 
             PDFTextStripper stripper = new PDFTextStripper();
-            stripper.setSortByPosition(true);
+            stripper.setSortByPosition(false);
 
             for (int p = 1; p <= document.getNumberOfPages(); ++p) {
                 stripper.setStartPage(p);
                 stripper.setEndPage(p);
                 String text = stripper.getText(document);
                 text = text.replace("\n", "");
-                fileWriter.write(text.trim());
+                text = text.trim();
+                fileWriter.write(text);
             }
         } catch (Exception e) {
             log.error("解析pdf文本文件出错", e);
             throw e;
         }
     }
+
+    public static List<ContentEachPage> readPdfTextEachPage(InputStream file) throws IOException {
+        List<ContentEachPage> contentEachPageList = new ArrayList<>();
+        if (file == null) {
+            log.error("inputStream is null");
+            return null;
+        }
+        try (
+                PDDocument document = PDDocument.load(file);
+        ) {
+            AccessPermission ap = document.getCurrentAccessPermission();
+            if (!ap.canExtractContent()) {
+                ap.setCanExtractContent(true);
+            }
+
+            PDFTextStripper stripper = new PDFTextStripper();
+            stripper.setSortByPosition(false);
+//            stripper.setSortByPosition(true);
+            for (int p = 1; p <= document.getNumberOfPages(); ++p) {
+
+                stripper.setStartPage(p);
+                stripper.setEndPage(p);
+                String text = stripper.getText(document);
+//                System.out.println("读取到的内容为："+text);
+
+                ContentEachPage contentEachPage = new ContentEachPage();
+                contentEachPage.setContent(text);
+                contentEachPage.setPageNum(p);
+
+                contentEachPageList.add(contentEachPage);
+//                text = text.replace("\n", "");
+//                text = text.trim();
+            }
+        } catch (Exception e) {
+            log.error("解析pdf文本文件出错", e);
+            throw e;
+        }
+        return contentEachPageList;
+    }
+
 
     /**
      * @Author luojiarui

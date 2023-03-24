@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jiaruiblog.DocumentSharingSiteApplication;
 import com.jiaruiblog.service.impl.CategoryServiceImpl;
+import com.jiaruiblog.service.impl.ElasticServiceImpl;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -67,7 +68,10 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void addRelationShip() {
+    public void addRelationShip() throws IOException {
+        ElasticServiceImpl elasticService = new ElasticServiceImpl();
+        elasticService.search_new("研究");
+
     }
 
     @Test

@@ -190,49 +190,10 @@ public class FileController {
      */
     @Deprecated
     @PostMapping("/upload")
-    public ResponseModel formUpload(@RequestParam("file") MultipartFile file) throws IOException {
-        List<String> availableSuffixList = Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
-        ResponseModel model = ResponseModel.getInstance();
-        try {
-            if (file != null && !file.isEmpty()) {
-                String originFileName = file.getOriginalFilename();
-                if (!StringUtils.hasText(originFileName)) {
-                    model.setMessage("格式不支持！");
-                    return model;
-                }
-                //获取文件后缀名
-                String suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
-                if (!availableSuffixList.contains(suffix)) {
-                    model.setMessage("格式不支持！");
-                    return model;
-                }
-                String fileMd5 = SecureUtil.md5(file.getInputStream());
+    public ResponseModel formUpload(@RequestParam("file") MultipartFile file) throws IOException, AuthenticationException {
+        System.out.println("这个是普通的upload方法");
+        return fileService.documentUpload_noAuth(file);
 
-                FileDocument fileDocument = fileService.saveFile(fileMd5, file);
-
-
-                switch (suffix) {
-                    case "pdf":
-                    case "docx":
-                    case "pptx":
-                    case "xlsx":
-                        taskExecuteService.execute(fileDocument);
-                        break;
-                    default:
-                        break;
-                }
-
-                model.setData(fileDocument.getId());
-                model.setCode(ResponseModel.SUCCESS);
-                model.setMessage("上传成功");
-            } else {
-                model.setMessage("请传入文件");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            model.setMessage(ex.getMessage());
-        }
-        return model;
     }
 
     /**
@@ -247,10 +208,9 @@ public class FileController {
             throws AuthenticationException {
         String username = (String) request.getAttribute("username");
         String userId = (String) request.getAttribute("id");
-        System.out.println("用户"+userId+"上传了"+file.getOriginalFilename());
+        System.out.println("这个时auth的upload方法"+file.getOriginalFilename());
         return fileService.documentUpload(file, userId, username);
     }
-
 
 
     /**

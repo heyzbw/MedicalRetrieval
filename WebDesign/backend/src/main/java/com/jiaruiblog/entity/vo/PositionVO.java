@@ -1,8 +1,7 @@
 package com.jiaruiblog.entity.vo;
 
-import com.jiaruiblog.entity.OcrPosition;
+import com.jiaruiblog.entity.ocrResult.OcrPosition;
 import lombok.Data;
-import org.openxmlformats.schemas.officeDocument.x2006.sharedTypes.STTrueFalse;
 
 @Data
 public class PositionVO {

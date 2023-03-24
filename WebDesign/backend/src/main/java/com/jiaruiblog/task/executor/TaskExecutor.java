@@ -1,6 +1,7 @@
 package com.jiaruiblog.task.executor;
 
 import cn.hutool.core.util.IdUtil;
+import com.jiaruiblog.entity.ContentEachPage;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
 import com.jiaruiblog.enums.FileFormatEnum;
@@ -18,6 +19,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,8 +35,6 @@ public abstract class TaskExecutor {
         // 第一步下载文件，转换为byte数组
         FileDocument fileDocument = taskData.getFileDocument();
         InputStream docInputStream = new ByteArrayInputStream(downFileBytes(fileDocument.getGridfsId()));
-
-//        System.out.println("ocrList:"+fileDocument.getOcrResultList());
 
         // 第二步 将文本索引到es中
         try {
@@ -68,56 +68,84 @@ public abstract class TaskExecutor {
         return fileService.getFileBytes(gridFsId);
     }
 
-    public void uploadFileToEs(InputStream is, FileDocument fileDocument, TaskData taskData) throws TikaException, SAXException {
+    public void uploadFileToEs(InputStream is, FileDocument fileDocument, TaskData taskData) throws TikaException, SAXException, IOException {
         String textFilePath = "./" + fileDocument.getMd5() + fileDocument.getName() + ".txt";
-        taskData.setTxtFilePath(textFilePath);
 
+//        InputStream isTemp = cloneInputStream(is);
+
+        taskData.setTxtFilePath(textFilePath);
+        List<ContentEachPage> contentEachPageList;
         try {
             // 根据不同的执行器，执行不同的文本提取方法，在这里做出区别
-            readText(is, textFilePath);
-            if (!new File(textFilePath).exists()) {
-                throw new TaskRunException("文本文件不存在，需要进行重新提取");
-            }
+            contentEachPageList = readTextEachPage(is);
+
+//            readText(is, textFilePath);
+
+//            if (!new File(textFilePath).exists()) {
+//                throw new TaskRunException("文本文件不存在，需要进行重新提取");
+//            }
             FileObj fileObj = new FileObj();
             fileObj.setId(fileDocument.getMd5());
             fileObj.setFileId(fileDocument.getId());
             fileObj.setName(fileDocument.getName());
             fileObj.setType(fileDocument.getContentType());
-            fileObj.readFile(textFilePath);
-            fileObj.setOcrResultList(fileDocument.getOcrResultList());
+//            fileObj.readFile(textFilePath);
+
+            fileObj.setOcrResultNewList(fileDocument.getOcrResultNewList());
+//            fileObj.setOcrResultList(fileDocument.getOcrResultList());
+
+            fileObj.setContentEachPageList(contentEachPageList);
 
 //            自己加上去的字段
 //            fileObj.setClick_rate(100);
 //            fileObj.setLike_num(1000);
             this.upload(fileObj);
-//            this.
 
         } catch (IOException | TaskRunException e) {
             throw new TaskRunException("存入es的过程中报错了", e);
         }
 
-        handleDescription(textFilePath, fileDocument);
+//        handleDescription(textFilePath, fileDocument);
+//
+//        // 被文本文件上传到gridFS系统中
+//        try (FileInputStream inputStream = new FileInputStream(textFilePath)) {
+//
+//            IFileService fileService = SpringApplicationContext.getBean(IFileService.class);
+//            String txtObjId = fileService.uploadFileToGridFs(
+//                    FileFormatEnum.TEXT.getFilePrefix(),
+//                    inputStream,
+//                    FileFormatEnum.TEXT.getContentType());
+//            fileDocument.setTextFileId(txtObjId);
+//
+//        } catch (IOException e) {
+//            throw new TaskRunException("存储文本文件报错了，请核对", e);
+//        }
+//
+//        try {
+//            Files.delete(Paths.get(textFilePath));
+//        } catch (IOException e) {
+//            log.error("删除文件路径{} ==> 失败信息{}", textFilePath, e);
+//        }
 
-        // 被文本文件上传到gridFS系统中
-        try (FileInputStream inputStream = new FileInputStream(textFilePath)) {
+    }
 
-            IFileService fileService = SpringApplicationContext.getBean(IFileService.class);
-            String txtObjId = fileService.uploadFileToGridFs(
-                    FileFormatEnum.TEXT.getFilePrefix(),
-                    inputStream,
-                    FileFormatEnum.TEXT.getContentType());
-            fileDocument.setTextFileId(txtObjId);
-
-        } catch (IOException e) {
-            throw new TaskRunException("存储文本文件报错了，请核对", e);
+    public static InputStream cloneInputStream(InputStream inputStream) throws IOException {
+        // 将 InputStream 读取到 ByteArrayOutputStream
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) > -1) {
+            byteArrayOutputStream.write(buffer, 0, len);
         }
+        byteArrayOutputStream.flush();
 
-        try {
-            Files.delete(Paths.get(textFilePath));
-        } catch (IOException e) {
-            log.error("删除文件路径{} ==> 失败信息{}", textFilePath, e);
-        }
+        // 将 ByteArrayOutputStream 转换回 ByteArrayInputStream
+        ByteArrayInputStream clonedInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
 
+        // 重置原始 InputStream 以便重复使用
+        inputStream.reset();
+
+        return clonedInputStream;
     }
 
     /**
@@ -154,7 +182,7 @@ public abstract class TaskExecutor {
      * @throws IOException -> IO
      */
     protected abstract void readText(InputStream is, String textFilePath) throws IOException;
-
+    protected abstract List<ContentEachPage> readTextEachPage(InputStream is) throws IOException;
     /**
      * 制作缩略图
      *

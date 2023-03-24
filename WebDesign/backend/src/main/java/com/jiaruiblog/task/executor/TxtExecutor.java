@@ -1,5 +1,6 @@
 package com.jiaruiblog.task.executor;
 
+import com.jiaruiblog.entity.ContentEachPage;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
 import com.jiaruiblog.task.data.TaskData;
@@ -7,6 +8,7 @@ import com.jiaruiblog.task.exception.TaskRunException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @ClassName TxtExecutor
@@ -20,6 +22,11 @@ public class TxtExecutor extends TaskExecutor{
     @Override
     protected void readText(InputStream is, String textFilePath) throws IOException {
 
+    }
+
+    @Override
+    protected List<ContentEachPage> readTextEachPage(InputStream is) throws IOException {
+        return null;
     }
 
     @Override

@@ -10,6 +10,10 @@ import com.jiaruiblog.config.SystemConfig;
 import com.jiaruiblog.entity.*;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
+import com.jiaruiblog.entity.ocrResult.EsSearch;
+import com.jiaruiblog.entity.ocrResult.EsSearchOcrOutcome;
+import com.jiaruiblog.entity.ocrResult.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrResultNew;
 import com.jiaruiblog.entity.vo.DocWithCateVO;
 import com.jiaruiblog.entity.vo.DocumentVO;
 import com.jiaruiblog.enums.DocStateEnum;
@@ -61,6 +65,7 @@ import java.util.stream.Collectors;
 public class FileServiceImpl implements IFileService {
 
     public static final String COLLECTION_NAME = "fileDatas";
+    public static final String OCR_RESULT_NAME = "ocr_result";
 
     private static final String PDF_SUFFIX = ".pdf";
 
@@ -110,7 +115,6 @@ public class FileServiceImpl implements IFileService {
     @Resource
     private File2OcrService file2OcrService;
 
-    CallFlask callFlask = new CallFlask();
 
 
     /**
@@ -223,16 +227,6 @@ public class FileServiceImpl implements IFileService {
         // 异步保存数据标签
         tagServiceImpl.saveTagWhenSaveDoc(fileDocument);
 
-        CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
-            try {
-//                file2OcrService.getOcrByPY(md5);
-                System.out.println("处理完了OCR");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        });
-
         System.out.println("保存完了文档");
         return fileDocument;
     }
@@ -277,33 +271,31 @@ public class FileServiceImpl implements IFileService {
                 FileDocument fileDocument = saveToDb(fileMd5, file, userId, username);
 
                 //  取ocr结果
-                CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
-                    try {
-//                        List<OcrResult> ocrResultList = file2OcrService.getOcrByPY(fileMd5);
-                        System.out.println("异步获取ocr数据");
+//                CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
+//                    try {
+//                        List<OcrResultNew> ocrResultList = file2OcrService.getOcrByPY(fileMd5);
 //                        fileDocument.setOcrResultList(ocrResultList);
-
-                        System.out.println("处理完了OCR");
-
-                        switch (suffix) {
-                            case "pdf":
-                            case "docx":
-                            case "pptx":
-                            case "xlsx":
-                            case "html":
-                            case "md":
-                            case "txt":
-                                taskExecuteService.execute(fileDocument);
-                                break;
-                            default:
-                                break;
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                });
+//                        System.out.println("documentUpload：处理完了OCR");
+//
+//                        switch (suffix) {
+//                            case "pdf":
+//                            case "docx":
+//                            case "pptx":
+//                            case "xlsx":
+//                            case "html":
+//                            case "md":
+//                            case "txt":
+//                                taskExecuteService.execute(fileDocument);
+//                                break;
+//                            default:
+//                                break;
+//                        }
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    return null;
+//                });
 
 //                callFlask.doUpload(fileMd5);
 
@@ -317,6 +309,55 @@ public class FileServiceImpl implements IFileService {
             ex.printStackTrace();
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.OPERATE_FAILED);
         }
+    }
+
+    @Override
+    public ResponseModel documentUpload_noAuth(MultipartFile file) throws AuthenticationException {
+        List<String> availableSuffixList = com.google.common.collect.Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
+        ResponseModel model = ResponseModel.getInstance();
+        try {
+            if (file != null && !file.isEmpty()) {
+                String originFileName = file.getOriginalFilename();
+                if (!StringUtils.hasText(originFileName)) {
+                    model.setMessage("格式不支持！");
+                    return model;
+                }
+                //获取文件后缀名
+                String suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
+                if (!availableSuffixList.contains(suffix)) {
+                    model.setMessage("格式不支持！");
+                    return model;
+                }
+                String fileMd5 = SecureUtil.md5(file.getInputStream());
+
+                FileDocument fileDocument = saveFile(fileMd5, file);
+
+                //获取OCR识别结果
+                List<OcrResultNew> ocrResultNewList = file2OcrService.getOcrByPY(fileMd5);
+                fileDocument.setOcrResultNewList(ocrResultNewList);
+
+                switch (suffix) {
+                    case "pdf":
+                    case "docx":
+                    case "pptx":
+                    case "xlsx":
+                        taskExecuteService.execute(fileDocument);
+                        break;
+                    default:
+                        break;
+                }
+
+                model.setData(fileDocument.getId());
+                model.setCode(ResponseModel.SUCCESS);
+                model.setMessage("上传成功");
+            } else {
+                model.setMessage("请传入文件");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            model.setMessage(ex.getMessage());
+        }
+        return model;
     }
 
     /**
@@ -530,7 +571,6 @@ public class FileServiceImpl implements IFileService {
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
         query.with(pageable);
 
-
         Field field = query.fields();
         field.exclude(CONTENT);
         return mongoTemplate.find(query, FileDocument.class, COLLECTION_NAME);
@@ -564,6 +604,8 @@ public class FileServiceImpl implements IFileService {
      **/
     @Override
     public BaseApiResult list(DocumentDTO documentDTO) {
+        long startTime = System.currentTimeMillis();
+
         List<DocumentVO> documentVos;
         List<FileDocument> fileDocuments = Lists.newArrayList();
 
@@ -600,7 +642,14 @@ public class FileServiceImpl implements IFileService {
                 docIdSet.addAll(commentServiceImpl.fuzzySearchDoc(keyWord));
                 List<FileDocument> esDoc = null;
                 try {
-                    esDoc = elasticServiceImpl.search(keyWord);
+                    List<EsSearch> esSearchList = elasticServiceImpl.search_new(keyWord);
+                    for(EsSearch esSearch:esSearchList)
+                    {
+                        esSearch.setOcrResultList(OcrResultFromDB(esSearch));
+                    }
+
+//                    将es的查询结果转为一个List<fileDocument>
+                    esDoc = getListFileDocumentFromEsOutcome(esSearchList);
                     if (!CollectionUtils.isEmpty(esDoc)) {
                         Set<String> existIds = esDoc.stream().map(FileDocument::getId).collect(Collectors.toSet());
                         docIdSet.removeAll(existIds);
@@ -635,6 +684,10 @@ public class FileServiceImpl implements IFileService {
         Map<String, Object> result = new HashMap<>(8);
         result.put("totalNum", totalNum);
         result.put("documents", documentVos);
+
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("查询的时间为：" + (double) (endTime - startTime) / 1000 + "s");
         return BaseApiResult.success(result);
     }
 
@@ -832,6 +885,8 @@ public class FileServiceImpl implements IFileService {
         documentVO.setPreviewFileId(fileDocument.getPreviewFileId());
 
         documentVO.setOcrResultList(fileDocument.getOcrResultList());
+        documentVO.setEsSearchContentList(fileDocument.getEsSearchContentList());
+
 
         return documentVO;
     }
@@ -1054,4 +1109,44 @@ public class FileServiceImpl implements IFileService {
         result.put("total", mongoTemplate.count(query, FileDocument.class, COLLECTION_NAME));
         return BaseApiResult.success(result);
     }
+
+    private List<OcrResult> OcrResultFromDB(EsSearch esSearch){
+        List<EsSearchOcrOutcome> esSearchOcrOutcomeList = esSearch.getEsSearchOcrOutcomeList();
+        List<OcrResult> list = new ArrayList<>();
+        for(EsSearchOcrOutcome esSearchOcrOutcome:esSearchOcrOutcomeList)
+        {
+            if(esSearchOcrOutcome.getOcrText() != null)
+            {
+                String mongoDB_id = esSearchOcrOutcome.getMongoDbId();
+
+                Query query = new Query(Criteria.where("_id").in(mongoDB_id));
+                OcrResult ocrResult = mongoTemplate.findOne(query, OcrResult.class, OCR_RESULT_NAME);
+                list.add(ocrResult);
+            }
+        }
+        return list;
+    }
+
+    private List<FileDocument> getListFileDocumentFromEsOutcome(List<EsSearch> esSearchList){
+
+        List<FileDocument> fileDocuments = new ArrayList<>();
+        for(EsSearch esSearch:esSearchList){
+            FileDocument fileDocument = new FileDocument();
+//            设置ocr结果
+            fileDocument.setOcrResultList(esSearch.getOcrResultList());
+//            设置es搜索结果的content
+            fileDocument.setEsSearchContentList(esSearch.getEsSearchContentList());
+
+            fileDocument.setId(esSearch.getId());
+            fileDocument.setName(esSearch.getName());
+            fileDocument.setMd5(esSearch.getFileId());
+            fileDocument.setContentType(esSearch.getType());
+            fileDocument.setContentScore(esSearch.getContentScore());
+            fileDocument.setLikeScore(esSearch.getLikeScore());
+            fileDocument.setClickScore(esSearch.getClickScore());
+            fileDocuments.add(fileDocument);
+        }
+        return fileDocuments;
+    }
+
 }

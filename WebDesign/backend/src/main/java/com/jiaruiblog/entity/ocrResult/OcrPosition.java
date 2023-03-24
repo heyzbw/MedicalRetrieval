@@ -1,4 +1,4 @@
-package com.jiaruiblog.entity;
+package com.jiaruiblog.entity.ocrResult;
 
 import lombok.Data;
 
