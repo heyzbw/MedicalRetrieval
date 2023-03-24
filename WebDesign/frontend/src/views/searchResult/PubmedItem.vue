@@ -6,7 +6,7 @@
                     style="width: 36px;max-height: 48px;border: 1px solid #dcdee2; border-radius: 2px">
             </div> -->
             <div class="title-group">
-                <div class="doc-title-info" @click="getDocView()">
+                <div class="doc-title-info" type="file" @click="getDocView()">
                     {{ Title }}
                 </div>
                 <div class="description">
@@ -47,12 +47,15 @@
 <script>
 import { parseTime } from "@/utils/index"
 import { BackendUrl } from '@/api/request'
+import axios from "axios";
 
 export default {
     name: "PubmedItem",
     data() {
         return {
-
+            actionUrl: BackendUrl() + "/files/upload",
+            uploadParam: {},
+            uploadProcess: 0.00,
         }
     },
     props: {
@@ -72,12 +75,55 @@ export default {
             this.$axios({
                 method: "post",
                 url: "http://127.0.0.1:8083/PDFdownload",
+                type: "application/pdf",
                 data: {
                     'doi': this.doi,
                     'Title': this.Title
                 }
             }).then(response => {
-                console.log(response.data)
+                console.log(typeof (response.data))
+                // const json = JSON.parse(response.data);
+                // console.log(typeof (json))
+                // console.log(json)
+                const inputFile = response.data
+                const blob = new File([inputFile], this.Title + 'pdf', { type: 'application/pdf' });
+                this.uploadParam = {
+                    fileId: this.Title,
+                    file: blob
+                };
+                console.log(blob)
+                let param = this.uploadParam
+                let formData = new FormData();
+                formData.set("fileName", param.fileId);
+                formData.set("file", param.file);
+                const config = {
+                    onUploadProgress: (progressEvent) => {
+                        // progressEvent.loaded:已上传文件大小
+                        // progressEvent.total:被上传文件的总大小
+                        this.uploadProcess = Number(
+                            ((progressEvent.loaded / progressEvent.total) * 0.9).toFixed(2)
+                        );
+                    },
+                };
+                // console.log(formData)
+                axios.post(this.actionUrl, formData, config).then(res => {
+                    let { data } = res
+                    console.log(res)
+                    if (data['code'] === 200 || data['code'] === 'success') {
+                        this.uploadProcess = 1;
+                        this.$Message.success("成功！")
+                    } else {
+                        this.$Message.error("出错：" + data['message'])
+                        this.uploadProcess = 0.00
+                    }
+                    setTimeout(() => {
+                    }, 1000)
+                }).catch(err => {
+                    this.$Message.error("上传出错！")
+                    this.uploadProcess = 0.0
+                })
+                // 无论是否成功都过滤掉
+                this.uploadParam = {}
             }).catch(error => {
                 console.log(error.response, "error");
                 this.$message({
@@ -85,6 +131,8 @@ export default {
                     type: 'error'
                 });
             });
+
+
         }
 
     }

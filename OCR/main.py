@@ -8,7 +8,7 @@ import os
 import re
 import urllib.request
 import requests
-from flask import Flask, send_from_directory, send_file
+from flask import Flask, send_from_directory, send_file, make_response
 
 # 创建一个服务，赋值给APP
 app = Flask(__name__)
@@ -104,8 +104,14 @@ def pdfdownload():
             break
         f.write(buffer)
     f.close()
+    print(type(f))
+    downloadpath = 'papers/' + file_name
     print("Sucessful to download" + " " + file_name)
-    return send_file(f)
+    response = make_response(
+        send_file(downloadpath, mimetype='application/pdf', as_attachment=True))
+    response.headers['Content-Type'] = 'application/pdf'
+    print(type(send_file(downloadpath, mimetype='application/pdf', as_attachment=True)))
+    return response
 
 
 if __name__ == '__main__':
