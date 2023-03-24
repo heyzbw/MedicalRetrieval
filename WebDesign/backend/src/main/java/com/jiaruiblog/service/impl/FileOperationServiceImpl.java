@@ -3,7 +3,9 @@ package com.jiaruiblog.service.impl;
 import com.jiaruiblog.entity.FileObj;
 import com.jiaruiblog.service.FileOperationService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tika.exception.TikaException;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +28,7 @@ public class FileOperationServiceImpl implements FileOperationService {
      * 这个方法将一个目录下所有的文件读入然后全部上传
      * @return List<FileObj>
      */
-    public List<FileObj> readFileByDir(String path) {
+    public List<FileObj> readFileByDir(String path) throws TikaException, IOException, SAXException {
         List<FileObj> fileObjs = new ArrayList<>();
         File file = new File(path);
 

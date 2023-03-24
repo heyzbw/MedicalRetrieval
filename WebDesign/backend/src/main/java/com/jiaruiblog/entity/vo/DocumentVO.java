@@ -1,6 +1,7 @@
 package com.jiaruiblog.entity.vo;
 
-import com.jiaruiblog.entity.OcrResult;
+import com.jiaruiblog.entity.ocrResult.EsSearchContent;
+import com.jiaruiblog.entity.ocrResult.OcrResult;
 import com.jiaruiblog.enums.DocStateEnum;
 import lombok.Data;
 
@@ -52,5 +53,7 @@ DocumentVO {
 
 //    ocr结果list
     private List<OcrResult>ocrResultList;
+
+    private List<EsSearchContent> esSearchContentList;
 
 }

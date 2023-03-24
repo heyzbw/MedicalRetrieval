@@ -67,7 +67,7 @@ export default {
             this.$emit("changeCate", param)
         },
         clickToSearch(searchValue) {
-            console.log(searchValue)
+            console.log("待搜索的关键词为："+searchValue)
             this.$emit("changeKeyWord", searchValue)
         },
         getAllItems() {

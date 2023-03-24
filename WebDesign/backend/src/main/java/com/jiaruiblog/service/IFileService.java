@@ -1,6 +1,7 @@
 package com.jiaruiblog.service;
 
 import com.jiaruiblog.entity.FileDocument;
+import com.jiaruiblog.entity.ResponseModel;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
 import com.jiaruiblog.enums.DocStateEnum;
@@ -182,6 +183,8 @@ public interface IFileService {
     InputStream getFileThumb(String thumbId);
 
     byte[] getFileBytes(String thumbId);
+
+    ResponseModel documentUpload_noAuth(MultipartFile file) throws AuthenticationException;
 
     /**
      * 保存文件流到dfs系统中

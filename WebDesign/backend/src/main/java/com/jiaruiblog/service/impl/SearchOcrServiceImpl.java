@@ -1,8 +1,8 @@
 package com.jiaruiblog.service.impl;
 
 import com.google.common.collect.Lists;
-import com.jiaruiblog.entity.OcrPosition;
-import com.jiaruiblog.entity.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrPosition;
+import com.jiaruiblog.entity.ocrResult.OcrResult;
 import com.jiaruiblog.entity.vo.PositionVO;
 import com.jiaruiblog.entity.vo.SearchOcrResultVO;
 import com.jiaruiblog.service.SearchOcrService;

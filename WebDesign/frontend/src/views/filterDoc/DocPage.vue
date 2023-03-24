@@ -56,7 +56,7 @@ export default {
             }
             CategoryRequest.getDocList(param).then(res => {
                 if (res.code === 200) {
-                    console.log(res.data)
+                    console.log("成功获取搜索文档列表"+res.data)
                     let result = res.data;
                     this.docList = result.data
                     this.pageNum = result.pageNum + 1;

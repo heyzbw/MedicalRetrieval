@@ -1,16 +1,17 @@
 package com.jiaruiblog.entity;
 
+import com.jiaruiblog.entity.ocrResult.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrResultNew;
 import lombok.Data;
 
+import org.apache.tika.exception.TikaException;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Base64;
 import java.util.List;
 
@@ -75,16 +76,21 @@ public class FileObj {
     @Field(type = FieldType.Nested, analyzer="ik_max_word")
     private List<OcrResult> ocrResultList;
 
+    @Field(type = FieldType.Nested, analyzer="ik_max_word")
+    private List<OcrResultNew> ocrResultNewList;
+
+    @Field(type = FieldType.Nested, analyzer="ik_max_word")
+    private List<ContentEachPage> contentEachPageList;
 
 
 
-
-    public void readFile(String path){
+    public void readFile(String path) throws TikaException, IOException, SAXException {
         //读文件
         File file = new File(path);
         byte[] bytes = getContent(file);
         //将文件内容转化为base64编码
         this.content = Base64.getEncoder().encodeToString(bytes);
+
     }
 
     public void readFile(InputStream inputStream) {

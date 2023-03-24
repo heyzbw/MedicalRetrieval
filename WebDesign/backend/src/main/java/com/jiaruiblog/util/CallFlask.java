@@ -2,8 +2,9 @@ package com.jiaruiblog.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.jiaruiblog.entity.OcrPosition;
-import com.jiaruiblog.entity.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrPosition;
+import com.jiaruiblog.entity.ocrResult.OcrResult;
+import com.jiaruiblog.entity.ocrResult.OcrResultNew;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -15,9 +16,9 @@ public class CallFlask {
 
     private RestTemplate restTemplate = GetRestTemplate(simpleClientHttpRequestFactory());
 
-    String SERVER_URL = "http://localhost:8083/";
+    String SERVER_URL = "http://localhost:5000/";
 
-    public List<OcrResult> doUpload(String md5){
+    public List<OcrResultNew> doUpload(String md5){
 //        待输入的参数
         JSONObject param = new JSONObject();
         param.put("md5",md5);
@@ -25,37 +26,45 @@ public class CallFlask {
         String file2ocr_URL = SERVER_URL + "pdf2pic";
         JSONObject result = restTemplate.postForEntity(file2ocr_URL,param,JSONObject.class).getBody();
         JSONArray dataArray = result.getJSONArray("data");
-        List<OcrResult> ocrResultList = new ArrayList<>();
+        List<OcrResultNew> ocrResultNewArrayList = new ArrayList<>();
 
         for (int i = 0; i < dataArray.size(); i++) {
             JSONObject dataObj = dataArray.getJSONObject(i);
             String ocrText = dataObj.getString("ocrText");
-            int pdfPage = dataObj.getInteger("pdfPage");
-            String pdfURL = dataObj.getString("pdfURL");
-            String image = dataObj.getString("image");
+            String mongoDB_id = dataObj.getString("recordId");
 
-            JSONArray textResultArray = dataObj.getJSONArray("textResult");
-//            OcrPosition[] ocrPositions = new OcrPosition[];
-            List<OcrPosition> textResults = new ArrayList<>();
-            for (int j = 0; j < textResultArray.size(); j++) {
-                JSONObject textResultObj = textResultArray.getJSONObject(j);
-                int charNum = textResultObj.getInteger("charNum");
-                boolean isHandwritten = textResultObj.getBoolean("isHandwritten");
-                String leftBottom = textResultObj.getString("leftBottom");
-                String leftTop = textResultObj.getString("leftTop");
-                String rightBottom = textResultObj.getString("rightBottom");
-                String rightTop = textResultObj.getString("rightTop");
-                String text = textResultObj.getString("text");
+            OcrResultNew ocrResultNew = new OcrResultNew();
+            ocrResultNew.setOcrText(ocrText);
+            ocrResultNew.setMongodb_id(mongoDB_id);
 
+            ocrResultNewArrayList.add(ocrResultNew);
 
-                OcrPosition textResult = new OcrPosition(charNum, isHandwritten, leftBottom, leftTop, rightBottom, rightTop, text);
-                textResults.add(textResult);
-            }
+//            int pdfPage = dataObj.getInteger("pdfPage");
+//            String pdfURL = dataObj.getString("pdfURL");
+//            String image = dataObj.getString("image");
 
-            OcrResult ocrResult = new OcrResult(ocrText, pdfURL,pdfPage, textResults,image);
-            ocrResultList.add(ocrResult);
+//            JSONArray textResultArray = dataObj.getJSONArray("textResult");
+////            OcrPosition[] ocrPositions = new OcrPosition[];
+//            List<OcrPosition> textResults = new ArrayList<>();
+//            for (int j = 0; j < textResultArray.size(); j++) {
+//                JSONObject textResultObj = textResultArray.getJSONObject(j);
+//                int charNum = textResultObj.getInteger("charNum");
+//                boolean isHandwritten = textResultObj.getBoolean("isHandwritten");
+//                String leftBottom = textResultObj.getString("leftBottom");
+//                String leftTop = textResultObj.getString("leftTop");
+//                String rightBottom = textResultObj.getString("rightBottom");
+//                String rightTop = textResultObj.getString("rightTop");
+//                String text = textResultObj.getString("text");
+//
+//
+//                OcrPosition textResult = new OcrPosition(charNum, isHandwritten, leftBottom, leftTop, rightBottom, rightTop, text);
+//                textResults.add(textResult);
+//            }
+//
+//            OcrResult ocrResult = new OcrResult(ocrText, pdfURL,pdfPage, textResults,image);
+//            ocrResultList.add(ocrResult);
         }
-        return ocrResultList;
+        return ocrResultNewArrayList;
     }
 
     public RestTemplate GetRestTemplate(ClientHttpRequestFactory factory){
