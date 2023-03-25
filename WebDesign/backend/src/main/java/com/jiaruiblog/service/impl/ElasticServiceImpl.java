@@ -203,7 +203,6 @@ public class ElasticServiceImpl implements ElasticService {
             List<EsSearchContent> esSearchContentList = new ArrayList<>();
             List<EsSearchOcrOutcome> esSearchOcrOutcomeList = new ArrayList<>();
 
-            List<Map<String, Object>> contentResultList = new ArrayList<>();
 //            获取到content的hit内容
             SearchHits innerContentHits = hit.getInnerHits().get(CONTENT_EACH_PAGE_LIST);
 //            获取到ocrList内容
@@ -251,8 +250,8 @@ public class ElasticServiceImpl implements ElasticService {
             esSearch.setContentScore(contentScore);
             esSearch.setName((String) objectMap.get("name"));
             esSearch.setType((String) objectMap.get("type"));
-            esSearch.setFileId((String) objectMap.get("fileId"));
-            esSearch.setId((String) objectMap.get("id"));
+            esSearch.setMd5((String) objectMap.get("id"));
+            esSearch.setId((String) objectMap.get("fileId"));
 
 //            从innerhit中获取文本内容
             if(innerContentHits.getTotalHits().value != 0){

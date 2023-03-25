@@ -661,7 +661,7 @@ public class FileServiceImpl implements IFileService {
                     esDoc = getThumbIdAndDateFromDB(esDoc);
 
                     if (!CollectionUtils.isEmpty(esDoc)) {
-                        Set<String> existIds = esDoc.stream().map(FileDocument::getMd5).collect(Collectors.toSet());
+                        Set<String> existIds = esDoc.stream().map(FileDocument::getId).collect(Collectors.toSet());
 
                         docIdSet.removeAll(existIds);
                     }
@@ -1168,7 +1168,7 @@ public class FileServiceImpl implements IFileService {
 
             fileDocument.setId(esSearch.getId());
             fileDocument.setName(esSearch.getName());
-            fileDocument.setMd5(esSearch.getFileId());
+            fileDocument.setMd5(esSearch.getMd5());
             fileDocument.setContentType(esSearch.getType());
             fileDocument.setContentScore(esSearch.getContentScore());
             fileDocument.setLikeScore(esSearch.getLikeScore());
@@ -1183,26 +1183,15 @@ public class FileServiceImpl implements IFileService {
 
     private List<FileDocument> getThumbIdAndDateFromDB(List<FileDocument> esDocs){
 
-        for(FileDocument esDoc:esDocs){
-            System.out.println("md5:"+esDoc.getMd5());
-            Query query = new Query(Criteria.where("_id").is(esDoc.getMd5()));
+        for(FileDocument esDoc:esDocs) {
+            System.out.println("md5:" + esDoc.getMd5());
+            Query query = new Query(Criteria.where("_id").is(esDoc.getId()));
             query.fields().include(UPLOAD_DATE_FILED_NAME).include(THUMBID_FILED_NAME);
 
             ThumbIdAndDate document = mongoTemplate.findOne(query, ThumbIdAndDate.class, COLLECTION_NAME);
-//            System.out.println("aaa");
 
-//            Document result = mongoTemplate.findOne(query,Docunment.class,COLLECTION_NAME);
-//            Date result =(Date) mongoTemplate.findOne(query, Date.class, COLLECTION_NAME);
-//            System.out.println("date:"+result);
             esDoc.setUploadDate(document.getUploadDate());
             esDoc.setThumbId(document.getThumbId());
-
-//
-//            query = new Query(Criteria.where("md5").is(esDoc.getMd5()));
-//            query.fields().include(THUMBID_FILED_NAME);
-//            String thumbId = mongoTemplate.findOne(query, String.class, COLLECTION_NAME);
-//            System.out.println("thumbId:"+thumbId);
-//            esDoc.setThumbId(thumbId);
         }
 
         return esDocs;
