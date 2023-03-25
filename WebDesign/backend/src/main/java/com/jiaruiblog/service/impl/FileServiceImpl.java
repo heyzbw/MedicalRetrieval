@@ -8,6 +8,7 @@ import com.jiaruiblog.auth.PermissionEnum;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.config.SystemConfig;
 import com.jiaruiblog.entity.*;
+import com.jiaruiblog.entity.data.ThumbIdAndDate;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
 import com.jiaruiblog.entity.ocrResult.*;
@@ -30,6 +31,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Field;
 import org.springframework.data.mongodb.core.query.Query;
@@ -68,6 +70,10 @@ public class FileServiceImpl implements IFileService {
 
     private static final String FILE_NAME = "filename";
 
+    private static final String UPLOAD_DATE_FILED_NAME = "uploadDate";
+
+    private static final String THUMBID_FILED_NAME = "thumbId";
+    //    uploadDate
     private static final String CONTENT = "content";
 
     private static final String[] EXCLUDE_FIELD = new String[]{"md5", "content", "contentType", "suffix", "description",
@@ -652,6 +658,8 @@ public class FileServiceImpl implements IFileService {
 
 //                    将es的查询结果转为一个List<fileDocument>
                     esDoc = getListFileDocumentFromEsOutcome(esSearchList);
+                    esDoc = getThumbIdAndDateFromDB(esDoc);
+
                     if (!CollectionUtils.isEmpty(esDoc)) {
                         Set<String> existIds = esDoc.stream().map(FileDocument::getMd5).collect(Collectors.toSet());
 
@@ -1165,9 +1173,39 @@ public class FileServiceImpl implements IFileService {
             fileDocument.setContentScore(esSearch.getContentScore());
             fileDocument.setLikeScore(esSearch.getLikeScore());
             fileDocument.setClickScore(esSearch.getClickScore());
+
+            fileDocument.setThumbId(esSearch.getThumbId());
+            fileDocument.setUploadDate(esSearch.getDate());
             fileDocuments.add(fileDocument);
         }
         return fileDocuments;
+    }
+
+    private List<FileDocument> getThumbIdAndDateFromDB(List<FileDocument> esDocs){
+
+        for(FileDocument esDoc:esDocs){
+            System.out.println("md5:"+esDoc.getMd5());
+            Query query = new Query(Criteria.where("_id").is(esDoc.getMd5()));
+            query.fields().include(UPLOAD_DATE_FILED_NAME).include(THUMBID_FILED_NAME);
+
+            ThumbIdAndDate document = mongoTemplate.findOne(query, ThumbIdAndDate.class, COLLECTION_NAME);
+            System.out.println("aaa");
+
+//            Document result = mongoTemplate.findOne(query,Docunment.class,COLLECTION_NAME);
+//            Date result =(Date) mongoTemplate.findOne(query, Date.class, COLLECTION_NAME);
+//            System.out.println("date:"+result);
+            esDoc.setUploadDate(document.getUploadDate());
+            esDoc.setThumbId(document.getThumbId());
+
+//
+//            query = new Query(Criteria.where("md5").is(esDoc.getMd5()));
+//            query.fields().include(THUMBID_FILED_NAME);
+//            String thumbId = mongoTemplate.findOne(query, String.class, COLLECTION_NAME);
+//            System.out.println("thumbId:"+thumbId);
+//            esDoc.setThumbId(thumbId);
+        }
+
+        return esDocs;
     }
 
 }

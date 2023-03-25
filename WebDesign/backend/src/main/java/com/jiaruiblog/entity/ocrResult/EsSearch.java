@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -33,6 +34,9 @@ public class EsSearch {
     private double likeScore;
 
 
+    private String thumbId;
+
+    private Date date;
 
     private List<EsSearchOcrOutcome> esSearchOcrOutcomeList = new ArrayList<>();
     private List<EsSearchContent> esSearchContentList = new ArrayList<>();

@@ -1,3 +1,6 @@
+from uuid import uuid1
+
+import gridfs
 import pymongo
 import json
 
@@ -11,6 +14,13 @@ class MongdbOcrUtil(object):
         self.client = pymongo.MongoClient(host=self.host, port=self.port)
         self.db = self.client.test
         self.collections = self.db.ocr_result
+        self.fs = gridfs.GridFS(self.db)
+
+    def upload_image_to_mongodb(self, image):
+        filename = "png_"+str(uuid1())
+        self.fs.put(image, filename=filename, contentType="png")
+        return filename
+
 
     def write_result(self, result_text):
         try:

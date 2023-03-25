@@ -9,6 +9,8 @@ import cv2
 import fitz
 import easyocr
 import numpy as np
+import io
+from PIL import Image
 
 from MongoDB.MongdbOcrUtil import MongdbOcrUtil
 from MongoDB.MongoFileDataUtil import MongoFileDataUtil
@@ -31,6 +33,7 @@ def pdf2pic(doc):
     """
     filename = doc.name
     images = []
+    page_images = []
     for p in range(len(doc)):
         page = doc.load_page(p)
         pageimg = page.get_images()  # 得到确定为图片的Object列表
@@ -59,11 +62,13 @@ def pdf2pic(doc):
 
             picInfo = PicInfo(img, p, filename)
             images.append(picInfo)
+            page_images.append(pageimg[i])
 
-    return images
+    return images, page_images
 
 
-def pic2json(image_np, pageNum, pdfname):
+def pic2json(image_np, pageNum, pdfname, image_page):
+    print("image_np:", image_np)
     img_base64 = numpy_to_base64(image_np)
     reader = easyocr.Reader(['ch_sim', 'en'])
     result = reader.readtext(image_np)
@@ -72,7 +77,7 @@ def pic2json(image_np, pageNum, pdfname):
     text["pdfURL"] = pdfname
     text["pdfPage"] = pageNum
     text["textResult"] = []
-    text["image"] = img_base64
+    # text["image"] = img_base64
 
     for se in result:
         sem = list(se)
@@ -87,6 +92,14 @@ def pic2json(image_np, pageNum, pdfname):
         textarr["text"] = sem[1]
         text["textResult"].append(textarr)
     if len(text["ocrText"]) > 0:
+        img = Image.fromarray(image_np)
+        with io.BytesIO() as output:
+            img.save(output, format='JPEG')
+            image_data = output.getvalue()
+
+        gridfs_id = mongdbOcrUtil.upload_image_to_mongodb(image_data)
+        print("gridfs_id",gridfs_id)
+        text["image"] = gridfs_id
         mongdbOcrUtil.write_result(text)
 
         return text
@@ -104,12 +117,22 @@ def numpy_to_base64(image_np):
 def fromMD5(md5):
     mongoFIleDataUtil = MongoFileDataUtil()
     doc = mongoFIleDataUtil.getFileByMD5(md5)
-    images = pdf2pic(doc)
+    images, page_images = pdf2pic(doc)
     texts = []
-    for image in images:
-        text = pic2json(image.image_np, image.pageNum, image.filename)
+    for i in range(0, len(images)):
+
+        image = images[i]
+        page_image = page_images[i]
+        print(page_image)
+
+        text = pic2json(image.image_np, image.pageNum, image.filename, page_image)
         if text != False:
             texts.append(text)
+
+    # for image in images:
+    #     text = pic2json(image.image_np, image.pageNum, image.filename)
+    #     if text != False:
+    #         texts.append(text)
 
     return texts
 
