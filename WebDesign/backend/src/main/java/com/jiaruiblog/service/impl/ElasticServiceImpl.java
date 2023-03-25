@@ -6,6 +6,7 @@ import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
 import com.jiaruiblog.entity.ocrResult.*;
 import com.jiaruiblog.service.ElasticService;
+import com.jiaruiblog.util.InfixToRPN;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.lucene.search.join.ScoreMode;
@@ -55,7 +56,7 @@ public class ElasticServiceImpl implements ElasticService {
 
     private static final String INDEX_NAME = "docwrite";
 
-//    private static final String INDEX_NAME = "synonym_test";
+    //    private static final String INDEX_NAME = "synonym_test";
     private static final String PIPELINE_NAME = "attachment.content";
 
     //ocr结果的字段
@@ -63,10 +64,10 @@ public class ElasticServiceImpl implements ElasticService {
     private static final String OCR_RESULT_LIST_TEXT = "ocrResultList.ocrText";
 
 
-//    点击率字段
+    //    点击率字段
     private static final String CLICK_RATE = "click_rate";
 
-//    点赞量字段
+    //    点赞量字段
     private static final String LIKE_NUM = "collect_num";
     private static final double CONTENT_WEIGHT = 60;
     private static final double CLICK_RATE_WEIGHT = 30;
@@ -161,7 +162,7 @@ public class ElasticServiceImpl implements ElasticService {
                         new FetchSourceContext(
                                 true,new String[]{CONTENT_EACH_PAGE_LIST_PAGE_NUM},null
                         )
-            ).setHighlightBuilder(highlightBuilder)
+                ).setHighlightBuilder(highlightBuilder)
         );
 
 //        ocr文本匹配
@@ -189,8 +190,8 @@ public class ElasticServiceImpl implements ElasticService {
         SearchHits hits = searchResponse.getHits();
 
         List<EsSearch> esSearchList = new ArrayList<>();
-        List<EsSearchContent> esSearchContentList = new ArrayList<>();
-        List<EsSearchOcrOutcome> esSearchOcrOutcomeList = new ArrayList<>();
+
+
 
         double max_content_score = getMaxScore(hits);
         int max_click_num = getMaxValue(hits, CLICK_RATE);
@@ -198,6 +199,9 @@ public class ElasticServiceImpl implements ElasticService {
 
         for (SearchHit hit : hits) {
             EsSearch esSearch = new EsSearch();
+
+            List<EsSearchContent> esSearchContentList = new ArrayList<>();
+            List<EsSearchOcrOutcome> esSearchOcrOutcomeList = new ArrayList<>();
 
             List<Map<String, Object>> contentResultList = new ArrayList<>();
 //            获取到content的hit内容
@@ -307,9 +311,21 @@ public class ElasticServiceImpl implements ElasticService {
         return esSearchList;
     }
 
-//    public List<FileDocument> advanced_search{
-//        return null;
-//    }
+    public List<EsSearch> search_high(String keyword) throws IOException{
+        String rpn = InfixToRPN.infixToRPN(keyword);
+        System.out.println(rpn);  // 输出：dqx zbw PYB & |
+
+        String[] tokens = rpn.split("\\s+"); // 将输入字符串按照空格分割成一个字符串数组
+        List<String> list = new ArrayList<>(Arrays.asList(tokens)); // 将字符串数组转换为ArrayList
+
+        for(String str:list){
+            System.out.println("str:"+str+"\"");
+        }
+        System.out.println(list);
+
+
+        return null;
+    }
 
     @Override
     public List<FileDocument> search(String keyword) throws IOException {
@@ -757,7 +773,7 @@ public class ElasticServiceImpl implements ElasticService {
      * <p>
      * // srb.query(QueryBuilders.matchQuery("attachment.content", keyword).analyzer("ik_smart"));
      *
-//     * @param keyword String
+     //     * @param keyword String
      * @return list
      * @throws IOException ioexception
      *
@@ -957,7 +973,7 @@ public class ElasticServiceImpl implements ElasticService {
     }
 
 
-//    private double getScore()
+    //    private double getScore()
     private int getMaxValue(SearchHits hits,String FieldName){
 
         //hits是一个迭代器，所以需要迭代返回每一个hits

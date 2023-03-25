@@ -1189,7 +1189,7 @@ public class FileServiceImpl implements IFileService {
             query.fields().include(UPLOAD_DATE_FILED_NAME).include(THUMBID_FILED_NAME);
 
             ThumbIdAndDate document = mongoTemplate.findOne(query, ThumbIdAndDate.class, COLLECTION_NAME);
-            System.out.println("aaa");
+//            System.out.println("aaa");
 
 //            Document result = mongoTemplate.findOne(query,Docunment.class,COLLECTION_NAME);
 //            Date result =(Date) mongoTemplate.findOne(query, Date.class, COLLECTION_NAME);
