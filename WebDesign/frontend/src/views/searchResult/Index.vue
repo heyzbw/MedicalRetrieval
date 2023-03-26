@@ -9,10 +9,11 @@
                 <button @click="getListDatap()">Pubmed搜索</button>
             </div>
             <SearchItem v-if="searchifag" v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)"
-                :id="item.id" :thumbId="item.thumbId" :title="item.title" :description="item.description"
+                :id="item.id" :thumbId="item.thumbId" :title="item.title" :esSearchContentList="item.esSearchContentList"
                 :time="item.createTime" :user-name="item.userName" :category="item.categoryVO" :tags="item.tagVOList"
-                :stringList="item.stringList" :collect-num="item.collectNum" :comment-num="item.commentNum"
-                :keyword="keyword">
+                :collect-num="item.collectNum" :comment-num="item.commentNum" :ocrResultList="item.ocrResultList"
+                :keyword="keyword" :click_score="item.click_score" :content_score="item.content_score"
+                :like_score="item.like_score">
             </SearchItem>
             <PubmedItem v-if="searchpubmed"
                 v-for="item in datapubmed.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)" :Title="item.Title"
@@ -122,7 +123,9 @@ export default {
                     this.totalItems = res.data.totalNum;
                     this.data = res.data.documents;
                     console.log("关键字查询成功，返回内容为：");
-                    console.log("data:",res.data)
+                    console.log("data:", res.data)
+                    console.log("desSearchContentList:", res.data[0].esSearchContentList)
+
                 } else {
                     this.data = []
                 }
@@ -139,7 +142,7 @@ export default {
 
 <style scoped>
 .nav {
-    background-color: #ffcc4f;
+    background-color: #ffffff;
     width: 100%;
     height: 50px;
 }
