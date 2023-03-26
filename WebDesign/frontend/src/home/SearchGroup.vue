@@ -1,17 +1,78 @@
 <template>
     <div class="search-group">
+        <!-- <link href="../assets/source/lczs-index.css" rel="stylesheet" type="text/css"> -->
+
         <div class="search-zone">
             <div class="logo">
                 <img :src="logoSrc" width="100%" height="100%" alt="" />
             </div>
+
             <div class="search-input">
                 <div class="search-input-top">
                     <div class="search-selection" @click="routeTo">
                         <span>全部</span>
                     </div>
                     <input :placeholder="placeholder" v-model="searchValue" @focus="userInputFlag = true"
-                        @blur="whenInputBlur" @keyup.enter="clickToSearch(searchValue)" @input="changeItem"
-                        ref="input"></input>
+                        @blur="whenInputBlur" @keyup.enter="clickToSearch(searchValue)" @input="changeItem" ref="input">
+
+                    <button class="subNav-btn btn2 currentDd-btn currentDt-btn"></button>
+                    <div id="mb"></div>
+                    <div class="showbox2 navContent-btn">
+                        <div class="close"></div>
+                        <div id="serachgaoji">
+                            <h3>高级检索</h3>
+
+                            <div class="s-condition fL w100"><select>
+                                    <option value="name">疾病名</option>
+                                    <option value="DIICD">ICD</option>
+                                    <option value="DISpeciality">类别</option>
+                                    <option value="DIConcurrent_Disease">并发症</option>
+                                    <option value="DISimilar_Disease">鉴别诊断</option>
+                                    <option value="DITreat_Drug">治疗药物</option>
+                                    <option value="DI_Examination">检查</option>
+                                    <option value="DIClinical_Symptoms">症状</option>
+                                </select><input style="width:53%;margin:0 15px 0 9px ;"><select style="width:50px;">
+                                    <option value="1">与</option>
+                                    <option value="0">或</option>
+                                </select><button onclick="addinput()"><img src="../assets/source/seach-gj03.png"></button>
+                            </div>
+                            <div class="s-condition fL w100"><select>
+                                    <option value="name">疾病名</option>
+                                    <option value="DIICD">ICD</option>
+                                    <option value="DISpeciality">类别</option>
+                                    <option value="DIConcurrent_Disease">并发症</option>
+                                    <option value="DISimilar_Disease">鉴别诊断</option>
+                                    <option value="DITreat_Drug">治疗药物</option>
+                                    <option value="DI_Examination">检查</option>
+                                    <option value="DIClinical_Symptoms">症状</option>
+                                </select><input style="width:53%;margin:0 15px 0 9px ;"><select style="width:50px;">
+                                    <option value="1">与</option>
+                                    <option value="0">或</option>
+                                </select><button onclick="addinput()"><img src="../assets/source/seach-gj03.png"></button>
+                                <button onclick="remove(this)"><img src="../assets/source/seach-gj04.png"></button>
+                            </div>
+                        </div>
+                        <div class="s-type fL w100">
+                            <!-- <label>类型 : </label> -->
+                            <!--  <a href="###"><input  name="aaaa" type="radio" checked="checked" /><span>全部</span></a> -->
+                            <a><input name="aaaa" type="radio" checked="checked" value="jb"><span>疾病</span></a>
+                            <a><input name="aaaa" type="radio" value="yw"><span>药物</span></a>
+                            <a><input name="aaaa" type="radio" value="jc"><span>检查</span></a>
+                            <a><input name="aaaa" type="radio" value="zz"><span>症状</span></a>
+                            <a><input name="aaaa" type="radio" value="ss"><span>手术</span></a>
+                            <a><input name="aaaa" type="radio" value="zlzn"><span>诊疗指南</span></a>
+                            <a><input name="aaaa" type="radio" value="blbg"><span>病例报告</span></a>
+                            <a><input name="aaaa" type="radio" value="hzxz"><span>患者教育</span></a>
+                        </div>
+                        <div class="btm-center">
+                            <button><img src="../assets/source/search.png"></button>
+                        </div>
+
+                        <div class="rg-button fL">
+                            <button><img src="../assets/source/search.png"></button>
+                        </div>
+                    </div>
+
                     <div class="search-button"
                         style="width: 100px; line-height: 45px; display: flex; align-content: center; flex-wrap: wrap; justify-content: center;"
                         @click="clickToSearch(searchValue)">
@@ -37,6 +98,11 @@
 <script>
 
 import StatsRequest from "@/api/stats";
+// import '@/api/sign-in'
+import '@/api/jquery'
+import '@/assets/source/lczs-index.css'
+// import '@/api/lczs-index'
+
 
 export default {
     name: "SearchGroup",
@@ -68,6 +134,7 @@ export default {
             StatsRequest.getSearchHistory().then(response => {
                 if (response.code === 200) {
                     this.hotSearch = response.data.hotSearch;
+                    console.log(response.data)
                     this.originUserSearch = response.data.userSearch;
                     this.userSearch = this.originUserSearch.slice(0, 10);
                 }
@@ -82,7 +149,7 @@ export default {
             }, 100)
         },
         clickToSearch(value) {
-            console.log("待查询的关键词为："+value)
+            console.log("待查询的关键词为：" + value)
             if (value !== "") {
                 this.$router.push({
                     path: '/searchResult',
