@@ -9,7 +9,9 @@ import Api from './api/index';
 import '../theme/my-theme.less'
 import axios from 'axios'
 //配置后端的访问地址
+import * as echarts from 'echarts';
 
+Vue.prototype.$echarts = echarts
 Vue.use(VueRouter);
 Vue.use(iView);
 Vue.use(ElementUI);
