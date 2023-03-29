@@ -1,8 +1,6 @@
 <template>
     <div class="hot-trend">
-        <div class="first-group"
-             @click="getDocView(top1.id)"
-        >
+        <div class="first-group" @click="getDocView(top1.id)">
             <div class="doc-thumb">
                 <DocThumb :flag="true" :title="top1.name"></DocThumb>
                 <div class="top-1">
@@ -12,15 +10,15 @@
             <div class="first-doc-detail">
                 <div class="doc-title">{{ top1.name }}</div>
                 <div class="doc-info">
-                    <Icon type="ios-chatbubbles-outline"/>
+                    <Icon type="ios-chatbubbles-outline" />
                     {{ top1.commentNum }}
                 </div>
                 <div class="doc-info">
-                    <Icon type="ios-thumbs-up-outline"/>
+                    <Icon type="ios-thumbs-up-outline" />
                     {{ top1.likeNum }}
                 </div>
                 <div class="doc-info">
-                    <Icon type="md-heart-outline"/>
+                    <Icon type="md-heart-outline" />
                     {{ top1.collectNum }}
                 </div>
             </div>
@@ -45,7 +43,7 @@ import StatsRequest from "@/api/stats";
 
 export default {
     name: "HotTrend.vue",
-    components: {DocThumb},
+    components: { DocThumb },
     data() {
         return {
             top1: {
@@ -62,11 +60,11 @@ export default {
         xxx(value) {
             if (value < 2) {
                 return {
-                    backgroundColor: "#FACF36"
+                    backgroundColor: "#00c026"
                 }
             } else if (value < 4) {
                 return {
-                    backgroundColor: "#FFFAE4"
+                    backgroundColor: "#b9ff83"
                 }
             } else {
                 return {
@@ -192,8 +190,8 @@ export default {
                 left: 0px;
                 width: 58px;
                 height: 24px;
-                background-color: #FACF36;
-                border: 1px solid #000000;
+                background-color: #00c427;
+                border: 1px solid #b8b8b8;
                 border-radius: 2px 0px 100px 0px;
                 text-align: center;
 
@@ -201,7 +199,7 @@ export default {
                     font-size: 14px;
                     font-family: PingFangSC-Semibold, PingFang SC;
                     font-weight: 600;
-                    color: #000000;
+                    color: #ffffff;
                     line-height: 22px;
                 }
             }
@@ -230,6 +228,7 @@ export default {
 
     .second-group {
         margin-top: 20px;
+
         //padding: 0 4px;
         .trend-item {
             display: flex;
@@ -247,7 +246,7 @@ export default {
                 height: 24px;
                 display: block;
                 border-radius: 2px;
-                border: 1px solid #000000;
+                border: 1px solid #efefef;
                 line-height: 24px;
                 text-align: center;
                 font-weight: 600;

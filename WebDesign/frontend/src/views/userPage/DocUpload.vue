@@ -38,12 +38,12 @@
             </Col>
             <Col span="20">
             <div class="search-input-top">
-                <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">标签{{
-                    item + 1
+                <Tag v-for="(item, index) in items" :key="index" :name="item" closable @on-close="handleClose2">{{
+                    item
                 }}
                 </Tag>
+                <input @keyup.enter="handleAdd" v-model="item">
                 <Button icon="ios-add" type="dashed" size="small" @click="handleAdd">添加标签</Button>
-
             </div>
             </Col>
         </Row>
@@ -73,25 +73,39 @@
             <Col span="1" class="star-tag">
             <span>*</span>
             </Col>
+            <Col span="6">
+            <div class="booll">
+                <!-- 是否为扫描件？ -->
+                <el-radio v-model="radio" label="1">PDF文件</el-radio>
+                <el-radio v-model="radio" label="2">PDF扫描件</el-radio>
+            </div>
+            </Col>
+        </Row>
+        <!-- <Row style="padding: 5px 0;" v-show="true">
+            <Col span="1" class="star-tag">
+            <span>*</span>
+            </Col>
             <Col span="20" class="description-area">
 
             <Input v-model="value1" maxlength="140" type="textarea" placeholder="请输入文档的描述信息"
                 :autosize="{ minRows: 2, maxRows: 5 }" />
             </Col>
-        </Row>
+        </Row> -->
 
         <Row style="margin-top: 30px;">
             <Col span="1" class="star-tag">
 
             </Col>
             <Col>
-            <div class="upload-button" style="width: 180px; height: 45px; border: 2px solid #000;
-                                                                                                    background: #FFF7D6;
-                                                                                                    box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
-                                                                                                    border-radius: 8px;
-                                                                                                    display: flex;
-                                                                                                    justify-content: center;
-                                                                                                    " @click="uploadFile">
+            <div class="upload-button"
+                style="width: 180px; height: 45px; border: 2px solid #000;
+                                                                                                                                                                                                                                                            background: #FFF7D6;
+                                                                                                                                                                                                                                                            box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
+                                                                                                                                                                                                                                                            border-radius: 8px;
+                                                                                                                                                                                                                                                            display: flex;
+                                                                                                                                                                                                                                                            justify-content: center;
+                                                                                                                                                                                                                                                            "
+                @click="uploadFile">
                 <div style="padding: 5px; line-height: 45px;">
                     <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
                 </div>
@@ -118,12 +132,16 @@ export default {
             actionUrl: BackendUrl() + "/files/upload",
             filename: '',
             uploadProcess: 0.00,
-            count: [0,],
+            count: [],
+            num: 0,
             processFlag: false,
             uploadParam: {},
             categoryOption: [],
             checkedCategory: { id: "ALL", name: "全部分类" },
             categoryType: 'CATEGORY',
+            items: [],
+            item: '',
+            radio: 1
         }
 
     },
@@ -207,15 +225,15 @@ export default {
         },
 
         handleAdd() {
-            if (this.count.length) {
-                this.count.push(this.count[this.count.length - 1] + 1);
-            } else {
-                this.count.push(0);
-            }
+            this.items[this.num] = this.item
+            this.num = this.num + 1;
+            console.log(this.items)
+            console.log(this.num)
         },
         handleClose2(event, name) {
-            const index = this.count.indexOf(name);
-            this.count.splice(index, 1);
+            const index = this.items.indexOf(name);
+            this.items.splice(index, 1);
+            this.num = this.num - 1
         },
         getAllItems() {
             this.loading = true
@@ -321,7 +339,23 @@ export default {
 
     .cate-dropdown {
         text-align: center;
-        width: 100%;
+        width: 35%;
+        height: 45px;
+        background: #FFFFFF;
+        border-radius: 8px;
+        border: 1px solid #000000;
+        //margin-left: 10px;
+
+        font-size: 14px;
+        font-family: PingFangSC-Medium, PingFang SC, serif;
+        font-weight: 500;
+        color: #000000;
+        line-height: 45px;
+    }
+
+    .booll {
+        text-align: center;
+        width: 60%;
         height: 45px;
         background: #FFFFFF;
         border-radius: 8px;
@@ -337,7 +371,7 @@ export default {
 
     .search-input-top {
 
-        width: 100%;
+        width: 60%;
         height: 45px;
         background: #FFFFFF;
         border-radius: 8px;
@@ -350,11 +384,13 @@ export default {
         align-content: center;
 
         input {
-            height: 43px;
-            width: 100%;
+            height: 30px;
+            width: 10%;
             text-decoration: none;
             outline: none;
             border: none;
+            border-radius: 8px;
+            border: 1px solid #000000;
         }
     }
 

@@ -16,7 +16,7 @@ public class CallFlask {
 
     private RestTemplate restTemplate = GetRestTemplate(simpleClientHttpRequestFactory());
 
-    String SERVER_URL = "http://localhost:5000/";
+    String SERVER_URL = "http://localhost:8083/";
 
     public List<OcrResultNew> doUpload(String md5){
 //        待输入的参数

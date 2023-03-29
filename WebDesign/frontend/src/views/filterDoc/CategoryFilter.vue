@@ -67,7 +67,7 @@ export default {
             this.$emit("changeCate", param)
         },
         clickToSearch(searchValue) {
-            console.log("待搜索的关键词为："+searchValue)
+            console.log("待搜索的关键词为：" + searchValue)
             this.$emit("changeKeyWord", searchValue)
         },
         getAllItems() {
@@ -77,6 +77,7 @@ export default {
             };
             CategoryRequest.getListData(params).then(response => {
                 this.loading = false;
+                console.log(response.data);
                 if (response.code !== 200) {
                     return;
                 }

@@ -96,7 +96,6 @@ export default {
             arr[1] = vm.pageNum
             console.log(arr[1])
             iframe.contentWindow.postMessage(arr, '*');
-
         },
 
         // 接受数据
@@ -107,14 +106,14 @@ export default {
             iframe.contentWindow.addEventListener('message', function (e) {
                 //这里打印一下，看是否拿到了传入的数据
                 // console.log("e" + e.data);
-                // console.log(iframe.contentWindow)
+                console.log(iframe.contentWindow)
                 // 这里打印的是pdf.js暴露出来的find接口
 
                 iframe.onload = function () {
                     setTimeout(() => {
                         let iframe = document.getElementById('myIframe');
                         console.log(iframe.contentWindow.PDFViewerApplication);
-                        console.log(e.data[1])
+                        // console.log(e.data[1])
                         // 输入查询数据
                         iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
 

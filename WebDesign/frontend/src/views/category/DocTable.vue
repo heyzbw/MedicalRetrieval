@@ -27,7 +27,6 @@
                     </Col>
                 </Row>
             </div>
-
         </div>
 
         <Modal v-model="action_modal" title="文档详情" :loading="action_loading" @on-ok="asyncOK">
@@ -58,8 +57,8 @@
                     </Button>
                 </p>
                 <div v-show="infoVisible" style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
-                    margin-top: 8px;
-    ">
+                        margin-top: 8px;
+        ">
                     <span v-if="document_info['docState'] === 'SUCCESS'">
                         索引建立成功，可以下载<span style="color: #408FFF; cursor: pointer"
                             @click="downloadTxt(document_info)">文本文件</span>。

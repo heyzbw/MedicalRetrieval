@@ -5,8 +5,10 @@
         </div>
         <div class="doc-group" style="display: inline-block">
             <div style="background-color: #fff">
-                <SearchInput ref="searchInput" @on-search="getListData"></SearchInput>
-                <button @click="getListDatap()">Pubmed搜索</button>
+                <SearchInput ref="searchInput" @on-search="getListData" style="display: inline-block"></SearchInput>
+                <div class="pubutton">
+                    <button @onclick="getListDatap()" class="bbb">Pubmed搜索</button>
+                </div>
             </div>
             <SearchItem v-if="searchifag" v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)"
                 :id="item.id" :thumbId="item.thumbId" :title="item.title" :esSearchContentList="item.esSearchContentList"
@@ -20,7 +22,7 @@
                 :Abstract="item.Abstract" :ISSN="item.ISSN" :Journal="item.Journal" :Source="item.Source"
                 :Author="item.Author" :doi="item.doi">
             </PubmedItem>
-            <div class="page-container" v-show="datapubmed.length > 0">
+            <div class="page-container" v-show="datapubmed.length > 0 || this.data.length > 0">
                 <Page :model-value="currentPage" :total="20" :page-size="pageSize" @on-change="pageChange" />
             </div>
             <div style="padding: 30px 10px; color: #555" v-show="data.length < 1">
@@ -86,6 +88,12 @@ export default {
                 console.log(response.data);
                 this.datapubmed = response.data.Papers;
             }).catch(error => {
+                // if (this.data == undefined || this.data.length === 0) {
+                //     this.info2(false)
+                // }
+                // else {
+                //     this.info1(false)
+                // }
                 console.log(error.response, "error");
                 this.$message({
                     message: error.response.data.errMsg,
@@ -97,6 +105,18 @@ export default {
             this.$Notice.info({
                 title: '通知信息',
                 desc: nodesc ? '' : '没有找到相关文档，试一试其他关键字'
+            });
+        },
+        info1(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '' : 'pubmed只支持英文检索哟'
+            });
+        },
+        info2(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '' : 'pubmed错了点问题，试一试其他关键字吧'
             });
         },
         pageChange(page) {
@@ -140,7 +160,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .nav {
     background-color: #ffffff;
     width: 100%;
@@ -155,7 +175,34 @@ export default {
     /*background-color: rgba(245, 245, 245, 100);*/
     color: rgba(16, 16, 16, 100);
     text-align: left;
+
     /*padding-left: 12px;*/
+}
+
+.pubutton {
+    padding-right: 23%;
+    padding-top: 5x;
+    height: 50px;
+    float: right;
+}
+
+.bbb {
+    margin: 15px;
+    font-family: Helvetica-Bold, Helvetica;
+    font-weight: bold;
+    font-size: 12px;
+    padding-top: 5x;
+    border: 1px solid #AAAAAA;
+    width: 90px;
+    height: 40px;
+    border-radius: 18px;
+    background-color: #7dffaa;
+    color: #fff;
+
+    &:hover {
+        cursor: pointer;
+        color: #1b933b;
+    }
 }
 
 .page-container {

@@ -11,14 +11,12 @@
                 </div>
                 <div class="description">
                     <div class="description-item">
-                        {{ Journal }}
+                        Author:{{ Author[0] }}
                     </div>
-                    <div class="description-item">
-                        {{ Author }}
+                    <div class="description-item1">
+                        Journal:{{ Journal }}
                     </div>
-                    <div class="description-item">
-                        {{ ISSN }}
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -33,7 +31,7 @@
                 {{ collectNum }}
             </li>
             <li>
-                <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>889
+                <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>0
             </li>
             <li>
                 <i class="ivu-icon ivu-icon-ios-chatbubbles-outline"></i>
@@ -213,6 +211,13 @@ export default {
 
 .description-item {
     width: 200px;
+    line-height: 24px;
+    padding-top: 2px;
+    float: left;
+}
+
+.description-item1 {
+    width: 800px;
     line-height: 24px;
     padding-top: 2px;
     float: left;

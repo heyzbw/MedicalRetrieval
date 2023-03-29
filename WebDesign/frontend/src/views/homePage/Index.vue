@@ -39,6 +39,7 @@ export default {
         getTrendData() {
             StatsRequest.getTrendData().then(response => {
                 this.data = response.data
+                console.log("111" + response.data)
             })
         }
     }

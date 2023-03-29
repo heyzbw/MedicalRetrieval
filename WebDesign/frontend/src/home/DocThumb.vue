@@ -1,5 +1,5 @@
 <template>
-    <div class="thumb-group" :style="flag|styleByFlag">
+    <div class="thumb-group" :style="flag | styleByFlag">
         <div class="thumb-com">
             <div class="thumb-pic">
                 <img :src="docId | imgSrc" alt="docId" referrerpolicy="no-referrer">
@@ -98,6 +98,7 @@ export default {
             overflow: hidden; //img如果超出这个div会隐藏超出部分
             display: flex; //flex布局
             align-items: center; //让img放在div的中间，居中
+
             img {
                 width: 100%;
             }

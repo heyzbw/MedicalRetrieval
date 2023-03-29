@@ -59,7 +59,7 @@
                 {{ collectNum }}
             </li>
             <li>
-                <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>889
+                <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>1
             </li>
             <li>
                 <i class="ivu-icon ivu-icon-ios-chatbubbles-outline"></i>
@@ -82,7 +82,7 @@ export default {
             pageNum: '',
             ocrshow: '',
             contentshow: '',
-            ocrNum: this.ocrResultList[0].pdfPage,
+            ocrNum: '',
             score: this.like_score + this.content_score + this.click_score
         }
     },
@@ -92,22 +92,24 @@ export default {
         title: { type: String, requires: true },
         time: { type: String, requires: true, default: "232" },
         userName: { type: String, requires: true, default: 'admin' },
-        category: { type: Object, requires: true, default: '' },
-        tags: { type: Array, requires: true, default: [] },
+        category: { type: Object, requires: false, default: '' },
+        tags: { type: Array, requires: false, default: [] },
         collectNum: { type: Number, requires: false, default: 0 },
         commentNum: { type: Number, requires: false, default: 0 },
         keyword: { type: String, requires: true },
-        esSearchContentList: { type: Array, requires: true, default: [] },
-        ocrResultList: { type: Array, requires: true, default: [] },
-        like_score: { type: Number, requires: true },
-        content_score: { type: Number, requires: true },
-        click_score: { type: Number, requires: true },
+        esSearchContentList: { type: Array, requires: false, default: [] },
+        ocrResultList: { type: Array, requires: false, default: [] },
+        like_score: { type: Number, requires: false },
+        content_score: { type: Number, requires: false },
+        click_score: { type: Number, requires: false },
     },
     // 将 prop 数据转换为本地数据
     created() {
         console.log(this.like_score)
         console.log(this.content_score)
         console.log(this.click_score)
+        console.log(this.esSearchContentList[0])
+        console.log(this.esSearchContentList[0].pageNum)
 
         this.score = this.like_score + this.content_score + this.click_score
     },
@@ -159,18 +161,20 @@ export default {
         },
         getDocView() {
             // console.log(x)
+            console.log(typeof (this.esSearchContentList[0].pageNum))
             this.$router.push({
                 path: '/preview',
                 query: {
                     docId: this.id,
                     keyword: this.keyword,
                     pageNum: this.esSearchContentList[0].pageNum
+
                 }
             })
 
         },
         getDocView1() {
-            // console.log(x)
+            console.log(this.esSearchContentList[1].pageNum)
             this.$router.push({
                 path: '/preview',
                 query: {
@@ -194,17 +198,17 @@ export default {
 
         },
         getDocView3() {
-            // console.log(x)
-            setTimeout(() => {
-                this.$router.push({
-                    path: '/preview',
-                    query: {
-                        docId: this.id,
-                        keyword: this.keyword,
-                        pageNum: this.ocrNum
-                    }
-                })
-            }, 100);
+            console.log(this.ocrNum)
+            console.log(typeof (this.ocrResultList[0].pdfPage))
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.ocrResultList[0].pdfPage
+                }
+            })
+
         },
     },
     filters: {
