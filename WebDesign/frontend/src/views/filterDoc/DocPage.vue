@@ -5,10 +5,10 @@
         <div class="tab">
             <Tabs value="name1">
                 <TabPane label="最近上传" name="name1">
-                    <filter-list-page :data="docList" :total="total" :pageNum="pageNum"
-                                      :pageSize="pageSize" @on-page-change="changePage"></filter-list-page>
+                    <filter-list-page :data="docList" :total="total" :pageNum="pageNum" :pageSize="pageSize"
+                        @on-page-change="changePage"></filter-list-page>
                 </TabPane>
-                <TabPane label="人气排名" name="name2" v-if="false">
+                <TabPane label="人气排名" name="name2" v-if="true">
                     <filter-list-page></filter-list-page>
                 </TabPane>
             </Tabs>
@@ -56,7 +56,7 @@ export default {
             }
             CategoryRequest.getDocList(param).then(res => {
                 if (res.code === 200) {
-                    console.log("成功获取搜索文档列表"+res.data)
+                    console.log(res.data)
                     let result = res.data;
                     this.docList = result.data
                     this.pageNum = result.pageNum + 1;
@@ -103,5 +103,4 @@ export default {
     }
 
 }
-
 </style>

@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="doc-preview">
-                <component :is="component" v-if="component" :previewId="previewId" :keyword="keyword" />
+                <component :is="component" v-if="component" :previewId="previewId" :keyword="keyword" :pageNum="pageNum" />
             </div>
             <!-- <FloatBall @click="changeshow"></FloatBall> -->
             <div>
@@ -90,8 +90,8 @@
                                         </p>
                                         <div v-show="infoVisible"
                                             style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                            margin-top: 8px;
-                                                                                                                                                                                                                                                                                                                                            ">
+                                                                                                                                                                                                                                                                                                                                                                margin-top: 8px;
+                                                                                                                                                                                                                                                                                                                                                ">
                                             <span v-if="this.docState === 'SUCCESS'">
                                                 索引建立成功，可以下载<span style="color: #408FFF; cursor: pointer"
                                                     @click="downloadTxt(this)">文本文件</span>。
@@ -217,7 +217,7 @@ export default {
             infoVisible: false,
             showtab: true,
             translateResult: '',
-
+            pageNum: '',
             left: 0,
             top: 40,
             bg: 1,
@@ -282,6 +282,7 @@ export default {
         init() {
             this.docId = this.$route.query.docId;
             this.keyword = this.$route.query.keyword
+            this.pageNum = this.$route.query.pageNum
             var params = {
                 docId: this.docId
             }

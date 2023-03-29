@@ -1,12 +1,12 @@
 <template>
     <div class="nav-container">
         <div class="nav-logo" @click="$router.push('/')">
-            <img :src="logoSrc" width="80%" height="80%" alt=""/>
+            <img :src="logoSrc" width="80%" height="80%" alt="" />
         </div>
-        <div class="nav-setting" v-show="false">
-<!--            <Button type="text" @click="$router.push('/admin/newDocument')">-->
-<!--                + 添加文档-->
-<!--            </Button>-->
+        <div class="nav-setting" v-show="true">
+            <Button type="text" @click="$router.push('/admin/newDocument1')">
+                + 添加文档
+            </Button>
             <Button type="text" @click="$router.push('/admin/allDocuments')">
                 <Icon type="ios-keypad" />
             </Button>
@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             buttonSize: "min",
-            logoSrc: require("../assets/svg/newLogo.svg"),
+            logoSrc: require("../assets/sparrow2.png"),
         }
     }
 }
@@ -32,11 +32,11 @@ export default {
     width: 100%;
     height: 50px;
     line-height: 50px;
-    background-color: #f4d057;
+    background-color: #ffffff;
     color: rgba(208, 164, 1, 100);
     font-family: Roboto, serif;
     float: left;
-
+    box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.2);
     top: 0;
     left: 0;
     position: fixed;
@@ -63,6 +63,4 @@ export default {
 .nav-setting {
     float: right;
 }
-
-
 </style>

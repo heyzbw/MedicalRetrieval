@@ -9,6 +9,8 @@ import re
 import urllib.request
 import requests
 from flask import Flask, send_from_directory, send_file, make_response
+from Bio import Entrez
+from Bio import Medline
 
 # 创建一个服务，赋值给APP
 app = Flask(__name__)

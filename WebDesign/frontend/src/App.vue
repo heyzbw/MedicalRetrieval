@@ -1,31 +1,33 @@
 <template>
   <div id="app">
-<!--    <div id="nav">-->
-      <!--      <router-link to="/">Home</router-link> |-->
-      <!--      <router-link to="/about">About</router-link>-->
-      <!--    </div>-->
-    <router-view/>
+    <!--    <div id="nav">-->
+    <!--      <router-link to="/">Home</router-link> |-->
+    <!--      <router-link to="/about">About</router-link>-->
+    <!--    </div>-->
+    <router-view />
   </div>
 </template>
 
 <style lang="scss">
 .information {
-    position: fixed;
-    top: 0;
-    left: calc( 50% - 300px);
-    height: 30px;
-    width: 600px;
-    background-color: rgba(#fff, 0.2);
-    line-height: 30px;
-    color: #333;
-    z-index: 999;
-    a {
-        color: #408FFF;
-        &:hover {
-            cursor: pointer;
-            color: blue;
-        }
+  position: fixed;
+  top: 0;
+  left: calc(50% - 300px);
+  height: 30px;
+  width: 600px;
+  background-color: rgba(#fff, 0.2);
+  line-height: 30px;
+  color: #333;
+  z-index: 999;
+
+  a {
+    color: #408FFF;
+
+    &:hover {
+      cursor: pointer;
+      color: blue;
     }
+  }
 }
 
 #app {
@@ -34,7 +36,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-    background-color: #f8f6f9;
+  background-color: #f8f6f9;
 }
 
 #nav {

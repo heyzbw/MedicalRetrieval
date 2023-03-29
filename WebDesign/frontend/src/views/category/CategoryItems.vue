@@ -7,7 +7,7 @@
             </p>
         </div>
         <div style="background-color: #fdffe8; font-size: 12px; color: #badc62;padding: 0 16px; position: absolute;
-        top: 52px; left: 0;z-index: 999; width: 100%;">
+                                top: 52px; left: 0;z-index: 999; width: 100%;">
             <span>右键可操作</span>
         </div>
         <Table context-menu show-context-menu highlight-row ref="currentRowTable" :columns="columns" :data="listData"
@@ -126,6 +126,7 @@ export default {
                     return;
                 }
                 this.listData = response.data
+                console.log(this.listData)
                 this.listLoading = false
                 if (response.data.length > 0) {
                     if (this.currentCatId == null) {
