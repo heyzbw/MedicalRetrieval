@@ -16,7 +16,7 @@ public class CallFlask {
 
     private RestTemplate restTemplate = GetRestTemplate(simpleClientHttpRequestFactory());
 
-    String SERVER_URL = "http://localhost:5000/";
+    String SERVER_URL = "http://localhost:8083/";
 
     public List<OcrResultNew> doUpload(String md5){
 //        待输入的参数
@@ -39,32 +39,12 @@ public class CallFlask {
 
             ocrResultNewArrayList.add(ocrResultNew);
 
-//            int pdfPage = dataObj.getInteger("pdfPage");
-//            String pdfURL = dataObj.getString("pdfURL");
-//            String image = dataObj.getString("image");
-
-//            JSONArray textResultArray = dataObj.getJSONArray("textResult");
-////            OcrPosition[] ocrPositions = new OcrPosition[];
-//            List<OcrPosition> textResults = new ArrayList<>();
-//            for (int j = 0; j < textResultArray.size(); j++) {
-//                JSONObject textResultObj = textResultArray.getJSONObject(j);
-//                int charNum = textResultObj.getInteger("charNum");
-//                boolean isHandwritten = textResultObj.getBoolean("isHandwritten");
-//                String leftBottom = textResultObj.getString("leftBottom");
-//                String leftTop = textResultObj.getString("leftTop");
-//                String rightBottom = textResultObj.getString("rightBottom");
-//                String rightTop = textResultObj.getString("rightTop");
-//                String text = textResultObj.getString("text");
-//
-//
-//                OcrPosition textResult = new OcrPosition(charNum, isHandwritten, leftBottom, leftTop, rightBottom, rightTop, text);
-//                textResults.add(textResult);
-//            }
-//
-//            OcrResult ocrResult = new OcrResult(ocrText, pdfURL,pdfPage, textResults,image);
-//            ocrResultList.add(ocrResult);
         }
         return ocrResultNewArrayList;
+    }
+
+    public String toScan(String path){
+        return null;
     }
 
     public RestTemplate GetRestTemplate(ClientHttpRequestFactory factory){

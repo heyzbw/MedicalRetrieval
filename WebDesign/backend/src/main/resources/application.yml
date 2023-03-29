@@ -54,7 +54,7 @@ logging:
 
 cloud:
   elasticsearch:
-    host: ${ES_HOST:localhost}
+    host: ${ES_HOST:43.139.40.23}
     port: ${ES_PORT:9200}
 #    host: 81.69.247.172
 #    port: 8888

@@ -48,6 +48,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -314,6 +315,17 @@ public class FileServiceImpl implements IFileService {
         }
     }
 
+    public ResponseModel documentUpload_scan(MultipartFile file) throws IOException {
+//        String fileSavePath = "C:\\Users\\22533\\Desktop\\testPaper\\scan"+file.getOriginalFilename();
+
+        String directoryPath = "C:\\Users\\22533\\Desktop\\testPaper\\scan\\";
+        byte[] bytes = file.getBytes();
+        Path path = Paths.get(directoryPath,file.getOriginalFilename());
+        Files.write(path,bytes);
+
+        return null;
+    }
+
     @Override
     public ResponseModel documentUpload_noAuth(MultipartFile file) throws AuthenticationException {
         List<String> availableSuffixList = com.google.common.collect.Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
@@ -338,6 +350,7 @@ public class FileServiceImpl implements IFileService {
                 //获取OCR识别结果
                 List<OcrResultNew> ocrResultNewList = file2OcrService.getOcrByPY(fileMd5);
                 fileDocument.setOcrResultNewList(ocrResultNewList);
+//                fileDocument.se
 
                 switch (suffix) {
                     case "pdf":
@@ -647,7 +660,8 @@ public class FileServiceImpl implements IFileService {
                 List<FileDocument> esDoc = null;
 
                 try {
-                    List<EsSearch> esSearchList = elasticServiceImpl.search_new(keyWord);
+//                    List<EsSearch> esSearchList = elasticServiceImpl.search_new(keyWord);
+                    List<EsSearch> esSearchList = elasticServiceImpl.search_advance(keyWord);
                     for(EsSearch esSearch:esSearchList)
                     {
                         if(esSearch.getEsSearchOcrOutcomeList() != null)
@@ -698,6 +712,8 @@ public class FileServiceImpl implements IFileService {
 
         long endTime = System.currentTimeMillis();
 
+        System.out.println("startTime:"+startTime);
+        System.out.println("endTime:"+endTime);
         System.out.println("查询的时间为：" + (double) (endTime - startTime) / 1000 + "s");
         return BaseApiResult.success(result);
     }
@@ -897,6 +913,7 @@ public class FileServiceImpl implements IFileService {
 
         documentVO.setOcrResultList(fileDocument.getOcrResultList());
         documentVO.setEsSearchContentList(fileDocument.getEsSearchContentList());
+        documentVO.setEsSearchContentList_syno(fileDocument.getEsSearchContentList_syno());
 
 //      得分
         documentVO.setContent_score(fileDocument.getContentScore());
@@ -1165,6 +1182,7 @@ public class FileServiceImpl implements IFileService {
             fileDocument.setOcrResultList(esSearch.getOcrResultList());
 //            设置es搜索结果的content
             fileDocument.setEsSearchContentList(esSearch.getEsSearchContentList());
+            fileDocument.setEsSearchContentList_syno(esSearch.getEsSearchContentList_syno());
 
             fileDocument.setId(esSearch.getId());
             fileDocument.setName(esSearch.getName());
@@ -1184,7 +1202,7 @@ public class FileServiceImpl implements IFileService {
     private List<FileDocument> getThumbIdAndDateFromDB(List<FileDocument> esDocs){
 
         for(FileDocument esDoc:esDocs) {
-            System.out.println("md5:" + esDoc.getMd5());
+//            System.out.println("md5:" + esDoc.getMd5());
             Query query = new Query(Criteria.where("_id").is(esDoc.getId()));
             query.fields().include(UPLOAD_DATE_FILED_NAME).include(THUMBID_FILED_NAME);
 

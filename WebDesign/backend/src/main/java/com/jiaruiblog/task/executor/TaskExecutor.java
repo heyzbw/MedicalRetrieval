@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import com.jiaruiblog.entity.ContentEachPage;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
+import com.jiaruiblog.entity.ocrResult.OcrResultNew;
 import com.jiaruiblog.enums.FileFormatEnum;
 import com.jiaruiblog.service.IFileService;
 import com.jiaruiblog.service.impl.ElasticServiceImpl;
@@ -78,30 +79,29 @@ public abstract class TaskExecutor {
         try {
             // 根据不同的执行器，执行不同的文本提取方法，在这里做出区别
             contentEachPageList = readTextEachPage(is);
+            List<ContentEachPage>  contentEachPageList_new = deepClone(contentEachPageList);
 
-//            readText(is, textFilePath);
-
-//            if (!new File(textFilePath).exists()) {
-//                throw new TaskRunException("文本文件不存在，需要进行重新提取");
-//            }
             FileObj fileObj = new FileObj();
             fileObj.setId(fileDocument.getMd5());
             fileObj.setFileId(fileDocument.getId());
             fileObj.setName(fileDocument.getName());
             fileObj.setType(fileDocument.getContentType());
-//            fileObj.readFile(textFilePath);
 
-            fileObj.setOcrResultNewList(fileDocument.getOcrResultNewList());
-//            fileObj.setOcrResultList(fileDocument.getOcrResultList());
+            List<OcrResultNew> ocrResultNewList = fileDocument.getOcrResultNewList();
+            List<OcrResultNew> ocrResultNewList_syno = deepCloneOcrResult(ocrResultNewList);
+
+            fileObj.setOcrResultNewList(ocrResultNewList);
+            fileObj.setOcrResultNewList_syno(ocrResultNewList_syno);
 
             fileObj.setContentEachPageList(contentEachPageList);
+            fileObj.setContentEachPageList_syno(contentEachPageList_new);
 
 //            自己加上去的字段
 //            fileObj.setClick_rate(100);
 //            fileObj.setLike_num(1000);
             this.upload(fileObj);
 
-        } catch (IOException | TaskRunException e) {
+        } catch (IOException | TaskRunException | ClassNotFoundException e) {
             throw new TaskRunException("存入es的过程中报错了", e);
         }
 
@@ -273,4 +273,27 @@ public abstract class TaskExecutor {
         }
         return objId;
     }
+
+    public static List<ContentEachPage> deepClone(List<ContentEachPage> src) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(byteOut);
+        out.writeObject(src);
+
+        ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+        ObjectInputStream in = new ObjectInputStream(byteIn);
+        List<ContentEachPage> dest = (List<ContentEachPage>) in.readObject();
+        return dest;
+    }
+
+    public static List<OcrResultNew> deepCloneOcrResult(List<OcrResultNew> src) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(byteOut);
+        out.writeObject(src);
+
+        ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+        ObjectInputStream in = new ObjectInputStream(byteIn);
+        List<OcrResultNew> dest = (List<OcrResultNew>) in.readObject();
+        return dest;
+    }
+
 }
