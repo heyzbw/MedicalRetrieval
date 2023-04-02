@@ -78,7 +78,8 @@ export default {
 .container {
     height: 100vh;
     width: 100%;
-    background-image: linear-gradient(to right, #c2fbd1, #a6b4ee);
+    background-image: url("../../assets/source/background.png");
+    background-size: 100%;
 }
 
 .login-wrapper {
@@ -120,7 +121,7 @@ export default {
     padding: 10px;
     width: 100%;
     margin-top: 40px;
-    background-image: linear-gradient(to right, #a6c1ee, #fbc2eb);
+    background-image: linear-gradient(to right, #eaeea6, #c2fbce);
     color: #fff;
     cursor: pointer;
 }
@@ -136,7 +137,7 @@ a {
 }
 
 .title2 {
-    color: #fef0f0;
+    color: #000;
     text-align: left;
     font: 400 64px/80px "Vast Shadow", sans-serif;
     position: absolute;
@@ -150,7 +151,7 @@ a {
 }
 
 .title1 {
-    color: #ffffff;
+    color: #000;
     text-align: center;
     font: 700 222px/289px "Rounded Mplus 1c Bold", sans-serif;
     position: absolute;
