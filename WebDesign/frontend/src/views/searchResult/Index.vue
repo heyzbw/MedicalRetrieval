@@ -23,7 +23,7 @@
                 :Author="item.Author" :doi="item.doi">
             </PubmedItem>
             <div class="page-container" v-show="datapubmed.length > 0 || this.data.length > 0">
-                <Page :model-value="currentPage" :total="20" :page-size="pageSize" @on-change="pageChange" />
+                <Page :model-value="currentPage" :total="totalItems" :page-size="pageSize" @on-change="pageChange" />
             </div>
             <div style="padding: 30px 10px; color: #555" v-show="data.length < 1">
                 <span v-if="!loading">暂无内容，试试其他呢～</span>
@@ -144,6 +144,7 @@ export default {
                     this.data = res.data.documents;
                     console.log("关键字查询成功，返回内容为：");
                     console.log("data:", res.data)
+                    //console.log("desSearchContentList:", res.data[0].esSearchContentList)
 
                 } else {
                     this.data = []

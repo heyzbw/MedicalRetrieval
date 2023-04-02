@@ -17,7 +17,7 @@ import {
 
 } from './url'
 
-import {Get, Post, Delete, Download} from "@/api/request";
+import { Get, Post, Delete, Download } from "@/api/request";
 
 export default {
 
@@ -29,6 +29,12 @@ export default {
         return Post(DOC_LIST_URL, params);
     },
 
+    getImageData: (params) => {
+        return Post(DOC_IMAGE_URL, params);
+    },
+    getSuperData: (params) => {
+        return Post(DOC_SUPER_URL, params);
+    },
     deleteData: (params) => {
         return Delete(DOC_REMOVE_URL, params);
     },
@@ -47,7 +53,7 @@ export default {
     },
 
     getTxtFile: (param) => {
-        return Download(DOC_TXT_URL + param, {params: {}, responseType: 'blob'})
+        return Download(DOC_TXT_URL + param, { params: {}, responseType: 'blob' })
     },
 
     getRebuildIndex: (param) => {

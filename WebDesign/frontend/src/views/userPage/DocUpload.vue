@@ -1,87 +1,92 @@
 <template>
-    <div class="main-container">
-        <div class="upload-title">
-            <span>上传文档</span>
-        </div>
-        <Row>
-            <Col span="1" class="star-tag">
-            <span>*</span>
-            </Col>
-            <Col span="12" style="text-align: left">
-            <div class="upload-panel" @click="uploadDialogShow">
-                <div style="padding: 30px 0;">
-                    <div style="padding: 5px; line-height: 45px;">
-                        <img :src="buttonSrc" width="68px" height="68px" alt="upload-pic" />
+    <div style="padding:20px 0 0 0">
+        <el-tabs type="card" width="100%" style="height: 100%">
+            <el-tab-pane label="上传文档" name="tab_first" width="100%">
+                <div class="main-container" style="height: 900px">
+                    <div class="upload-title">
+                        <span>上传文档</span>
                     </div>
-                    <p>支持Word/Excel/PPT/PDF，不超过100M</p>
-                </div>
-                <input type="file" ref="fileToUpload" id="fileToUpload" style="display: none" @change="changeFile">
-            </div>l
-            </Col>
-        </Row>
-        <Row v-show="true">
-            <Col span="1" class="star-tag">
-            </Col>
-            <Col span="20" style="text-align: left">
-            <div class="file-title">
-                <span>{{ filename }}</span>
-            </div>
-            <div class="progress-wrapper" v-if="processFlag">
-                <div class="pro" :style="uploadProcess | processToStr"></div>
-            </div>
-            </Col>
-        </Row>
+                    <Row>
+                        <Col span="1" class="star-tag">
+                        <span>*</span>
+                        </Col>
+                        <Col span="12" style="text-align: left">
+                        <div class="upload-panel" @click="uploadDialogShow">
+                            <div style="padding: 30px 0;">
+                                <div style="padding: 5px; line-height: 45px;">
+                                    <img :src="buttonSrc" width="68px" height="68px" alt="upload-pic" />
+                                </div>
+                                <p>支持Word/Excel/PPT/PDF，不超过100M</p>
+                            </div>
+                            <input type="file" ref="fileToUpload" id="fileToUpload" style="display: none"
+                                @change="changeFile">
+                        </div>
+                        </Col>
+                    </Row>
+                    <Row v-show="true">
+                        <Col span="1" class="star-tag">
+                        </Col>
+                        <Col span="20" style="text-align: left">
+                        <div class="file-title">
+                            <span>{{ filename }}</span>
+                        </div>
+                        <div class="progress-wrapper" v-if="processFlag">
+                            <div class="pro" :style="uploadProcess | processToStr"></div>
+                        </div>
+                        </Col>
+                    </Row>
 
-        <Row style="padding: 5px 0; margin-top: 8px;" v-show="true">
-            <Col span="1" class="star-tag">
-            <span>*</span>
-            </Col>
-            <Col span="20">
-            <div class="search-input-top">
-                <Tag v-for="(item, index) in items" :key="index" :name="item" closable @on-close="handleClose2">{{
-                    item
-                }}
-                </Tag>
-                <input @keyup.enter="handleAdd" v-model="item">
-                <Button icon="ios-add" type="dashed" size="small" @click="handleAdd">添加标签</Button>
-            </div>
-            </Col>
-        </Row>
-        <Row style="padding: 5px 0;" v-show="true">
-            <Col span="1" class="star-tag">
-            <span>*</span>
-            </Col>
-            <Col span="6">
-            <div class="cate-dropdown">
-                <Dropdown @on-click="switchCategory">
-                    <a href="javascript:void(0)">
-                        {{ checkedCategory.name }}
-                        <Icon type="ios-arrow-down"></Icon>
-                    </a>
-                    <template #list>
-                        <DropdownMenu>
-                            <DropdownItem v-for="item in categoryOption" :name="item.id">
-                                {{ item.seeName }}
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </template>
-                </Dropdown>
-            </div>
-            </Col>
-        </Row>
-        <Row style="padding: 5px 0;" v-show="true">
-            <Col span="1" class="star-tag">
-            <span>*</span>
-            </Col>
-            <Col span="6">
-            <div class="booll">
-                <!-- 是否为扫描件？ -->
-                <el-radio v-model="radio" label="1">PDF文件</el-radio>
-                <el-radio v-model="radio" label="2">PDF扫描件</el-radio>
-            </div>
-            </Col>
-        </Row>
-        <!-- <Row style="padding: 5px 0;" v-show="true">
+                    <Row style="padding: 5px 0; margin-top: 8px;" v-show="true">
+                        <Col span="1" class="star-tag">
+                        <span>*</span>
+                        </Col>
+                        <Col span="20">
+                        <div class="search-input-top">
+                            <Tag v-for="(item, index) in items" :key="index" :name="item" closable @on-close="handleClose2">
+                                {{
+                                    item
+                                }}
+                            </Tag>
+                            <input @keyup.enter="handleAdd" v-model="item">
+                            <Button icon="ios-add" type="dashed" size="small" @click="handleAdd">添加标签</Button>
+                        </div>
+                        </Col>
+                    </Row>
+                    <Row style="padding: 5px 0;" v-show="true">
+                        <Col span="1" class="star-tag">
+                        <span>*</span>
+                        </Col>
+                        <Col span="6">
+                        <div class="cate-dropdown">
+                            <Dropdown @on-click="switchCategory">
+                                <a href="javascript:void(0)">
+                                    {{ checkedCategory.name }}
+                                    <Icon type="ios-arrow-down"></Icon>
+                                </a>
+                                <template #list>
+                                    <DropdownMenu>
+                                        <DropdownItem v-for="item in categoryOption" :name="item.id">
+                                            {{ item.seeName }}
+                                        </DropdownItem>
+                                    </DropdownMenu>
+                                </template>
+                            </Dropdown>
+                        </div>
+                        </Col>
+                    </Row>
+                    <Row style="padding: 5px 0;" v-show="true">
+                        <Col span="1" class="star-tag">
+                        <span>*</span>
+                        </Col>
+                        <Col span="6">
+                        <div class="booll">
+                            <!-- 是否为扫描件？ -->
+                            <el-radio v-model="radio" label="1">PDF文件</el-radio>
+                            <el-radio v-model="radio" label="2">PDF扫描件</el-radio>
+                        </div>
+                        </Col>
+                    </Row>
+                    <!-- <Row style="padding: 5px 0;" v-show="true">
             <Col span="1" class="star-tag">
             <span>*</span>
             </Col>
@@ -92,34 +97,80 @@
             </Col>
         </Row> -->
 
-        <Row style="margin-top: 30px;">
-            <Col span="1" class="star-tag">
+                    <Row style="margin-top: 30px;">
+                        <Col span="1" class="star-tag">
 
-            </Col>
-            <Col>
-            <div class="upload-button"
-                style="width: 180px; height: 45px; border: 2px solid #000;
-                                                                                                                                                                                                                                                            background: #FFF7D6;
-                                                                                                                                                                                                                                                            box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
-                                                                                                                                                                                                                                                            border-radius: 8px;
-                                                                                                                                                                                                                                                            display: flex;
-                                                                                                                                                                                                                                                            justify-content: center;
-                                                                                                                                                                                                                                                            "
-                @click="uploadFile">
-                <div style="padding: 5px; line-height: 45px;">
-                    <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
+                        </Col>
+                        <Col>
+                        <div class="upload-button"
+                            style="width: 180px; height: 45px; border: 2px solid #000;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            background: #FFF7D6;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            border-radius: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            display: flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            justify-content: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+                            @click="uploadFile">
+                            <div style="padding: 5px; line-height: 45px;">
+                                <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
+                            </div>
+
+                            <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">点我上传文档</span>
+                        </div>
+                        </Col>
+                    </Row>
                 </div>
 
-                <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">点我上传文档</span>
-            </div>
-            </Col>
-        </Row>
+            </el-tab-pane>
+            <el-tab-pane label="批量导入文档" name="tab_second" width="100%">
+                <div width="100%">
+
+                    <el-upload class="upload-demo" drag action="#" multiple ref="upload" :file-list="files"
+                        :http-request="handleUpload" :on-exceed='handExceed' :on-remove="handleRemove"
+                        :on-success='handFileSuccess' :before-remove="beforeRemove" :auto-upload="false" :limit="5">
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">一次只能上传5个文件</div>
+                    </el-upload>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="CancelUpload">取 消</el-button>
+                        <el-button type="primary" @click="fileChange">立即上传</el-button>
+                    </span>
+
+                </div>
+
+            </el-tab-pane>
+            <el-tab-pane label="导入图片生成扫描件" name="tab_third" width="100%">
+                <!-- <el-upload ref="upload" :action="actionUrl" :auto-upload="false" list-type="picture-card"
+                    :http-request="uploadImage" accept="image/png" multiple :limit="9">
+                    <i class="el-icon-plus"></i>
+                </el-upload> -->
+                <el-upload action="#" ref="upload" list-type="picture-card" accept="image/png"
+                    :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :http-request="uploadAvatar"
+                    :before-upload="beforeAvatarUpload" :file-list="fileList">
+                    <!-- :action="baseUrl" -->
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+                <!-- <el-dialog :visible.sync="dialogVisible" append-to-body>
+                    <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog> -->
+
+                <div>
+                    <el-input v-model="imagefile" placeholder="请输入文件名" style="width:20%;"></el-input>
+                </div>
+
+                <el-button type="primary" class="btn btn-primary btn-sm submit-btn" @click="submitUpload">生成</el-button>
+            </el-tab-pane>
+        </el-tabs>
+
     </div>
 </template>
 
 <script>
 import { BackendUrl } from '@/api/request'
 import CategoryRequest from "@/api/category";
+import DocumentRequest from "@/api/document"
 
 import axios from "axios";
 
@@ -129,6 +180,7 @@ export default {
         return {
             placeholder: "输入一些内容",
             buttonSrc: require("@/assets/source/folder.png"),
+            actionUrl: BackendUrl() + "/files/upload",
             actionUrl: BackendUrl() + "/files/upload",
             filename: '',
             uploadProcess: 0.00,
@@ -141,7 +193,17 @@ export default {
             categoryType: 'CATEGORY',
             items: [],
             item: '',
-            radio: 1
+            radio: '',
+            //回显附件列表
+            fileList: [],
+            //上传附件列表
+            files: [],
+            formData: {},
+            imagefile: '',
+            imageUrl: "",
+            dialogImageUrl: "",
+            form: [],
+            dialogVisible: '',
         }
 
     },
@@ -183,12 +245,15 @@ export default {
             let param = this.uploadParam
 
             if (param === {} || param.file === undefined || param.fileId === undefined) {
+                this.info(false)
                 return;
-            }
+            };
             let formData = new FormData();
             formData.set("fileName", param.fileId);
             formData.set("file", param.file);
             console.log(param.file)
+            console.log(param.fileId)
+
             const config = {
                 onUploadProgress: (progressEvent) => {
                     // progressEvent.loaded:已上传文件大小
@@ -258,7 +323,198 @@ export default {
                     })
                 }
             })
-        }
+        },
+        info(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '' : '请上传文件'
+            });
+        },
+        info1(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '' : '请选择分类'
+            });
+        },
+        info2(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '' : '请选择pdf的格式'
+            });
+        },
+        info3(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '' : '上传失败'
+            });
+        },
+        handleUpload(raw) {
+            this.files.push(raw.file);
+            // console.log(files);
+        },
+        async fileChange() {
+            if (this.files.length > 5) {
+                this.$message.warning(`当前限制只能上传选择 1~5 个文件`);
+                return
+            } else { }
+            const loading = this.$loading({
+                lock: true,
+                text: '上传中...',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+            this.$refs.upload.submit() // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件
+            let random = Math.random();
+            let formData = new FormData();
+            //formData.append("file", param.file);
+            //formData.append("fileName", param.fileId);
+
+            //formData.append("user_id", localStorage.user_id);
+            //formData.append("s_id", localStorage.s_id);
+            //formData.append("random", random);
+            //formData.append("file_kind", "src");
+            this.files.forEach(function (file) {
+                formData.append('file', file); // 因为要上传多个文件，所以需要遍历一下才行
+                console.log(file);
+                formData.append("fileName", file.name);//不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
+                console.log(file.name);
+            })
+            //let res = await this.$axios.post(`${this.$baseUrl}/file/upload`, formData);
+
+            const config = {
+                onUploadProgress: (progressEvent) => {
+                    // progressEvent.loaded:已上传文件大小
+                    // progressEvent.total:被上传文件的总大小
+                    this.uploadProcess = Number(
+                        ((progressEvent.loaded / progressEvent.total) * 0.9).toFixed(2)
+                    );
+                },
+            };
+            console.log(formData)
+            console.log(this.files)
+
+            axios.post(this.actionUrl, formData, config).then(res => {
+                let { data } = res
+                if (data['code'] === 200 || data['code'] === 'success') {
+                    this.uploadProcess = 1;
+                    this.$Message.success("成功！")
+                    console.log(res)
+                    this.$refs.upload.clearFiles();
+                    this.files = []
+                    loading.close();
+
+                } else {
+                    this.$Message.error("出错：" + data['message'])
+                    this.uploadProcess = 0.00
+                    loading.close();
+                    this.$message.error("上传文件失败" + res.data.msg);
+                }
+                setTimeout(() => {
+
+                    this.filename = ''
+                }, 1000)
+            }).catch(err => {
+                this.$Message.error("上传出错！")
+                this.processFlag = false
+                this.uploadProcess = 0.0
+            })
+            console.log(res);
+            // JSON.parse(res)
+        },
+        handExceed(files, fileList) {
+            this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        },
+        CancelUpload() {
+            this.files = []
+            this.$refs.upload.clearFiles();
+        },
+        handFileSuccess(file) {
+            console.log(file);
+            this.files = []
+            this.$refs.upload.clearFiles();
+        },
+        handleRemove(file, fileList) {
+            // console.log(file, fileList);
+            this.files = fileList
+        },
+        beforeRemove(file, fileList) {
+            // console.log(file, fileList);
+        },
+        uploadImage(file) {
+            this.formData.append("blogimg", file.file);
+            console.log(file);
+        },
+        // 点击按钮触发
+        async submitUpload() {
+            if (this.imagefile != "") {
+                const params = {
+                    "filename": this.imagefile,
+                    "imageList": this.form
+                }
+                console.log(params)
+                DocumentRequest.getImageData(params).then(res => {
+                    if (res.code === 200) {
+                        console.log("data:", res.data)
+                        this.$refs.upload.clearFiles();
+                        this.$message.success("发布成功！");
+                    } else {
+                        this.info3(false)
+                    }
+                })
+
+            }
+            else {
+                this.$message.error("情输入文件名");
+            }
+
+        },
+        // 图片上传功能
+        uploadAvatar(item) {
+            console.log(item.file)
+            this.form.push(item.file)
+
+        },
+        beforeAvatarUpload(file) {
+            const isPng = file.type === 'image/png'
+            const isLt2M = file.size / 1024 / 1024 < 2
+
+            if (!isPng) {
+                this.$message.error('上传图片只能是 JPG或png 格式!')
+            }
+            if (!isLt2M) {
+                this.$message.error('上传图片大小不能超过 2MB!')
+            }
+            return (isPng) && isLt2M
+        },
+        handleRemove(file, fileList) {
+            for (const i in this.form.picList) {
+                if (this.form.picList[i].key === file.uid) {
+                    this.form.picList.splice(i, 1)
+                }
+                console.log(this.form.picList, "434")
+            }
+        },
+        handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url
+            this.dialogVisible = true
+        },
+        /**
+         * 清空上传组件
+         */
+        emptyUpload() {
+            const mainImg = this.$refs.upload
+            if (mainImg) {
+                if (mainImg.length) {
+                    mainImg.forEach(item => {
+                        item.clearFiles()
+                    })
+                } else {
+                    this.$refs.upload.clearFiles()
+                }
+            }
+        },
+
+
     }
 }
 </script>
@@ -359,7 +615,7 @@ export default {
         height: 45px;
         background: #FFFFFF;
         border-radius: 8px;
-        border: 1px solid #000000;
+        //border: 1px solid #000000;
         //margin-left: 10px;
 
         font-size: 14px;
@@ -390,7 +646,7 @@ export default {
             outline: none;
             border: none;
             border-radius: 8px;
-            border: 1px solid #000000;
+            //border: 1px solid #000000;
         }
     }
 

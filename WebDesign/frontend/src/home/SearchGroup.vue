@@ -19,64 +19,36 @@
                     <input :placeholder="placeholder" v-model="searchValue" @focus="userInputFlag = true"
                         @blur="whenInputBlur" @keyup.enter="clickToSearch(searchValue)" @input="changeItem" ref="input">
 
-                    <button class="subNav-btn btn2 currentDd-btn currentDt-btn"></button>
-                    <div id="mb">
+                    <el-button type="primary" size="mini" style="margin-left: 10px" plain @click="search()">高级搜索</el-button>
 
-                    </div>
-                    <div class="showbox2 navContent-btn">
-                        <div class="close"></div>
-                        <div id="serachgaoji">
-                            <h3>高级检索</h3>
+                    <!-- 弹窗, 高级搜索 -->
+                    <el-dialog v-dialogDrag title="高级搜索" :visible.sync="dialogFormVisible" class="dialog">
+                        <div style="margin-top: 15px;" v-for=" index in numbb">
+                            <el-input placeholder="请内容" v-model="items[index - 1]" class="input-with-select" style="">
+                                <el-select v-model="select[index - 1]" slot="prepend" placeholder="请选择" style="width:100px">
+                                    <el-option label="关键字" value="1"></el-option>
+                                    <el-option label="时间" value="2"></el-option>
+                                    <el-option label="标题" value="3"></el-option>
 
-                            <div class="s-condition fL w100">
-                                <select>
-                                    <option value="name">疾病名</option>
-                                    <option value="DIICD">ICD</option>
-                                    <option value="DISpeciality">类别</option>
-                                    <option value="DIConcurrent_Disease">并发症</option>
-                                    <option value="DISimilar_Disease">鉴别诊断</option>
-                                    <option value="DITreat_Drug">治疗药物</option>
-                                    <option value="DI_Examination">检查</option>
-                                    <option value="DIClinical_Symptoms">症状</option>
-                                </select>
-                                <input style="width:53%;margin:0 15px 0 9px ;">
-                                <select style="width:50px;">
-                                    <option value="1">与</option>
-                                    <option value="0">或</option>
-                                </select><button onclick="addinput()"><img src="../assets/source/seach-gj03.png"></button>
-                            </div>
-                            <div class="s-condition fL w100"><select>
-                                    <option value="name">疾病名</option>
-                                    <option value="DIICD">ICD</option>
-                                    <option value="DISpeciality">类别</option>
-                                    <option value="DIConcurrent_Disease">并发症</option>
-                                    <option value="DISimilar_Disease">鉴别诊断</option>
-                                    <option value="DITreat_Drug">治疗药物</option>
-                                    <option value="DI_Examination">检查</option>
-                                    <option value="DIClinical_Symptoms">症状</option>
-                                </select><input style="width:53%;margin:0 15px 0 9px ;"><select style="width:50px;">
-                                    <option value="1">与</option>
-                                    <option value="0">或</option>
-                                </select><button onclick="addinput()"><img src="../assets/source/seach-gj03.png"></button>
-                                <button onclick="remove(this)"><img src="../assets/source/seach-gj04.png"></button>
-                            </div>
+                                </el-select>
+
+                                <el-button class="butt" slot="append" icon="el-icon-plus" style="margin:0 10px"
+                                    @click="addnum(index - 1)"></el-button>
+                                <el-button class="butt" slot="append" icon="el-icon-minus" style=" "
+                                    @click="deletenum(index)"></el-button>
+                                <el-select v-model="logi[index - 1]" slot="append" placeholder="and or"
+                                    style="width:10px;margin:0 10px ;position:relative">
+                                    <el-option label="与" value="1"></el-option>
+                                    <el-option label="或" value="0"></el-option>
+                                </el-select>
+                            </el-input>
                         </div>
-                        <!-- <div class="s-type fL w100"> -->
-                        <!-- <label>类型 : </label> -->
-                        <!--  <a href="###"><input  name="aaaa" type="radio" checked="checked" /><span>全部</span></a> -->
-                        <!-- <a><input name="aaaa" type="radio" checked="checked" value="jb"><span>疾病</span></a>
-                            <a><input name="aaaa" type="radio" value="yw"><span>药物</span></a>
-                            <a><input name="aaaa" type="radio" value="jc"><span>检查</span></a>
-                            <a><input name="aaaa" type="radio" value="zz"><span>症状</span></a>
-                            <a><input name="aaaa" type="radio" value="ss"><span>手术</span></a>
-                            <a><input name="aaaa" type="radio" value="zlzn"><span>诊疗指南</span></a>
-                            <a><input name="aaaa" type="radio" value="blbg"><span>病例报告</span></a>
-                            <a><input name="aaaa" type="radio" value="hzxz"><span>患者教育</span></a>
-                        </div> -->
-                        <div class="btm-center">
-                            <button><img src="../assets/source/search.png"></button>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button plain @click="dialogFormVisible = false">取 消</el-button>
+                            <el-button type="danger" @click="savebtn">搜 索</el-button>
                         </div>
-                    </div>
+                    </el-dialog>
+
 
                     <div class="search-button"
                         style="width: 100px; line-height: 45px; display: flex; align-content: center; flex-wrap: wrap; justify-content: center;"
@@ -101,12 +73,13 @@
 </template>
 
 <script>
-import '@/api/jquery'
+import $ from 'jquery'
 
 import StatsRequest from "@/api/stats";
-import '@/assets/source/lczs-index.css'
-import '../api/lczs-index'
-import '@/api/sign-in'
+
+import maintainCondition from "../api/maintainCondition";
+import { title } from 'process';
+
 
 
 export default {
@@ -122,8 +95,31 @@ export default {
             userSearch: [],
             userInputFlag: false,
             hotshow: true,
-            yuncishow: false
-        }
+            yuncishow: false,
+            conditions: maintainCondition.conditions,
+            dataList: [],
+            items: [],
+            numbb: 1,
+            select: [],
+            logi: [],
+            time: '',
+            advancedsearch: '',
+            title: '',
+            // 公共数据
+            commonData: {
+                id: "",
+                invstscde: "", // 处理状态编码,
+                invstsnam: "", // 处理状态名称
+            },
+
+            conditions: maintainCondition.conditions, //搜索条件
+
+            dialogFormVisible: false, //高级搜索弹框显示隐藏
+            sortDialogFormVisible: false, //排序搜索弹框显示隐藏
+            invimtmcdeInputShow: true, //处理状态编码维护编码控制
+            nums: "", //控制新增按钮只能新增一个
+        };
+
     },
     created() {
         this.init();
@@ -208,183 +204,127 @@ export default {
             }
             await StatsRequest.removeSearchHistory(param).then().catch(err => this.$Message.error(err))
         },
-        addinput() {
-            iningj(0);
-            gaojiserach();
+        search() {
+            this.dialogFormVisible = true;
         },
-        iningj(type) {
-            var jbmess = "疾病名,ICD,类别,并发症,鉴别诊断,治疗药物,检查,症状";
-            var jbfile = "name,DIICD,DISpeciality,DIConcurrent_Disease,DISimilar_Disease,DITreat_Drug,DI_Examination,DIClinical_Symptoms";
-            var jcmess = "检查名,类别,疾病,药物";
-            var jcfile = "name,EXSpeciality,Disease,Drug";
-            var ywmess = "药物名称,药物成分,类别,国家基本药物,适应症,禁忌症,药物相互作用";
-            var ywfile = "name,Composition,type,National,adapt,Contraindications,Interactiondrug";
-            var zzmess = "症状名,类别,疾病,症状,解剖部位,实验室检查,科室";
-            var zzfile = "name,SYSpeciality,SY_ReleDisease,SY_AccompSy,SY_BodyStructure,SY_Examination,SY_Department";
-            var ssmess = "手术名,类别,适应症,并发症";
-            var ssfile = "name,Speciality,OPIndicationsDisease,OPComplicationDisease";
-            var hzxzmess = "题名,类别,疾病,症状,检查,并发症,鉴别诊断,药物";
-            var hzxzfile = "PETitle,type,PEDiseases,PE_Symptoms,PE_examination,PE_Complication,PE_SimilarDisease,PE_TreatDrug";
-            var blbgmess = "题名,作者,机构,来源,关键字,症状,检查,疾病,并发症,鉴别诊断,药物";
-            var blbgfile = "name,CRAuthor,CRUnit,from,keyword,CR_Symptoms,CR_Examination,Disease,CR_Complications,CRSimilar_Disease,CRTreat_Drug";
-            var zlznmess = "题名,作者,机构,来源,关键字,疾病,类别";
-            var zlznfile = "name,TGAuthor,TGUnit,from,keyword,TG_Diseases,TGSpeciality";
-            var allmess = "";
+        // 高级搜索-新增
+        //高级搜索-删除
+        addnum() {
+            this.numbb = this.numbb + 1;
 
-            var mess = "";
-            var file = "";
-            var zttype = $("input[name='aaaa']:checked").val();
-            if (zttype == "jb") {
-                file = jbfile;
-                mess = jbmess;
-            } else if (zttype == "jc") {
-                file = jcfile;
-                mess = jcmess;
-            } else if (zttype == "yw") {
-                file = ywfile;
-                mess = ywmess;
-            } else if (zttype == "zz") {
-                file = zzfile;
-                mess = zzmess;
-            } else if (zttype == "ss") {
-                file = ssfile;
-                mess = ssmess;
-            } else if (zttype == "zlzn") {
-                file = zlznfile;
-                mess = zlznmess;
-            } else if (zttype == "blbg") {
-                file = blbgfile;
-                mess = blbgmess;
-            } else if (zttype == "hzxz") {
-                file = hzxzfile;
-                mess = hzxzmess;
-            }
-            var htmls = "<div class='s-condition fL w100'><select>";
-            for (var i = 0; i < file.split(",").length; i++) {
-                htmls += "<option value='" + file.split(",")[i] + "'>" + mess.split(",")[i] + "</option>";
-            }
-            htmls += "</select><input style='width:53%;margin:0 15px 0 9px ;'/>";
-            htmls += "<select style='width:50px;'><option value='1'>与</option><option value='0'>或</option></select>";
-            htmls += "<button onclick='addinput()'><img src='../assets/source/search-gj03.png' /></button> ";
-            if (type == 0) {
-                htmls += "<button onclick='remove(this)'><img src='../assets/source/search-gj04.png' /></button> ";
-            }
-            htmls += "</div>";
-            $("#serachgaoji").append(htmls);
-            gaojiserach();
         },
-        remove(obj) {
-            var par = obj.parentNode;
-            var _parentElement = par.parentNode;
-            if (_parentElement) {
-                _parentElement.removeChild(par);
+        deletenum(index) {
+            if (this.numbb == 1) {
+                this.info(false)
             }
-            gaojiserach();
+            else {
+                this.items.splice(index, 1);
+                this.numbb = this.numbb - 1
+            }
+
         },
-        gaojiserach() {
-
-            $(".btm-center").find("button").click(function () {
-                var tabletype = $("input[name='aaaa']:checked").val();
-                var expertSerach = {};
-                var length = $(".s-condition.fL.w100").length;
-                $(".s-condition.fL.w100").each(function (i, dom) {
-
-                    var file = $(this).children("select:first-child").val();
-                    var values = $(this).find("input").val();
-                    var filetype = $(this).children('select').eq(1).val();
-                    if (values != "") {
-                        if (expertSerach.hasOwnProperty(file)) {
-                            if (i == length - 1) {
-                                expertSerach[file] = expertSerach[file] + ";" + values + "-end ";
-                            } else {
-                                if (filetype == 1) {
-                                    expertSerach[file] = expertSerach[file] + ";" + values + "-and ";
-                                } else {
-                                    expertSerach[file] = expertSerach[file] + ";" + values + "-or ";
-                                }
-                            }
-
-                        } else {
-                            if (i == length - 1) {
-                                expertSerach[file] = values + "-" + "end ";
-                            } else {
-                                if (filetype == 1) {
-                                    expertSerach[file] = values + "-" + "and ";
-                                } else {
-                                    expertSerach[file] = values + "-" + " or ";
-                                }
-                            }
-                        }
-
-                    }
-                });
-                if (JSON.stringify(expertSerach) != "{}") {
-                    serachcharecebtlist(tabletype, "expert", "", "", JSON.stringify(expertSerach));
+        info(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '' : '请填写好内容'
+            });
+        },
+        info1(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '' : '时间和标题不能超过一个'
+            });
+        },
+        // 高级搜索-保存
+        savebtn() {
+            console.log(this.items);
+            console.log(this.logi);
+            console.log(this.select);
+            let superkey = []
+            let luoji = []
+            let mn = 0
+            let tm = 0
+            for (let i = 0; i < this.numbb; i++) {
+                if (this.select[i] == '1') {
+                    superkey.push(this.items[i])
+                    luoji.push(this.logi[i])
+                }
+                else if (this.select[i] == '2') {
+                    this.time = this.items[i];
+                    mn = mn + 1
                 } else {
-                    layer.msg('请输入关键字');
-                    return;
+                    this.title = this.items[i]
+                    tm = tm + 1
                 }
 
-            });
-            $("#serachgaoji").find("input").keydown(function () {
-                if (event.keyCode == 13) {
-                    var tabletype = $("input[name='aaaa']:checked").val();
-                    var expertSerach = {};
-                    var length = $(".s-condition.fL.w100").length;
-                    $(".s-condition.fL.w100").each(function (i, dom) {
+            }
+            console.log(superkey);
+            console.log(mn);
+            if (mn > 1 || tm > 1) {
+                this.info1(false)
+            }
+            else {
 
-                        var file = $(this).children("select:first-child").val();
-                        var values = $(this).find("input").val();
-                        var filetype = $(this).children('select').eq(1).val();
-                        if (values != "") {
-                            if (expertSerach.hasOwnProperty(file)) {
-                                if (i == length - 1) {
-                                    expertSerach[file] = expertSerach[file] + ";" + values + "-end ";
-                                } else {
-                                    if (filetype == 1) {
-                                        expertSerach[file] = expertSerach[file] + ";" + values + "-and ";
-                                    } else {
-                                        expertSerach[file] = expertSerach[file] + ";" + values + "-or ";
-                                    }
+                if (this.select.length != this.numbb || this.logi.length != this.numbb) {
+                    this.info(false)
+                }
+
+                else {
+                    if (superkey.length != 1) {
+                        for (let i = 0; i < superkey.length; i++) {
+                            if (i == superkey.length - 1) {
+                                console.log(superkey[i])
+                                this.advancedsearch = superkey[i] + ' | ' + this.advancedsearch;
+                            }
+                            else {
+                                if (luoji[i] == 0 || luoji[i + 1] == 0) {
+                                    this.advancedsearch = this.advancedsearch + superkey[i] + ' | ';
+                                    console.log(superkey[i])
+
+
                                 }
-
-                            } else {
-                                if (i == length - 1) {
-                                    expertSerach[file] = values + "-" + "end ";
-                                } else {
-                                    if (filetype == 1) {
-                                        expertSerach[file] = values + "-" + "and ";
-                                    } else {
-                                        expertSerach[file] = values + "-" + " or ";
-                                    }
+                                else {
+                                    this.advancedsearch = this.advancedsearch + '( ' + superkey[i] + ' & ' + superkey[i + 1] + ' ) ';
+                                    console.log(superkey[i])
+                                    i = i + 1;
                                 }
                             }
-
                         }
-                    });
-                    if (JSON.stringify(expertSerach) != "{}") {
-                        serachcharecebtlist(tabletype, "expert", "", "", JSON.stringify(expertSerach));
                     } else {
-                        layer.msg('请输入关键字');
-                        return;
+                        this.advancedsearch = superkey[0]
                     }
-                    //			serachcharecebtlist(tabletype,"expert","","",JSON.stringify(expertSerach));
+                    console.log(this.advancedsearch);
+                    this.time = Number(this.time);
+                    console.log(typeof (this.time));
                 }
-            });
-        }
+
+
+                this.$router.push({
+                    path: '/superResult',
+                    query: {
+                        keyWord: this.advancedsearch,
+                        time: this.time,
+                        title: this.title,
+                    }
+                })
+            }
+            this.advancedsearch = '';
+        },
+
+
+
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .search-group {
-
     width: 100%;
-    height: 440px;
+    height: 340px;
     position: absolute;
     left: 0;
     top: 0;
-    padding-top: 200px;
+    padding-top: 100px;
     //border: 2px solid #000;
 
     .ulist {
@@ -452,6 +392,17 @@ export default {
                         }
                     }
                 }
+
+                .dialog {
+
+
+                    .input-with-select .el-input-group__prepend {
+                        background-color: #fff;
+                        width: 600px;
+                    }
+
+                }
+
 
                 input {
                     height: 41px;

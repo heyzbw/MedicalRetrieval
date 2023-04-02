@@ -42,7 +42,7 @@
                     <p v-html="esSearchContentList[2].contentHighLight[0]"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                 </div>
-                <div v-if="this.ocrshow" @click="getDocView3()">【第{{ ocrResultList[0].pdfPage }}页】 <div style="color:red">
+                <div v-if="this.ocrshow" @click="getDocView3()">【第{{ ocrResultList[0].pdfPage + 1 }}页】 <div style="color:red">
                         来源于图片</div>
                     <p v-html="ocrResultList[0].ocrText"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
@@ -222,7 +222,7 @@ export default {
                 query: {
                     docId: this.id,
                     keyword: this.keyword,
-                    pageNum: this.ocrResultList[0].pdfPage
+                    pageNum: this.ocrResultList[0].pdfPage + 1
                 }
             })
 
