@@ -8,8 +8,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import jquery from "jquery";
 import '../theme/my-theme.less'
 import axios from 'axios'
+import 'amfe-flexible';
 //配置后端的访问地址
-
 
 import * as echarts from 'echarts';
 Vue.prototype.$ = jquery;
@@ -19,7 +19,11 @@ Vue.use(iView);
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios
 
+Vue.directive('dialogDrag', {
+    bind(el, binding, vnode) {
 
+    }
+})
 // Vue.prototype.$axios = Api;
 
 // The routing configuration

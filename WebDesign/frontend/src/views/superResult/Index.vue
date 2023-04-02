@@ -6,22 +6,15 @@
         <div class="doc-group" style="display: inline-block">
             <div style="background-color: #fff">
                 <SearchInput ref="searchInput" @on-search="getListData" style="display: inline-block"></SearchInput>
-                <div class="pubutton">
-                    <button @onclick="getListDatap()" class="bbb">Pubmed搜索</button>
-                </div>
             </div>
-            <SearchItem v-if="searchifag" v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)"
-                :id="item.id" :thumbId="item.thumbId" :title="item.title" :esSearchContentList="item.esSearchContentList"
+            <SearchItem v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)" :id="item.id"
+                :thumbId="item.thumbId" :title="item.title" :esSearchContentList="item.esSearchContentList"
                 :time="item.createTime" :user-name="item.userName" :category="item.categoryVO" :tags="item.tagVOList"
                 :collect-num="item.collectNum" :comment-num="item.commentNum" :ocrResultList="item.ocrResultList"
                 :keyword="keyword" :click_score="item.click_score" :content_score="item.content_score"
                 :like_score="item.like_score">
             </SearchItem>
-            <PubmedItem v-if="searchpubmed"
-                v-for="item in datapubmed.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)" :Title="item.Title"
-                :Abstract="item.Abstract" :ISSN="item.ISSN" :Journal="item.Journal" :Source="item.Source"
-                :Author="item.Author" :doi="item.doi">
-            </PubmedItem>
+
             <div class="page-container" v-show="datapubmed.length > 0 || this.data.length > 0">
                 <Page :model-value="currentPage" :total="totalItems" :page-size="pageSize" @on-change="pageChange" />
             </div>
@@ -55,8 +48,7 @@ export default {
             loading: true,
             keyword: "",
             datapubmed: [],
-            searchifag: true,
-            searchpubmed: false,
+            time
         }
     },
     components: {
@@ -71,52 +63,10 @@ export default {
         this.getListData()
     },
     methods: {
-        getListDatap() {
-            this.loading = true
-            this.searchifag = false
-            this.searchpubmed = true
-            let keyword = this.$route.query.keyWord
-            this.keyword = keyword
-            console.log(this.keyword)
-            if (keyword === "") return;
-            this.$axios({
-                method: "post",
-                url: "http://127.0.0.1:8083/getpubmed",
-                data: { 'keyword': this.keyword, }
-            }).then(response => {
-                this.loading = false;
-                console.log(response.data);
-                this.datapubmed = response.data.Papers;
-            }).catch(error => {
-                // if (this.data == undefined || this.data.length === 0) {
-                //     this.info2(false)
-                // }
-                // else {
-                //     this.info1(false)
-                // }
-                console.log(error.response, "error");
-                this.$message({
-                    message: error.response.data.errMsg,
-                    type: 'error'
-                });
-            });
-        },
         info(nodesc) {
             this.$Notice.info({
                 title: '通知信息',
                 desc: nodesc ? '' : '没有找到相关文档，试一试其他关键字'
-            });
-        },
-        info1(nodesc) {
-            this.$Notice.info({
-                title: '通知信息',
-                desc: nodesc ? '' : 'pubmed只支持英文检索哟'
-            });
-        },
-        info2(nodesc) {
-            this.$Notice.info({
-                title: '通知信息',
-                desc: nodesc ? '' : 'pubmed错了点问题，试一试其他关键字吧'
             });
         },
         pageChange(page) {
@@ -127,7 +77,10 @@ export default {
             this.searchifag = true
             this.searchpubmed = false
             let keyword = this.$route.query.keyWord
+            this.time = this.$route.query.time
+            this.title = this.$route.query.title
             this.keyword = keyword
+            thi
             if (keyword === "") return;
             const params = {
                 "categoryId": "",
@@ -135,9 +88,12 @@ export default {
                 "page": this.currentPage - 1,
                 "rows": this.pageSize,
                 "tagId": "",
-                "type": "FILTER"
+                "type": "ADVANCE",
+                "keyword": this.keyword,
+                "time": this.time,
+                "title": this.title
             }
-            DocumentRequest.getListData(params).then(res => {
+            DocumentRequest.getSuperData(params).then(res => {
                 this.loading = false;
                 if (res.code === 200) {
                     this.totalItems = res.data.totalNum;
