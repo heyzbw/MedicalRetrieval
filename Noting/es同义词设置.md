@@ -50,7 +50,9 @@ PUT /synonym_test/
       "filter": {
         "synonym": {
           "type": "synonym",
-          "synonyms_path": "analysis/synonyms.txt"
+          "synonyms_path": "analysis/synonyms.txt",
+          "ignore_case": true,
+		  "format": "word1, word2, {} => {}"
         }
       }
     }

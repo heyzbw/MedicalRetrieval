@@ -154,6 +154,13 @@
             <version>5.1.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+
         <!-- 让@Properties 生效 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -172,6 +179,17 @@
             <version>5.4.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>tea-openapi</artifactId>
+            <version>0.2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>docmind_api20220711</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -186,5 +204,7 @@
         </plugins>
     </build>
 
+    <!-- 打包成jar包 -->
+    <packaging>jar</packaging>
 
 </project>

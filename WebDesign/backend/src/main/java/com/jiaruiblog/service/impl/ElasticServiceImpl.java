@@ -170,7 +170,6 @@ public class ElasticServiceImpl implements ElasticService {
         SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
 
         SearchHits hits = searchResponse.getHits();
-
         return process_outcome(hits,keyword);
     }
 
@@ -547,7 +546,7 @@ public class ElasticServiceImpl implements ElasticService {
 
         SearchHits hits = searchResponse.getHits();
 
-        return process_outcome(hits,keywords);
+        return process_outcome(hits,list);
     }
 
     private BoolQueryBuilder createSingleBoolQueryBuilder(String keyword){

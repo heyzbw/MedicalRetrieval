@@ -7,7 +7,7 @@ server:
 spring:
   data:
     mongodb:
-      database: ${MONGO_DATABASE:test}
+      database: ${MONGO_DATABASE:sqrrow}
       host: ${MONGO_HOST:localhost}
       port: ${MONGO_PORT:27017}
       threads-allowed-to-block-for-connection-multiplier: 20
@@ -54,7 +54,7 @@ logging:
 
 cloud:
   elasticsearch:
-    host: ${ES_HOST:43.139.40.23}
+    host: ${ES_HOST:localhost}
     port: ${ES_PORT:9200}
 #    host: 81.69.247.172
 #    port: 8888

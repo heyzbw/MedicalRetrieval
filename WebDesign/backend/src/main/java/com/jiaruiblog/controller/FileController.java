@@ -196,6 +196,13 @@ public class FileController {
     }
 
     @Deprecated
+    @PostMapping("/uploadMultiFile")
+    public ResponseModel formUploadMulti(@RequestParam("file") MultipartFile[] files) throws IOException, AuthenticationException {
+        System.out.println("这个是普通的upload方法");
+        return fileService.documentUpload_noAuth_multi(files);
+    }
+
+    @Deprecated
     @PostMapping("/upload/scan")
     public ResponseModel scan(@RequestParam("file") MultipartFile file) throws IOException, AuthenticationException {
         System.out.println("这是一个针对扫描件的上传方法");

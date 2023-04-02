@@ -29,17 +29,16 @@
         <div class="doc-abstract" v-show="ocrResultListin">
 
             <div style="padding:0 0 0 30px">
-                <div @click="getDocView()">【第{{ esSearchContentList[0].pageNum }}页】 <div style="color:blue">来源于文本</div>
+                <div @click="getDocView()" v-if="contentResultSize>=1">【第{{ esSearchContentList[0].pageNum }}页】 <div style="color:blue">来源于文本</div>
                     <p v-html="esSearchContentList[0].contentHighLight[0]"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                 </div>
 
-                <div @click="getDocView1()">【第{{ esSearchContentList[1].pageNum }}页】 <div style="color:blue">来源于文本</div>
+                <div @click="getDocView1()" v-if="contentResultSize>=2">【第{{ esSearchContentList[1].pageNum }}页】 <div style="color:blue">来源于文本</div>
                     <p v-html="esSearchContentList[1].contentHighLight[0]"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                 </div>
-                <div v-if="this.contentshow" @click="getDocView2()">【第{{ esSearchContentList[2].pageNum }}页】 <div
-                        style="color:blue">来源于文本</div>
+                <div v-if="this.contentshow &&  contentResultSize>=3" @click="getDocView2()" >【第{{ esSearchContentList[2].pageNum }}页】 <div style="color:blue">来源于文本</div>
                     <p v-html="esSearchContentList[2].contentHighLight[0]"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                 </div>
@@ -48,6 +47,8 @@
                     <p v-html="ocrResultList[0].ocrText"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                 </div>
+<!--              <div>contentLenght:{{contentResultSize}}}</div>-->
+<!--              <div>contentLenght:{{ocrResultListSize}}}</div>-->
             </div>
 
 
@@ -83,14 +84,17 @@ export default {
             ocrshow: '',
             contentshow: '',
             ocrNum: '',
-            score: this.like_score + this.content_score + this.click_score
+            score: this.like_score + this.content_score + this.click_score,
+            contentResultSize:0,
+            ocrResultListSize:0,
+
         }
     },
     props: {
         id: { type: String, requires: true },
         thumbId: { type: String, requires: true },
         title: { type: String, requires: true },
-        time: { type: String, requires: true, default: "232" },
+        time: { type: Number, requires: true, default: "232" },
         userName: { type: String, requires: true, default: 'admin' },
         category: { type: Object, requires: false, default: '' },
         tags: { type: Array, requires: false, default: [] },
@@ -102,16 +106,29 @@ export default {
         like_score: { type: Number, requires: false },
         content_score: { type: Number, requires: false },
         click_score: { type: Number, requires: false },
+
+
+
+
     },
     // 将 prop 数据转换为本地数据
     created() {
-        console.log(this.like_score)
-        console.log(this.content_score)
-        console.log(this.click_score)
-        console.log(this.esSearchContentList[0])
-        console.log(this.esSearchContentList[0].pageNum)
+        console.log("like_score):",this.like_score)
+        console.log("content_score):",this.content_score)
+        console.log("click_score):",this.click_score)
+        console.log("esSearchContentList[0]):",this.esSearchContentList[0])
+        console.log("esSearchContentList[0].pageNum):",this.esSearchContentList[0].pageNum)
 
         this.score = this.like_score + this.content_score + this.click_score
+        if(this.esSearchContentList !== [] && this.esSearchContentList !== null)
+        {
+          this.contentResultSize = this.esSearchContentList.length
+        }
+        if(this.ocrResultList !== [] && this.ocrResultList !== null)
+        {
+          this.ocrResultListSize = this.ocrResultList.length
+        }
+
     },
     computed: {
         categoryIn: function () {

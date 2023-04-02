@@ -144,7 +144,6 @@ export default {
                     this.data = res.data.documents;
                     console.log("关键字查询成功，返回内容为：");
                     console.log("data:", res.data)
-                    console.log("desSearchContentList:", res.data[0].esSearchContentList)
 
                 } else {
                     this.data = []

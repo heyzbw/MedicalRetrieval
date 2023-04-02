@@ -184,6 +184,8 @@ public interface IFileService {
 
     byte[] getFileBytes(String thumbId);
 
+    ResponseModel documentUpload_noAuth_multi(MultipartFile[] files) throws AuthenticationException;
+
     ResponseModel documentUpload_noAuth(MultipartFile file) throws AuthenticationException;
 
     /**

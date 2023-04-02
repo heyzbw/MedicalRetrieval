@@ -18,7 +18,6 @@ import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.service.*;
 import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.BaseApiResult;
-import com.jiaruiblog.util.CallFlask;
 import com.jiaruiblog.util.PdfUtil;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
@@ -31,7 +30,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Field;
 import org.springframework.data.mongodb.core.query.Query;
@@ -52,7 +50,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -324,6 +321,64 @@ public class FileServiceImpl implements IFileService {
         Files.write(path,bytes);
 
         return null;
+    }
+
+    @Override
+    public ResponseModel documentUpload_noAuth_multi(MultipartFile[] files) throws AuthenticationException {
+        List<String> availableSuffixList = com.google.common.collect.Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
+        ResponseModel model = ResponseModel.getInstance();
+        List<String> listFileId = new ArrayList<>();
+
+        for(int i=0;i<files.length;i++)
+        {
+            MultipartFile file = files[i];
+            try {
+                if (file != null && !file.isEmpty()) {
+                    String originFileName = file.getOriginalFilename();
+                    if (!StringUtils.hasText(originFileName)) {
+                        model.setMessage(originFileName+"的格式不支持！");
+                        return model;
+                    }
+                    //获取文件后缀名
+                    String suffix = originFileName.substring(originFileName.lastIndexOf(".") + 1);
+                    if (!availableSuffixList.contains(suffix)) {
+                        model.setMessage(originFileName+"的格式不支持！");
+                        return model;
+                    }
+                    String fileMd5 = SecureUtil.md5(file.getInputStream());
+
+                    FileDocument fileDocument = saveFile(fileMd5, file);
+
+                    //获取OCR识别结果
+                    List<OcrResultNew> ocrResultNewList = file2OcrService.getOcrByPY(fileMd5);
+                    fileDocument.setOcrResultNewList(ocrResultNewList);
+//                fileDocument.se
+
+                    switch (suffix) {
+                        case "pdf":
+                        case "docx":
+                        case "pptx":
+                        case "xlsx":
+                            taskExecuteService.execute(fileDocument);
+                            break;
+                        default:
+                            break;
+                    }
+                    listFileId.add(fileDocument.getId());
+//                    model.setData(fileDocument.getId());
+
+                } else {
+                    model.setMessage("请传入文件");
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                model.setMessage(ex.getMessage());
+            }
+        }
+        model.setData("");
+        model.setCode(ResponseModel.SUCCESS);
+        model.setMessage("上传成功");
+        return model;
     }
 
     @Override

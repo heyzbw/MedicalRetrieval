@@ -16,7 +16,7 @@
                     <p>支持Word/Excel/PPT/PDF，不超过100M</p>
                 </div>
                 <input type="file" ref="fileToUpload" id="fileToUpload" style="display: none" @change="changeFile">
-            </div>
+            </div>l
             </Col>
         </Row>
         <Row v-show="true">
