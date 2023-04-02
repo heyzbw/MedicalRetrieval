@@ -104,12 +104,12 @@
                         <Col>
                         <div class="upload-button"
                             style="width: 180px; height: 45px; border: 2px solid #000;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            background: #FFF7D6;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            border-radius: 8px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            justify-content: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                background: #FFF7D6;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                border-radius: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                display: flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                justify-content: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                "
                             @click="uploadFile">
                             <div style="padding: 5px; line-height: 45px;">
                                 <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
@@ -126,8 +126,9 @@
                 <div width="100%">
 
                     <el-upload class="upload-demo" drag action="#" multiple ref="upload" :file-list="files"
-                        :http-request="handleUpload" :on-exceed='handExceed' :on-remove="handleRemove"
-                        :on-success='handFileSuccess' :before-remove="beforeRemove" :auto-upload="false" :limit="5">
+                        :on-progress="handleUpload" :http-request="handleUpload" :on-exceed='handExceed'
+                        :on-remove="handleRemove1" :on-success='handFileSuccess' :before-remove="beforeRemove"
+                        :auto-upload="true" :limit="5">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         <div class="el-upload__tip" slot="tip">一次只能上传5个文件</div>
@@ -146,7 +147,7 @@
                     <i class="el-icon-plus"></i>
                 </el-upload> -->
                 <el-upload action="#" ref="upload" list-type="picture-card" accept="image/png"
-                    :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :http-request="uploadAvatar"
+                    :on-preview="handlePictureCardPreview" :on-remove="handleRemove2" :http-request="uploadAvatar"
                     :before-upload="beforeAvatarUpload" :file-list="fileList">
                     <!-- :action="baseUrl" -->
                     <img v-if="imageUrl" :src="imageUrl" class="avatar" />
@@ -349,77 +350,79 @@ export default {
             });
         },
         handleUpload(raw) {
+            //console.log(raw)
             this.files.push(raw.file);
-            // console.log(files);
+            console.log(this.files);
         },
         async fileChange() {
             if (this.files.length > 5) {
                 this.$message.warning(`当前限制只能上传选择 1~5 个文件`);
                 return
-            } else { }
-            const loading = this.$loading({
-                lock: true,
-                text: '上传中...',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)'
-            });
-            this.$refs.upload.submit() // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件
-            let random = Math.random();
-            let formData = new FormData();
-            //formData.append("file", param.file);
-            //formData.append("fileName", param.fileId);
+            } else {
+                const loading = this.$loading({
+                    lock: true,
+                    text: '上传中...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                this.$refs.upload.submit() // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件
+                let random = Math.random();
+                let formData = new FormData();
+                //formData.append("file", param.file);
+                //formData.append("fileName", param.fileId);
 
-            //formData.append("user_id", localStorage.user_id);
-            //formData.append("s_id", localStorage.s_id);
-            //formData.append("random", random);
-            //formData.append("file_kind", "src");
-            this.files.forEach(function (file) {
-                formData.append('file', file); // 因为要上传多个文件，所以需要遍历一下才行
-                console.log(file);
-                formData.append("fileName", file.name);//不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
-                console.log(file.name);
-            })
-            //let res = await this.$axios.post(`${this.$baseUrl}/file/upload`, formData);
+                //formData.append("user_id", localStorage.user_id);
+                //formData.append("s_id", localStorage.s_id);
+                //formData.append("random", random);
+                //formData.append("file_kind", "src");
+                this.files.forEach(function (file) {
+                    formData.append('file', file); // 因为要上传多个文件，所以需要遍历一下才行
+                    console.log(file);
+                    formData.append("fileName", file.name);//不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
+                    console.log(file.name);
+                })
+                //let res = await this.$axios.post(`${this.$baseUrl}/file/upload`, formData);
 
-            const config = {
-                onUploadProgress: (progressEvent) => {
-                    // progressEvent.loaded:已上传文件大小
-                    // progressEvent.total:被上传文件的总大小
-                    this.uploadProcess = Number(
-                        ((progressEvent.loaded / progressEvent.total) * 0.9).toFixed(2)
-                    );
-                },
-            };
-            console.log(formData)
-            console.log(this.files)
+                const config = {
+                    onUploadProgress: (progressEvent) => {
+                        // progressEvent.loaded:已上传文件大小
+                        // progressEvent.total:被上传文件的总大小
+                        this.uploadProcess = Number(
+                            ((progressEvent.loaded / progressEvent.total) * 0.9).toFixed(2)
+                        );
+                    },
+                };
+                console.log(formData)
+                console.log(this.files)
+                axios.post(this.actionUrl, formData, config).then(res => {
+                    let { data } = res
+                    if (data['code'] === 200 || data['code'] === 'success') {
+                        this.uploadProcess = 1;
+                        this.$Message.success("成功！")
+                        console.log(res)
+                        this.$refs.upload.clearFiles();
+                        this.files = []
+                        loading.close();
 
-            axios.post(this.actionUrl, formData, config).then(res => {
-                let { data } = res
-                if (data['code'] === 200 || data['code'] === 'success') {
-                    this.uploadProcess = 1;
-                    this.$Message.success("成功！")
-                    console.log(res)
-                    this.$refs.upload.clearFiles();
-                    this.files = []
-                    loading.close();
+                    } else {
+                        this.$Message.error("出错：" + data['message'])
+                        this.uploadProcess = 0.00
+                        loading.close();
+                        console.log(res)
+                        this.$message.error("上传文件失败" + res.data.msg);
+                    }
+                    setTimeout(() => {
+                        this.filename = ''
+                    }, 1000)
+                }).catch(err => {
+                    this.$Message.error("上传出错！")
+                    this.processFlag = false
+                    this.uploadProcess = 0.0
+                })
+                //console.log(res);
+                // JSON.parse(res)
+            }
 
-                } else {
-                    this.$Message.error("出错：" + data['message'])
-                    this.uploadProcess = 0.00
-                    loading.close();
-                    this.$message.error("上传文件失败" + res.data.msg);
-                }
-                setTimeout(() => {
-
-                    this.filename = ''
-                }, 1000)
-            }).catch(err => {
-                this.$Message.error("上传出错！")
-                this.processFlag = false
-                this.uploadProcess = 0.0
-            })
-            console.log(res);
-            // JSON.parse(res)
         },
         handExceed(files, fileList) {
             this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -433,8 +436,8 @@ export default {
             this.files = []
             this.$refs.upload.clearFiles();
         },
-        handleRemove(file, fileList) {
-            // console.log(file, fileList);
+        handleRemove1(file, fileList) {
+            console.log(file, fileList);
             this.files = fileList
         },
         beforeRemove(file, fileList) {
@@ -472,7 +475,6 @@ export default {
         uploadAvatar(item) {
             console.log(item.file)
             this.form.push(item.file)
-
         },
         beforeAvatarUpload(file) {
             const isPng = file.type === 'image/png'
@@ -486,12 +488,16 @@ export default {
             }
             return (isPng) && isLt2M
         },
-        handleRemove(file, fileList) {
-            for (const i in this.form.picList) {
-                if (this.form.picList[i].key === file.uid) {
-                    this.form.picList.splice(i, 1)
+        handleRemove2(file, fileList) {
+            console.log(this.form.length)
+            console.log(this.form)
+            console.log(file)
+            for (let i = 0; i < this.form.length; i++) {
+                if (this.form[i].uid === file.uid) {
+                    console.log(i, "tt")
+                    this.form.splice(i, 1)
                 }
-                console.log(this.form.picList, "434")
+                console.log(this.form, "434")
             }
         },
         handlePictureCardPreview(file) {
