@@ -8,6 +8,7 @@
                     <li id="tag02">浏览</li>
                 </ul>
             </div> -->
+            <img :src="imgSrc" width="100%" height="99%" alt="" />
             <SearchGroup></SearchGroup>
         </div>
 
@@ -193,7 +194,7 @@ export default {
     },
     data() {
         return {
-            imgSrc: require("../assets/source/banner.png"),
+            imgSrc: require("../assets/source/background(1).png"),
             defaultAvatar: require("../assets/source/user_avater.png"),
             data: {},
             currentData: [],
@@ -274,11 +275,12 @@ export default {
     width: 100%;
     // height: 100vh;
     //padding-bottom: 20px;
+    //position: fixed;
 
     .top-group {
-        // height: 340px;
-        //width: 100%;
-        padding: 400px 0px 0 0;
+        height: 340px;
+        width: 100%;
+
         //z-index: -1;
 
     }

@@ -3,6 +3,7 @@
         <div class="nav-logo" @click="$router.push('/')">
             <img :src="logoSrc" width="80%" height="80%" alt="" />
         </div>
+        <p>MedicalRetrieval</p>
         <div class="nav-setting" v-show="true">
             <Button type="text" @click="$router.push('/admin/newDocument1')">
                 + 添加文档
@@ -62,5 +63,31 @@ export default {
 
 .nav-setting {
     float: right;
+}
+
+p {
+    font-size: 2em;
+    top: 0;
+    left: 12%;
+    font-style: oblique;
+    color: rgba(255, 255, 255, 0.3);
+    background-image: url(../assets/source/greneenpuls.png);
+
+    letter-spacing: 8px;
+    /* 注意添加私有前缀 */
+    -webkit-background-clip: text;
+    font-weight: 50;
+    animation: wave 30s linear infinite;
+    position: fixed;
+}
+
+@keyframes wave {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 1000px 0;
+    }
 }
 </style>
