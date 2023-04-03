@@ -1241,10 +1241,8 @@ public class ElasticServiceImpl implements ElasticService {
                         String rightBottom = (String) textResultMap.get("rightBottom");
                         String leftBottom = (String) textResultMap.get("leftBottom");
                         String rightTop = (String) textResultMap.get("rightTop");
-                        boolean handwritten = (Boolean) textResultMap.get("handwritten");
-                        int charNum = (Integer) textResultMap.get("charNum");
 
-                        OcrPosition ocrPosition = new OcrPosition(charNum, handwritten, leftBottom, leftTop, rightBottom, rightTop, text);
+                        OcrPosition ocrPosition = new OcrPosition(leftBottom, leftTop, rightBottom, rightTop, text);
                         textResult.add(ocrPosition);
                     }
                 }

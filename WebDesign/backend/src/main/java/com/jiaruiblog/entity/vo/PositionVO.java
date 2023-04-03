@@ -13,8 +13,6 @@ public class PositionVO {
     private String rightTop;
     private String text;
     public PositionVO(OcrPosition ocrPosition){
-        charNum =     ocrPosition.getCharNum();
-//        isHandwritten  = ocrPosition.g();
         leftBottom   = ocrPosition.getLeftBottom();
         leftTop      = ocrPosition.getLeftTop();
         rightBottom  = ocrPosition.getRightBottom();

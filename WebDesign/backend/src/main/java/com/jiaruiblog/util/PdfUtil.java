@@ -81,7 +81,7 @@ public class PdfUtil {
                 stripper.setStartPage(p);
                 stripper.setEndPage(p);
                 String text = stripper.getText(document);
-                System.out.println("text:"+text);
+//                System.out.println("text:"+text);
                 text = text.replace("\n", "");
                 text = text.replace("\r", "");
 //                System.out.println("text_new:"+text);

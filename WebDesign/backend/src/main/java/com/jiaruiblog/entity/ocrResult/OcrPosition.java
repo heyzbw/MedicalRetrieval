@@ -4,17 +4,16 @@ import lombok.Data;
 
 @Data
 public class OcrPosition {
-    private int charNum;
-    private boolean isHandwritten;
+
+    private int[] position;
     private String leftBottom;
     private String leftTop;
     private String  rightBottom;
     private String  rightTop;
     private String  text;
 
-    public OcrPosition(int charNum, boolean isHandwritten, String leftBottom, String leftTop, String rightBottom, String rightTop, String text) {
-        this.charNum = charNum;
-        this.isHandwritten = isHandwritten;
+    public OcrPosition(String leftBottom, String leftTop, String rightBottom, String rightTop, String text) {
+
         this.leftBottom = leftBottom;
         this.leftTop = leftTop;
         this.rightBottom = rightBottom;
