@@ -18,7 +18,7 @@
                                 </div>
                                 <p>支持Word/Excel/PPT/PDF，不超过100M</p>
                             </div>
-                            <input type="file" ref="fileToUpload" id="fileToUpload" style="display: none"
+                            <input type="file" ref="fileToUpload" id="fileToUpload" style="display: none" multiple
                                 @change="changeFile">
                         </div>
                         </Col>
@@ -125,14 +125,23 @@
             <el-tab-pane label="批量导入文档" name="tab_second" width="100%">
                 <div width="100%">
 
-                    <el-upload class="upload-demo" drag action="#" multiple ref="upload" :file-list="files"
-                        :on-progress="handleUpload" :http-request="handleUpload" :on-exceed='handExceed'
-                        :on-remove="handleRemove1" :on-success='handFileSuccess' :before-remove="beforeRemove"
-                        :auto-upload="true" :limit="5">
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">一次只能上传5个文件</div>
+<!--                    <el-upload class="upload-demo" drag action="#" multiple ref="upload" :file-list="files"-->
+<!--                        :on-progress="handleUpload" :http-request="handleUpload" :on-exceed='handExceed'-->
+<!--                        :on-remove="handleRemove1" :on-success='handFileSuccess' :before-remove="beforeRemove"-->
+<!--                        :auto-upload="true" :limit="5">-->
+<!--                        <i class="el-icon-upload"></i>-->
+<!--                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+<!--                        <div class="el-upload__tip" slot="tip">一次只能上传5个文件</div>-->
+<!--                    </el-upload>-->
+                    <el-upload class="upload-demo" drag action="#" multiple ref="files_multi" :file-list="files"
+                               :on-progress="handleUpload" :http-request="handleUpload" :on-exceed='handExceed'
+                               :on-remove="handleRemove1" :on-success='handFileSuccess' :before-remove="beforeRemove"
+                               :auto-upload="true" :limit="5">
+                      <i class="el-icon-upload"></i>
+                      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                      <div class="el-upload__tip" slot="tip">一次只能上传5个文件</div>
                     </el-upload>
+
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="CancelUpload">取 消</el-button>
                         <el-button type="primary" @click="fileChange">立即上传</el-button>
@@ -182,7 +191,7 @@ export default {
             placeholder: "输入一些内容",
             buttonSrc: require("@/assets/source/folder.png"),
             actionUrl: BackendUrl() + "/files/upload",
-            actionUrl: BackendUrl() + "/files/upload",
+            actionUrl_multi: BackendUrl() + "/files/uploadMultiFile",
             filename: '',
             uploadProcess: 0.00,
             count: [],
@@ -199,6 +208,7 @@ export default {
             fileList: [],
             //上传附件列表
             files: [],
+            files_new: [],
             formData: {},
             imagefile: '',
             imageUrl: "",
@@ -230,7 +240,7 @@ export default {
         },
         changeFile() {
             const inputFile = this.$refs.fileToUpload.files[0];
-            console.log(inputFile)
+            console.log(typeof inputFile)
             let filename = inputFile.name;
             // 此处应向后台请求 后台保存上传文件名称返回fileId作为文件标识
             this.uploadParam = {
@@ -350,7 +360,18 @@ export default {
             });
         },
         handleUpload(raw) {
+            let _files = this.$refs.files_multi.files
+            console.log()
+            for(let i=0;i<_files.length;i++)
+            {
+                console.log("i:",i)
+                let input = this.$refs.files.files[0];
+                this.files_new.push(input)
+            }
+            // const inputFile =
+            // this.files_new.push(inputFile)
             //console.log(raw)
+            console.log("我们的类型为",typeof raw.file)
             this.files.push(raw.file);
             console.log(this.files);
         },
@@ -370,17 +391,20 @@ export default {
                 let formData = new FormData();
                 //formData.append("file", param.file);
                 //formData.append("fileName", param.fileId);
-
+                for(let i=0;i<this.files_new.length;i++)
+                {
+                    formData.append("files",this.files_new[i])
+                }
                 //formData.append("user_id", localStorage.user_id);
                 //formData.append("s_id", localStorage.s_id);
                 //formData.append("random", random);
                 //formData.append("file_kind", "src");
-                this.files.forEach(function (file) {
-                    formData.append('file', file); // 因为要上传多个文件，所以需要遍历一下才行
-                    console.log(file);
-                    formData.append("fileName", file.name);//不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
-                    console.log(file.name);
-                })
+                // this.files.forEach(function (file) {
+                //     formData.append('file', file); // 因为要上传多个文件，所以需要遍历一下才行
+                //     console.log(file);
+                //     formData.append("fileName", file.name);//不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
+                //     console.log(file.name);
+                // })
                 //let res = await this.$axios.post(`${this.$baseUrl}/file/upload`, formData);
 
                 const config = {
@@ -394,7 +418,7 @@ export default {
                 };
                 console.log(formData)
                 console.log(this.files)
-                axios.post(this.actionUrl, formData, config).then(res => {
+                axios.post(this.actionUrl_multi, formData, config).then(res => {
                     let { data } = res
                     if (data['code'] === 200 || data['code'] === 'success') {
                         this.uploadProcess = 1;

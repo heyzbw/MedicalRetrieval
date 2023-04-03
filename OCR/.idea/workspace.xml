@@ -5,23 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/dto/AdvanceDocumentDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/dto/ImageDataDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FromPCY/scan/ocrScan.py" beforeDir="false" afterPath="$PROJECT_DIR$/FromPCY/scan/ocrScan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MongoDB/MongoFileDataUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/MongoFileDataUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/DocumentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/DocumentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/IFileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/IFileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/CallFlask.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/CallFlask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/converter/ImageToPdfConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/converter/ImageToPdfConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/converter/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/converter/test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/document.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/document.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/url.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/url.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -205,6 +190,8 @@
       <workItem from="1680429458482" duration="133000" />
       <workItem from="1680429850693" duration="1685000" />
       <workItem from="1680438136820" duration="775000" />
+      <workItem from="1680511035104" duration="510000" />
+      <workItem from="1680511678478" duration="307000" />
     </task>
     <servers />
   </component>
