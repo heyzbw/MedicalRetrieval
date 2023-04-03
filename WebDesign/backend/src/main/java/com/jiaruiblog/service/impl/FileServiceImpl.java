@@ -4,11 +4,13 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.google.common.collect.Maps;
+import com.itextpdf.text.DocumentException;
 import com.jiaruiblog.auth.PermissionEnum;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.config.SystemConfig;
 import com.jiaruiblog.entity.*;
 import com.jiaruiblog.entity.data.ThumbIdAndDate;
+import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
 import com.jiaruiblog.entity.ocrResult.*;
@@ -18,7 +20,9 @@ import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.service.*;
 import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.BaseApiResult;
+import com.jiaruiblog.util.CallFlask;
 import com.jiaruiblog.util.PdfUtil;
+import com.jiaruiblog.util.converter.ImageToPdfConverter;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSDownloadOptions;
@@ -44,6 +48,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -773,6 +778,17 @@ public class FileServiceImpl implements IFileService {
         return BaseApiResult.success(result);
     }
 
+    @Override
+    public BaseApiResult list_advance(AdvanceDocumentDTO advanceDocumentDTO){
+        System.out.println("title:"+advanceDocumentDTO.getTitle());
+        if(advanceDocumentDTO.getKeyword().equals("") || advanceDocumentDTO.getKeyword() == null){
+
+        }
+
+
+        return null;
+    }
+
     /**
      * @return com.jiaruiblog.utils.ApiResult
      * @Author luojiarui
@@ -1268,6 +1284,84 @@ public class FileServiceImpl implements IFileService {
         }
 
         return esDocs;
+    }
+
+    @Override
+    public ResponseModel createScanPDF(String filename, MultipartFile[] files, HttpServletRequest request) throws DocumentException, IOException, AuthenticationException {
+
+//        使用Uitl工具中的方法将图片转为PDF
+        MultipartFile fileScan = ImageToPdfConverter.convertImagesToPdf(files,filename);
+
+        InputStream inputStream = fileScan.getInputStream();
+        String UUID = uploadFileToGridFs(inputStream,fileScan.getContentType());
+
+        CallFlask callFlask = new CallFlask();
+
+        String fileScanPath = callFlask.toScan(fileScan,filename);
+
+        File file = new File(fileScanPath);
+        FileInputStream fis = new FileInputStream(file);
+        byte[] fileBytes = new byte[(int) file.length()];
+        fis.read(fileBytes);
+        fis.close();
+
+        // Convert the byte array to a MultipartFile object
+        MultipartFile multipartFile = new CustomMultipartFile(file.getName(), "application/pdf", fileBytes);
+
+        return documentUpload_noAuth(multipartFile);
+    }
+
+    private static class CustomMultipartFile implements MultipartFile {
+
+        private final String name;
+        private final String contentType;
+        private final byte[] content;
+
+        public CustomMultipartFile(String name, String contentType, byte[] content) {
+            this.name = name;
+            this.contentType = contentType;
+            this.content = content;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String getOriginalFilename() {
+            return name;
+        }
+
+        @Override
+        public String getContentType() {
+            return contentType;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return content == null || content.length == 0;
+        }
+
+        @Override
+        public long getSize() {
+            return content.length;
+        }
+
+        @Override
+        public byte[] getBytes() throws IOException {
+            return content;
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(content);
+        }
+
+        @Override
+        public void transferTo(File dest) throws IOException, IllegalStateException {
+            Files.write(dest.toPath(), content);
+        }
     }
 
 }

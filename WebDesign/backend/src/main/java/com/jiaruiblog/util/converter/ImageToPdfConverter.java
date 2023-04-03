@@ -16,14 +16,14 @@ import java.util.List;
 
 public class ImageToPdfConverter {
 
-    public MultipartFile convertImagesToPdf(List<String> filePaths, String filename) throws IOException, DocumentException {
+    public static MultipartFile convertImagesToPdf(MultipartFile[] files, String filename) throws IOException, DocumentException {
         Document document = new Document();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, outputStream);
         document.open();
 
-        for (String filePath : filePaths) {
-            Image image = Image.getInstance(filePath);
+        for (MultipartFile file : files) {
+            Image image = Image.getInstance(file.getBytes());
             image.setBorderWidth(0);
             image.scaleToFit(PageSize.A4.getWidth(), PageSize.A4.getHeight());
 
@@ -36,7 +36,6 @@ public class ImageToPdfConverter {
             document.add(image);
         }
 
-
         document.close();
 
         // Create a temporary file to store the PDF
@@ -47,7 +46,7 @@ public class ImageToPdfConverter {
 
         // Convert the temporary file to a MultipartFile
         MultipartFile multipartFile = FileToMultipartConverter.toMultipartFile(tempPdfFile);
-//        tempPdfFile.delete(); // Delete the temporary file
+        // tempPdfFile.delete(); // Delete the temporary file
 
         return multipartFile;
     }

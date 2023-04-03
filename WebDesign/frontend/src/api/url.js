@@ -10,11 +10,13 @@ const QUERY_BY_CATE_URL = '/category/getDocByTagCateKeyWord'; // 根据分类进
 
 const DOC_DETAIL_URL = '/document/detail'; // 文档详情
 const DOC_LIST_URL = '/document/list'; // 文档列表
-const DOC_SUPER_URL = '/document/advance'; // 文档列表
-const DOC_IMAGE_URL = '/document/Image'; // 文档列表
+const DOC_SUPER_URL = '/document/advance'; // 高级搜索
+// const DOC_IMAGE_URL = '/document/Image'; // 文档列表
 
 const DOC_REMOVE_URL = '/document/auth/remove'; // 文档删除
 const DOC_WITH_CHECK_URL = '/document/listWithCategory'; // 返回已经选中的信息
+
+const DOC_IMAGE_URL = '/document/Image' //图片转pdf扫描件
 
 const ABC = '/files/view/'
 
@@ -39,6 +41,8 @@ const COMMENT_REMOVE_URL = '/comment/auth/remove'; // 评论删除
 const COMMENT_UPDATE_URL = '/comment/auth/update'; // 评论更新
 const COMMENT_USER_URL = '/comment/auth/myComments'; // 用户主页查询评论列表
 const COMMENT_ALL_URL = '/comment/auth/allComments'; // 管理员查询评论列表
+
+
 
 const STATS_TREND_URL = '/statistics/trend'; //
 const STATS_ALL_URL = '/statistics/all';
@@ -140,5 +144,6 @@ module.exports = {
     ADD_LIKE_URL,
     GET_LIKE_URL,
 
-    ABC
+    DOC_IMAGE_URL,
+    DOC_SUPER_URL
 }

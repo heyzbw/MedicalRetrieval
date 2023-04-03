@@ -181,7 +181,7 @@ export default {
             placeholder: "输入一些内容",
             buttonSrc: require("@/assets/source/folder.png"),
             actionUrl: BackendUrl() + "/files/upload",
-            actionUrl: BackendUrl() + "/files/upload",
+            actionUrl_multi: BackendUrl() + "/files/uploadMultiFile",
             filename: '',
             uploadProcess: 0.00,
             count: [],
@@ -229,7 +229,8 @@ export default {
         },
         changeFile() {
             const inputFile = this.$refs.fileToUpload.files[0];
-            console.log(inputFile)
+
+            console.log("原作者的type是：",typeof inputFile)
             let filename = inputFile.name;
             // 此处应向后台请求 后台保存上传文件名称返回fileId作为文件标识
             this.uploadParam = {
@@ -255,6 +256,9 @@ export default {
             console.log(param.fileId)
 
             const config = {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                },
                 onUploadProgress: (progressEvent) => {
                     // progressEvent.loaded:已上传文件大小
                     // progressEvent.total:被上传文件的总大小
@@ -349,8 +353,9 @@ export default {
             });
         },
         handleUpload(raw) {
+            console.log("进入了handleUpload")
+            console.log("我们的type为：",typeof raw.file)
             this.files.push(raw.file);
-            // console.log(files);
         },
         async fileChange() {
             if (this.files.length > 5) {
@@ -366,34 +371,37 @@ export default {
             this.$refs.upload.submit() // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件
             let random = Math.random();
             let formData = new FormData();
-            //formData.append("file", param.file);
-            //formData.append("fileName", param.fileId);
 
-            //formData.append("user_id", localStorage.user_id);
-            //formData.append("s_id", localStorage.s_id);
-            //formData.append("random", random);
-            //formData.append("file_kind", "src");
-            this.files.forEach(function (file) {
-                formData.append('file', file); // 因为要上传多个文件，所以需要遍历一下才行
-                console.log(file);
-                formData.append("fileName", file.name);//不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
-                console.log(file.name);
-            })
+            // formData.set("files", this.files[0])
+            for (let i = 0; i < this.files.length; i++) {
+                formData.append('files', this.files[i]);
+            }
+
+            console.log("formData_each",formData)
+
+            // this.files.forEach(function (file) {
+            //     formData.append('file', file); // 因为要上传多个文件，所以需要遍历一下才行
+            //     console.log(file);
+            //     formData.append("fileName", file.name);//不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
+            //     console.log(file.name);
+            // })
             //let res = await this.$axios.post(`${this.$baseUrl}/file/upload`, formData);
 
             const config = {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                },
+
                 onUploadProgress: (progressEvent) => {
-                    // progressEvent.loaded:已上传文件大小
-                    // progressEvent.total:被上传文件的总大小
                     this.uploadProcess = Number(
                         ((progressEvent.loaded / progressEvent.total) * 0.9).toFixed(2)
                     );
                 },
             };
-            console.log(formData)
+            console.log("formData:",formData)
             console.log(this.files)
 
-            axios.post(this.actionUrl, formData, config).then(res => {
+            axios.post(this.actionUrl_multi, formData, config).then(res => {
                 let { data } = res
                 if (data['code'] === 200 || data['code'] === 'success') {
                     this.uploadProcess = 1;
@@ -446,13 +454,19 @@ export default {
         },
         // 点击按钮触发
         async submitUpload() {
-            if (this.imagefile != "") {
-                const params = {
-                    "filename": this.imagefile,
-                    "imageList": this.form
-                }
-                console.log(params)
-                DocumentRequest.getImageData(params).then(res => {
+
+
+
+          let formData = new FormData();
+          if (this.imagefile != "") {
+
+              formData.set("filename", this.imagefile);
+
+              for (let i = 0; i < this.form.length; i++) {
+                formData.append('imageList', this.form[i]);
+              }
+
+                DocumentRequest.getImageData(formData).then(res => {
                     if (res.code === 200) {
                         console.log("data:", res.data)
                         this.$refs.upload.clearFiles();
@@ -461,7 +475,14 @@ export default {
                         this.info3(false)
                     }
                 })
-
+            // const params = {
+            //   "filename": this.imagefile,
+            //   "imageList": this.form
+            // }
+            // console.log(params)
+            // console.log("formData",formData)
+            // console.log("filename", formData.get("filename"))
+            // console.log("image", formData.get("imageList"))
             }
             else {
                 this.$message.error("情输入文件名");

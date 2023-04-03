@@ -13,7 +13,9 @@ import {
     GET_LIKE_URL,
 
     COLLECT_ADD_URL,
-    COLLECT_REMOVE_URL
+    COLLECT_REMOVE_URL,
+    DOC_IMAGE_URL,
+    DOC_SUPER_URL
 
 } from './url'
 

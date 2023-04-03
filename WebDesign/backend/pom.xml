@@ -190,6 +190,14 @@
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.3.10</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>
