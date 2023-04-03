@@ -12,7 +12,7 @@ class MongdbOcrUtil(object):
         self.host = host_address
         self.port = 27017
         self.client = pymongo.MongoClient(host=self.host, port=self.port)
-        self.db = self.client.test
+        self.db = self.client.sqrrow
         self.collections = self.db.ocr_result
         self.fs = gridfs.GridFS(self.db)
 

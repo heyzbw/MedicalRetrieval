@@ -125,21 +125,13 @@
             <el-tab-pane label="批量导入文档" name="tab_second" width="100%">
                 <div width="100%">
 
-<!--                    <el-upload class="upload-demo" drag action="#" multiple ref="upload" :file-list="files"-->
-<!--                        :on-progress="handleUpload" :http-request="handleUpload" :on-exceed='handExceed'-->
-<!--                        :on-remove="handleRemove1" :on-success='handFileSuccess' :before-remove="beforeRemove"-->
-<!--                        :auto-upload="true" :limit="5">-->
-<!--                        <i class="el-icon-upload"></i>-->
-<!--                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
-<!--                        <div class="el-upload__tip" slot="tip">一次只能上传5个文件</div>-->
-<!--                    </el-upload>-->
-                    <el-upload class="upload-demo" drag action="#" multiple ref="files_multi" :file-list="files"
-                               :on-progress="handleUpload" :http-request="handleUpload" :on-exceed='handExceed'
-                               :on-remove="handleRemove1" :on-success='handFileSuccess' :before-remove="beforeRemove"
-                               :auto-upload="true" :limit="5">
-                      <i class="el-icon-upload"></i>
-                      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                      <div class="el-upload__tip" slot="tip">一次只能上传5个文件</div>
+                    <el-upload class="upload-demo" drag action="#" multiple ref="upload" :file-list="files"
+                        :on-progress="handleUpload" :http-request="handleUpload" :on-exceed='handExceed'
+                        :on-remove="handleRemove1" :on-success='handFileSuccess' :before-remove="beforeRemove"
+                        :auto-upload="true" :limit="5">
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">一次只能上传5个文件</div>
                     </el-upload>
 
                     <span slot="footer" class="dialog-footer">
@@ -359,22 +351,12 @@ export default {
                 desc: nodesc ? '' : '上传失败'
             });
         },
-        handleUpload(raw) {
-            let _files = this.$refs.files_multi.files
-            console.log()
-            for(let i=0;i<_files.length;i++)
-            {
-                console.log("i:",i)
-                let input = this.$refs.files.files[0];
-                this.files_new.push(input)
-            }
-            // const inputFile =
-            // this.files_new.push(inputFile)
-            //console.log(raw)
-            console.log("我们的类型为",typeof raw.file)
-            this.files.push(raw.file);
-            console.log(this.files);
-        },
+
+      handleUpload(fileObject) {
+          let fd = new FormData();
+          this.files.push(fileObject.file)
+          console.log("files:",this.files);
+      },
         async fileChange() {
             if (this.files.length > 5) {
                 this.$message.warning(`当前限制只能上传选择 1~5 个文件`);
@@ -389,23 +371,10 @@ export default {
                 this.$refs.upload.submit() // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件
                 let random = Math.random();
                 let formData = new FormData();
-                //formData.append("file", param.file);
-                //formData.append("fileName", param.fileId);
-                for(let i=0;i<this.files_new.length;i++)
+                for(let i=0;i<this.files.length;i++)
                 {
-                    formData.append("files",this.files_new[i])
+                    formData.append("files",this.files[i])
                 }
-                //formData.append("user_id", localStorage.user_id);
-                //formData.append("s_id", localStorage.s_id);
-                //formData.append("random", random);
-                //formData.append("file_kind", "src");
-                // this.files.forEach(function (file) {
-                //     formData.append('file', file); // 因为要上传多个文件，所以需要遍历一下才行
-                //     console.log(file);
-                //     formData.append("fileName", file.name);//不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
-                //     console.log(file.name);
-                // })
-                //let res = await this.$axios.post(`${this.$baseUrl}/file/upload`, formData);
 
                 const config = {
                     onUploadProgress: (progressEvent) => {
@@ -471,30 +440,35 @@ export default {
             this.formData.append("blogimg", file.file);
             console.log(file);
         },
-        // 点击按钮触发
-        async submitUpload() {
-            if (this.imagefile != "") {
-                const params = {
-                    "filename": this.imagefile,
-                    "imageList": this.form
-                }
-                console.log(params)
-                DocumentRequest.getImageData(params).then(res => {
-                    if (res.code === 200) {
-                        console.log("data:", res.data)
-                        this.$refs.upload.clearFiles();
-                        this.$message.success("发布成功！");
-                    } else {
-                        this.info3(false)
-                    }
-                })
+      // 点击按钮触发
+      async submitUpload() {
 
-            }
-            else {
-                this.$message.error("情输入文件名");
-            }
 
-        },
+
+        let formData = new FormData();
+        if (this.imagefile != "") {
+
+          formData.set("filename", this.imagefile);
+
+          for (let i = 0; i < this.form.length; i++) {
+            formData.append('imageList', this.form[i]);
+          }
+
+          DocumentRequest.getImageData(formData).then(res => {
+            if (res.code === 200) {
+              console.log("data:", res.data)
+              this.$refs.upload.clearFiles();
+              this.$message.success("发布成功！");
+            } else {
+              this.info3(false)
+            }
+          })
+        }
+        else {
+          this.$message.error("情输入文件名");
+        }
+
+      },
         // 图片上传功能
         uploadAvatar(item) {
             console.log(item.file)

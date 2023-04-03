@@ -35,17 +35,16 @@ class CommonOcr(object):
         return json.loads(response)['result']
 
 if __name__ == "__main__":
-    with open(r'C:\Users\22533\Desktop\testPaper\test.png', 'rb') as fp:
+    with open(r'C:\Users\22533\Desktop\notingDQX\tmp63nk7970', 'rb') as fp:
         image = fp.read()
 
     result = CommonOcr().getRecognize(image)
     print("result", result)
-    # response = CommonOcr(r'C:\Users\22533\Desktop\testPaper\test.png')
-    # print(response.recognize())
-    # print(type(response.recognize()))
-    # result_dict = json.loads(response.recognize())['result']
-    # print(type(result_dict))
-    # print(result_dict)
+
+    lines = result['lines']
+    for line in lines:
+        print("text:", line["text"])
+        print("position", line["position"])
 
     # # 遍历字典
     # for key, value in result_dict.items():
