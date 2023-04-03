@@ -296,17 +296,18 @@ export default {
                     console.log(this.advancedsearch);
                     this.time = Number(this.time);
                     console.log(typeof (this.time));
+                    this.$router.push({
+                        path: '/superResult',
+                        query: {
+                            keyWord: this.advancedsearch,
+                            time: this.time,
+                            title: this.title,
+                        }
+                    })
                 }
 
 
-                this.$router.push({
-                    path: '/superResult',
-                    query: {
-                        keyWord: this.advancedsearch,
-                        time: this.time,
-                        title: this.title,
-                    }
-                })
+
             }
             this.advancedsearch = '';
         },

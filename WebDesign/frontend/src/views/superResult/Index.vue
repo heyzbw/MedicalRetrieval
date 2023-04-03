@@ -30,12 +30,11 @@
 <script>
 
 import Nav from "@/components/Nav";
-import SearchItem from "@/views/searchResult/SearchItem";
+import SearchItem from "@/views/superResult/SearchItem";
 import DocItem from "@/views/searchResult/DocItem";
 import Footer from "@/components/MyFooter";
 import DocumentRequest from "@/api/document"
 import SearchInput from "./SearchInput"
-import PubmedItem from "./PubmedItem";
 
 export default {
     name: "Index.vue",
@@ -48,7 +47,7 @@ export default {
             loading: true,
             keyword: "",
             datapubmed: [],
-            time
+            time: '',
         }
     },
     components: {
@@ -57,10 +56,9 @@ export default {
         DocItem,
         SearchItem,
         SearchInput,
-        PubmedItem
     },
     mounted() {
-        this.getListData()
+        this.getSuperData()
     },
     methods: {
         info(nodesc) {
@@ -72,7 +70,7 @@ export default {
         pageChange(page) {
             this.currentPage = page
         },
-        getListData() {
+        getSuperData() {
             this.loading = true
             this.searchifag = true
             this.searchpubmed = false
@@ -96,6 +94,7 @@ export default {
             DocumentRequest.getSuperData(params).then(res => {
                 this.loading = false;
                 if (res.code === 200) {
+                    console.log(res)
                     this.totalItems = res.data.totalNum;
                     this.data = res.data.documents;
                     console.log("关键字查询成功，返回内容为：");
@@ -103,6 +102,7 @@ export default {
                     //console.log("desSearchContentList:", res.data[0].esSearchContentList)
 
                 } else {
+                    console.log(res)
                     this.data = []
                 }
                 this.listLoading = false
