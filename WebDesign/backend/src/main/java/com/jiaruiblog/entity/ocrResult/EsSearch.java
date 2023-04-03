@@ -41,6 +41,8 @@ public class EsSearch {
     private List<EsSearchOcrOutcome> esSearchOcrOutcomeList = new ArrayList<>();
     private List<EsSearchContent> esSearchContentList = new ArrayList<>();
 
+    private List<EsSearchContent> esSearchContentList_syno = new ArrayList<>();
+
     private static final String DB_NAME = "ocr_result";
 
 //    最终展示时使用的ocrResult

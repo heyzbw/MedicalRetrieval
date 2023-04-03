@@ -56,6 +56,8 @@ DocumentVO {
 
     private List<EsSearchContent> esSearchContentList;
 
+    private List<EsSearchContent> esSearchContentList_syno;
+
 //    得分
     private double content_score;
 

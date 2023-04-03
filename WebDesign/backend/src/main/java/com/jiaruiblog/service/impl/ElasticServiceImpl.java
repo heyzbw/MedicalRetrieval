@@ -88,12 +88,29 @@ public class ElasticServiceImpl implements ElasticService {
     private static String em_last = "</em>";
     private static String zhuanyizfu = "/r";
 
-    private static String CONTENT_EACH_PAGE_LIST = "contentEachPageList";
-    private static String  CONTENT_EACH_PAGE_LIST_CONTENT = "contentEachPageList.content";
-    private static String  CONTENT_EACH_PAGE_LIST_PAGE_NUM = "contentEachPageList.pageNum";
-    private static String OCR_RESULT_NEW_LIST = "ocrResultNewList";
-    private static String OCR_RESULT_LIST_OCRTEXT = "ocrResultNewList.ocrText";
-    private static String OCR_RESULT_LIST_MONGODB_ID = "ocrResultNewList.mongodb_id";
+//    content nested中的内容
+    private static final String CONTENT_EACH_PAGE_LIST = "contentEachPageList";
+    private static final String  CONTENT_EACH_PAGE_LIST_CONTENT = "contentEachPageList.content";
+    private static final String  CONTENT_EACH_PAGE_LIST_PAGE_NUM = "contentEachPageList.pageNum";
+
+//    ocrResult中的内容
+    private static final String OCR_RESULT_NEW_LIST = "ocrResultNewList";
+    private static final String OCR_RESULT_LIST_OCRTEXT = "ocrResultNewList.ocrText";
+    private static final String OCR_RESULT_LIST_MONGODB_ID = "ocrResultNewList.mongodb_id";
+
+//    contentEachPageList_syno中的内容
+    private static final String CONTENT_EACH_PAGE_LIST_SYNO = "contentEachPageList_syno";
+    private static final String  CONTENT_EACH_PAGE_LIST_CONTENT_SYNO = "contentEachPageList_syno.content";
+    private static final String  CONTENT_EACH_PAGE_LIST_PAGE_NUM_SYNO = "contentEachPageList_syno.pageNum";
+
+//    ocrResultNewList_syno
+    private static final String OCR_RESULT_NEW_LIST_SYNO = "ocrResultNewList_syno";
+    private static final String OCR_RESULT_LIST_OCRTEXT_SYNO = "ocrResultNewList_syno.ocrText";
+    private static final String OCR_RESULT_LIST_MONGODB_ID_SYNO = "ocrResultNewList_syno.mongodb_id";
+
+    private static final float NO_SYNO_WEIGHT = 3;
+    private static final float SYNO_WEIGHT = 1;
+
 
     @Resource
     private MongoTemplate mongoTemplate;
@@ -136,62 +153,222 @@ public class ElasticServiceImpl implements ElasticService {
     }
 
     public List<EsSearch> search_new(String keyword) throws IOException {
+
         SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-
-//      加高亮
-        HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.field(CONTENT_EACH_PAGE_LIST_CONTENT);
-        highlightBuilder.preTags("<em>").postTags("</em>");
-        highlightBuilder.fragmentSize(150);
-        searchSourceBuilder.highlighter(highlightBuilder);
-
-//        要返回的字段的名称
+        // 要返回的字段的信息
         String[] include = {CLICK_RATE, LIKE_NUM,COLLECT_NUM, "name", "type","md5","fileId","id"};
         searchSourceBuilder.fetchSource(include,null);
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
-//        根据内容去匹配
-        MatchPhraseQueryBuilder matchContent = QueryBuilders.matchPhraseQuery(CONTENT_EACH_PAGE_LIST_CONTENT, keyword);
-        matchContent.boost(0.7f);
+        //创建bool查询条件
+        BoolQueryBuilder boolQueryBuilder = createSingleBoolQueryBuilder(keyword);
 
-        NestedQueryBuilder nestedContent = QueryBuilders.nestedQuery(CONTENT_EACH_PAGE_LIST, matchContent,ScoreMode.Total);
-        nestedContent.innerHit(
-                new InnerHitBuilder().setFetchSourceContext(
-                        new FetchSourceContext(
-                                true,new String[]{CONTENT_EACH_PAGE_LIST_PAGE_NUM},null
-                        )
-                ).setHighlightBuilder(highlightBuilder)
-        );
-
-//        ocr文本匹配
-        MatchPhraseQueryBuilder matchOcrText = QueryBuilders.matchPhraseQuery(OCR_RESULT_LIST_OCRTEXT, keyword);
-        matchOcrText.boost(0.3f);
-
-        NestedQueryBuilder nestedOcrText = QueryBuilders.nestedQuery(OCR_RESULT_NEW_LIST, matchOcrText, ScoreMode.Total);
-        nestedOcrText.innerHit(
-                new InnerHitBuilder().setFetchSourceContext(
-                        new FetchSourceContext(true, new String[]{OCR_RESULT_LIST_OCRTEXT, OCR_RESULT_LIST_MONGODB_ID}, null
-                        )
-                )
-        );
-
-//        查询条件，二者满足一个
-        boolQueryBuilder.should(nestedContent);
-        boolQueryBuilder.should(nestedOcrText);
-        boolQueryBuilder.minimumShouldMatch(1);
-
-//        查询并返回结果
+        //查询并返回结果
         searchSourceBuilder.query(boolQueryBuilder);
         searchRequest.source(searchSourceBuilder);
         SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
 
         SearchHits hits = searchResponse.getHits();
+        return process_outcome(hits,keyword);
+    }
 
+
+//    根据bool表达式去创建一个查询
+    private BoolQueryBuilder[] createBuilder(List<String> list){
+
+        Stack<BoolQueryBuilder> boolQueryBuildersContent = new Stack<>();
+        Stack<BoolQueryBuilder> boolQueryBuildersOcr = new Stack<>();
+        for (String content : list) {
+            if (!(content.equals("|") || content.equals("&"))) {
+
+                MatchPhraseQueryBuilder matchContent_temp = QueryBuilders.matchPhraseQuery(CONTENT_EACH_PAGE_LIST_CONTENT, content);
+                MatchPhraseQueryBuilder matchOcr_temp = QueryBuilders.matchPhraseQuery(OCR_RESULT_LIST_OCRTEXT, content);
+
+                BoolQueryBuilder boolQueryBuilder1 = new BoolQueryBuilder().must(matchContent_temp);
+                BoolQueryBuilder boolQueryBuilder2 = new BoolQueryBuilder().must(matchOcr_temp);
+
+                boolQueryBuildersContent.push(boolQueryBuilder1);
+                boolQueryBuildersOcr.push(boolQueryBuilder2);
+            } else {
+                BoolQueryBuilder boolContent_temp1 = boolQueryBuildersContent.pop();
+                BoolQueryBuilder boolContent_temp2 = boolQueryBuildersContent.pop();
+                BoolQueryBuilder boolOcr_temp1 = boolQueryBuildersOcr.pop();
+                BoolQueryBuilder boolOcr_temp2 = boolQueryBuildersOcr.pop();
+
+                BoolQueryBuilder boolContent_temp3;
+                BoolQueryBuilder boolOcr_temp3;
+
+                if (content.equals("|")) {
+                    boolContent_temp3 = new BoolQueryBuilder().should(boolContent_temp1).should(boolContent_temp2);
+                    boolOcr_temp3 = new BoolQueryBuilder().should(boolOcr_temp1).should(boolOcr_temp2);
+                } else {
+                    boolContent_temp3 = new BoolQueryBuilder().must(boolContent_temp1).must(boolContent_temp2);
+                    boolOcr_temp3 = new BoolQueryBuilder().must(boolOcr_temp1).must(boolOcr_temp2);
+                }
+                boolQueryBuildersContent.push(boolContent_temp3);
+                boolQueryBuildersOcr.push(boolOcr_temp3);
+            }
+        }
+
+        BoolQueryBuilder[] result = new BoolQueryBuilder[2];
+        result[0] = boolQueryBuildersContent.pop();
+        result[1] = boolQueryBuildersOcr.pop();
+        return result;
+    }
+
+//    处理查询出来的结果
+    public List<EsSearch> process_outcome(SearchHits hits,String keyword){
         List<EsSearch> esSearchList = new ArrayList<>();
 
+        double max_content_score = getMaxScore(hits);
+        int max_click_num = getMaxValue(hits, CLICK_RATE);
+        int max_like_num = getMaxValue(hits, LIKE_NUM);
 
+        for (SearchHit hit : hits) {
+            EsSearch esSearch = new EsSearch();
+
+            List<EsSearchContent> esSearchContentList = new ArrayList<>();
+            List<EsSearchOcrOutcome> esSearchOcrOutcomeList = new ArrayList<>();
+            List<EsSearchContent> esSearchContentList_syno = new ArrayList<>();
+
+//            获取到content的hit内容
+            SearchHits innerContentHits = hit.getInnerHits().get(CONTENT_EACH_PAGE_LIST);
+//            获取到ocrList内容
+            SearchHits innerOcrHits = hit.getInnerHits().get(OCR_RESULT_NEW_LIST);
+//            获取同义词匹配到的内容
+            SearchHits innerSynoContentHits = hit.getInnerHits().get(CONTENT_EACH_PAGE_LIST_SYNO);
+
+
+            Map<String,Object> objectMap = hit.getSourceAsMap();
+
+            float score = hit.getScore();
+
+            double contentScore = 0;
+
+            if(max_content_score > 0){
+                contentScore = score / max_content_score * CONTENT_WEIGHT;
+            }
+            else {
+                contentScore = 0;
+            }
+
+            double clickScore = 0;
+
+
+            if(max_click_num > 0)
+            {
+                clickScore = ((int) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
+            }
+            else {
+                clickScore = 0;
+            }
+
+            double likeScore = 0;
+
+            if(max_like_num > 0)
+            {
+                likeScore = ((int) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
+            }
+            else {
+                likeScore = 0;
+            }
+
+
+//           查询返回的字段为： "click_rate", "collect_num", "collect_num","name", "type","md5","fileId","id",
+            esSearch.setClickScore(clickScore);
+            esSearch.setLikeScore(likeScore);
+            esSearch.setContentScore(contentScore);
+            esSearch.setName((String) objectMap.get("name"));
+            esSearch.setType((String) objectMap.get("type"));
+            esSearch.setMd5((String) objectMap.get("id"));
+            esSearch.setId((String) objectMap.get("fileId"));
+
+//            从innerhit中获取文本内容
+            if(innerContentHits.getTotalHits().value != 0){
+                for (SearchHit contentHit : innerContentHits){
+                    EsSearchContent  esSearchContent = new EsSearchContent();
+//                    保存高亮内容的
+                    List<String> highLightList = new ArrayList<>();
+
+                    Map<String, HighlightField> highlightFields = contentHit.getHighlightFields();
+                    HighlightField highlightedContent = highlightFields.get(CONTENT_EACH_PAGE_LIST_CONTENT);
+
+                    for(Text highlightedText:highlightedContent.fragments()){
+                        String highlightedText_string = highlightedText.toString();
+                        highLightList.add(highlightedText_string);
+                    }
+//                    设置高亮
+                    esSearchContent.setContentHighLight(highLightList);
+//                    设置页码
+                    esSearchContent.setPageNum((int)contentHit.getSourceAsMap().get("pageNum"));
+
+                    esSearchContentList.add(esSearchContent);
+                }
+                esSearch.setEsSearchContentList(esSearchContentList);
+            }
+            else {
+                esSearch.setEsSearchContentList(null);
+            }
+
+
+//            从ocr中获取图片内容
+            if(innerOcrHits.getTotalHits().value != 0){
+                boolean flag = false;
+                for(SearchHit ocrHit:innerOcrHits){
+                    EsSearchOcrOutcome esSearchOcrOutcome = new EsSearchOcrOutcome();
+                    String ocrText = (String) ocrHit.getSourceAsMap().get("ocrText");
+
+                    if(ocrText.contains(keyword)){
+                        flag = true;
+                        esSearchOcrOutcome.setOcrText(ocrText);
+                        esSearchOcrOutcome.setMongoDbId((String) ocrHit.getSourceAsMap().get("mongodb_id"));
+                        esSearchOcrOutcomeList.add(esSearchOcrOutcome);
+                    }
+                }
+                if(flag)
+                {
+                    esSearch.setEsSearchOcrOutcomeList(esSearchOcrOutcomeList);
+                }
+            }
+            else {
+                esSearch.setEsSearchOcrOutcomeList(null);
+            }
+
+            if(innerSynoContentHits.getTotalHits().value != 0){
+                for(SearchHit syno_hit:innerSynoContentHits){
+                    EsSearchContent esSearchContent = new EsSearchContent();
+                    List<String> highLightList = new ArrayList<>();
+
+                    Map<String, HighlightField> highlightFields = syno_hit.getHighlightFields();
+                    HighlightField highlightedContent = highlightFields.get(CONTENT_EACH_PAGE_LIST_CONTENT_SYNO);
+
+                    for(Text highlightedText:highlightedContent.fragments()){
+                        String highlightedText_string = highlightedText.toString();
+                        highLightList.add(highlightedText_string);
+                    }
+
+                    // 设置高亮
+                    esSearchContent.setContentHighLight(highLightList);
+                    esSearchContent.setPageNum((int)syno_hit.getSourceAsMap().get("pageNum"));
+                    esSearchContentList_syno.add(esSearchContent);
+                }
+                esSearch.setEsSearchContentList_syno(esSearchContentList_syno);
+            }
+            else {
+                esSearch.setEsSearchContentList_syno(null);
+            }
+
+            if(esSearch.getEsSearchOcrOutcomeList() != null || esSearch.getEsSearchContentList() != null)
+            {
+                esSearchList.add(esSearch);
+            }
+        }
+
+        return esSearchList;
+    }
+    public List<EsSearch> process_outcome(SearchHits hits,List<String> keyword){
+        List<EsSearch> esSearchList = new ArrayList<>();
 
         double max_content_score = getMaxScore(hits);
         int max_click_num = getMaxValue(hits, CLICK_RATE);
@@ -244,7 +421,6 @@ public class ElasticServiceImpl implements ElasticService {
 
 
 //           查询返回的字段为： "click_rate", "collect_num", "collect_num","name", "type","md5","fileId","id",
-
             esSearch.setClickScore(clickScore);
             esSearch.setLikeScore(likeScore);
             esSearch.setContentScore(contentScore);
@@ -287,7 +463,7 @@ public class ElasticServiceImpl implements ElasticService {
                     EsSearchOcrOutcome esSearchOcrOutcome = new EsSearchOcrOutcome();
                     String ocrText = (String) ocrHit.getSourceAsMap().get("ocrText");
 
-                    if(ocrText.contains(keyword)){
+                    if(keyword.stream().anyMatch(ocrText::contains)){
                         flag = true;
                         esSearchOcrOutcome.setOcrText(ocrText);
                         esSearchOcrOutcome.setMongoDbId((String) ocrHit.getSourceAsMap().get("mongodb_id"));
@@ -310,20 +486,133 @@ public class ElasticServiceImpl implements ElasticService {
         return esSearchList;
     }
 
-    public List<EsSearch> search_high(String keyword) throws IOException{
-        String rpn = InfixToRPN.infixToRPN(keyword);
+    public List<EsSearch> search_advance(String keywords) throws IOException {
+
+        String rpn = InfixToRPN.infixToRPN(keywords);
         System.out.println(rpn);  // 输出：dqx zbw PYB & |
 
         String[] tokens = rpn.split("\\s+"); // 将输入字符串按照空格分割成一个字符串数组
         List<String> list = new ArrayList<>(Arrays.asList(tokens)); // 将字符串数组转换为ArrayList
 
-        for(String str:list){
-            System.out.println("str:"+str+"\"");
-        }
-        System.out.println(list);
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        // 要返回的字段的信息
+        String[] include = {CLICK_RATE, LIKE_NUM,COLLECT_NUM, "name", "type","md5","fileId","id"};
+        searchSourceBuilder.fetchSource(include,null);
+
+        BoolQueryBuilder[] boolQueryBuilders = createBuilder(list);
+
+        BoolQueryBuilder boolQueryBuilderContent = boolQueryBuilders[0].boost(0.7f);
+        BoolQueryBuilder boolQueryBuilderOcr = boolQueryBuilders[1].boost(0.3f);
+
+        //创建bool查询条件
+        //      加高亮
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.field(CONTENT_EACH_PAGE_LIST_CONTENT);
+        highlightBuilder.preTags("<em>").postTags("</em>");
+        highlightBuilder.fragmentSize(150);
+
+//        根据内容去匹配
+        NestedQueryBuilder nestedContent = QueryBuilders.nestedQuery(CONTENT_EACH_PAGE_LIST, boolQueryBuilderContent,ScoreMode.Total);
+        nestedContent.innerHit(
+                new InnerHitBuilder().setFetchSourceContext(
+                        new FetchSourceContext(
+                                true,new String[]{CONTENT_EACH_PAGE_LIST_PAGE_NUM},null)
+                ).setHighlightBuilder(highlightBuilder)
+        );
+
+//        ocr文本匹配
+        NestedQueryBuilder nestedOcrText = QueryBuilders.nestedQuery(OCR_RESULT_NEW_LIST, boolQueryBuilderOcr, ScoreMode.Total);
+        nestedOcrText.innerHit(
+                new InnerHitBuilder().setFetchSourceContext(
+                        new FetchSourceContext(true, new String[]{OCR_RESULT_LIST_OCRTEXT, OCR_RESULT_LIST_MONGODB_ID}, null)
+                )
+        );
 
 
-        return null;
+        //        构建bool查询条件
+        BoolQueryBuilder combinedQueryBuilder = QueryBuilders.boolQuery();
+//        查询条件，二者满足一个
+        combinedQueryBuilder.should(nestedContent);
+        combinedQueryBuilder.should(nestedOcrText);
+        combinedQueryBuilder.minimumShouldMatch(1);
+
+
+        //查询并返回结果
+        searchSourceBuilder.query(combinedQueryBuilder);
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
+
+        SearchHits hits = searchResponse.getHits();
+
+        return process_outcome(hits,list);
+    }
+
+    private BoolQueryBuilder createSingleBoolQueryBuilder(String keyword){
+
+        //      加高亮
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.field(CONTENT_EACH_PAGE_LIST_CONTENT);
+        highlightBuilder.preTags("<em>").postTags("</em>");
+        highlightBuilder.fragmentSize(150);
+
+        HighlightBuilder highlightBuilder_syno = new HighlightBuilder();
+        highlightBuilder_syno.field(CONTENT_EACH_PAGE_LIST_CONTENT_SYNO);
+        highlightBuilder_syno.preTags("<bm>").postTags("</bm>");
+        highlightBuilder_syno.fragmentSize(150);
+
+//        根据内容去匹配
+        MatchPhraseQueryBuilder matchContent = QueryBuilders.matchPhraseQuery(CONTENT_EACH_PAGE_LIST_CONTENT, keyword).boost(NO_SYNO_WEIGHT);
+        BoolQueryBuilder contentboolQueryBuilder = new BoolQueryBuilder().should(matchContent);
+
+        matchContent.boost(0.7f);
+
+        NestedQueryBuilder nestedContent = QueryBuilders.nestedQuery(CONTENT_EACH_PAGE_LIST, contentboolQueryBuilder,ScoreMode.Total);
+        nestedContent.innerHit(
+                new InnerHitBuilder().setFetchSourceContext(
+                        new FetchSourceContext(
+                                true,new String[]{CONTENT_EACH_PAGE_LIST_PAGE_NUM},null)
+                ).setHighlightBuilder(highlightBuilder)
+        );
+
+//        同义词字段的匹配
+        MatchPhraseQueryBuilder matchContentSyno = QueryBuilders.matchPhraseQuery(CONTENT_EACH_PAGE_LIST_CONTENT_SYNO, keyword).boost(SYNO_WEIGHT);
+        BoolQueryBuilder contentBoolQueryBuilder_syno = new BoolQueryBuilder().should(matchContentSyno);
+
+        matchContentSyno.boost(0.3f);
+
+        NestedQueryBuilder nestedContentSyno = QueryBuilders.nestedQuery(CONTENT_EACH_PAGE_LIST_SYNO, contentBoolQueryBuilder_syno,ScoreMode.Total);
+        nestedContentSyno.innerHit(
+                new InnerHitBuilder().setFetchSourceContext(
+                        new FetchSourceContext(
+                                true,new String[]{CONTENT_EACH_PAGE_LIST_PAGE_NUM_SYNO},null)
+                ).setHighlightBuilder(highlightBuilder_syno)
+        );
+
+//        ocr文本匹配
+        MatchPhraseQueryBuilder matchOcrText = QueryBuilders.matchPhraseQuery(OCR_RESULT_LIST_OCRTEXT, keyword).boost(NO_SYNO_WEIGHT);
+//        MatchPhraseQueryBuilder matchOcrTextSyno = QueryBuilders.matchPhraseQuery(OCR_RESULT_LIST_OCRTEXT_SYNO, keyword).boost(NO_SYNO_WEIGHT);
+        BoolQueryBuilder ocrBoolQueryBuilder = new BoolQueryBuilder().should(matchOcrText);
+        ocrBoolQueryBuilder.boost(0.3f);
+
+        NestedQueryBuilder nestedOcrText = QueryBuilders.nestedQuery(OCR_RESULT_NEW_LIST, ocrBoolQueryBuilder, ScoreMode.Total);
+        nestedOcrText.innerHit(
+                new InnerHitBuilder().setFetchSourceContext(
+                        new FetchSourceContext(true, new String[]{OCR_RESULT_LIST_OCRTEXT, OCR_RESULT_LIST_MONGODB_ID}, null)
+                )
+        );
+
+
+        //        构建bool查询条件
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+//        查询条件，二者满足一个
+        boolQueryBuilder.should(nestedContent);
+        boolQueryBuilder.should(nestedOcrText);
+        boolQueryBuilder.should(nestedContentSyno);
+        boolQueryBuilder.minimumShouldMatch(1);
+
+        return boolQueryBuilder;
     }
 
     @Override

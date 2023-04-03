@@ -2,13 +2,23 @@ package com.jiaruiblog.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.jiaruiblog.entity.ocrResult.OcrPosition;
-import com.jiaruiblog.entity.ocrResult.OcrResult;
 import com.jiaruiblog.entity.ocrResult.OcrResultNew;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +26,19 @@ public class CallFlask {
 
     private RestTemplate restTemplate = GetRestTemplate(simpleClientHttpRequestFactory());
 
-    String SERVER_URL = "http://localhost:8083/";
+    private static final String SERVER_URL = "http://localhost:5000/";
+    private static final String file2ocr_URL = SERVER_URL + "pdf2pic";
+    private static final String toScanURL = SERVER_URL + "scanPDF";
+    private static final String FILE_TEMP_SAVE_PATH = "C:/Users/22533/Desktop/notingDQX/";
+
+
 
     public List<OcrResultNew> doUpload(String md5){
 //        待输入的参数
         JSONObject param = new JSONObject();
         param.put("md5",md5);
 //        链接地址
-        String file2ocr_URL = SERVER_URL + "pdf2pic";
+
         JSONObject result = restTemplate.postForEntity(file2ocr_URL,param,JSONObject.class).getBody();
         JSONArray dataArray = result.getJSONArray("data");
         List<OcrResultNew> ocrResultNewArrayList = new ArrayList<>();
@@ -39,33 +54,26 @@ public class CallFlask {
 
             ocrResultNewArrayList.add(ocrResultNew);
 
-//            int pdfPage = dataObj.getInteger("pdfPage");
-//            String pdfURL = dataObj.getString("pdfURL");
-//            String image = dataObj.getString("image");
-
-//            JSONArray textResultArray = dataObj.getJSONArray("textResult");
-////            OcrPosition[] ocrPositions = new OcrPosition[];
-//            List<OcrPosition> textResults = new ArrayList<>();
-//            for (int j = 0; j < textResultArray.size(); j++) {
-//                JSONObject textResultObj = textResultArray.getJSONObject(j);
-//                int charNum = textResultObj.getInteger("charNum");
-//                boolean isHandwritten = textResultObj.getBoolean("isHandwritten");
-//                String leftBottom = textResultObj.getString("leftBottom");
-//                String leftTop = textResultObj.getString("leftTop");
-//                String rightBottom = textResultObj.getString("rightBottom");
-//                String rightTop = textResultObj.getString("rightTop");
-//                String text = textResultObj.getString("text");
-//
-//
-//                OcrPosition textResult = new OcrPosition(charNum, isHandwritten, leftBottom, leftTop, rightBottom, rightTop, text);
-//                textResults.add(textResult);
-//            }
-//
-//            OcrResult ocrResult = new OcrResult(ocrText, pdfURL,pdfPage, textResults,image);
-//            ocrResultList.add(ocrResult);
         }
         return ocrResultNewArrayList;
     }
+
+    public String toScan(MultipartFile file, String filename) throws IOException {
+
+        String savePath = FILE_TEMP_SAVE_PATH + filename;
+        Path path = Paths.get(savePath);
+        Files.write(path, file.getBytes());
+
+        JSONObject param = new JSONObject();
+        param.put("filePath",savePath);
+        param.put("filename",filename);
+
+        JSONObject result = restTemplate.postForEntity(toScanURL, param, JSONObject.class).getBody();
+        String pathScan = (String) result.get("data");
+        System.out.println("pathScan:"+pathScan);
+        return pathScan;
+    }
+
 
     public RestTemplate GetRestTemplate(ClientHttpRequestFactory factory){
         return new RestTemplate(factory);

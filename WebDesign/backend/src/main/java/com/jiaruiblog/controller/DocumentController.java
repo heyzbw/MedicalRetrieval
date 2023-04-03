@@ -1,9 +1,12 @@
 package com.jiaruiblog.controller;
 
+import com.itextpdf.text.DocumentException;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.User;
+import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
+import com.jiaruiblog.entity.dto.ImageDataDTO;
 import com.jiaruiblog.entity.dto.RemoveObjectDTO;
 import com.jiaruiblog.enums.FilterTypeEnum;
 import com.jiaruiblog.intercepter.SensitiveFilter;
@@ -16,11 +19,14 @@ import com.jiaruiblog.util.BaseApiResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.auth.AuthenticationException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -75,6 +81,36 @@ public class DocumentController {
             }
         }
         return iFileService.list(documentDTO);
+    }
+
+
+
+    @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
+    @PostMapping(value = "/listAdvance")
+    public BaseApiResult listAdvance(@RequestBody AdvanceDocumentDTO documentDTO)
+            throws IOException {
+
+//        long startTime = System.currentTimeMillis();
+
+//        System.out.println("进入了查询方法");
+        String userId = documentDTO.getUserId();
+        if (StringUtils.hasText(documentDTO.getFilterWord()) &&
+                documentDTO.getType() == FilterTypeEnum.FILTER) {
+            String filterWord = documentDTO.getFilterWord();
+            //非法敏感词汇判断
+            SensitiveFilter filter = SensitiveFilter.getInstance();
+            int n = filter.checkSensitiveWord(filterWord, 0, 1);
+            //存在非法字符
+            if (n > 0) {
+                log.error("这个人输入了非法字符--> {},不知道他到底要查什么~", filterWord);
+            } else {
+                redisService.incrementScoreByUserId(filterWord, RedisServiceImpl.SEARCH_KEY);
+                if (StringUtils.hasText(userId)) {
+                    redisService.addSearchHistoryByUserId(userId, filterWord);
+                }
+            }
+        }
+        return iFileService.list_advance(documentDTO);
     }
 
     @ApiOperation(value = "2.2 查询文档的详细信息", notes = "查询文档的详细信息")
@@ -133,4 +169,22 @@ public class DocumentController {
         List<String> keyList = redisService.getHotList(null, RedisServiceImpl.SEARCH_KEY);
         return BaseApiResult.success(keyList);
     }
+
+    @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
+    @PostMapping("/Image")
+    public BaseApiResult uploadImage(@RequestParam("filename") String filename, @RequestParam("imageList") MultipartFile[] imageList,HttpServletRequest request) throws IOException, DocumentException, AuthenticationException {
+        iFileService.createScanPDF(filename,imageList,request);
+
+        return null;
+    }
+
+//    @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
+//    @PostMapping("/Image")
+//    public BaseApiResult uploadImage(@RequestBody ImageDataDTO imageDataDTO) {
+//        String filename = imageDataDTO.getFilename();
+//        MultipartFile[] imageList = imageDataDTO.getImageList();
+//        // 进行后续处理
+//        return null;
+//    }
+
 }

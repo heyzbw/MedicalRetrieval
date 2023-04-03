@@ -19,17 +19,33 @@ class MongoFileDataUtil(object):
         :param md5: 文件的md5的值
         :return:
         '''
+
+        print("md5",md5)
         myquery = {"md5": md5}  # 查询条件
         projection = {"_id": 1, "gridfsId": 1, "name": 1}
         search_results = self.collections.find_one(myquery, projection)
-        gridfsId = search_results["gridfsId"]
-        file_name = search_results["name"]
+        if  search_results != None:
+            gridfsId = search_results["gridfsId"]
+            file_name = search_results["name"]
+            bucket = GridFSBucket(self.db)
+            file_mongoDB = bucket.open_download_stream_by_name(gridfsId)
+            fileData = io.BytesIO(file_mongoDB.read())
+            document = fitz.open(stream=fileData, filetype='pdf')
+            document.name = file_name
+
+            return document
+
+        else:
+            return None
+
+    def getFileByGridID(self, gridfsId):
         bucket = GridFSBucket(self.db)
         file_mongoDB = bucket.open_download_stream_by_name(gridfsId)
         fileData = io.BytesIO(file_mongoDB.read())
         document = fitz.open(stream=fileData, filetype='pdf')
-        document.name = file_name
+        # document.name = file_name
         return document
+
 
 
 if __name__ == '__main__':

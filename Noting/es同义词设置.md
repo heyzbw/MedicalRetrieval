@@ -8,7 +8,7 @@
 
 ```
 $ pwd
-/Users/liuxg/elastic/elasticsearch-7.8.0/config/analysis
+/etc/elasticsearch/analysis
 liuxg:analysis liuxg$ cat synonyms.txt 
 "china, silk road, chn, PRC, People's Republic of China",
 "elk, elastic stack"
@@ -50,7 +50,9 @@ PUT /synonym_test/
       "filter": {
         "synonym": {
           "type": "synonym",
-          "synonyms_path": "analysis/synonyms.txt"
+          "synonyms_path": "analysis/synonyms.txt",
+          "ignore_case": true,
+		  "format": "word1, word2, {} => {}"
         }
       }
     }

@@ -79,9 +79,16 @@ public class PdfUtil {
 //            stripper.setSortByPosition(true);
             for (int p = 1; p <= document.getNumberOfPages(); ++p) {
 
+                System.out.println("whywhwywhwy");
+
                 stripper.setStartPage(p);
                 stripper.setEndPage(p);
                 String text = stripper.getText(document);
+                System.out.println("text:"+text);
+                text = text.replace("\n", "");
+                text = text.replace("\r", "");
+                System.out.println("text_new:"+text);
+//                text = text.trim();
 //                System.out.println("读取到的内容为："+text);
 
                 ContentEachPage contentEachPage = new ContentEachPage();

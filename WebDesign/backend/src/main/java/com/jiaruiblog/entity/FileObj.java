@@ -76,11 +76,17 @@ public class FileObj {
     @Field(type = FieldType.Nested, analyzer="ik_max_word")
     private List<OcrResult> ocrResultList;
 
-    @Field(type = FieldType.Nested, analyzer="ik_max_word")
+    @Field(type = FieldType.Nested, analyzer="no_synonyms")
     private List<OcrResultNew> ocrResultNewList;
 
-    @Field(type = FieldType.Nested, analyzer="ik_max_word")
+    @Field(type = FieldType.Nested, analyzer="synonyms")
+    private List<OcrResultNew> ocrResultNewList_syno;
+
+    @Field(type = FieldType.Nested, analyzer="no_synonyms")
     private List<ContentEachPage> contentEachPageList;
+
+    @Field(type = FieldType.Nested, analyzer="synonyms")
+    private List<ContentEachPage> contentEachPageList_syno;
 
 
 

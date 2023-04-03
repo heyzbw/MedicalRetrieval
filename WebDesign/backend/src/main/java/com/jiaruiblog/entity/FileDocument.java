@@ -71,6 +71,9 @@ public class FileDocument {
 
     private List<EsSearchContent> esSearchContentList;
 
+//    同义词的搜索结果
+    private List<EsSearchContent> esSearchContentList_syno;
+
     /**
      * 大文件管理GridFS的ID
      */

@@ -5,17 +5,22 @@ Created on Tue Feb  7 20:04:35 2023
 @author: 18444
 """
 import base64
+import tempfile
+
 import cv2
 import fitz
 import easyocr
 import numpy as np
 import io
 from PIL import Image
+import os
 
 from MongoDB.MongdbOcrUtil import MongdbOcrUtil
 from MongoDB.MongoFileDataUtil import MongoFileDataUtil
+from Call_API import CommonOcr
 
 mongdbOcrUtil = MongdbOcrUtil()
+commonOcr = CommonOcr()
 
 
 class PicInfo:
@@ -48,6 +53,7 @@ def pdf2pic(doc):
 
             # 如果pix.n<5,可以直接存
             if pix.n < 5:
+
                 img_bytes = pix.tobytes()
                 img_base64 = base64.b64encode(img_bytes).decode('utf-8')
 
@@ -66,12 +72,43 @@ def pdf2pic(doc):
 
     return images, page_images
 
+# 创建临时文件
+    # with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+    #     temp_file.write(file.read())
+    #     temp_file_path = temp_file.name
+    #
+    # path_to_save = "C:/Users/22533/Desktop/notingDQX/pdf/" + filename
+    # # 进行识别
+    # result = omp.ocr(temp_file_path, path_to_save, deskew=True,
+    #                  language=['chi_sim', 'eng'], image_dpi=300)
+    # # 删除临时文件
+    # os.remove(temp_file_path)
+    #
+    # return result
+
 
 def pic2json(image_np, pageNum, pdfname, image_page):
-    print("image_np:", image_np)
+
+    print("image_page type:", type(image_page))
+
+    success, encoded_image = cv2.imencode('.png', image_np)  # 将图片编码为png格式
+    content = encoded_image.tobytes()  # 将编码后的图片转为bytes-like object
+
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(content)
+        temp_file_path = temp_file.name
+
+    with open(temp_file_path,'rb') as fp:
+        image = fp.read()
+    
+    result = CommonOcr().getRecognize(image)
+
+    print("tempPath:",temp_file_path)
+
     img_base64 = numpy_to_base64(image_np)
-    reader = easyocr.Reader(['ch_sim', 'en'])
-    result = reader.readtext(image_np)
+    # reader = easyocr.Reader(['ch_sim', 'en'])
+
+    # result = reader.readtext(image_np)
     text = {}
     text["ocrText"] = ""
     text["pdfURL"] = pdfname
@@ -79,18 +116,33 @@ def pic2json(image_np, pageNum, pdfname, image_page):
     text["textResult"] = []
     # text["image"] = img_base64
 
-    for se in result:
-        sem = list(se)
+    for line in result['lines']:
+        text_ocr = line["text"]
+        position = line["position"]
+        text["ocrText"] += text_ocr
+
         textarr = {}
-        text["ocrText"] += sem[1]
-        textarr["charNum"] = len(sem[1])
-        textarr["isHandwritten"] = "false"
-        textarr["leftBottom"] = "{x},{y}".format(x=sem[0][3][0], y=sem[0][3][1])
-        textarr["leftTop"] = "{x},{y}".format(x=sem[0][0][0], y=sem[0][0][1])
-        textarr["rightBottom"] = "{x},{y}".format(x=sem[0][2][0], y=sem[0][2][1])
-        textarr["rightTop"] = "{x},{y}".format(x=sem[0][1][0], y=sem[0][1][1])
-        textarr["text"] = sem[1]
+        textarr["text"] = text_ocr
+        textarr["position"] = position
         text["textResult"].append(textarr)
+
+        textarr["leftTop"] = "{x},{y}".format(x=position[0], y=position[1])
+        textarr["rightTop"] = "{x},{y}".format(x=position[2], y=position[3])
+        textarr["rightBottom"] = "{x},{y}".format(x=position[4], y=position[5])
+        textarr["leftBottom"] = "{x},{y}".format(x=position[6], y=position[7])
+        # sem = list(se)
+        # textarr = {}
+        # text["ocrText"] += sem[1]
+        # textarr["charNum"] = len(sem[1])
+        # textarr["isHandwritten"] = "false"
+        # textarr["leftTop"] = "{x},{y}".format(x=sem[0][0][0], y=sem[0][0][1])
+        # textarr["rightBottom"] = "{x},{y}".format(x=sem[0][2][0], y=sem[0][2][1])
+        # textarr["rightTop"] = "{x},{y}".format(x=sem[0][1][0], y=sem[0][1][1])
+        # textarr["text"] = sem[1]
+        # text["textResult"].append(textarr)
+
+    os.remove(temp_file_path)
+
     if len(text["ocrText"]) > 0:
         img = Image.fromarray(image_np)
         with io.BytesIO() as output:
@@ -98,13 +150,58 @@ def pic2json(image_np, pageNum, pdfname, image_page):
             image_data = output.getvalue()
 
         gridfs_id = mongdbOcrUtil.upload_image_to_mongodb(image_data)
-        print("gridfs_id",gridfs_id)
+        print("gridfs_id", gridfs_id)
         text["image"] = gridfs_id
         mongdbOcrUtil.write_result(text)
-
+        
         return text
+
     else:
         return False
+
+
+# def pic2json(image_np, pageNum, pdfname, image_page):
+#     # print("image_np:", image_np)
+#     img_base64 = numpy_to_base64(image_np)
+#     reader = easyocr.Reader(['ch_sim', 'en'])
+#     image_bytes = image_np.tobytes()
+#     result = commonOcr.getRecognize(image_bytes)
+#     print(result)
+#
+#     # result = reader.readtext(image_np)
+#     # text = {}
+#     # text["ocrText"] = ""
+#     # text["pdfURL"] = pdfname
+#     # text["pdfPage"] = pageNum
+#     # text["textResult"] = []
+#     # # text["image"] = img_base64
+#     #
+#     # for se in result:
+#     #     sem = list(se)
+#     #     textarr = {}
+#     #     text["ocrText"] += sem[1]
+#     #     textarr["charNum"] = len(sem[1])
+#     #     textarr["isHandwritten"] = "false"
+#     #     textarr["leftBottom"] = "{x},{y}".format(x=sem[0][3][0], y=sem[0][3][1])
+#     #     textarr["leftTop"] = "{x},{y}".format(x=sem[0][0][0], y=sem[0][0][1])
+#     #     textarr["rightBottom"] = "{x},{y}".format(x=sem[0][2][0], y=sem[0][2][1])
+#     #     textarr["rightTop"] = "{x},{y}".format(x=sem[0][1][0], y=sem[0][1][1])
+#     #     textarr["text"] = sem[1]
+#     #     text["textResult"].append(textarr)
+#     # if len(text["ocrText"]) > 0:
+#     #     img = Image.fromarray(image_np)
+#     #     with io.BytesIO() as output:
+#     #         img.save(output, format='JPEG')
+#     #         image_data = output.getvalue()
+#     #
+#     #     gridfs_id = mongdbOcrUtil.upload_image_to_mongodb(image_data)
+#     #     print("gridfs_id",gridfs_id)
+#     #     text["image"] = gridfs_id
+#     #     mongdbOcrUtil.write_result(text)
+#     #
+#     #     return text
+#     # else:
+#     #     return False
 
 # numpy 转 base64
 def numpy_to_base64(image_np):
@@ -123,7 +220,6 @@ def fromMD5(md5):
 
         image = images[i]
         page_image = page_images[i]
-        print(page_image)
 
         text = pic2json(image.image_np, image.pageNum, image.filename, page_image)
         if text != False:
@@ -138,5 +234,5 @@ def fromMD5(md5):
 
 
 if __name__ == '__main__':
-    md5 = "31c0020f1fe46009a1ab42559d42e685"
+    md5 = "6da81f0a5750577291276861de36baac"
     fromMD5(md5)

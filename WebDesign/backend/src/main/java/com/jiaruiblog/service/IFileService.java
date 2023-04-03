@@ -1,7 +1,9 @@
 package com.jiaruiblog.service;
 
+import com.itextpdf.text.DocumentException;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.ResponseModel;
+import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
 import com.jiaruiblog.enums.DocStateEnum;
@@ -10,6 +12,7 @@ import com.jiaruiblog.util.BaseApiResult;
 import org.apache.http.auth.AuthenticationException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -146,6 +149,8 @@ public interface IFileService {
      */
     BaseApiResult list(DocumentDTO documentDTO);
 
+    BaseApiResult list_advance(AdvanceDocumentDTO advanceDocumentDTO);
+
     /**
      *根据文档的详情，查询该文档的详细信息
      *
@@ -183,6 +188,8 @@ public interface IFileService {
     InputStream getFileThumb(String thumbId);
 
     byte[] getFileBytes(String thumbId);
+
+    ResponseModel documentUpload_noAuth_multi(MultipartFile[] files) throws AuthenticationException;
 
     ResponseModel documentUpload_noAuth(MultipartFile file) throws AuthenticationException;
 
@@ -226,4 +233,7 @@ public interface IFileService {
      * @return com.jiaruiblog.util.BaseApiResult
      **/
     BaseApiResult queryFileDocumentResult(BasePageDTO pageDTO, boolean reviewing);
+
+
+    ResponseModel createScanPDF(String filename, MultipartFile[] files, HttpServletRequest request) throws DocumentException, IOException, AuthenticationException;
 }

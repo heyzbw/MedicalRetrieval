@@ -6,6 +6,7 @@ let vm = new Vue();
 
 const instance = axios.create({
     baseURL: 'http://localhost:8082/api/v1.0',
+    // baseURL: 'http://60.204.158.96:8082/api/v1.0',
     timeout: 100000,
     headers: {
         post: {
