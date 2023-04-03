@@ -294,10 +294,14 @@ export default {
                         this.advancedsearch = superkey[0]
                     }
                     console.log(this.advancedsearch);
-                    this.time = Number(this.time);
+                    if (this.time != '') {
+                        this.time = parseInt(this.time);
+                    }
+
                     console.log(typeof (this.time));
+                    console.log(this.time)
                     this.$router.push({
-                        path: '/superResult',
+                        path: '/superSearch',
                         query: {
                             keyWord: this.advancedsearch,
                             time: this.time,

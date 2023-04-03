@@ -10,8 +10,8 @@ const QUERY_BY_CATE_URL = '/category/getDocByTagCateKeyWord'; // 根据分类进
 
 const DOC_DETAIL_URL = '/document/detail'; // 文档详情
 const DOC_LIST_URL = '/document/list'; // 文档列表
-const DOC_SUPER_URL = '/document/advance'; // 高级搜索
-// const DOC_IMAGE_URL = '/document/Image'; // 文档列表
+const DOC_SUPER_URL = '/document/listAdvance'; // 高级搜索
+//const DOC_IMAGE_URL = '/document/Image'; // 文档列表
 
 const DOC_REMOVE_URL = '/document/auth/remove'; // 文档删除
 const DOC_WITH_CHECK_URL = '/document/listWithCategory'; // 返回已经选中的信息

@@ -40,6 +40,13 @@ const routes = [
         }
     },
     {
+        path: "/superSearch",
+        name: "superSearch",
+        component: function () {
+            return import("../views/superSearch/Index")
+        }
+    },
+    {
         path: "/preview",
         name: "preview",
         component: function () {
@@ -174,7 +181,7 @@ const routes = [
                 component: function () {
                     return import("../views/userPage/UserUpload")
                 }
-            },{
+            }, {
                 path: "docUpload",
                 name: "docUpload",
                 component: function () {
