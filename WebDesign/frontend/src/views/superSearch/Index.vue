@@ -30,11 +30,11 @@
 <script>
 
 import Nav from "@/components/Nav";
-import SearchItem from "@/views/superResult/SearchItem";
+import SearchItem from "@/views/searchResult/SearchItem";
 import DocItem from "@/views/searchResult/DocItem";
 import Footer from "@/components/MyFooter";
 import DocumentRequest from "@/api/document"
-import SearchInput from "./SearchInput"
+import SearchInput from "@/views/searchResult/SearchInput"
 
 export default {
     name: "Index.vue",
@@ -75,10 +75,9 @@ export default {
             this.searchifag = true
             this.searchpubmed = false
             let keyword = this.$route.query.keyWord
-            this.time = this.$route.query.time
+            this.time = parseInt(this.$route.query.time)
             this.title = this.$route.query.title
             this.keyword = keyword
-            thi
             if (keyword === "") return;
             const params = {
                 "categoryId": "",
@@ -91,6 +90,7 @@ export default {
                 "time": this.time,
                 "title": this.title
             }
+            console.log(params)
             DocumentRequest.getSuperData(params).then(res => {
                 this.loading = false;
                 if (res.code === 200) {
@@ -111,7 +111,39 @@ export default {
                 }
             })
         },
+        getListData() {
+            this.loading = true
+            this.searchifag = true
+            this.searchpubmed = false
+            let keyword = this.$route.query.keyWord
+            this.keyword = keyword
+            if (keyword === "") return;
+            const params = {
+                "categoryId": "",
+                "filterWord": keyword,
+                "page": this.currentPage - 1,
+                "rows": this.pageSize,
+                "tagId": "",
+                "type": "FILTER"
+            }
+            DocumentRequest.getListData(params).then(res => {
+                this.loading = false;
+                if (res.code === 200) {
+                    this.totalItems = res.data.totalNum;
+                    this.data = res.data.documents;
+                    console.log("关键字查询成功，返回内容为：");
+                    console.log("data:", res.data)
+                    //console.log("desSearchContentList:", res.data[0].esSearchContentList)
 
+                } else {
+                    this.data = []
+                }
+                this.listLoading = false
+                if (this.data == null || this.data.length === 0) {
+                    this.info(false)
+                }
+            })
+        },
     }
 }
 </script>

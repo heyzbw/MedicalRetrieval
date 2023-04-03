@@ -7,7 +7,7 @@
             <div style="background-color: #fff">
                 <SearchInput ref="searchInput" @on-search="getListData" style="display: inline-block"></SearchInput>
                 <div class="pubutton">
-                    <button @onclick="getListDatap()" class="bbb">Pubmed搜索</button>
+                    <button @click="getListDatap()" class="bbb">Pubmed搜索</button>
                 </div>
             </div>
             <SearchItem v-if="searchifag" v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)"
@@ -88,12 +88,12 @@ export default {
                 console.log(response.data);
                 this.datapubmed = response.data.Papers;
             }).catch(error => {
-                // if (this.data == undefined || this.data.length === 0) {
-                //     this.info2(false)
-                // }
-                // else {
-                //     this.info1(false)
-                // }
+                if (this.data == undefined || this.data.length === 0) {
+                    this.info2(false)
+                }
+                else {
+                    this.info1(false)
+                }
                 console.log(error.response, "error");
                 this.$message({
                     message: error.response.data.errMsg,
@@ -137,6 +137,7 @@ export default {
                 "tagId": "",
                 "type": "FILTER"
             }
+            console.log(params)
             DocumentRequest.getListData(params).then(res => {
                 this.loading = false;
                 if (res.code === 200) {
