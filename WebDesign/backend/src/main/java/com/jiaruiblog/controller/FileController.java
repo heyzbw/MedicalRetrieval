@@ -197,12 +197,12 @@ public class FileController {
 
     @Deprecated
     @PostMapping("/uploadMultiFile")
-    public ResponseModel formUploadMulti(@RequestParam("files") MultipartFile files) throws IOException, AuthenticationException {
+    public ResponseModel formUploadMulti(@RequestParam("files") MultipartFile[] files) throws IOException, AuthenticationException {
         System.out.println("这个是多文件上传的接口");
 //        for(MultipartFile file_each:files){
 //            System.out.println("文件名："+file_each.getOriginalFilename());
 //        }
-        return fileService.documentUpload_noAuth(files);
+        return fileService.documentUpload_noAuth_multi(files);
     }
 
     @Deprecated

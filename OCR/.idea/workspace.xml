@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MongoDB/GetMongoDBUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/GetMongoDBUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pdf2pic.py" beforeDir="false" afterPath="$PROJECT_DIR$/pdf2pic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testForAPI.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,6 +217,7 @@
       <workItem from="1680518225138" duration="2458000" />
       <workItem from="1680520819099" duration="37000" />
       <workItem from="1680521663126" duration="1080000" />
+      <workItem from="1680525814236" duration="793000" />
     </task>
     <servers />
   </component>
@@ -234,7 +230,7 @@
     <SUITE FILE_PATH="coverage/OCR$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680089665661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/heart_disease_json$ocrScan.coverage" NAME="ocrScan Coverage Results" MODIFIED="1680335033809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FromPCY/scan" />
     <SUITE FILE_PATH="coverage/heart_disease_json$Call_API.coverage" NAME="Call_API Coverage Results" MODIFIED="1680522579317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680522257382" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680526275296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/OCR$pdf2pic.coverage" NAME="pdf2pic Coverage Results" MODIFIED="1680084220920" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
