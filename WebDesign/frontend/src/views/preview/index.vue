@@ -36,7 +36,13 @@
             <div>
 
                 <div class="doc-operation-body">
-                    <doc-operation :likeStatus="likeStatus" :collectStatus="collectStatus" @addLike="addLike" />
+                    <doc-operation
+                        :likeStatus="likeStatus"
+                        :collectStatus="collectStatus"
+                        @addLike="addLike"
+                        @addCollect="addCollect"
+
+                    />
                 </div>
                 <div class="doc-comment">
                     <comment-page />
@@ -236,6 +242,8 @@ export default {
             yPum: "",
             movb: 1,
             num: 1,
+            hasCollect:false,
+            hasLike:false
         }
     },
     components: {
@@ -284,7 +292,8 @@ export default {
             this.keyword = this.$route.query.keyword
             this.pageNum = this.$route.query.pageNum
             var params = {
-                docId: this.docId
+                docId: this.docId,
+                userId: localStorage.getItem("id")
             }
             DocRequest.getData(params).then(response => {
                 if (response.code === 200) {
@@ -304,6 +313,10 @@ export default {
 
                     let title = response.data.title
 
+                    this.hasLike = response.data.hasLike
+                    this.hasCollect = response.data.hasCollect
+                    console.log("hasLike:"+this.hasLike)
+                    console.log("hasCollect:"+this.hasCollect)
                     this.previewId = response.data.previewFileId
                     // console.log("keyword" + { keyword })
                     let suffix = title.split(".")[title.split('.').length - 1];
@@ -352,7 +365,8 @@ export default {
 
         async getLikeInfo() {
             let param = {
-                entityId: this.docId
+                entityId: this.docId,
+                userId: localStorage.getItem("id")
             }
             await DocRequest.getLikeInfo(param).then(res => {
                 if (res.code == 200) {
@@ -368,55 +382,97 @@ export default {
                 this.$Message.info("error")
             })
         },
-        async addLike(entityType) {
-            if (entityType !== 1 && entityType !== 2) {
-                return
-            }
+        // async addLike(entityType) {
+        //     if (entityType !== 1 && entityType !== 2) {
+        //         return
+        //     }
+        //
+        //     let params = {
+        //         entityType: entityType,
+        //         entityId: this.docId
+        //     }
+        //     await DocRequest.addLike({ params }).then(res => {
+        //         if (res.code == 200) {
+        //             let result = res.data;
+        //             if (entityType === 1) {
+        //                 this.likeCount = result.likeCount || 0;
+        //                 this.likeStatus = result.likeStatus || 0;
+        //                 if (this.likeStatus === 0) {
+        //                     this.$Message.info("取消点赞！")
+        //                 } else {
+        //                     this.$Message.success("点赞成功！")
+        //                 }
+        //             } else {
+        //                 this.collectCount = result.likeCount || 0;
+        //                 this.collectStatus = result.likeStatus || 0;
+        //                 if (this.collectStatus === 0) {
+        //                     this.$Message.info("取消收藏！")
+        //                 } else {
+        //                     this.$Message.success("收藏成功！")
+        //                 }
+        //             }
+        //         } else {
+        //             this.$Message.info("error")
+        //         }
+        //     }).catch(err => {
+        //         this.$Message.info("error")
+        //     })
+        // },
 
-            let params = {
-                entityType: entityType,
-                entityId: this.docId
+
+      // 添加点赞
+      async addLike(entityType) {
+        if (entityType !== 2) {
+          return
+        }
+        let params = {
+          entityType: entityType,
+          entityId: this.docId
+        }
+        await DocRequest.addLike({params}).then(res => {
+          if (res.code == 200) {
+            let result = res.data;
+            this.likeCount = result.likeCount || 0;
+            this.likeStatus = result.likeStatus || 0;
+            if (this.likeStatus === 0) {
+              this.$Message.info("取消点赞！")
             }
-            await DocRequest.addLike({ params }).then(res => {
-                if (res.code == 200) {
-                    let result = res.data;
-                    if (entityType === 1) {
-                        this.likeCount = result.likeCount || 0;
-                        this.likeStatus = result.likeStatus || 0;
-                        if (this.likeStatus === 0) {
-                            this.$Message.info("取消点赞！")
-                        } else {
-                            this.$Message.success("点赞成功！")
-                        }
-                    } else {
-                        this.collectCount = result.likeCount || 0;
-                        this.collectStatus = result.likeStatus || 0;
-                        if (this.collectStatus === 0) {
-                            this.$Message.info("取消收藏！")
-                        } else {
-                            this.$Message.success("收藏成功！")
-                        }
-                    }
-                } else {
-                    this.$Message.info("error")
-                }
-            }).catch(err => {
-                this.$Message.info("error")
-            })
-        },
-        downloadTxt(doc) {
-            let fileId = this.txtID
-            if (fileId === null || fileId === '') {
-                return;
+            else {
+              this.$Message.success("点赞成功！")
             }
-            DocumentRequest.getTxtFile(fileId).then(res => {
-                const dom = document.createElement('a');
-                dom.href = URL.createObjectURL(res);
-                dom.download = this.title + '.txt';
-                dom.click();
-            }).catch(error => {
-                console.log(error)
-            })
+          } else {
+            this.$Message.info("error")
+          }
+        }).catch(err => {
+          this.$Message.info("error")
+        })
+      },
+
+        // 添加收藏
+        async addCollect(entityType) {
+          if (entityType !== 1) {
+            return
+          }
+          let params = {
+            docId: this.docId
+          }
+          await DocRequest.addCollect({params}).then(res => {
+            if (res.code == 200) {
+              let result = res.data;
+              console.log("res data:",res.data)
+              // this.collectCount = result.likeCount || 0;
+              // this.collectStatus = result.likeStatus || 0;
+              if (result === "SUCCESS_REMOVE_COLLECT") {
+                this.$Message.info("取消收藏！")
+              } else {
+                this.$Message.success("收藏成功！")
+              }
+            } else {
+              this.$Message.info("error")
+            }
+          }).catch(err => {
+            this.$Message.info("error")
+          })
         },
         /**
          * 对文档进行重新建立索引

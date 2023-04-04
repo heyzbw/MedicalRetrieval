@@ -190,7 +190,7 @@ public class FileController {
      */
     @Deprecated
     @PostMapping("/upload")
-    public ResponseModel formUpload(@RequestParam("file") MultipartFile file) throws IOException, AuthenticationException {
+    public ResponseModel formUpload(@RequestParam("file") MultipartFile file,int fileChoice) throws IOException, AuthenticationException {
         System.out.println("这个是普通的upload方法");
         return fileService.documentUpload_noAuth(file);
     }

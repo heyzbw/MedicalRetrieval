@@ -126,4 +126,7 @@ public class FileDocument {
 //    来做点赞数量的分数
     private double likeScore;
 
+    private boolean hasCollect;
+    private boolean hasLike;
+
 }

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -149,7 +150,7 @@ public interface IFileService {
      */
     BaseApiResult list(DocumentDTO documentDTO);
 
-    BaseApiResult list_advance(AdvanceDocumentDTO advanceDocumentDTO);
+    BaseApiResult list_advance(AdvanceDocumentDTO advanceDocumentDTO) throws ParseException;
 
     /**
      *根据文档的详情，查询该文档的详细信息
@@ -157,7 +158,7 @@ public interface IFileService {
      * @param id ->Long
      * @return ApiResult
      */
-    BaseApiResult detail(String id) throws IOException;
+    BaseApiResult detail(String id,String username) throws IOException;
 
     /**
      * 删除掉已经存在的文档

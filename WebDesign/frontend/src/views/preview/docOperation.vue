@@ -1,5 +1,6 @@
 <template>
     <div class="operation-container">
+
         <div class="item" v-for="item in data" @click="operate(item)">
             <div class="item-logo">
                 <img :src="item.src" :alt="item.src">
@@ -8,6 +9,9 @@
                 {{ item.name }}
             </div>
         </div>
+
+      <div>{{collectStatus}}</div>
+      <div>{{likeStatus}}</div>
     </div>
 </template>
 
@@ -36,8 +40,12 @@ export default {
                     index: "3"
                 },
             ],
-            docId: this.$route.query.docId,
+            docId: this.$route.query.docId
         }
+    },
+    props:{
+      collectStatus:{type:Boolean,request:true,default:false},
+      likeStatus:{type:Boolean,request:true,default:false}
     },
     mounted() {
 
@@ -46,29 +54,16 @@ export default {
         operate(item) {
             if (item.index === "3") {
                 window.open(BackendUrl() + "/files/view/" + this.docId, "_blank");
-            } else if (item.index === "1" || item.index === "2") {
-
-                if (!localStorage.getItem('token')) {
-                    this.$Message.error('跳转到登录页面，请先登录！');
-                    this.$router.push({
-                        path: '/login',
-                        query: {
-                            userName: this.userName
-                        }
-                    })
-                }
-
-                let params = {
-                    docId: this.docId
-                }
-                CollectRequest.postData(params).then(res => {
-                    this.$Notice.info({
-                        title: '通知信息',
-                        desc: '收藏点赞成功！'
-                    });
-                }).catch(res => {
-                    console.log(res)
-                })
+            }
+            else if (item.index === "1") {
+              this.$emit("addCollect", Number(item.index))
+              console.log("发出收藏事件")
+              this.collectStatus = !this.collectStatus
+            }
+            else if (item.index === "2"){
+              this.$emit("addLike", Number(item.index))
+              console.log("发出点赞事件")
+              this.likeStatus = !this.likeStatus
             }
         }
     }

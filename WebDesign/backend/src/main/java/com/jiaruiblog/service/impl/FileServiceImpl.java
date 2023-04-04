@@ -27,9 +27,12 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSDownloadOptions;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.http.auth.AuthenticationException;
+import org.elasticsearch.common.recycler.Recycler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,6 +56,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -120,6 +124,9 @@ public class FileServiceImpl implements IFileService {
 
     @Resource
     private File2OcrService file2OcrService;
+
+    @Resource
+    private LikeService likeService;
 
 
 
@@ -721,7 +728,7 @@ public class FileServiceImpl implements IFileService {
 
                 try {
 //                    List<EsSearch> esSearchList = elasticServiceImpl.search_new(keyWord);
-                    List<EsSearch> esSearchList = elasticServiceImpl.search_advance(keyWord);
+                    List<EsSearch> esSearchList = elasticServiceImpl.search_new(keyWord);
                     for(EsSearch esSearch:esSearchList)
                     {
                         if(esSearch.getEsSearchOcrOutcomeList() != null)
@@ -779,14 +786,159 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public BaseApiResult list_advance(AdvanceDocumentDTO advanceDocumentDTO){
-        System.out.println("title:"+advanceDocumentDTO.getTitle());
-        if(advanceDocumentDTO.getKeyword().equals("") || advanceDocumentDTO.getKeyword() == null){
+    public BaseApiResult list_advance(AdvanceDocumentDTO advanceDocumentDTO) throws ParseException {
+        int page = advanceDocumentDTO.getPage();
+        int row = advanceDocumentDTO.getRows();
 
+        List<DocumentVO> documentVos;
+
+        int totalNum = 0;
+
+//        首先通过组合条件进行查询,如果组合查询条件不为空
+        if(!(advanceDocumentDTO.getKeywordToSearch() == null)){
+
+            List<FileDocument> fileDocuments = Lists.newArrayList();
+
+            Set<String> docIdSet = new HashSet<>();
+            String keyWord = Optional.of(advanceDocumentDTO).map(AdvanceDocumentDTO::getFilterWord).orElse("");
+            // 模糊查询 分类
+            docIdSet.addAll(categoryServiceImpl.fuzzySearchDoc(keyWord));
+            // 模糊查询 标签
+            docIdSet.addAll(tagServiceImpl.fuzzySearchDoc(keyWord));
+            // 模糊查询 文件标题
+            docIdSet.addAll(fuzzySearchDoc(keyWord));
+            // 模糊查询 评论内容
+
+            docIdSet.addAll(commentServiceImpl.fuzzySearchDoc(keyWord));
+            List<FileDocument> esDoc = null;
+
+            try {
+                List<EsSearch> esSearchList = elasticServiceImpl.search_advance(keyWord);
+                for(EsSearch esSearch:esSearchList)
+                {
+                    if(esSearch.getEsSearchOcrOutcomeList() != null)
+                    {
+                        esSearch.setOcrResultList(OcrResultFromDB(esSearch,keyWord));
+                    }
+                }
+
+//                    将es的查询结果转为一个List<fileDocument>
+                esDoc = getListFileDocumentFromEsOutcome(esSearchList);
+                esDoc = getThumbIdAndDateFromDB(esDoc);
+
+                if (!CollectionUtils.isEmpty(esDoc)) {
+                    Set<String> existIds = esDoc.stream().map(FileDocument::getId).collect(Collectors.toSet());
+
+                    docIdSet.removeAll(existIds);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fileDocuments = listAndFilterByPage(advanceDocumentDTO.getPage(), advanceDocumentDTO.getRows(), docIdSet);
+            if (esDoc != null) {
+                fileDocuments = Optional.ofNullable(fileDocuments).orElse(new ArrayList<>());
+                fileDocuments.addAll(esDoc);
+                totalNum = fileDocuments.size();
+            }
+
+            List<FileDocument> fileDocuments_filter_title = new ArrayList<>();
+//          没有搜索标题
+            if(advanceDocumentDTO.getTitle().equals("") || advanceDocumentDTO.getTitle() == null){
+                fileDocuments_filter_title = fileDocuments;
+            }
+//            否则搜索了标题就按照标题来过滤
+            else {
+                for(FileDocument fileDocument:fileDocuments){
+                    String title = fileDocument.getName();
+                    if(title.contains(advanceDocumentDTO.getTitle())){
+                        fileDocuments_filter_title.add(fileDocument);
+                    }
+                }
+            }
+
+            List<FileDocument> fileDocument_filter_time = new ArrayList<>();
+//            如果没有按照时间进行查找
+            if(advanceDocumentDTO.getTime()==0)
+            {
+                fileDocument_filter_time = fileDocuments_filter_title;
+            }
+//            按照时间进行查找
+            else {
+                int year_to_compare = advanceDocumentDTO.getTime();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+//                Date dateTemp = sdf.parse(year_to_compare);
+                Date dateTemp = transformIntToDate(year_to_compare);
+
+                for(FileDocument fileDocument:fileDocuments){
+                    Date date = fileDocument.getUploadDate();
+                    int result = date.compareTo(dateTemp);
+//                    表示年份比用户输入晚
+                    if(result > 0){
+                        fileDocument_filter_time.add(fileDocument);
+                    }
+//                    否则表示比用户输入早
+                }
+            }
+
+            documentVos = convertDocuments(fileDocuments);
+            Map<String, Object> result = new HashMap<>(8);
+            result.put("totalNum", totalNum);
+            result.put("documents", documentVos);
+
+            return BaseApiResult.success(result);
         }
+//        针对于标题进行查询
+        else if(!(advanceDocumentDTO.getTitle().equals("") || advanceDocumentDTO.getTitle() == null))
+        {
+            String title = advanceDocumentDTO.getTitle();
+
+            Query query = new Query();
+            if (StringUtils.hasText(title)) {
+                Pattern pattern = Pattern.compile("^.*" + title + ".*$", Pattern.CASE_INSENSITIVE);
+                query.addCriteria(Criteria.where("name").regex(pattern));
+
+            }
+
+            int year = advanceDocumentDTO.getTime();
+            Date dateTemp = transformIntToDate(year);
+
+            query.addCriteria(Criteria.where(UPLOAD_DATE_FILED_NAME).gt(dateTemp));
+
+            // 不包含该字段
+            query.fields().exclude(EXCLUDE_FIELD);
+
+            // 设置起始页和每页查询条数
+            Pageable pageable = PageRequest.of(page, row);
+            query.with(pageable);
+            query.with(Sort.by(Sort.Direction.DESC, "uploadDate"));
+
+            List<FileDocument> fileDocuments = mongoTemplate.find(query, FileDocument.class, COLLECTION_NAME);;
+
+//            System.out.println("fileDocumentList:"+fileDocumentList);
+
+            documentVos = convertDocuments(fileDocuments);
+            Map<String, Object> result = new HashMap<>(8);
+            result.put("totalNum", totalNum);
+            result.put("documents", documentVos);
+
+            return BaseApiResult.success(result);
+        }
+//        只查询时间
+        else if(advanceDocumentDTO.getTime() != 0){
+            return null;
+        }
+        else
+            return BaseApiResult.error(200,"所以你输入了个啥？");
 
 
-        return null;
+    }
+
+    private Date transformIntToDate(int yearToCompare) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+                Date dateTemp = sdf.parse(String.valueOf(yearToCompare));
+                return dateTemp;
     }
 
     /**
@@ -797,8 +949,30 @@ public class FileServiceImpl implements IFileService {
      * @Param [id]
      **/
     @Override
-    public BaseApiResult detail(String id) throws IOException {
+    public BaseApiResult detail(String id,String username) throws IOException {
         FileDocument fileDocument = queryById(id);
+        boolean hasLike,hasCollect;
+
+        LikeDocRelationship likeDB = likeService.getExistLikeRelationship(username,id);
+        if(likeDB == null){
+            hasLike = false;
+        }
+        else
+            hasLike = true;
+
+        CollectDocRelationship collect = new CollectDocRelationship();
+        collect.setUserId(username);
+        collect.setDocId(id);
+        CollectDocRelationship collectDocRelationship = collectServiceImpl.getExistRelationship(collect);
+        if(collectDocRelationship == null){
+            hasCollect = false;
+        }
+        else
+            hasCollect = true;
+
+        fileDocument.setHasCollect(hasCollect);
+        fileDocument.setHasLike(hasLike);
+
         elasticServiceImpl.NumberOperation(id,"ADD","click_rate");
         if (fileDocument == null) {
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, MessageConstant.PARAMS_LENGTH_REQUIRED);
@@ -975,6 +1149,7 @@ public class FileServiceImpl implements IFileService {
         documentVO.setCommentNum(commentServiceImpl.commentNum(docId));
         documentVO.setCollectNum(collectServiceImpl.collectNum(docId));
         documentVO.setCategoryVO(categoryServiceImpl.queryByDocId(docId));
+        documentVO.setLikeNum(queryLikeNumByDocId(docId));
         documentVO.setTagVOList(tagServiceImpl.queryByDocId(docId));
         // 查询文档的信息:新增文档地址，文档错误信息，文本id
         documentVO.setDocState(fileDocument.getDocState());
@@ -991,9 +1166,16 @@ public class FileServiceImpl implements IFileService {
         documentVO.setClick_score(fileDocument.getClickScore());
         documentVO.setLike_score(fileDocument.getLikeScore());
 
+        documentVO.setHasCollect(fileDocument.isHasCollect());
+        documentVO.setHasLike(fileDocument.isHasLike());
+
         return documentVO;
     }
 
+    private Long queryLikeNumByDocId(String docId){
+        Query query = new Query().addCriteria(Criteria.where("docId").is(docId));
+        return mongoTemplate.count(query,LikeDocRelationship.class,"likeCollection");
+    }
     /**
      * 模糊搜索
      *

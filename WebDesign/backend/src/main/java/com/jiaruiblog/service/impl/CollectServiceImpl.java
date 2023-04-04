@@ -112,17 +112,18 @@ public class CollectServiceImpl implements CollectService {
      * @Date 9:37 下午 2022/6/23
      * @Param []
      **/
-    private CollectDocRelationship getExistRelationship(CollectDocRelationship collect) {
-        collect = Optional.ofNullable(collect).orElse(new CollectDocRelationship());
-
-        Query query = new Query()
-                .addCriteria(Criteria.where(DOC_ID).is(collect.getDocId())
-                        .and("userId").is(collect.getUserId()));
-
-        return mongoTemplate.findOne(
-                query, CollectDocRelationship.class, COLLECTION_NAME
-        );
-    }
+//    @Autowired
+//    public CollectDocRelationship getExistRelationship(CollectDocRelationship collect) {
+//        collect = Optional.ofNullable(collect).orElse(new CollectDocRelationship());
+//
+//        Query query = new Query()
+//                .addCriteria(Criteria.where(DOC_ID).is(collect.getDocId())
+//                        .and("userId").is(collect.getUserId()));
+//
+//        return mongoTemplate.findOne(
+//                query, CollectDocRelationship.class, COLLECTION_NAME
+//        );
+//    }
 
     /**
      * @return java.lang.Long
@@ -220,6 +221,18 @@ public class CollectServiceImpl implements CollectService {
         return BaseApiResult.success(result);
     }
 
+    @Override
+    public CollectDocRelationship getExistRelationship(CollectDocRelationship collect) {
+        collect = Optional.ofNullable(collect).orElse(new CollectDocRelationship());
+
+        Query query = new Query()
+                .addCriteria(Criteria.where(DOC_ID).is(collect.getDocId())
+                        .and("userId").is(collect.getUserId()));
+
+        return mongoTemplate.findOne(
+                query, CollectDocRelationship.class, COLLECTION_NAME
+        );
+    }
 
 
 }

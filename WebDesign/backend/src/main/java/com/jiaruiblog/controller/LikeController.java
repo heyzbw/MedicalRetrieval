@@ -59,6 +59,7 @@ public class LikeController{
         }
         // 获取到当前用户
         String userId = (String) request.getAttribute("id");
+        System.out.println("userId:"+userId);
         long likeCount = 0;
         int likeStatus = 0;
         try {
@@ -72,36 +73,19 @@ public class LikeController{
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, e.getMessage());
         }
 
-
         // 返回的结果，封装成一个Map集合
         Map<String, Object> map = new HashMap<>();
         map.put("likeCount", likeCount);
         map.put("likeStatus", likeStatus);
 
-//        //触发点赞事件
-//        if (likeStatus == 1) {
-//            Event event = new Event().setTopic(TOPIC_LIKE)
-//                    .setEntityId(entityId)
-//                    .setEntityType(entityType)
-//                    .setUserId(hostHolder.getUser().getId())
-//                    .setEntityUserId(entityUserId)
-//                    .setData("postId", postId);
-//            eventProducer.fireEvent(event);
-//        }
-//        if (entityType == ENTITY_TYPE_POST) {
-//
-//            // 计算帖子分数
-//            String redisKey = RedisKeyUtil.getPostScoreKey();
-//            redisTemplate.opsForSet().add(redisKey, postId);
-//        }
         return BaseApiResult.success(map);
     }
 
     @GetMapping("queryLikeInfo")
-    public BaseApiResult queryLikeInfo(@RequestParam("entityId") String entityId,
+    public BaseApiResult queryLikeInfo(@RequestParam("entityId") String entityId,@RequestParam("userId") String userId,
                                        HttpServletRequest request) {
         // 获取到当前用户
-        String userId = (String) request.getAttribute("id");
+        System.out.println("userId"+userId);
         // 返回的结果，封装成一个Map集合
         Map<String, Object> map = new HashMap<>();
         map.put("likeCount", 0);

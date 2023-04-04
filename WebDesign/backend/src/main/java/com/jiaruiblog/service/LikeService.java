@@ -1,5 +1,7 @@
 package com.jiaruiblog.service;
 
+import com.jiaruiblog.entity.LikeDocRelationship;
+
 /**
  * @ClassName LikeService
  * @Description 用户对某个文档进行点赞或者收藏的操作
@@ -34,5 +36,6 @@ public interface LikeService {
      */
     int findEntityLikeStatus(String userId, Integer entityType, String entityId);
 
-
+    LikeDocRelationship getExistLikeRelationship(String username, String docId);
+//    Long queryByDocId(String docId);
 }

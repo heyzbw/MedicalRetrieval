@@ -67,6 +67,7 @@ public class DocReviewController {
     @PutMapping("userRead")
     public BaseApiResult updateDocReview(@RequestBody @Valid BatchIdDTO batchIdDTO, HttpServletRequest request) {
         String userId = (String) request.getAttribute("id");
+        System.out.println("UserId:"+userId);
         return docReviewService.userRead(batchIdDTO.getIds(), userId);
     }
 
