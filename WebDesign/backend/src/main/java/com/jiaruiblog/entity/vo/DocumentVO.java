@@ -30,7 +30,8 @@ DocumentVO {
     private Long size;
 
     private Long collectNum;
-
+//    点赞数量
+    private Long likeNum;
     private Long commentNum;
 
     private CategoryVO categoryVO;
@@ -64,4 +65,7 @@ DocumentVO {
     private double click_score;
 
     private double like_score;
+
+    private boolean hasCollect;
+    private boolean hasLike;
 }

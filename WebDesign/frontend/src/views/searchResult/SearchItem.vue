@@ -61,7 +61,8 @@
                 {{ collectNum }}
             </li>
             <li>
-                <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>1
+                <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>
+                {{likeNum}}
             </li>
             <li>
                 <i class="ivu-icon ivu-icon-ios-chatbubbles-outline"></i>
@@ -100,7 +101,8 @@ export default {
         category: { type: Object, requires: false, default: '' },
         tags: { type: Array, requires: false, default: [] },
         collectNum: { type: Number, requires: false, default: 0 },
-        commentNum: { type: Number, requires: false, default: 0 },
+        commentNum: { type: Number, requires: false, default: 10 },
+        likeNum: {type:Number, requires:false,default:0},
         keyword: { type: String, requires: true },
         esSearchContentList: { type: Array, requires: false, default: [] },
         ocrResultList: { type: Array, requires: false, default: [] },

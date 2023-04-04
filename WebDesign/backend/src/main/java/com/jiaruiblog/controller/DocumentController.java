@@ -28,6 +28,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -87,8 +88,8 @@ public class DocumentController {
 
     @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
     @PostMapping(value = "/listAdvance")
-    public BaseApiResult listAdvance(@RequestBody AdvanceDocumentDTO documentDTO)
-            throws IOException {
+    public BaseApiResult listAdvance(@RequestBody AdvanceDocumentDTO documentDTO) throws IOException, ParseException {
+        System.out.println("titile"+documentDTO.getTitle());
 
 //        long startTime = System.currentTimeMillis();
 
@@ -115,9 +116,9 @@ public class DocumentController {
 
     @ApiOperation(value = "2.2 查询文档的详细信息", notes = "查询文档的详细信息")
     @GetMapping(value = "/detail")
-    public BaseApiResult detail(@RequestParam(value = "docId") String id) throws IOException {
-
-        return iFileService.detail(id);
+    public BaseApiResult detail(@RequestParam(value = "docId") String id,@RequestParam(value = "userId") String userId) throws IOException {
+        System.out.println("username:"+userId);
+        return iFileService.detail(id,userId);
     }
 
     @ApiOperation(value = "3.2 删除某个文档", notes = "删除某个文档")

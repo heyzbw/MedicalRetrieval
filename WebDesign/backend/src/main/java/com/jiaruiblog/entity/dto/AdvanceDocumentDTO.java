@@ -33,11 +33,11 @@ public class AdvanceDocumentDTO {
 
     private String userId;
 
-    private int time;
+    private int time = 0;
 
     private String title;
 
-    private String keyword;
+    private String keywordToSearch;
 
 
 }

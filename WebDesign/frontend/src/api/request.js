@@ -89,7 +89,7 @@ instance.interceptors.response.use(response => {
 export function Get(url, params) {
     return new Promise((resolve, reject) => {
         instance.get(url, {
-            params: params
+            params: params,
         }).then((res) => {
             resolve(res.data);
         }).catch((error) => {

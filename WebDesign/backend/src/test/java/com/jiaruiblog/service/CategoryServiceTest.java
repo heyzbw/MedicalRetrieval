@@ -16,9 +16,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @RunWith(SpringRunner.class)
@@ -195,5 +199,15 @@ public class CategoryServiceTest {
                 categoryServiceImpl.getDocByTagAndCate(cateId, tagId, keyword, pageNum, pageSize));
         System.out.println(result);
         Assert.assertEquals(200, result.get("code"));
+    }
+
+    @Test
+    public void testString(){
+        String input = "这是一个<em>测试</em>字符串，其中包含<em>多个</em>子串。";
+        Pattern pattern = Pattern.compile("<em>[^<]*</em>");
+        Matcher matcher = pattern.matcher(input);
+        while (matcher.find()) {
+            System.out.println(matcher.group());
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.jiaruiblog.service;
 
+import org.junit.Test;
+
 class Operation {
     private static int ADD = 1;
     private static int SUB = 1;
@@ -27,4 +29,6 @@ class Operation {
         }
         return result;
     }
+
+
 }

@@ -10,6 +10,7 @@ import com.jiaruiblog.util.InfixToRPN;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.lucene.search.join.ScoreMode;
+import org.apache.poi.ss.formula.functions.T;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -35,6 +36,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.elasticsearch.action.update.UpdateRequest;
@@ -127,29 +130,8 @@ public class ElasticServiceImpl implements ElasticService {
         IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
         //上传同时，使用attachment pipeline 进行提取文件
         indexRequest.source(JSON.toJSONString(file), XContentType.JSON);
-//        indexRequest.setPipeline("attachment");
 
         IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-//        String id = indexResponse.getId();
-//         立即使用相同的 ID 搜索刚插入的文档
-//        GetResponse response = client.get(
-//                new GetRequest(INDEX_NAME, "_doc", id), RequestOptions.DEFAULT); // 根据文档ID查询
-//        System.out.println("插入到es中"+response.getSourceAsString()); // 输出查询结果
-//        JSONObject jsonObject = JSON.parseObject(response.getSourceAsString());
-//        JSONObject attachment = jsonObject.getJSONObject("attachment");
-
-//        String content = attachment.getString("content");
-
-//        UpdateRequest updateRequest = new UpdateRequest(INDEX_NAME, "_doc", id);
-//
-//        Map<String, Object> updateFields = new HashMap<>();
-//        updateFields.put("nosyn", content);
-//        updateFields.put("syn", content);
-
-//        updateRequest.doc(updateFields);
-
-//        UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
-
     }
 
     public List<EsSearch> search_new(String keyword) throws IOException {
@@ -222,8 +204,8 @@ public class ElasticServiceImpl implements ElasticService {
         List<EsSearch> esSearchList = new ArrayList<>();
 
         double max_content_score = getMaxScore(hits);
-        int max_click_num = getMaxValue(hits, CLICK_RATE);
-        int max_like_num = getMaxValue(hits, LIKE_NUM);
+        double max_click_num = (double) getMaxValue(hits, CLICK_RATE);
+        double max_like_num = (double) getMaxValue(hits, LIKE_NUM);
 
         for (SearchHit hit : hits) {
             EsSearch esSearch = new EsSearch();
@@ -258,7 +240,7 @@ public class ElasticServiceImpl implements ElasticService {
 
             if(max_click_num > 0)
             {
-                clickScore = ((int) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
+                clickScore = ((int)hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
             }
             else {
                 clickScore = 0;
@@ -311,7 +293,6 @@ public class ElasticServiceImpl implements ElasticService {
                 esSearch.setEsSearchContentList(null);
             }
 
-
 //            从ocr中获取图片内容
             if(innerOcrHits.getTotalHits().value != 0){
                 boolean flag = false;
@@ -335,6 +316,7 @@ public class ElasticServiceImpl implements ElasticService {
                 esSearch.setEsSearchOcrOutcomeList(null);
             }
 
+//           从同义词中获取
             if(innerSynoContentHits.getTotalHits().value != 0){
                 for(SearchHit syno_hit:innerSynoContentHits){
                     EsSearchContent esSearchContent = new EsSearchContent();
@@ -345,13 +327,31 @@ public class ElasticServiceImpl implements ElasticService {
 
                     for(Text highlightedText:highlightedContent.fragments()){
                         String highlightedText_string = highlightedText.toString();
-                        highLightList.add(highlightedText_string);
-                    }
 
-                    // 设置高亮
-                    esSearchContent.setContentHighLight(highLightList);
-                    esSearchContent.setPageNum((int)syno_hit.getSourceAsMap().get("pageNum"));
-                    esSearchContentList_syno.add(esSearchContent);
+                        List<String> bmSubStrs = extractEmTags(highlightedText_string);
+
+//                        判断是否全部高亮均为<bm>keyword</bm>,如果是就没必要添加进去了，因为前面的已经有了，不全为keyword的才有返回的必要
+                        boolean flag = false;
+                        for(String bmSubStr:bmSubStrs){
+                            if(!bmSubStr.equals("<bm>"+keyword+"</bm>")){
+                                flag = true;
+                                break;
+                            }
+                        }
+//
+                        if(flag){
+                            highlightedText_string = highlightedText_string.replaceAll("<bm>"+keyword+"</bm>","<em>"+keyword+"</em>");
+                            highLightList.add(highlightedText_string);
+                        }
+
+//                        有内容我才塞进入
+                    }
+                    if(highLightList.size()>0){
+                        // 设置高亮
+                        esSearchContent.setContentHighLight(highLightList);
+                        esSearchContent.setPageNum((int)syno_hit.getSourceAsMap().get("pageNum"));
+                        esSearchContentList_syno.add(esSearchContent);
+                    }
                 }
                 esSearch.setEsSearchContentList_syno(esSearchContentList_syno);
             }
@@ -371,8 +371,9 @@ public class ElasticServiceImpl implements ElasticService {
         List<EsSearch> esSearchList = new ArrayList<>();
 
         double max_content_score = getMaxScore(hits);
-        int max_click_num = getMaxValue(hits, CLICK_RATE);
-        int max_like_num = getMaxValue(hits, LIKE_NUM);
+        double max_click_num =(double)getMaxValue(hits, CLICK_RATE);
+
+        double max_like_num = (double) getMaxValue(hits, LIKE_NUM);
 
         for (SearchHit hit : hits) {
             EsSearch esSearch = new EsSearch();
@@ -400,10 +401,12 @@ public class ElasticServiceImpl implements ElasticService {
 
             double clickScore = 0;
 
+            System.out.println("click_rate_max:"+max_click_num);
 
             if(max_click_num > 0)
             {
-                clickScore = ((int) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
+                System.out.println("click_rate:"+hit.getSourceAsMap().get(CLICK_RATE));
+                clickScore = ((double) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
             }
             else {
                 clickScore = 0;
@@ -413,7 +416,7 @@ public class ElasticServiceImpl implements ElasticService {
 
             if(max_like_num > 0)
             {
-                likeScore = ((int) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
+                likeScore = ((double) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
             }
             else {
                 likeScore = 0;
@@ -1288,6 +1291,16 @@ public class ElasticServiceImpl implements ElasticService {
             }
         }
         return max_score;
+    }
+
+    private static List<String> extractEmTags(String input) {
+        List<String> matches = new ArrayList<String>();
+        Pattern pattern = Pattern.compile("<bm>[^<]*</bm>");
+        Matcher matcher = pattern.matcher(input);
+        while (matcher.find()) {
+            matches.add(matcher.group());
+        }
+        return matches;
     }
 }
 
