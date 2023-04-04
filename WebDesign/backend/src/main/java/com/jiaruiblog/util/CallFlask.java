@@ -26,7 +26,7 @@ public class CallFlask {
 
     private RestTemplate restTemplate = GetRestTemplate(simpleClientHttpRequestFactory());
 
-    private static final String SERVER_URL = "http://localhost:5000/";
+    private static final String SERVER_URL = "http://localhost:8083/";
     private static final String file2ocr_URL = SERVER_URL + "pdf2pic";
     private static final String toScanURL = SERVER_URL + "scanPDF";
     private static final String FILE_TEMP_SAVE_PATH = "C:/Users/22533/Desktop/notingDQX/";
