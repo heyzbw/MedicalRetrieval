@@ -11,7 +11,7 @@ import requests
 from flask import Flask, send_from_directory, send_file, make_response
 from Bio import Entrez
 from Bio import Medline
-from FromPCY.scan.ocrScan import getScaner
+# from FromPCY.scan.ocrScan import getScaner
 
 # 创建一个服务，赋值给APP
 app = Flask(__name__)
@@ -46,21 +46,22 @@ def call_pdf2pic():
     json_obj = {"data": json_data}
     return json_obj
 
-@app.route('/scanPDF', methods=['POST'])
-def scaner():
-    data = request.get_json()
-    filename = data.get("filename")
-    filePath = data.get("filePath")
 
-    fileToSave = getScaner(filePath, filename)
+# @app.route('/scanPDF', methods=['POST'])
+# def scaner():
+#     data = request.get_json()
+#     filename = data.get("filename")
+#     filePath = data.get("filePath")
 
-    json_obj = {"data": fileToSave}
+#     fileToSave = getScaner(filePath, filename)
 
-    # 进行文件处理
+#     json_obj = {"data": fileToSave}
 
-    # 返回成功
+#     # 进行文件处理
 
-    return json_obj
+#     # 返回成功
+
+#     return json_obj
 
 
 @app.route('/getpubmed', methods=['POST'])
@@ -105,7 +106,7 @@ def pdfdownload():
     pattern = '/.*?\.pdf'
     content = requests.get(url, headers=headers)
     download_url = re.findall(pattern, content.text)
-    # print(download_url)
+    print(download_url)
     download_url[1] = "https:" + download_url[1]
     print(download_url[1])
     path = r"papers"
@@ -129,7 +130,7 @@ def pdfdownload():
     print("Sucessful to download" + " " + file_name)
     response = make_response(
         send_file(downloadpath, as_attachment=True))
-    response.headers['Content-Type'] = 'blob'
+    response.headers['Content-Type'] = 'arraybuffer'
     # print(type(send_file(downloadpath,
     #       mimetype='application/pdf;chartset=UTF-8', as_attachment=True)))
     return response
@@ -139,4 +140,3 @@ if __name__ == '__main__':
     # 这个host：windows就一个网卡，可以不写，而linux有多个网卡，写成0.0.0.0可以接受任意网卡信息
     # 端口号默认5000，可以手动设置，这里我设置成了8803
     app.run(host='0.0.0.0', port=8083,  debug=False)
-
