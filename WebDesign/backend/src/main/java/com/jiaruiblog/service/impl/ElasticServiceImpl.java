@@ -7,6 +7,7 @@ import com.jiaruiblog.entity.FileObj;
 import com.jiaruiblog.entity.ocrResult.*;
 import com.jiaruiblog.service.ElasticService;
 import com.jiaruiblog.util.InfixToRPN;
+import com.jiaruiblog.util.ReadSynoDataFromTxt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.lucene.search.join.ScoreMode;
@@ -114,9 +115,13 @@ public class ElasticServiceImpl implements ElasticService {
     private static final float NO_SYNO_WEIGHT = 3;
     private static final float SYNO_WEIGHT = 1;
 
+    private List<List<String>> synonyms_lines = ReadSynoDataFromTxt.readDataFromTxt();
 
     @Resource
     private MongoTemplate mongoTemplate;
+
+    public ElasticServiceImpl() throws IOException {
+    }
 //    private static float CONTENT_WEIGHT = 0.7f;
 
 
@@ -200,7 +205,10 @@ public class ElasticServiceImpl implements ElasticService {
     }
 
 //    处理查询出来的结果
-    public List<EsSearch> process_outcome(SearchHits hits,String keyword){
+    public List<EsSearch> process_outcome(SearchHits hits,String keyword) throws IOException {
+
+        List<String> syno_words = getSyno(keyword);
+
         List<EsSearch> esSearchList = new ArrayList<>();
 
         double max_content_score = getMaxScore(hits);
@@ -327,6 +335,8 @@ public class ElasticServiceImpl implements ElasticService {
 
                     for(Text highlightedText:highlightedContent.fragments()){
                         String highlightedText_string = highlightedText.toString();
+
+                        highlightedText_string = ReadSynoDataFromTxt.tokenNotSYno(highlightedText_string,syno_words);
 
                         List<String> bmSubStrs = extractEmTags(highlightedText_string);
 
@@ -1301,6 +1311,15 @@ public class ElasticServiceImpl implements ElasticService {
             matches.add(matcher.group());
         }
         return matches;
+    }
+
+    private List<String> getSyno(String keyword){
+        for(List<String>synonyms_line:synonyms_lines){
+            if(synonyms_line.contains(keyword)){
+                return synonyms_line;
+            }
+        }
+        return null;
     }
 }
 

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jiaruiblog.DocumentSharingSiteApplication;
 import com.jiaruiblog.service.impl.CategoryServiceImpl;
 import com.jiaruiblog.service.impl.ElasticServiceImpl;
+import com.jiaruiblog.util.ReadSynoDataFromTxt;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -21,6 +22,8 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import javax.annotation.Resource;
 import java.io.IOException;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,11 +67,32 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void search() {
+    public void search() throws IOException {
+        ReadSynoDataFromTxt readSynoDataFromTxt = new ReadSynoDataFromTxt();
+        readSynoDataFromTxt.readDataFromTxt();
+
     }
 
-    @Test
-    public void list() {
+
+    public static void main(String[] args) {
+
+        String target = "This is a <bm>banana</bm>,and <bm>apple</bm> or <bm>orange</bm>";
+        List<String> list = Arrays.asList("banana", "apple");
+        String regex = "<bm>([^*<>]+)</bm>";
+        String replacement = "$1";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(target);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String s = matcher.group(1);
+            System.out.println("s:"+s);
+            if (!list.contains(s)) {
+                matcher.appendReplacement(sb, replacement.replace("$1", s));
+            }
+        }
+        matcher.appendTail(sb);
+        System.out.println(sb.toString());
+
     }
 
     @Test
