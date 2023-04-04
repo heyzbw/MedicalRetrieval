@@ -73,7 +73,7 @@ export default {
             this.$axios({
                 method: "post",
                 url: "http://127.0.0.1:8083/PDFdownload",
-                type: "blob",
+                responseType: 'arraybuffer',
                 data: {
                     'doi': this.doi,
                     'Title': this.Title
@@ -84,11 +84,16 @@ export default {
                 // console.log(typeof (json))
                 console.log(response)
                 let inputFile = response.data
-                let bblob = new Blob([inputFile], { type: 'application/pdf' })
-                let blob = new File([bblob], this.Title + '.pdf', { type: 'application/pdf' });
-                window.URL.createObjectURL(blob)
+                let bblob = new Blob([inputFile], { type: 'application/pdf;charset=utf-8' })
+                let blob = new File([bblob], this.Title + '.pdf', { type: 'application/pdf;charset=utf-8' });
+                //window.URL.createObjectURL(blob)
                 window.URL.createObjectURL(bblob)
-
+                //window.URL.createObjectURL(filee)
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = this.Title + '.pdf';
+                link.click();
+                window.URL.revokeObjectURL(link.href);
                 this.uploadParam = {
                     fileId: this.Title,
                     file: blob
@@ -107,7 +112,7 @@ export default {
                         );
                     },
                 };
-                // console.log(formData)
+                console.log(formData)
                 axios.post(this.actionUrl, formData, config).then(res => {
                     let { data } = res
                     console.log(res)
@@ -127,7 +132,7 @@ export default {
                 // 无论是否成功都过滤掉
                 this.uploadParam = {}
             }).catch(error => {
-                console.log(error.response, "error");
+                //console.log(error.response, "error");
                 this.$message({
                     message: error.response.data.errMsg,
                     type: 'error'
