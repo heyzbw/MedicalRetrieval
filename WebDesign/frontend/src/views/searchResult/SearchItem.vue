@@ -111,6 +111,15 @@
                             <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                         </div>
 
+                      <highlight-rect
+                          :image="ocrResultList[0].image"
+                          :left-bottom="ocrResultList[0].textResult[0].leftBottom"
+                          :left-top="ocrResultList[0].textResult[0].leftTop"
+                          :right-bottom="ocrResultList[0].textResult[0].rightBottom"
+                          :right-top="ocrResultList[0].textResult[0].rightTop"
+                      />
+
+
                     </el-tab-pane>
                 </el-tabs>
 
@@ -140,8 +149,14 @@
 import { parseTime } from "@/utils/index"
 import { BackendUrl } from '@/api/request'
 
+import HighlightRect from '@/components/HighlightRect.vue'
+
+
 export default {
     name: "SearchItem",
+    components: {
+      HighlightRect
+    },
     data() {
         return {
             pageNum: '',
@@ -357,11 +372,11 @@ export default {
     },
     filters: {
         imgSrc(value) {
-            if (value === "" || value === undefined || value == null) {
-                return BackendUrl() + "/files/image2/d2d9933cf295443990b2bed036a534ec";
-            } else {
-                return BackendUrl() + "/files/image2/" + value;
-            }
+          if (value === "" || value == null) {
+            return require('@/assets/source/doc.png')
+          } else {
+            return BackendUrl() + "/files/image2/" + value;
+          }
         }
     }
 }

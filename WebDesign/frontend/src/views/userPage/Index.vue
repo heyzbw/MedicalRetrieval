@@ -134,7 +134,6 @@ export default {
     },
     methods: {
         selected(item) {
-            console.log(item)
             this.checkedNav = item
             this.$router.replace({ name: item.route })
             this.isRouterAlive = false
