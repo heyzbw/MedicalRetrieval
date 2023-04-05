@@ -40,6 +40,7 @@ export default {
     this.$refs.image.removeEventListener('load', this.onImageLoad);
   },
   watch: {
+
     image() {
       this.onImageLoad();
     }
