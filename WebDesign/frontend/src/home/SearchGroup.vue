@@ -300,14 +300,12 @@ export default {
                     for (let i = 0; i < this.items.length; i++) {
                         if (i == this.items.length - 1) {
                             console.log(this.items[i])
-                            this.advancedsearch = this.items[i] + ' | ' + this.advancedsearch;
+                            this.advancedsearch = this.advancedsearch + ' | ' + this.items[i];
                         }
                         else {
-                            if (this.select[i] == 0 || this.select[i + 1] == 0) {
+                            if (this.logi[i] == 0 || this.logi[i + 1] == 0) {
                                 this.advancedsearch = this.advancedsearch + this.items[i] + ' | ';
                                 console.log(this.items[i])
-
-
                             }
                             else {
                                 this.advancedsearch = this.advancedsearch + '( ' + this.items[i] + ' & ' + this.items[i + 1] + ' ) ';
