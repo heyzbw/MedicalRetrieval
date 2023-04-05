@@ -256,6 +256,7 @@ export default {
             formData.set("fileName", param.fileId);
             formData.set("file", param.file);
             formData.set("fileChoice", param.file_choice)
+          formData.set("labels",this.items)
 
             const config = {
                 onUploadProgress: (progressEvent) => {

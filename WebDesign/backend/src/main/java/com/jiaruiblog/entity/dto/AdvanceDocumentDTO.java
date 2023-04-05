@@ -37,7 +37,7 @@ public class AdvanceDocumentDTO {
 
     private String title;
 
-    private String keywordToSearch;
+    private String keyword;
 
 
 }

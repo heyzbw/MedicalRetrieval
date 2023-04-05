@@ -797,17 +797,19 @@ public class FileServiceImpl implements IFileService {
         int page = advanceDocumentDTO.getPage();
         int row = advanceDocumentDTO.getRows();
 
+        List<String> advanceString = getSearchWord(advanceDocumentDTO.getKeyword());
+
         List<DocumentVO> documentVos;
 
         int totalNum = 0;
 
 //        首先通过组合条件进行查询,如果组合查询条件不为空
-        if(!(advanceDocumentDTO.getKeywordToSearch() == null)){
+        if(!(advanceDocumentDTO.getKeyword() == null)){
 
             List<FileDocument> fileDocuments = Lists.newArrayList();
 
             Set<String> docIdSet = new HashSet<>();
-            String keyWord = Optional.of(advanceDocumentDTO).map(AdvanceDocumentDTO::getFilterWord).orElse("");
+            String keyWord = Optional.of(advanceDocumentDTO).map(AdvanceDocumentDTO::getKeyword).orElse("");
             // 模糊查询 分类
             docIdSet.addAll(categoryServiceImpl.fuzzySearchDoc(keyWord));
             // 模糊查询 标签
@@ -825,7 +827,7 @@ public class FileServiceImpl implements IFileService {
                 {
                     if(esSearch.getEsSearchOcrOutcomeList() != null)
                     {
-                        esSearch.setOcrResultList(OcrResultFromDB(esSearch,keyWord));
+                        esSearch.setOcrResultList(OcrResultFromDB(esSearch,advanceString));
                     }
                 }
 
@@ -888,7 +890,7 @@ public class FileServiceImpl implements IFileService {
                 }
             }
 
-            documentVos = convertDocuments(fileDocuments);
+            documentVos = convertDocuments(fileDocument_filter_time);
             Map<String, Object> result = new HashMap<>(8);
             result.put("totalNum", totalNum);
             result.put("documents", documentVos);
@@ -1434,6 +1436,43 @@ public class FileServiceImpl implements IFileService {
         return list;
     }
 
+    private List<OcrResult> OcrResultFromDB(EsSearch esSearch,List<String> keywords){
+        List<EsSearchOcrOutcome> esSearchOcrOutcomeList = esSearch.getEsSearchOcrOutcomeList();
+        List<OcrResult> list = new ArrayList<>();
+
+        for(EsSearchOcrOutcome esSearchOcrOutcome:esSearchOcrOutcomeList)
+        {
+            if(esSearchOcrOutcome.getOcrText() != null)
+            {
+                String mongoDB_id = esSearchOcrOutcome.getMongoDbId();
+
+                Query query = new Query(Criteria.where("_id").in(mongoDB_id));
+                OcrResult ocrResults = mongoTemplate.findOne(query, OcrResult.class, OCR_RESULT_NAME);
+
+                List<OcrPosition> ocrPositionList = ocrResults.getTextResult();
+                List<OcrPosition> ocrPositionList_new = new ArrayList<>();
+                for(int i=0;i<ocrPositionList.size();i++)
+                {
+                    String ocrPositionTemp = ocrPositionList.get(i).getText();
+
+                    boolean flag = false;
+                    for(String keyword:keywords){
+                        if(ocrPositionTemp.contains(keyword))
+                        {
+                            ocrPositionList_new.add(ocrPositionList.get(i));
+                            flag = true;
+                            break;
+                        }
+                    }
+
+                }
+                ocrResults.setTextResult(ocrPositionList_new);
+                list.add(ocrResults);
+            }
+        }
+        return list;
+    }
+
     private List<FileDocument> getListFileDocumentFromEsOutcome(List<EsSearch> esSearchList){
 
         List<FileDocument> fileDocuments = new ArrayList<>();
@@ -1500,6 +1539,28 @@ public class FileServiceImpl implements IFileService {
         UploadFileObj uploadFileObj = new UploadFileObj();
         uploadFileObj.setFile(multipartFile);
         return documentUpload_noAuth(uploadFileObj);
+    }
+
+    private List<String> getSearchWord(String advanceWords){
+
+        List<String> resultStrings = new ArrayList<>();
+
+        // Remove parentheses, ampersands, and vertical bars from the input string
+        String filteredString = advanceWords.replaceAll("[()&|]", "");
+
+         // Split the filtered string by whitespace to get individual Chinese strings
+        String[] splitStrings = filteredString.split("\\s+");
+
+        // Add each Chinese string to the list
+        for (String s : splitStrings) {
+            if(StringUtils.hasText(s))
+                resultStrings.add(s);
+        }
+
+        // Print the resulting list of Chinese strings
+        System.out.println(resultStrings);
+
+        return resultStrings;
     }
 
 //    private static class CustomMultipartFile implements MultipartFile {

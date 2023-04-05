@@ -335,7 +335,10 @@ public class ElasticServiceImpl implements ElasticService {
                     for(Text highlightedText:highlightedContent.fragments()){
                         String highlightedText_string = highlightedText.toString();
 
-                        highlightedText_string = ReadSynoDataFromTxt.tokenNotSYno(highlightedText_string,syno_words);
+                        if(syno_words != null)
+                        {
+                            highlightedText_string = ReadSynoDataFromTxt.tokenNotSYno(highlightedText_string,syno_words);
+                        }
 
                         List<String> bmSubStrs = extractEmTags(highlightedText_string);
 
