@@ -113,12 +113,8 @@
 
                       <highlight-rect
                           :image="ocrResultList[0].image"
-                          :left-bottom="ocrResultList[0].textResult[0].leftBottom"
-                          :left-top="ocrResultList[0].textResult[0].leftTop"
-                          :right-bottom="ocrResultList[0].textResult[0].rightBottom"
-                          :right-top="ocrResultList[0].textResult[0].rightTop"
+                          :textResult="ocrResultList[0].textResult"
                       />
-
 
                     </el-tab-pane>
                 </el-tabs>
