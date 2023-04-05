@@ -9,24 +9,41 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.core.io.ClassPathResource;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
 public  class ReadSynoDataFromTxt {
 //    public List<List<String>> result = new ArrayList<>();
 
     public static List<List<String>> readDataFromTxt() throws IOException {
         List<List<String>> result = new ArrayList<>();
 
-        List<String> lines = Files.readAllLines(Paths.get("src/main/resources/static/synonyms.txt"));
-        for(String line:lines){
-            line = line.replaceAll("\"","");
+        ClassPathResource resource = new ClassPathResource("static/synonyms.txt");
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+        for (String line : lines) {
+            line = line.replaceAll("\"", "");
             String[] elements = line.split(",");
             List<String> row = new ArrayList<>();
-            for(String element:elements){
+            for (String element : elements) {
                 row.add(element);
             }
             result.add(row);
         }
         return result;
     }
+
 
     public static String tokenNotSYno(String target,List<String> list){
 
