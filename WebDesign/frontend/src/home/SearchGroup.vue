@@ -23,24 +23,52 @@
 
                     <!-- 弹窗, 高级搜索 -->
                     <el-dialog v-dialogDrag title="高级搜索" :visible.sync="dialogFormVisible" class="dialog">
+
+                        <el-input placeholder="请输入标题" v-model="title" class="input-with-select" style="width: ">
+                            <el-select slot="prepend" placeholder="标题" style="width:100px" :disabled="true">
+                                <el-option label="关键字" value="1"></el-option>
+                                <el-option label="时间" value="2"></el-option>
+                                <el-option label="标题" value="3"></el-option>
+                            </el-select>
+
+                            <el-button class="butt" slot="append" icon="el-icon-plus" style="margin:0 10px"
+                                @click="addnum(index - 1)"></el-button>
+                            <el-button class="butt" slot="append" icon="el-icon-minus" style=" "
+                                :disabled="true"></el-button>
+                        </el-input>
+
+
+                        <el-input placeholder="请输入时间" v-model="time" class="input-with-select" style="">
+                            <el-select slot="prepend" placeholder="时间" style="width:100px" :disabled="true">
+                                <el-option label="关键字" value="1"></el-option>
+                                <el-option label="时间" value="2"></el-option>
+                                <el-option label="标题" value="3"></el-option>
+                            </el-select>
+                            <el-button class="butt" slot="append" icon="el-icon-plus" style="margin:0 10px"
+                                @click="addnum(index - 1)"></el-button>
+                            <el-button class="butt" slot="append" icon="el-icon-minus" style=" "
+                                :disabled="true"></el-button>
+                        </el-input>
+
                         <div style="margin-top: 15px;" v-for=" index in numbb">
                             <el-input placeholder="请内容" v-model="items[index - 1]" class="input-with-select" style="">
-                                <el-select v-model="select[index - 1]" slot="prepend" placeholder="请选择" style="width:100px">
+                                <el-select v-model="select[index - 1]" slot="prepend" placeholder="关键字" style="width:100px"
+                                    :disabled="true">
                                     <el-option label="关键字" value="1"></el-option>
                                     <el-option label="时间" value="2"></el-option>
                                     <el-option label="标题" value="3"></el-option>
 
                                 </el-select>
-
-                                <el-button class="butt" slot="append" icon="el-icon-plus" style="margin:0 10px"
-                                    @click="addnum(index - 1)"></el-button>
-                                <el-button class="butt" slot="append" icon="el-icon-minus" style=" "
-                                    @click="deletenum(index)"></el-button>
                                 <el-select v-model="logi[index - 1]" slot="append" placeholder="and or"
-                                    style="width:10px;margin:0 10px ;position:relative">
+                                    style="width:60px;margin:0 0px ;position:relative">
                                     <el-option label="与" value="1"></el-option>
                                     <el-option label="或" value="0"></el-option>
                                 </el-select>
+                                <el-button class="butt" slot="append" icon="el-icon-plus" style="margin:0 0px"
+                                    @click="addnum(index - 1)"></el-button>
+                                <el-button class="butt" slot="append" icon="el-icon-minus" style=" "
+                                    @click="deletenum(index)"></el-button>
+
                             </el-input>
                         </div>
                         <div slot="footer" class="dialog-footer">
@@ -102,7 +130,7 @@ export default {
             numbb: 1,
             select: [],
             logi: [],
-            time: '',
+            time: null,
             advancedsearch: '',
             title: '',
             // 公共数据
@@ -239,80 +267,76 @@ export default {
         savebtn() {
             console.log(this.items);
             console.log(this.logi);
-            console.log(this.select);
-            let superkey = []
-            let luoji = []
-            let mn = 0
-            let tm = 0
-            for (let i = 0; i < this.numbb; i++) {
-                if (this.select[i] == '1') {
-                    superkey.push(this.items[i])
-                    luoji.push(this.logi[i])
-                }
-                else if (this.select[i] == '2') {
-                    this.time = this.items[i];
-                    mn = mn + 1
-                } else {
-                    this.title = this.items[i]
-                    tm = tm + 1
-                }
+            //console.log(this.select);
+            // let items = []
+            // let luoji = []
+            // let mn = 0
+            // let tm = 0
+            // for (let i = 0; i < this.numbb; i++) {
+            //     if (this.select[i] == '1') {
+            //         items.push(this.items[i])
+            //         luoji.push(this.logi[i])
+            //     }
+            //     else if (this.select[i] == '2') {
+            //         this.time = this.items[i];
+            //         mn = mn + 1
+            //     } else {
+            //         this.title = this.items[i]
+            //         tm = tm + 1
+            //     }
 
-            }
-            console.log(superkey);
-            console.log(mn);
-            if (mn > 1 || tm > 1) {
-                this.info1(false)
+            // }
+            // console.log(items);
+            // console.log(mn);
+            // if (mn > 1 || tm > 1) {
+            //     this.info1(false)
+            // }
+            // else {
+            if (this.items.length == 0) {
+                this.info(false)
             }
             else {
+                if (this.items.length != 1) {
+                    for (let i = 0; i < this.items.length; i++) {
+                        if (i == this.items.length - 1) {
+                            console.log(this.items[i])
+                            this.advancedsearch = this.items[i] + ' | ' + this.advancedsearch;
+                        }
+                        else {
+                            if (this.select[i] == 0 || this.select[i + 1] == 0) {
+                                this.advancedsearch = this.advancedsearch + this.items[i] + ' | ';
+                                console.log(this.items[i])
 
-                if (this.select.length != this.numbb || this.logi.length != this.numbb) {
-                    this.info(false)
-                }
 
-                else {
-                    if (superkey.length != 1) {
-                        for (let i = 0; i < superkey.length; i++) {
-                            if (i == superkey.length - 1) {
-                                console.log(superkey[i])
-                                this.advancedsearch = superkey[i] + ' | ' + this.advancedsearch;
                             }
                             else {
-                                if (luoji[i] == 0 || luoji[i + 1] == 0) {
-                                    this.advancedsearch = this.advancedsearch + superkey[i] + ' | ';
-                                    console.log(superkey[i])
-
-
-                                }
-                                else {
-                                    this.advancedsearch = this.advancedsearch + '( ' + superkey[i] + ' & ' + superkey[i + 1] + ' ) ';
-                                    console.log(superkey[i])
-                                    i = i + 1;
-                                }
+                                this.advancedsearch = this.advancedsearch + '( ' + this.items[i] + ' & ' + this.items[i + 1] + ' ) ';
+                                console.log(this.items[i])
+                                i = i + 1;
                             }
                         }
-                    } else {
-                        this.advancedsearch = superkey[0]
                     }
-                    console.log(this.advancedsearch);
-                    if (this.time != '') {
-                        this.time = parseInt(this.time);
-                    }
-
-                    console.log(typeof (this.time));
-                    console.log(this.time)
-                    this.$router.push({
-                        path: '/superSearch',
-                        query: {
-                            keyWord: this.advancedsearch,
-                            time: this.time,
-                            title: this.title,
-                        }
-                    })
+                } else {
+                    this.advancedsearch = this.items[0]
+                }
+                console.log(this.advancedsearch);
+                if (this.time != null) {
+                    this.time = parseInt(this.time);
                 }
 
-
-
+                console.log(typeof (this.time));
+                console.log(this.time)
+                this.$router.push({
+                    path: '/superSearch',
+                    query: {
+                        keyWord: this.advancedsearch,
+                        time: this.time,
+                        title: this.title,
+                    }
+                })
             }
+
+            // }
             this.advancedsearch = '';
         },
 
@@ -399,11 +423,9 @@ export default {
                 }
 
                 .dialog {
-
-
                     .input-with-select .el-input-group__prepend {
                         background-color: #fff;
-                        width: 600px;
+                        width: 55%;
                     }
 
                 }

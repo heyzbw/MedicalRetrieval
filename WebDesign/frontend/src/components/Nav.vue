@@ -71,7 +71,7 @@ p {
     left: 12%;
     font-style: oblique;
     color: rgba(255, 255, 255, 0.3);
-    background-image: url(../assets/source/greneenpuls.png);
+    background-image: url(../assets/source/water.png);
 
     letter-spacing: 8px;
     /* 注意添加私有前缀 */

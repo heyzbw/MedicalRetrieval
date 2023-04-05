@@ -24,12 +24,15 @@
                     <Tag color="blue" v-for="item in tagsIn">{{ item }}</Tag>
                 </div>
             </div>
-            <div class="defen">得分:{{ this.score }}</div>
+            <el-tooltip class="item" effect="dark" placement="bottom">
+                <div slot="content">{{ this.tooltips }} </div>
+                <div class="defen">得分:{{ this.score }}</div>
+            </el-tooltip>
+
         </div>
         <div class="doc-abstract" v-show="ocrResultListin">
-
             <div style="padding:0 0 0 30px">
-                <div @click="getDocView()" v-if="contentResultSize>=1">【第{{ esSearchContentList[0].pageNum }}页】 <div style="color:blue">来源于文本</div>
+                <!-- <div @click="getDocView()" v-if="contentResultSize>=1">【第{{ esSearchContentList[0].pageNum }}页】 <div style="color:blue">来源于文本</div>
                     <p v-html="esSearchContentList[0].contentHighLight[0]"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                 </div>
@@ -47,13 +50,72 @@
                         来源于图片</div>
                     <p v-html="ocrResultList[0].ocrText"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                </div>
-<!--              <div>contentLenght:{{contentResultSize}}}</div>-->
-<!--              <div>contentLenght:{{ocrResultListSize}}}</div>-->
+                </div> -->
+                <el-tabs type="card" width="100%" style="height: 100%" v-model="activeTab">
+                    <el-tab-pane label="来源于文本" name="first" width="100%">
+                        <div @click="getDocView()" v-if="contentResultSize >= 1">【第{{ esSearchContentList[0].pageNum }}页】
+                            <div style="color:blue">来源于文本</div>
+                            <p v-html="esSearchContentList[0].contentHighLight[0]"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+
+                        <div @click="getDocView1()" v-if="contentResultSize >= 2">【第{{ esSearchContentList[1].pageNum }}页】
+                            <div style="color:blue">来源于文本</div>
+                            <p v-html="esSearchContentList[1].contentHighLight[0]"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+                        <div v-if="contentResultSize >= 3" @click="getDocView2()">【第{{ esSearchContentList[2].pageNum }}页】
+                            <div style="color:blue">来源于文本</div>
+                            <p v-html="esSearchContentList[2].contentHighLight[0]"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+
+                    </el-tab-pane>
+                    <el-tab-pane label="来源于同义词" name="tab_second" width="100%" v-if="esSearchContentList_synoSize">
+                        <div @click="getsynoView()" v-if="esSearchContentList_synoSize >= 1">【第{{
+                            esSearchContentList_syno[0].pageNum }}页】 <div style="color:green">来源于同义词</div>
+                            <p v-html="esSearchContentList_syno[0].contentHighLight[0]"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+
+                        <div @click="getsynoView1()" v-if="esSearchContentList_synoSize >= 2">【第{{
+                            esSearchContentList_syno[1].pageNum }}页】
+                            <div style="color:green">来源于同义词</div>
+                            <p v-html="esSearchContentList_syno[1].contentHighLight[0]"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+                        <div v-if="esSearchContentList_synoSize >= 3" @click="getsynoView2()">【第{{
+                            esSearchContentList_syno[2].pageNum }}页】
+                            <div style="color:green">来源于同义词</div>
+                            <p v-html="esSearchContentList_syno[2].contentHighLight[0]"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="来源于图片" name="tab_third" width="100%" v-if="ocrResultListSize">
+                        <div v-if="ocrResultListSize >= 1" @click="getDocView3()">【第{{ ocrResultList[0].pdfPage + 1 }}页】
+                            <div style="color:red">
+                                来源于图片</div>
+                            <p v-html="ocrResultList[0].ocrText"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+                        <div v-if="ocrResultListSize >= 2" @click="getDocView3()">【第{{ ocrResultList[1].pdfPage + 1 }}页】
+                            <div style="color:red">
+                                来源于图片</div>
+                            <p v-html="ocrResultList[1].ocrText"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+                        <div v-if="ocrResultListSize >= 3" @click="getDocView3()">【第{{ ocrResultList[2].pdfPage + 1 }}页】
+                            <div style="color:red">
+                                来源于图片</div>
+                            <p v-html="ocrResultList[2].ocrText"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
+
+                    </el-tab-pane>
+                </el-tabs>
+
+
             </div>
-
-
-
         </div>
         <ul class="ivu-list-item-action">
             <li>
@@ -62,7 +124,7 @@
             </li>
             <li>
                 <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>
-                {{likeNum}}
+                {{ likeNum }}
             </li>
             <li>
                 <i class="ivu-icon ivu-icon-ios-chatbubbles-outline"></i>
@@ -87,9 +149,11 @@ export default {
             contentshow: '',
             ocrNum: '',
             score: this.like_score + this.content_score + this.click_score,
-            contentResultSize:0,
-            ocrResultListSize:0,
-
+            contentResultSize: 0,
+            ocrResultListSize: 0,
+            esSearchContentList_synoSize: 0,
+            activeTab: 'first',
+            tooltips: '',
         }
     },
     props: {
@@ -102,34 +166,35 @@ export default {
         tags: { type: Array, requires: false, default: [] },
         collectNum: { type: Number, requires: false, default: 0 },
         commentNum: { type: Number, requires: false, default: 10 },
-        likeNum: {type:Number, requires:false,default:0},
+        likeNum: { type: Number, requires: false, default: 0 },
         keyword: { type: String, requires: true },
         esSearchContentList: { type: Array, requires: false, default: [] },
+        esSearchContentList_syno: { type: Array, requires: false, default: [] },
         ocrResultList: { type: Array, requires: false, default: [] },
         like_score: { type: Number, requires: false },
         content_score: { type: Number, requires: false },
         click_score: { type: Number, requires: false },
 
-
-
-
     },
     // 将 prop 数据转换为本地数据
     created() {
-        console.log("like_score):",this.like_score)
-        console.log("content_score):",this.content_score)
-        console.log("click_score):",this.click_score)
-        console.log("esSearchContentList[0]):",this.esSearchContentList[0])
-        console.log("esSearchContentList[0].pageNum):",this.esSearchContentList[0].pageNum)
-
+        // console.log("like_score):", this.like_score)
+        // console.log("content_score):", this.content_score)
+        // console.log("click_score):", this.click_score)
+        // console.log("esSearchContentList[0]):", this.esSearchContentList[0])
+        // console.log("esSearchContentList[0].pageNum):", this.esSearchContentList[0].pageNum)
         this.score = this.like_score + this.content_score + this.click_score
-        if(this.esSearchContentList !== [] && this.esSearchContentList !== null)
-        {
-          this.contentResultSize = this.esSearchContentList.length
+        let str = Number(this.content_score);
+        str = str.toFixed(2)
+        this.tooltips = '内容得分' + str + ', ' + '点赞得分' + this.like_score + ', ' + '浏览得分' + this.click_score
+        if (this.esSearchContentList !== [] && this.esSearchContentList !== null) {
+            this.contentResultSize = this.esSearchContentList.length
         }
-        if(this.ocrResultList !== [] && this.ocrResultList !== null)
-        {
-          this.ocrResultListSize = this.ocrResultList.length
+        if (this.ocrResultList !== [] && this.ocrResultList !== null) {
+            this.ocrResultListSize = this.ocrResultList.length
+        }
+        if (this.esSearchContentList_syno !== [] && this.esSearchContentList_syno !== null) {
+            this.esSearchContentList_synoSize = this.esSearchContentList_syno.length
         }
 
     },
@@ -217,15 +282,74 @@ export default {
             })
 
         },
-        getDocView3() {
-            console.log(this.ocrNum)
-            console.log(typeof (this.ocrResultList[0].pdfPage))
+        getsynoView() {
+            // console.log(x)
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.esSearchContentList_syno[0].pageNum
+                }
+            })
+        },
+        getsynoView1() {
+            // console.log(x)
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.esSearchContentList_syno[1].pageNum
+                }
+            })
+        },
+        getsynoView2() {
+            // console.log(x)
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.esSearchContentList_syno[2].pageNum
+                }
+            })
+        },
+        getpicView() {
+            // console.log(this.ocrNum)
+            // console.log(typeof (this.ocrResultList[0].pdfPage))
             this.$router.push({
                 path: '/preview',
                 query: {
                     docId: this.id,
                     keyword: this.keyword,
                     pageNum: this.ocrResultList[0].pdfPage + 1
+                }
+            })
+
+        },
+        getpicView1() {
+            // console.log(this.ocrNum)
+            // console.log(typeof (this.ocrResultList[0].pdfPage))
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.ocrResultList[1].pdfPage + 1
+                }
+            })
+
+        },
+        getpicView2() {
+            // console.log(this.ocrNum)
+            // console.log(typeof (this.ocrResultList[0].pdfPage))
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.ocrResultList[2].pdfPage + 1
                 }
             })
 
@@ -325,6 +449,10 @@ li {
 
 .doc-abstract>>>em {
     background-color: yellow;
+}
+
+.doc-abstract>>>bm {
+    background-color: rgb(49, 246, 49);
 }
 
 .sl-abstract {

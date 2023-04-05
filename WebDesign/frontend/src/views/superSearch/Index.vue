@@ -47,7 +47,7 @@ export default {
             loading: true,
             keyword: "",
             datapubmed: [],
-            time: '',
+            time: 2023,
         }
     },
     components: {
@@ -75,7 +75,7 @@ export default {
             this.searchifag = true
             this.searchpubmed = false
             let keyword = this.$route.query.keyWord
-            this.time = parseInt(this.$route.query.time)
+            this.time = this.$route.query.time
             this.title = this.$route.query.title
             this.keyword = keyword
             if (keyword === "") return;
@@ -89,6 +89,7 @@ export default {
                 "keyword": this.keyword,
                 "time": this.time,
                 "title": this.title
+
             }
             console.log(params)
             DocumentRequest.getSuperData(params).then(res => {
