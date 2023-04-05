@@ -235,7 +235,7 @@ public class TagServiceImpl implements TagService {
      **/
     @Override
     public Map<Tag, List<TagDocRelationship>> getRecentTagRelationship() {
-        return getRecentTagRelationship(2);
+        return getRecentTagRelationship(3);
     }
 
     /**

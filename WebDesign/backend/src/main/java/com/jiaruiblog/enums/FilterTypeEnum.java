@@ -27,6 +27,14 @@ public enum FilterTypeEnum implements BaseEnum {
      */
     TAG(4);
 
+    /**
+     * tag
+     */
+//    ADVANCE(5);
+
+
+
+
     private Integer code;
 
     FilterTypeEnum(int code) {

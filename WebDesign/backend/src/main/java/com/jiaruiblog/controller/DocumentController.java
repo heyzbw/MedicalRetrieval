@@ -89,7 +89,8 @@ public class DocumentController {
     @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
     @PostMapping(value = "/listAdvance")
     public BaseApiResult listAdvance(@RequestBody AdvanceDocumentDTO documentDTO) throws IOException, ParseException {
-        System.out.println("titile"+documentDTO.getTitle());
+        System.out.println("docunmentDTO:"+documentDTO);
+        System.out.println("title"+documentDTO.getTitle());
 
 //        long startTime = System.currentTimeMillis();
 

@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="" />
+    <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/TagServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/TagServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -221,7 +226,7 @@
       <workItem from="1680590095952" duration="602000" />
       <workItem from="1680636376230" duration="1000" />
       <workItem from="1680636398362" duration="1984000" />
-      <workItem from="1680674036046" duration="474000" />
+      <workItem from="1680674036046" duration="878000" />
     </task>
     <servers />
   </component>

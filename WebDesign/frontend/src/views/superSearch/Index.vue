@@ -85,13 +85,12 @@ export default {
                 "page": this.currentPage - 1,
                 "rows": this.pageSize,
                 "tagId": "",
-                "type": "ADVANCE",
+                "type": "FILTER",
                 "keyword": this.keyword,
                 "time": this.time,
                 "title": this.title
-
             }
-            console.log(params)
+            console.log("params",params)
             DocumentRequest.getSuperData(params).then(res => {
                 this.loading = false;
                 if (res.code === 200) {
@@ -100,8 +99,6 @@ export default {
                     this.data = res.data.documents;
                     console.log("关键字查询成功，返回内容为：");
                     console.log("data:", res.data)
-                    //console.log("desSearchContentList:", res.data[0].esSearchContentList)
-
                 } else {
                     console.log(res)
                     this.data = []
