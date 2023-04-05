@@ -241,6 +241,8 @@ export default {
          * @param tagId
          */
         changeToCurrentTag(name, tagId) {
+          console.log("item.name:"+name)
+          console.log("item.tagid:"+tagId)
             this.currentData = []
             this.data.forEach(item => {
                 if (item.name === name && item.tagId === tagId) {
