@@ -998,6 +998,7 @@ public class FileServiceImpl implements IFileService {
         categoryServiceImpl.removeRelateByDocId(id);
         collectServiceImpl.removeRelateByDocId(id);
         tagServiceImpl.removeRelateByDocId(id);
+        elasticServiceImpl.deleteByDocId(id);
 
         return BaseApiResult.success(MessageConstant.SUCCESS);
     }
@@ -1493,57 +1494,57 @@ public class FileServiceImpl implements IFileService {
         return documentUpload_noAuth(multipartFile);
     }
 
-    private static class CustomMultipartFile implements MultipartFile {
-
-        private final String name;
-        private final String contentType;
-        private final byte[] content;
-
-        public CustomMultipartFile(String name, String contentType, byte[] content) {
-            this.name = name;
-            this.contentType = contentType;
-            this.content = content;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String getOriginalFilename() {
-            return name;
-        }
-
-        @Override
-        public String getContentType() {
-            return contentType;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return content == null || content.length == 0;
-        }
-
-        @Override
-        public long getSize() {
-            return content.length;
-        }
-
-        @Override
-        public byte[] getBytes() throws IOException {
-            return content;
-        }
-
-        @Override
-        public InputStream getInputStream() throws IOException {
-            return new ByteArrayInputStream(content);
-        }
-
-        @Override
-        public void transferTo(File dest) throws IOException, IllegalStateException {
-            Files.write(dest.toPath(), content);
-        }
-    }
+//    private static class CustomMultipartFile implements MultipartFile {
+//
+//        private final String name;
+//        private final String contentType;
+//        private final byte[] content;
+//
+//        public CustomMultipartFile(String name, String contentType, byte[] content) {
+//            this.name = name;
+//            this.contentType = contentType;
+//            this.content = content;
+//        }
+//
+//        @Override
+//        public String getName() {
+//            return name;
+//        }
+//
+//        @Override
+//        public String getOriginalFilename() {
+//            return name;
+//        }
+//
+//        @Override
+//        public String getContentType() {
+//            return contentType;
+//        }
+//
+//        @Override
+//        public boolean isEmpty() {
+//            return content == null || content.length == 0;
+//        }
+//
+//        @Override
+//        public long getSize() {
+//            return content.length;
+//        }
+//
+//        @Override
+//        public byte[] getBytes() throws IOException {
+//            return content;
+//        }
+//
+//        @Override
+//        public InputStream getInputStream() throws IOException {
+//            return new ByteArrayInputStream(content);
+//        }
+//
+//        @Override
+//        public void transferTo(File dest) throws IOException, IllegalStateException {
+//            Files.write(dest.toPath(), content);
+//        }
+//    }
 
 }

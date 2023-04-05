@@ -5,11 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.google.common.collect.Lists;
 import com.jiaruiblog.common.MessageConstant;
+import com.jiaruiblog.entity.CustomMultipartFile;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.ResponseModel;
 import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.service.IFileService;
 import com.jiaruiblog.service.TaskExecuteService;
+import com.jiaruiblog.service.impl.FileServiceImpl;
 import com.jiaruiblog.util.BaseApiResult;
 import com.jiaruiblog.util.CallFlask;
 import com.jiaruiblog.util.FileContentTypeUtils;
@@ -190,8 +192,24 @@ public class FileController {
      */
     @Deprecated
     @PostMapping("/upload")
-    public ResponseModel formUpload(@RequestParam("file") MultipartFile file,int fileChoice) throws IOException, AuthenticationException {
+    public ResponseModel formUpload(@RequestParam("file") MultipartFile file, @RequestParam("fileChoice")String fileChoice) throws IOException, AuthenticationException {
         System.out.println("这个是普通的upload方法");
+        System.out.println("是否为扫描件："+fileChoice);
+
+        if(fileChoice.equals("2")){
+            CallFlask callFlask = new CallFlask();
+            String filename = file.getOriginalFilename();
+            String filePath = callFlask.toScan(file,filename);
+
+            File file_Pdf = new File(filePath);
+            FileInputStream fis = new FileInputStream(file_Pdf);
+            byte[] fileBytes = new byte[(int) file_Pdf.length()];
+            fis.read(fileBytes);
+            fis.close();
+
+            file = new CustomMultipartFile(file.getName(), "application/pdf", fileBytes);
+        }
+
         return fileService.documentUpload_noAuth(file);
     }
 

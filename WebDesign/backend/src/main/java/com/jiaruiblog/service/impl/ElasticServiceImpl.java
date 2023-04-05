@@ -1,6 +1,5 @@
 package com.jiaruiblog.service.impl;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Sets;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
@@ -11,9 +10,6 @@ import com.jiaruiblog.util.ReadSynoDataFromTxt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.lucene.search.join.ScoreMode;
-import org.apache.poi.ss.formula.functions.T;
-import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -24,6 +20,8 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -39,7 +37,6 @@ import java.net.ConnectException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -62,6 +59,8 @@ public class ElasticServiceImpl implements ElasticService {
 
     //    private static final String INDEX_NAME = "synonym_test";
     private static final String PIPELINE_NAME = "attachment.content";
+
+    private static final String FILE_ID = "fileId";
 
     //ocr结果的字段
 //    private static final String OCR_RESULT_LIST = "ocrResultList";
@@ -1157,6 +1156,20 @@ public class ElasticServiceImpl implements ElasticService {
 
 //    }
 
+
+    @Override
+    public void deleteByDocId(String docId){
+        System.out.println("进入了删除es的方法中 ");
+        DeleteByQueryRequest request = new DeleteByQueryRequest(INDEX_NAME);
+        request.setQuery(QueryBuilders.termQuery(FILE_ID,docId));
+        try{
+            BulkByScrollResponse response = client.deleteByQuery(request, RequestOptions.DEFAULT);
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+
+        }
+    }
 
     public boolean NumberOperation(String fileId, String operation, String field) throws IOException {
 

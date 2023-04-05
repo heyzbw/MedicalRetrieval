@@ -237,8 +237,7 @@ export default {
             // 此处应向后台请求 后台保存上传文件名称返回fileId作为文件标识
             this.uploadParam = {
                 fileId: filename,
-                file: inputFile,
-                file_choice:this.radio
+                file: inputFile
             };
             this.filename = filename
             this.processFlag = true
@@ -255,7 +254,7 @@ export default {
             let formData = new FormData();
             formData.set("fileName", param.fileId);
             formData.set("file", param.file);
-            formData.set("fileChoice",param.file_choice)
+            formData.set("fileChoice",this.radio)
 
             const config = {
                 onUploadProgress: (progressEvent) => {

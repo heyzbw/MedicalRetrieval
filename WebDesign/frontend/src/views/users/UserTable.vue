@@ -35,7 +35,7 @@
                 </p>
             </template>
             <div style="text-align:left;white-space:normal">
-                <p style="word-wrap: break-word;word-break: break-all;">您准备删除{{remove_item.username}}</p>
+                <p style="word-wrap: break-word;word-break: break-all;">您准备删除2{{remove_item.username}}</p>
                 <p>是否确定删除？</p>
             </div>
             <template #footer>
