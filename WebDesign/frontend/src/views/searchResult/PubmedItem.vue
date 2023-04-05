@@ -80,6 +80,7 @@ export default {
                 }
             }).then(response => {
                 console.log(typeof (response.data))
+                this.info(true)
                 // const json = JSON.parse(response.data);
                 // console.log(typeof (json))
                 console.log(response)
@@ -133,14 +134,17 @@ export default {
                 this.uploadParam = {}
             }).catch(error => {
                 //console.log(error.response, "error");
-                this.$message({
-                    message: error.response.data.errMsg,
-                    type: 'error'
-                });
+                this.info(false)
             });
 
 
-        }
+        },
+        info(nodesc) {
+            this.$Notice.info({
+                title: '通知信息',
+                desc: nodesc ? '正在保存远程数据库请耐心等待' : 'pubmed错了点问题，换篇文章或者稍后再试'
+            });
+        },
 
     }
 }

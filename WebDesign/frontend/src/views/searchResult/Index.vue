@@ -7,14 +7,15 @@
             <div style="background-color: #fff">
                 <SearchInput ref="searchInput" @on-search="getListData" style="display: inline-block"></SearchInput>
                 <div class="pubutton">
-                    <button @click="getListDatap()" class="bbb">Pubmed搜索</button>
+                    <el-button @click="getListDatap()" class="bbb">Pubmed搜索</el-button>
                 </div>
             </div>
             <SearchItem v-if="searchifag" v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)"
                 :id="item.id" :thumbId="item.thumbId" :title="item.title" :esSearchContentList="item.esSearchContentList"
                 :time="item.createTime" :user-name="item.userName" :category="item.categoryVO" :tags="item.tagVOList"
-                :collect-num="item.collectNum" :like-num="item.likeNum" :comment-num="item.commentNum" :ocrResultList="item.ocrResultList"
-                :keyword="keyword" :click_score="item.click_score" :content_score="item.content_score"
+                :collect-num="item.collectNum" :like-num="item.likeNum" :comment-num="item.commentNum"
+                :ocrResultList="item.ocrResultList" :keyword="keyword" :click_score="item.click_score"
+                :content_score="item.content_score" :esSearchContentList_syno="item.esSearchContentList_syno"
                 :like_score="item.like_score">
             </SearchItem>
             <PubmedItem v-if="searchpubmed"
@@ -184,6 +185,7 @@ export default {
     padding-right: 23%;
     padding-top: 5x;
     height: 50px;
+    text-align: center;
     float: right;
 }
 
@@ -191,18 +193,19 @@ export default {
     margin: 15px;
     font-family: Helvetica-Bold, Helvetica;
     font-weight: bold;
-    font-size: 12px;
-    padding-top: 5x;
+    font-size: 10px;
+    padding-top: 0x;
     border: 1px solid #AAAAAA;
     width: 90px;
+    text-align: center;
     height: 40px;
-    border-radius: 18px;
-    background-color: #7dffaa;
-    color: #fff;
+    border-radius: 10px;
+    /*background-color: #7dffaa;*/
+
 
     &:hover {
         cursor: pointer;
-        color: #1b933b;
+
     }
 }
 

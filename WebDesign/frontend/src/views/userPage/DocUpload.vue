@@ -104,12 +104,12 @@
                         <Col>
                         <div class="upload-button"
                             style="width: 180px; height: 45px; border: 2px solid #000;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                background: #FFF7D6;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                border-radius: 8px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                justify-content: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                "
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background: #FFF7D6;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    border-radius: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    display: flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    justify-content: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
                             @click="uploadFile">
                             <div style="padding: 5px; line-height: 45px;">
                                 <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
@@ -238,7 +238,7 @@ export default {
             this.uploadParam = {
                 fileId: filename,
                 file: inputFile,
-                file_choice:this.radio
+                file_choice: this.radio
             };
             this.filename = filename
             this.processFlag = true
@@ -255,7 +255,7 @@ export default {
             let formData = new FormData();
             formData.set("fileName", param.fileId);
             formData.set("file", param.file);
-            formData.set("fileChoice",param.file_choice)
+            formData.set("fileChoice", param.file_choice)
 
             const config = {
                 onUploadProgress: (progressEvent) => {
@@ -295,6 +295,7 @@ export default {
         handleAdd() {
             this.items[this.num] = this.item
             this.num = this.num + 1;
+            this.item = ''
             console.log(this.items)
             console.log(this.num)
         },
@@ -352,11 +353,11 @@ export default {
             });
         },
 
-      handleUpload(fileObject) {
-          let fd = new FormData();
-          this.files.push(fileObject.file)
-          console.log("files:",this.files);
-      },
+        handleUpload(fileObject) {
+            let fd = new FormData();
+            this.files.push(fileObject.file)
+            console.log("files:", this.files);
+        },
         async fileChange() {
             if (this.files.length > 5) {
                 this.$message.warning(`当前限制只能上传选择 1~5 个文件`);
@@ -371,9 +372,8 @@ export default {
                 this.$refs.upload.submit() // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件
                 let random = Math.random();
                 let formData = new FormData();
-                for(let i=0;i<this.files.length;i++)
-                {
-                    formData.append("files",this.files[i])
+                for (let i = 0; i < this.files.length; i++) {
+                    formData.append("files", this.files[i])
                 }
 
                 const config = {
@@ -440,35 +440,35 @@ export default {
             this.formData.append("blogimg", file.file);
             console.log(file);
         },
-      // 点击按钮触发
-      async submitUpload() {
+        // 点击按钮触发
+        async submitUpload() {
 
 
 
-        let formData = new FormData();
-        if (this.imagefile != "") {
+            let formData = new FormData();
+            if (this.imagefile != "") {
 
-          formData.set("filename", this.imagefile);
+                formData.set("filename", this.imagefile);
 
-          for (let i = 0; i < this.form.length; i++) {
-            formData.append('imageList', this.form[i]);
-          }
+                for (let i = 0; i < this.form.length; i++) {
+                    formData.append('imageList', this.form[i]);
+                }
 
-          DocumentRequest.getImageData(formData).then(res => {
-            if (res.code === 200) {
-              console.log("data:", res.data)
-              this.$refs.upload.clearFiles();
-              this.$message.success("发布成功！");
-            } else {
-              this.info3(false)
+                DocumentRequest.getImageData(formData).then(res => {
+                    if (res.code === 200) {
+                        console.log("data:", res.data)
+                        this.$refs.upload.clearFiles();
+                        this.$message.success("发布成功！");
+                    } else {
+                        this.info3(false)
+                    }
+                })
             }
-          })
-        }
-        else {
-          this.$message.error("情输入文件名");
-        }
+            else {
+                this.$message.error("情输入文件名");
+            }
 
-      },
+        },
         // 图片上传功能
         uploadAvatar(item) {
             console.log(item.file)
