@@ -3,6 +3,7 @@ package com.jiaruiblog.service;
 import com.itextpdf.text.DocumentException;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.ResponseModel;
+import com.jiaruiblog.entity.UploadFileObj;
 import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
@@ -37,6 +38,8 @@ public interface IFileService {
      */
     FileDocument saveFile(String md5, MultipartFile file);
 
+
+    void saveTagWhenSaveDoc(FileDocument fileDocument, List<String> tags);
 
     BaseApiResult documentUpload(MultipartFile file, String userId, String username) throws AuthenticationException;
 
@@ -192,7 +195,7 @@ public interface IFileService {
 
     ResponseModel documentUpload_noAuth_multi(MultipartFile[] files) throws AuthenticationException;
 
-    ResponseModel documentUpload_noAuth(MultipartFile file) throws AuthenticationException;
+    ResponseModel documentUpload_noAuth(UploadFileObj uploadFileObj) throws AuthenticationException;
 
     /**
      * 保存文件流到dfs系统中

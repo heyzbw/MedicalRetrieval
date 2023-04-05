@@ -255,6 +255,7 @@ export default {
             formData.set("fileName", param.fileId);
             formData.set("file", param.file);
             formData.set("fileChoice",this.radio)
+            formData.set("labels",this.items)
 
             const config = {
                 onUploadProgress: (progressEvent) => {
@@ -294,8 +295,8 @@ export default {
         handleAdd() {
             this.items[this.num] = this.item
             this.num = this.num + 1;
-            console.log(this.items)
-            console.log(this.num)
+            console.log("标签为："+this.items)
+            console.log("数量为："+this.num)
         },
         handleClose2(event, name) {
             const index = this.items.indexOf(name);
