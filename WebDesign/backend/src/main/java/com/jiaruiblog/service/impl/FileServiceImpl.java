@@ -27,12 +27,9 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSDownloadOptions;
 import com.mongodb.client.gridfs.model.GridFSFile;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.http.auth.AuthenticationException;
-import org.elasticsearch.common.recycler.Recycler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -238,12 +235,15 @@ public class FileServiceImpl implements IFileService {
             ex.printStackTrace();
         }
         // 异步保存数据标签
-        tagServiceImpl.saveTagWhenSaveDoc(fileDocument);
+//        tagServiceImpl.saveTagWhenSaveDoc(fileDocument);
 
-        System.out.println("保存完了文档");
         return fileDocument;
     }
 
+    @Override
+    public void saveTagWhenSaveDoc(FileDocument fileDocument, List<String> tags){
+        tagServiceImpl.saveTagWhenSaveDoc(fileDocument,tags);
+    }
     /**
      * @return com.jiaruiblog.util.BaseApiResult
      * @Author luojiarui
@@ -282,6 +282,8 @@ public class FileServiceImpl implements IFileService {
                     return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, MessageConstant.DATA_DUPLICATE);
                 }
                 FileDocument fileDocument = saveToDb(fileMd5, file, userId, username);
+
+//                saveTagWhenSaveDoc(fileDocument,);
 
                 //  取ocr结果
 //                CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
@@ -394,7 +396,11 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public ResponseModel documentUpload_noAuth(MultipartFile file) throws AuthenticationException {
+    public ResponseModel documentUpload_noAuth(UploadFileObj uploadFileObj) throws AuthenticationException {
+
+        MultipartFile file = uploadFileObj.getFile();
+        List<String> labels = uploadFileObj.getLabels();
+
         List<String> availableSuffixList = com.google.common.collect.Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
         ResponseModel model = ResponseModel.getInstance();
         try {
@@ -414,10 +420,11 @@ public class FileServiceImpl implements IFileService {
 
                 FileDocument fileDocument = saveFile(fileMd5, file);
 
+                saveTagWhenSaveDoc(fileDocument,labels);
+
                 //获取OCR识别结果
                 List<OcrResultNew> ocrResultNewList = file2OcrService.getOcrByPY(fileMd5);
                 fileDocument.setOcrResultNewList(ocrResultNewList);
-//                fileDocument.se
 
                 switch (suffix) {
                     case "pdf":
@@ -998,6 +1005,7 @@ public class FileServiceImpl implements IFileService {
         categoryServiceImpl.removeRelateByDocId(id);
         collectServiceImpl.removeRelateByDocId(id);
         tagServiceImpl.removeRelateByDocId(id);
+        elasticServiceImpl.deleteByDocId(id);
 
         return BaseApiResult.success(MessageConstant.SUCCESS);
     }
@@ -1489,61 +1497,62 @@ public class FileServiceImpl implements IFileService {
 
         // Convert the byte array to a MultipartFile object
         MultipartFile multipartFile = new CustomMultipartFile(file.getName(), "application/pdf", fileBytes);
-
-        return documentUpload_noAuth(multipartFile);
+        UploadFileObj uploadFileObj = new UploadFileObj();
+        uploadFileObj.setFile(multipartFile);
+        return documentUpload_noAuth(uploadFileObj);
     }
 
-    private static class CustomMultipartFile implements MultipartFile {
-
-        private final String name;
-        private final String contentType;
-        private final byte[] content;
-
-        public CustomMultipartFile(String name, String contentType, byte[] content) {
-            this.name = name;
-            this.contentType = contentType;
-            this.content = content;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String getOriginalFilename() {
-            return name;
-        }
-
-        @Override
-        public String getContentType() {
-            return contentType;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return content == null || content.length == 0;
-        }
-
-        @Override
-        public long getSize() {
-            return content.length;
-        }
-
-        @Override
-        public byte[] getBytes() throws IOException {
-            return content;
-        }
-
-        @Override
-        public InputStream getInputStream() throws IOException {
-            return new ByteArrayInputStream(content);
-        }
-
-        @Override
-        public void transferTo(File dest) throws IOException, IllegalStateException {
-            Files.write(dest.toPath(), content);
-        }
-    }
+//    private static class CustomMultipartFile implements MultipartFile {
+//
+//        private final String name;
+//        private final String contentType;
+//        private final byte[] content;
+//
+//        public CustomMultipartFile(String name, String contentType, byte[] content) {
+//            this.name = name;
+//            this.contentType = contentType;
+//            this.content = content;
+//        }
+//
+//        @Override
+//        public String getName() {
+//            return name;
+//        }
+//
+//        @Override
+//        public String getOriginalFilename() {
+//            return name;
+//        }
+//
+//        @Override
+//        public String getContentType() {
+//            return contentType;
+//        }
+//
+//        @Override
+//        public boolean isEmpty() {
+//            return content == null || content.length == 0;
+//        }
+//
+//        @Override
+//        public long getSize() {
+//            return content.length;
+//        }
+//
+//        @Override
+//        public byte[] getBytes() throws IOException {
+//            return content;
+//        }
+//
+//        @Override
+//        public InputStream getInputStream() throws IOException {
+//            return new ByteArrayInputStream(content);
+//        }
+//
+//        @Override
+//        public void transferTo(File dest) throws IOException, IllegalStateException {
+//            Files.write(dest.toPath(), content);
+//        }
+//    }
 
 }

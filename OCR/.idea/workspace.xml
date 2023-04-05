@@ -5,17 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/UploadFileObj.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/DocumentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/DocumentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/dto/AdvanceDocumentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/dto/AdvanceDocumentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MongoDB/GetMongoDBUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/GetMongoDBUtil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/FileController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/IFileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/IFileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/ElasticServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/ElasticServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/CallFlask.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/CallFlask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/service/CategoryServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/service/CategoryServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/service/InfixToRPN.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/service/InfixToRPN.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/service/Operation.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/service/Operation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/TagServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/TagServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/ReadSynoDataFromTxt.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/ReadSynoDataFromTxt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +48,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/study/sqrrow_new_new/MedicalRetrieval/OCR&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/study/sqrrow/MedicalRetrieval/OCR&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -231,6 +230,9 @@
       <workItem from="1680548010847" duration="919000" />
       <workItem from="1680580942080" duration="1042000" />
       <workItem from="1680590095952" duration="602000" />
+      <workItem from="1680636376230" duration="1000" />
+      <workItem from="1680636398362" duration="1984000" />
+      <workItem from="1680674036046" duration="157000" />
     </task>
     <servers />
   </component>
@@ -243,7 +245,7 @@
     <SUITE FILE_PATH="coverage/OCR$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680089665661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/heart_disease_json$ocrScan.coverage" NAME="ocrScan Coverage Results" MODIFIED="1680335033809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FromPCY/scan" />
     <SUITE FILE_PATH="coverage/heart_disease_json$Call_API.coverage" NAME="Call_API Coverage Results" MODIFIED="1680522579317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680548023861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680638119177" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/OCR$pdf2pic.coverage" NAME="pdf2pic Coverage Results" MODIFIED="1680084220920" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

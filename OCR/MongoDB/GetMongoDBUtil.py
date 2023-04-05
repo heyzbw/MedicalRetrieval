@@ -1,6 +1,6 @@
 import pymongo
 
-host_address = '127.0.0.1'
+host_address = '121.36.201.185'
 
 
 class GetMongoDBUtil(object):

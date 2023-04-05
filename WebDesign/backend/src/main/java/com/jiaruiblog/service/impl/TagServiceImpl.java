@@ -400,4 +400,37 @@ public class TagServiceImpl implements TagService {
         }
     }
 
+    @Async
+    public void saveTagWhenSaveDoc(FileDocument fileDocument,List<String> tagsLabel) {
+        if(fileDocument == null || !StringUtils.hasText(fileDocument.getSuffix())) {
+            return;
+        }
+        for(String tagName:tagsLabel){
+            if (tagName.length() == 0) {
+                continue;
+            }
+
+            List<Tag> tags = queryTagByName(tagName.toUpperCase(Locale.ROOT));
+            Tag tag;
+
+            if(CollectionUtils.isEmpty(tags)) {
+                tag = new Tag();
+                tag.setName(tagName.toUpperCase(Locale.ROOT));
+                tag.setCreateDate(new Date());
+                tag.setUpdateDate(new Date());
+                tag = mongoTemplate.save(tag, COLLECTION_NAME);
+            } else {
+                tag = tags.get(0);
+            }
+            if (tag.getId() != null) {
+                TagDocRelationship tagDocRelationship = new TagDocRelationship();
+                tagDocRelationship.setTagId(tag.getId());
+                tagDocRelationship.setFileId(fileDocument.getId());
+                tagDocRelationship.setCreateDate(new Date());
+                tagDocRelationship.setUpdateDate(new Date());
+                addRelationShip(tagDocRelationship);
+            }
+        }
+    }
+
 }

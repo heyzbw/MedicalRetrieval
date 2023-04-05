@@ -6,6 +6,7 @@ import com.jiaruiblog.entity.Category;
 import com.jiaruiblog.entity.dto.FileDocumentDTO;
 import com.jiaruiblog.entity.vo.CategoryVO;
 import com.jiaruiblog.service.CategoryService;
+import com.jiaruiblog.service.ElasticService;
 import com.jiaruiblog.util.BaseApiResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
@@ -48,9 +49,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     private static final String FILE_ID = "fileId";
 
+
     @Autowired
     MongoTemplate mongoTemplate;
 
+    @Autowired
+    ElasticService elasticService;
     /**
      * 新增一条分类记录
      * todo 这里需要考虑并发插入的事务问题
@@ -170,6 +174,9 @@ public class CategoryServiceImpl implements CategoryService {
         Query query = new Query(Criteria.where(CATEGORY_ID).is(relationship.getCategoryId())
                 .and(FILE_ID).is(relationship.getFileId()));
         mongoTemplate.remove(query, CateDocRelationship.class, RELATE_COLLECTION_NAME);
+
+        elasticService.deleteByDocId(relationship.getFileId());
+
         return BaseApiResult.success(MessageConstant.SUCCESS);
     }
 

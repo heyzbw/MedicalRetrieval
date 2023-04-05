@@ -37,7 +37,6 @@ public  class ReadSynoDataFromTxt {
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             String s = matcher.group(1);
-            System.out.println("s:"+s);
             if (!list.contains(s)) {
                 matcher.appendReplacement(sb, replacement.replace("$1", s));
             }

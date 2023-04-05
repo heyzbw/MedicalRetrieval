@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify  # flask库
 from flask_cors import CORS
+
+from FromPCY.scan.ocrScan import getScaner
 from pdf2pic import *
 # from Bio import Entrez
 # from Bio import Medline
@@ -47,21 +49,21 @@ def call_pdf2pic():
     return json_obj
 
 
-# @app.route('/scanPDF', methods=['POST'])
-# def scaner():
-#     data = request.get_json()
-#     filename = data.get("filename")
-#     filePath = data.get("filePath")
+@app.route('/scanPDF', methods=['POST'])
+def scaner():
+    data = request.get_json()
+    filename = data.get("filename")
+    filePath = data.get("filePath")
 
-#     fileToSave = getScaner(filePath, filename)
+    fileToSave = getScaner(filePath, filename)
 
-#     json_obj = {"data": fileToSave}
+    json_obj = {"data": fileToSave}
 
-#     # 进行文件处理
+    # 进行文件处理
 
-#     # 返回成功
+    # 返回成功
 
-#     return json_obj
+    return json_obj
 
 
 @app.route('/getpubmed', methods=['POST'])
