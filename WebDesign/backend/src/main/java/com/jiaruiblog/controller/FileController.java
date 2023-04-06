@@ -5,10 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.google.common.collect.Lists;
 import com.jiaruiblog.common.MessageConstant;
-import com.jiaruiblog.entity.CustomMultipartFile;
-import com.jiaruiblog.entity.FileDocument;
-import com.jiaruiblog.entity.ResponseModel;
-import com.jiaruiblog.entity.UploadFileObj;
+import com.jiaruiblog.entity.*;
 import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.service.IFileService;
 import com.jiaruiblog.service.TaskExecuteService;
@@ -193,17 +190,21 @@ public class FileController {
      */
     @Deprecated
     @PostMapping("/upload")
-    public ResponseModel formUpload(@RequestParam("file") MultipartFile file, @RequestParam("fileChoice")String fileChoice,@RequestParam("labels")List<String> labels) throws IOException, AuthenticationException {
-        System.out.println("这个是普通的upload方法");
-        System.out.println("是否为扫描件："+fileChoice);
+    public ResponseModel formUpload(@RequestParam("file") MultipartFile file,
+                                    @RequestParam("fileChoice")String fileChoice,
+                                    @RequestParam("labels")List<String> labels,
+                                    @RequestParam("userid")String userId,
+                                    @RequestParam("username")String username
+//                                    HttpServletRequest request
+    ) throws IOException, AuthenticationException {
+
         UploadFileObj uploadFileObj = new UploadFileObj();
         uploadFileObj.setFile(file);
         uploadFileObj.setLabels(labels);
         uploadFileObj.setFileChoice(fileChoice);
-        for(String label:labels){
-            System.out.println("label:"+label);
-        }
-//        System.out.println("label:"+);
+        uploadFileObj.setUserId(userId);
+        uploadFileObj.setUsername(username);
+
         if(fileChoice.equals("2")){
             CallFlask callFlask = new CallFlask();
             String filename = file.getOriginalFilename();
@@ -216,6 +217,7 @@ public class FileController {
             fis.close();
 
             file = new CustomMultipartFile(file.getName(), "application/pdf", fileBytes);
+            uploadFileObj.setFile(file);
         }
 
         return fileService.documentUpload_noAuth(uploadFileObj);
@@ -223,21 +225,19 @@ public class FileController {
 
     @Deprecated
     @PostMapping("/uploadMultiFile")
-    public ResponseModel formUploadMulti(@RequestParam("files") MultipartFile[] files) throws IOException, AuthenticationException {
-        System.out.println("这个是多文件上传的接口");
-//        for(MultipartFile file_each:files){
-//            System.out.println("文件名："+file_each.getOriginalFilename());
-//        }
-        return fileService.documentUpload_noAuth_multi(files);
-    }
+    public ResponseModel formUploadMulti(@RequestParam("files") MultipartFile[] files,
+                                         @RequestParam("userid")String userId,
+                                         @RequestParam("username")String username) throws IOException, AuthenticationException {
 
-//    @Deprecated
-//    @PostMapping("/upload/scan")
-//    public ResponseModel scan(@RequestParam("file") MultipartFile file) throws IOException, AuthenticationException {
-//        System.out.println("这是一个针对扫描件的上传方法");
-////        return fileService.documentUpload_noAuth(file);
-//
-//    }
+        MultiFilesUploadObj multiFilesUploadObj = new MultiFilesUploadObj();
+        multiFilesUploadObj.setFiles(files);
+        multiFilesUploadObj.setUserId(userId);
+        multiFilesUploadObj.setUsername(username);
+
+        System.out.println("userId"+userId);
+
+        return fileService.documentUpload_noAuth_multi(multiFilesUploadObj);
+    }
 
     /**
      * 表单上传文件
@@ -274,7 +274,6 @@ public class FileController {
         }
         return model;
     }
-
 
     /**
      * 删除附件

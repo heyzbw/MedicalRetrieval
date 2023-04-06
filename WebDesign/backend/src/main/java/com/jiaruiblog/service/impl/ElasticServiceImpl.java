@@ -418,7 +418,7 @@ public class ElasticServiceImpl implements ElasticService {
             if(max_click_num > 0)
             {
                 System.out.println("click_rate:"+hit.getSourceAsMap().get(CLICK_RATE));
-                clickScore = ((double) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
+                clickScore = ((int) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
             }
             else {
                 clickScore = 0;
@@ -428,7 +428,7 @@ public class ElasticServiceImpl implements ElasticService {
 
             if(max_like_num > 0)
             {
-                likeScore = ((double) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
+                likeScore = ((int) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
             }
             else {
                 likeScore = 0;

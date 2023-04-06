@@ -109,7 +109,7 @@ export default {
         keyword: {type: String, requires: false}
     },
     mounted() {
-
+      // console.log("mounted创建了一个AllDocument.index")
     },
     computed: {
         filterColumns() {
@@ -137,6 +137,7 @@ export default {
             })
         },
         queryTable() {
+            console.log("调用了queryTable方法")
             this.$refs.docTable.getListData();
         }
     }

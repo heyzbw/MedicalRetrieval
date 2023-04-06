@@ -25,7 +25,7 @@ import java.util.Map;
 @Slf4j
 @WebFilter(filterName = "JwtFilter", urlPatterns = {
         "/comment/auth/*", "/user/auth/*", "/collect/auth/*", "/document/auth/*",
-        "/docReview/*", "/docLog/*", "/like/*", "/files/auth/*"
+        "/docReview/*", "/docLog/*", "/like/*", "/files/auth/*", "/document/list"
 })
 public class JwtFilter implements Filter
 {
@@ -53,29 +53,34 @@ public class JwtFilter implements Filter
 
         //获取 header里的token
         final String token = request.getHeader("authorization");
-
+        System.out.println("request.getMethod():"+request.getMethod());
         if (OPTIONS.equals(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             chain.doFilter(request, response);
         }
         // Except OPTIONS, other request should be checked by JWT
         else {
+            System.out.println("进入第二个判断中");
             if (token == null) {
+                System.out.println("没有token");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-
+            System.out.println("token:"+token);
             Map<String, Claim> userData = JwtUtil.verifyToken(token);
             if (CollectionUtils.isEmpty(userData)) {
+                System.out.println("发生401错误");
+
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             } else {
+                System.out.println("拦截器 拿到用户信息，放到request中");
                 //拦截器 拿到用户信息，放到request中
                 request.setAttribute("id", userData.get("id").asString());
                 request.setAttribute("username", userData.get("username").asString());
                 request.setAttribute("password", userData.get("password").asString());
+                request.setAttribute("permission", userData.get("permission").asInt());
                 chain.doFilter(req, res);
             }
         }
     }
-
 }
