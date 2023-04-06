@@ -138,6 +138,8 @@ public interface IFileService {
      */
     List<FileDocument> listAndFilterByPage(int pageIndex, int pageSize, Collection<String> ids);
 
+    List<FileDocument> listAndFilterByPage(int pageIndex, int pageSize, Collection<String> ids, String userId);
+
     /**
      * listAndFilterByPageNotSort
      * @param pageIndex int

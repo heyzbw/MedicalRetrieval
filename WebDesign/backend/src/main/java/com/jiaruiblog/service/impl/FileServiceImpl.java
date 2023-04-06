@@ -684,6 +684,24 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
+    public List<FileDocument> listAndFilterByPage(int pageIndex, int pageSize, Collection<String> ids,String userId) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return Lists.newArrayList();
+        }
+        Query query = new Query().with(Sort.by(Sort.Direction.DESC, "uploadDate"));
+        // 增加过滤条件
+        query.addCriteria(Criteria.where("_id").in(ids));
+        query.addCriteria(Criteria.where("userId").is(userId));
+        // 设置起始页和每页查询条数
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        query.with(pageable);
+
+        Field field = query.fields();
+        field.exclude(CONTENT);
+        return mongoTemplate.find(query, FileDocument.class, COLLECTION_NAME);
+    }
+
+    @Override
     public List<FileDocument> listAndFilterByPageNotSort(int pageIndex, int pageSize, List<String> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             return Lists.newArrayList();
@@ -716,15 +734,16 @@ public class FileServiceImpl implements IFileService {
         List<DocumentVO> documentVos;
         List<FileDocument> fileDocuments = Lists.newArrayList();
 
+        PermissionEnum permissionEnum = documentDTO.getPermission();
+        String userid = documentDTO.getUserId();
         long totalNum = 0L;
 
         switch (documentDTO.getType()) {
             case ALL:
-//                System.out.println("");
-//                用户只能查看到自己上传的
-                if(documentDTO.getPermission() == PermissionEnum.USER)
+
+                if(permissionEnum == PermissionEnum.USER)
                 {
-                    fileDocuments = listFilesByPage(documentDTO.getPage(), documentDTO.getRows(),documentDTO.getUserId());
+                    fileDocuments = listFilesByPage(documentDTO.getPage(), documentDTO.getRows(),userid);
                     totalNum = fileDocuments.size();
                 }
 //                管理员可以看到所有用户上传的
@@ -739,7 +758,16 @@ public class FileServiceImpl implements IFileService {
                     break;
                 }
                 List<String> fileIdList1 = tagServiceImpl.queryDocIdListByTagId(tag.getId());
-                fileDocuments = listAndFilterByPage(documentDTO.getPage(), documentDTO.getRows(), fileIdList1);
+//                普通用户
+                if (permissionEnum == PermissionEnum.USER){
+                    fileDocuments = listAndFilterByPage(documentDTO.getPage(), documentDTO.getRows(), fileIdList1,userid);
+                }
+//                管理员
+                else {
+                    fileDocuments = listAndFilterByPage(documentDTO.getPage(), documentDTO.getRows(), fileIdList1);
+                }
+
+
                 if (CollectionUtils.isEmpty(fileIdList1)) {
                     break;
                 }
@@ -796,7 +824,16 @@ public class FileServiceImpl implements IFileService {
                     break;
                 }
                 List<String> fileIdList = categoryServiceImpl.queryDocListByCategory(category);
-                fileDocuments = listAndFilterByPage(documentDTO.getPage(), documentDTO.getRows(), fileIdList);
+
+//                普通用户
+                if(permissionEnum == PermissionEnum.USER){
+                    fileDocuments = listAndFilterByPage(documentDTO.getPage(), documentDTO.getRows(), fileIdList,userid);
+                }
+//                管理员
+                else {
+                    fileDocuments = listAndFilterByPage(documentDTO.getPage(), documentDTO.getRows(), fileIdList);
+                }
+
                 if (CollectionUtils.isEmpty(fileIdList)) {
                     break;
                 }
@@ -1052,8 +1089,17 @@ public class FileServiceImpl implements IFileService {
         String filterWord = documentDTO.getFilterWord();
         int page = documentDTO.getPage();
         int row = documentDTO.getRows();
-        List<FileDocument> fileDocuments = fuzzySearchDocWithPage(filterWord, page, row);
-        long totalNum = countNumByKeyWord(filterWord);
+
+        List<FileDocument> fileDocuments ;
+
+        if(documentDTO.getPermission() == PermissionEnum.USER){
+            fileDocuments = fuzzySearchDocWithPage(filterWord, page, row,documentDTO.getUserId());
+        }
+        else{
+            fileDocuments = fuzzySearchDocWithPage(filterWord, page, row);
+        }
+
+        long totalNum = fileDocuments.size();
 
         List<DocWithCateVO> documentVos = Lists.newArrayList();
         switch (documentDTO.getType()) {
@@ -1103,6 +1149,22 @@ public class FileServiceImpl implements IFileService {
         return mongoTemplate.find(query, FileDocument.class, COLLECTION_NAME);
     }
 
+    private List<FileDocument> fuzzySearchDocWithPage(String keyWord, int page, int row,String userid){
+        Query query = new Query();
+        if (StringUtils.hasText(keyWord)) {
+            Pattern pattern = Pattern.compile("^.*" + keyWord + ".*$", Pattern.CASE_INSENSITIVE);
+            query.addCriteria(Criteria.where("name").regex(pattern));
+        }
+        query.addCriteria(Criteria.where("userId").is(userid));
+        // 不包含该字段
+        query.fields().exclude(EXCLUDE_FIELD);
+
+        // 设置起始页和每页查询条数
+        Pageable pageable = PageRequest.of(page, row);
+        query.with(pageable);
+        query.with(Sort.by(Sort.Direction.DESC, "uploadDate"));
+        return mongoTemplate.find(query, FileDocument.class, COLLECTION_NAME);
+    }
     /**
      * @return long
      * @Author luojiarui

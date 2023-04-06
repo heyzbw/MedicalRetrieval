@@ -14,7 +14,8 @@
                             <Button type="text" @click="addDoc">添加文档</Button>
                         </div>
                         <doc-table ref="docTable" type="CATEGORY" cateId="" @removeDoc="removeDoc"
-                            @on-page-change="queryTable" class="table-panel"></doc-table>
+                            @on-page-change="queryTable" class="table-panel">
+                        </doc-table>
                     </div>
                 </div>
             </template>

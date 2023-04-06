@@ -20,9 +20,9 @@
             </template>
         </Split>
         <Modal v-model="modal" fullscreen title="Fullscreen Modal" @on-ok="saveEditor" @on-cancel="cancelEditor">
-            <!-- <div>
+             <div>
                 <check-table ref="addDocTable" type="TAG" :cateId="cateId"></check-table>
-            </div> -->
+            </div> 
         </Modal>
     </div>
 </template>
