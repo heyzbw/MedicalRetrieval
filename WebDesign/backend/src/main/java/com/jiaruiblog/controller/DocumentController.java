@@ -1,6 +1,7 @@
 package com.jiaruiblog.controller;
 
 import com.itextpdf.text.DocumentException;
+import com.jiaruiblog.auth.PermissionEnum;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.User;
@@ -16,6 +17,7 @@ import com.jiaruiblog.service.RedisService;
 import com.jiaruiblog.service.impl.DocLogServiceImpl;
 import com.jiaruiblog.service.impl.RedisServiceImpl;
 import com.jiaruiblog.util.BaseApiResult;
+import com.jiaruiblog.util.PermissionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +60,7 @@ public class DocumentController {
 
     @ApiOperation(value = "2.1 查询文档的分页列表页", notes = "根据参数查询文档列表")
     @PostMapping(value = "/list")
-    public BaseApiResult list(@RequestBody DocumentDTO documentDTO)
+    public BaseApiResult list(@RequestBody DocumentDTO documentDTO,HttpServletRequest request)
             throws IOException {
 
 //        long startTime = System.currentTimeMillis();
@@ -81,6 +83,10 @@ public class DocumentController {
                 }
             }
         }
+        PermissionEnum userPermission = PermissionUtil.getUserPermission(request);
+        documentDTO.setPermission(userPermission);
+        documentDTO.setUserId((String) request.getAttribute("id"));
+//        System.out.println("");
         return iFileService.list(documentDTO);
     }
 

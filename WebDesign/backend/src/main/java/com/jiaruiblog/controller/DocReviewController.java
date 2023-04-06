@@ -9,6 +9,7 @@ import com.jiaruiblog.entity.dto.RefuseDTO;
 import com.jiaruiblog.service.DocReviewService;
 import com.jiaruiblog.service.IFileService;
 import com.jiaruiblog.util.BaseApiResult;
+import com.jiaruiblog.util.PermissionUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,8 +128,20 @@ public class DocReviewController {
     @GetMapping("queryReviewResultList")
     public BaseApiResult queryReviewResultList(@ModelAttribute("pageParams") @Valid BasePageDTO pageParams,
                                                HttpServletRequest request) {
-        System.out.println("进入了queryReviewResultList方法中");
-        return docReviewService.queryReviewLog(pageParams, null, true);
+
+        PermissionEnum userPermission = PermissionUtil.getUserPermission(request);
+
+//        如果是管理员
+        if(userPermission == PermissionEnum.ADMIN){
+            System.out.println("queryReviewResultList 管理员");
+            return docReviewService.queryReviewLog(pageParams, null, true);
+        }
+//        如果是普通用户
+        else {
+            System.out.println("他是一个普通用户");
+            // 如果权限不足，返回一个错误响应
+            return docReviewService.queryReviewLog(pageParams, (String) request.getAttribute("id"), false);
+        }
     }
 
     /**

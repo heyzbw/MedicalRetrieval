@@ -111,7 +111,7 @@
                 </p>
             </template>
             <div style="text-align:left;white-space:normal">
-                <p style="word-wrap: break-word;word-break: break-all;">您准备删除1《{{ remove_item.title }}》</p>
+                <p style="word-wrap: break-word;word-break: break-all;">您准备删除《{{ remove_item.title }}》</p>
                 <p>是否确定删除？</p>
             </div>
             <template #footer>
@@ -339,6 +339,7 @@ export default {
             this.modal1 = false
         },
         getListData(categoryId, filterWord) {
+
             const params = {
                 "categoryId": categoryId,
                 "filterWord": filterWord,
@@ -347,6 +348,7 @@ export default {
                 "tagId": categoryId,
                 "type": this.currentType
             }
+            console.log("你的type是个啥？",this.currentType)
             DocumentRequest.getListData(params).then(res => {
                 this.loading = false
                 if (res.code === 200) {

@@ -57,6 +57,7 @@ public class JwtUtil {
                 .withClaim("id", user.getId())
                 .withClaim("username", user.getUsername())
                 .withClaim("password", user.getPassword())
+                .withClaim("permission", user.getPermissionEnum().getCode())
                 .withExpiresAt(expireDate)
                 //签发时间
                 .withIssuedAt(new Date())

@@ -649,6 +649,16 @@ public class FileServiceImpl implements IFileService {
         return mongoTemplate.find(query, FileDocument.class, COLLECTION_NAME);
     }
 
+    public List<FileDocument> listFilesByPage(int pageIndex, int pageSize,String userid){
+        Query query = new Query().addCriteria(Criteria.where("userId").is(userid)).with(Sort.by(Sort.Direction.DESC, "uploadDate"));
+        long skip = (long) (pageIndex) * pageSize;
+        query.skip(skip);
+        query.limit(pageSize);
+        Field field = query.fields();
+        field.exclude(CONTENT);
+        return mongoTemplate.find(query, FileDocument.class, COLLECTION_NAME);
+    }
+
     /**
      * @return java.util.List<com.jiaruiblog.entity.FileDocument>
      * @Author luojiarui
@@ -710,8 +720,18 @@ public class FileServiceImpl implements IFileService {
 
         switch (documentDTO.getType()) {
             case ALL:
-                fileDocuments = listFilesByPage(documentDTO.getPage(), documentDTO.getRows());
-                totalNum = countAllFile();
+//                System.out.println("");
+//                用户只能查看到自己上传的
+                if(documentDTO.getPermission() == PermissionEnum.USER)
+                {
+                    fileDocuments = listFilesByPage(documentDTO.getPage(), documentDTO.getRows(),documentDTO.getUserId());
+                    totalNum = fileDocuments.size();
+                }
+//                管理员可以看到所有用户上传的
+                else {
+                    fileDocuments = listFilesByPage(documentDTO.getPage(), documentDTO.getRows());
+                    totalNum = countAllFile();
+                }
                 break;
             case TAG:
                 Tag tag = tagServiceImpl.queryByTagId(documentDTO.getTagId());

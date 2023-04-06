@@ -1,5 +1,6 @@
 package com.jiaruiblog.entity.dto;
 
+import com.jiaruiblog.auth.PermissionEnum;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.enums.FilterTypeEnum;
 import lombok.Data;
@@ -38,4 +39,5 @@ public class DocumentDTO {
     private String tagId;
 
     private String userId;
+    private PermissionEnum Permission;
 }

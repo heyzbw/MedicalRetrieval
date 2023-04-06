@@ -53,6 +53,7 @@ export default {
     },
     methods: {
         turnUrl(name) {
+            console.log("name是什么："+name)
             this.$router.push(name);
         }
     },
