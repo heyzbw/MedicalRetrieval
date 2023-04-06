@@ -16,6 +16,7 @@ export default {
       default: () => []
     }
   },
+  
   filters: {
     imgSrc(value) {
       if (value === '' || value == null) {

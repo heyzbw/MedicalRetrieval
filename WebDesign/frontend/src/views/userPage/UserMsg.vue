@@ -103,6 +103,7 @@ export default {
                 page: this.currentPage,
                 rows: this.pageSize
             }
+            console.log("发送请求到后端")
             docReviewRequest.getReviewLog(param).then(res => {
                 if (res.code === 200) {
                     let result = res.data.data
@@ -122,6 +123,7 @@ export default {
                     }
                 }
             }).catch(err => {
+                console.log("遇到错误")
                 console.log(err)
             })
         },

@@ -258,9 +258,9 @@ public class FileServiceImpl implements IFileService {
             throw new AuthenticationException();
         }
         // 用户非管理员且普通用户禁止
-        if (Boolean.TRUE.equals(!systemConfig.getUserUpload()) && user.getPermissionEnum() != PermissionEnum.ADMIN) {
-            throw new AuthenticationException();
-        }
+//        if (Boolean.TRUE.equals(!systemConfig.getUserUpload()) && user.getPermissionEnum() != PermissionEnum.ADMIN) {
+//            throw new AuthenticationException();
+//        }
         List<String> availableSuffixList = com.google.common.collect.Lists
                 .newArrayList("pdf", "png", "docx", "pptx", "xlsx", "html", "md", "txt");
         try {
@@ -338,7 +338,12 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public ResponseModel documentUpload_noAuth_multi(MultipartFile[] files) throws AuthenticationException {
+    public ResponseModel documentUpload_noAuth_multi(MultiFilesUploadObj multiFilesUploadObj) throws AuthenticationException {
+
+        String userId = multiFilesUploadObj.getUserId();
+        String username = multiFilesUploadObj.getUsername();
+        MultipartFile[] files = multiFilesUploadObj.getFiles();
+
         List<String> availableSuffixList = com.google.common.collect.Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
         ResponseModel model = ResponseModel.getInstance();
         List<String> listFileId = new ArrayList<>();
@@ -360,8 +365,8 @@ public class FileServiceImpl implements IFileService {
                         return model;
                     }
                     String fileMd5 = SecureUtil.md5(file.getInputStream());
-
-                    FileDocument fileDocument = saveFile(fileMd5, file);
+                    FileDocument fileDocument = saveToDb(fileMd5,file,userId,username);
+//                    FileDocument fileDocument = saveFile(fileMd5, file);
 
                     //获取OCR识别结果
                     List<OcrResultNew> ocrResultNewList = file2OcrService.getOcrByPY(fileMd5);
@@ -400,7 +405,8 @@ public class FileServiceImpl implements IFileService {
 
         MultipartFile file = uploadFileObj.getFile();
         List<String> labels = uploadFileObj.getLabels();
-
+        String userId = uploadFileObj.getUserId();
+        String username = uploadFileObj.getUsername();
         List<String> availableSuffixList = com.google.common.collect.Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
         ResponseModel model = ResponseModel.getInstance();
         try {
@@ -418,7 +424,8 @@ public class FileServiceImpl implements IFileService {
                 }
                 String fileMd5 = SecureUtil.md5(file.getInputStream());
 
-                FileDocument fileDocument = saveFile(fileMd5, file);
+                FileDocument fileDocument = saveToDb(fileMd5, file,userId,username);
+//                FileDocument fileDocument = saveFile(fileMd5, file);
 
                 saveTagWhenSaveDoc(fileDocument,labels);
 
@@ -477,8 +484,8 @@ public class FileServiceImpl implements IFileService {
         try {
             String gridfsId = uploadFileToGridFs(file.getInputStream(), file.getContentType());
             fileDocument.setGridfsId(gridfsId);
+            System.out.println("用户的id为："+fileDocument.getUserId());
             fileDocument = mongoTemplate.save(fileDocument, COLLECTION_NAME);
-            System.out.println("成功将文件"+file.getOriginalFilename()+"上传到了mongodb中");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

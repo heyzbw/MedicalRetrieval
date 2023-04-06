@@ -256,9 +256,11 @@ export default {
             formData.set("fileName", param.fileId);
             formData.set("file", param.file);
             formData.set("fileChoice", param.file_choice)
-          formData.set("labels",this.items)
-
+            formData.set("labels",this.items)
+            formData.set("userid",localStorage.getItem("id"))
+            formData.set("username",localStorage.getItem("username"))
             const config = {
+                // headers: {},
                 onUploadProgress: (progressEvent) => {
                     // progressEvent.loaded:已上传文件大小
                     // progressEvent.total:被上传文件的总大小
@@ -267,6 +269,14 @@ export default {
                     );
                 },
             };
+
+            // 添加用户信息
+          //   config.headers.authorization = localStorage.getItem("token");
+          //   config.headers.id = localStorage.getItem("id")
+          //   config.headers.username = localStorage.getItem("username")
+          //   console.log("config.headers.id",config.headers.id)
+          // console.log("localStorage.getItem(id)",localStorage.getItem("id"))
+
             this.progressFlag = true;
             console.log(formData)
             axios.post(this.actionUrl, formData, config).then(res => {
@@ -376,6 +386,8 @@ export default {
                 for (let i = 0; i < this.files.length; i++) {
                     formData.append("files", this.files[i])
                 }
+                formData.set("userid",localStorage.getItem("id"))
+                formData.set("username",localStorage.getItem("username"))
 
                 const config = {
                     onUploadProgress: (progressEvent) => {

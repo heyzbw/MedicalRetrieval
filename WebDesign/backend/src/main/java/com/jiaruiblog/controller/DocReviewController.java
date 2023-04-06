@@ -29,7 +29,7 @@ import javax.validation.Valid;
 @Slf4j
 @CrossOrigin
 @RestController
-@RequestMapping("/docReview")
+@RequestMapping("/docReview/")
 public class DocReviewController {
 
     @Autowired
@@ -122,11 +122,12 @@ public class DocReviewController {
      * @Date 21:15 2022/11/30
      * @Param [pageParams, request]
      **/
-    @Permission({PermissionEnum.ADMIN})
+    @Permission({PermissionEnum.ADMIN,PermissionEnum.USER})
     @ApiOperation(value = "管理员和普通用户分别查询数据", notes = "查询文档审批的列表")
     @GetMapping("queryReviewResultList")
     public BaseApiResult queryReviewResultList(@ModelAttribute("pageParams") @Valid BasePageDTO pageParams,
                                                HttpServletRequest request) {
+        System.out.println("进入了queryReviewResultList方法中");
         return docReviewService.queryReviewLog(pageParams, null, true);
     }
 

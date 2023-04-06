@@ -2,6 +2,7 @@ package com.jiaruiblog.service;
 
 import com.itextpdf.text.DocumentException;
 import com.jiaruiblog.entity.FileDocument;
+import com.jiaruiblog.entity.MultiFilesUploadObj;
 import com.jiaruiblog.entity.ResponseModel;
 import com.jiaruiblog.entity.UploadFileObj;
 import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
@@ -193,7 +194,7 @@ public interface IFileService {
 
     byte[] getFileBytes(String thumbId);
 
-    ResponseModel documentUpload_noAuth_multi(MultipartFile[] files) throws AuthenticationException;
+    ResponseModel documentUpload_noAuth_multi(MultiFilesUploadObj multiFilesUploadObj) throws AuthenticationException;
 
     ResponseModel documentUpload_noAuth(UploadFileObj uploadFileObj) throws AuthenticationException;
 
