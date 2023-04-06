@@ -280,6 +280,7 @@ export default {
     },
     mounted() {
         this.getListData()
+        console.log("CATEGORYID:",this.cateId)
     },
     computed: {
         filterColumns() {
@@ -348,7 +349,8 @@ export default {
                 "tagId": categoryId,
                 "type": this.currentType
             }
-            console.log("你的type是个啥？",this.currentType)
+          //   console.log("你的type是个啥？",this.currentType)
+          // console.log("你的categoryId是个啥？",categoryId)
             DocumentRequest.getListData(params).then(res => {
                 this.loading = false
                 if (res.code === 200) {
