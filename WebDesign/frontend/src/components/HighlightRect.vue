@@ -29,11 +29,11 @@ export default {
     if (this.$refs.image.complete) {
       setTimeout(() => {
         this.onImageLoad();
-      }, 100);
+      }, 300);
     } else {
       setTimeout(() => {
         this.$refs.image.addEventListener('load', this.onImageLoad);
-      }, 100);
+      }, 300);
     }
   },
   beforeDestroy() {
