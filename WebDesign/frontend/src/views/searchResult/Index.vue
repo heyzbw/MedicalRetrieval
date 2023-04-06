@@ -5,9 +5,10 @@
         </div>
         <div class="doc-group" style="display: inline-block">
             <div style="background-color: #fff">
-                <SearchInput ref="searchInput" @on-search="getListData" style="display: inline-block"></SearchInput>
+                <SearchInput ref="searchInput" @on-search="getListData" @on-change="sentkeyword"
+                    style="display: inline-block"></SearchInput>
                 <div class="pubutton">
-                    <el-button @click="getListDatap()" class="bbb">Pubmed搜索</el-button>
+                    <el-button @click="getListDatap()" class="bbb" @sentword="sentkeyword">Pubmed搜索</el-button>
                 </div>
             </div>
             <SearchItem v-if="searchifag" v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)"
@@ -76,10 +77,10 @@ export default {
             this.loading = true
             this.searchifag = false
             this.searchpubmed = true
-            let keyword = this.$route.query.keyWord
-            this.keyword = keyword
+            //let keyword = this.$route.query.keyWord
+            //this.keyword = keyword
             console.log(this.keyword)
-            if (keyword === "") return;
+            if (this.keyword === "") return;
             this.$axios({
                 method: "post",
                 url: "http://127.0.0.1:8083/getpubmed",
@@ -157,7 +158,11 @@ export default {
                 }
             })
         },
-
+        sentkeyword(data) {
+            let keyword = data
+            this.keyword = keyword
+            console.log(this.keyword)
+        },
     }
 }
 </script>
@@ -182,7 +187,7 @@ export default {
 }
 
 .pubutton {
-    padding-right: 23%;
+    padding-right: 18%;
     padding-top: 5x;
     height: 50px;
     text-align: center;
@@ -196,7 +201,7 @@ export default {
     font-size: 10px;
     padding-top: 0x;
     border: 1px solid #AAAAAA;
-    width: 90px;
+    width: 105px;
     text-align: center;
     height: 40px;
     border-radius: 10px;
