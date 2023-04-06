@@ -1,6 +1,7 @@
 <template>
     <div class="search-zone">
-        <Input search enter-button="搜索" :value="keyWord" placeholder="请输入文档关键字" @on-search="searchValue" />
+        <Input search enter-button="搜索" v-model="keyWord" placeholder="请输入文档关键字" @on-search="searchValue"
+            @on-change="sentword" />
     </div>
 </template>
 
@@ -16,6 +17,7 @@ export default {
     methods: {
         searchValue(value) {
             if (value !== "") {
+
                 this.$router.push({
                     path: '/searchResult',
                     query: {
@@ -24,6 +26,10 @@ export default {
                 })
                 this.$emit("on-search", true)
             }
+        },
+        sentword() {
+            this.$emit("on-change", this.keyWord)
+            console.log(this.keyWord)
         }
     }
 }

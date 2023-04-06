@@ -10,8 +10,9 @@
             </div>
             <div style="font-size:16px">加载中...</div>
         </div>
+
         <iframe :src="`pdf/web/viewer.html?file=${pdfURL}`" class="pdf-window" width="100%" height="100%" frameborder="no"
-            id="myIframe">
+            id='myIframe' @mousemove="handleMouseSelect" style="">
         </iframe>
 
     </div>
@@ -29,7 +30,7 @@ export default {
 
     data() {
         return {
-            pdfURL: BackendUrl() + '/files/view/' + this.$route.query.docId,
+            //pdfURL: BackendUrl() + '/files/view/' + this.$route.query.docId,
             keyword: this.$route.query.keyword,
             selectedText: '',
             view_flag: false,
@@ -37,44 +38,81 @@ export default {
             pageNum: this.$route.query.pageNum
         };
     },
+    watch() {
+        this.getSelectText();
+    },
     mounted() {
         //这是滑选事件
+        this.getSelectText();
         this.getMessage();
         this.sendMessage();
         // this.getMessage1();
         // this.sendMessage1();
-        // this.getSelectText();
+
+        let vm = this;
+        //这是滑选事件
+        vm.getSelectText();
+        function getWord() {
+
+            // 非iframe中获取文字的方法
+            // var word = window.getSelection?window.getSelection():document.selection.createRange().text;
+
+            // iframe中获取选中文字的方法
+            var word = document.getElementById("myIframe").contentWindow.getSelection().toString();
+            // this.selectedText = word
+            // console.log(this.selectedText)
+            // alert(word)
+            console.log(word)
+            vm.$emit('func', word)
+        }
+        // document.body.addEventListener("click", getWord, false);
+        let x, y;
+        document.getElementById("myIframe").contentWindow.onmousedown = function (event) {
+            x = event.pageX;
+            y = event.pagey;
+        }
+        document.getElementById("myIframe").contentWindow.onmouseup = function (event) {
+            let new_x = event.pageX;
+            let new_y = event.pagey;
+            if (x == new_x && y == new_y) {
+                //执行点击事件操作
+            } else {
+                // 选中操作
+                getWord()
+            }
+        }
+
         // this.translateText();
-        // document.addEventListener('mouseup', () => {
-        //     const selection = window.getSelection();
+        document.addEventListener('mouseup', () => {
+            const selection = window.getSelection();
 
-        //     let iframe = document.getElementById('myIframe');
+            let iframe = document.getElementById('myIframe');
 
 
-        //     iframe.onload = function () {
-        //         setTimeout(() => {
-        //             console.log(iframe.contentWindow.getSelection().toString())
-        //             let iframe = document.getElementById('myIframe');
-        //             this.selectedText = iframe.contentWindow.getSelection().toString();
-        //             console.log(iframe.contentWindow)
-        //         }, 100);
-        //     }
-        //     if (selection.toString().length > 0) {
-        //         this.selectedText = selection.toString();
-        //     }
-        // });
+            iframe.onload = function () {
+                setTimeout(() => {
+                    console.log(iframe.contentWindow.getSelection().toString())
+                    let iframe = document.getElementById('myIframe');
+                    this.selectedText = iframe.contentWindow.getSelection().toString();
+                    console.log(iframe.contentWindow)
+                }, 100);
+            }
+            if (selection.toString().length > 0) {
+                this.selectedText = selection.toString();
+            }
+        });
         // 搜索时 接收数据
     },
     created() {
         this.sendMessage();
         // this.sendMessage1();
-        this.getPdfText();
+
         // this.getMessage1();
         this.getMessage();
+        this.getSelectText()
+        this.getPdfText();
 
-
-
-        // this.getSelectText();
+        //this.getSelectText();
     },
     methods: {
         getPdfText() {
@@ -89,6 +127,8 @@ export default {
             let vm = this;
             //获取iframe
             let iframe = document.getElementById('myIframe');
+            this.pdfURL = BackendUrl() + '/files/view/' + this.$route.query.docId
+
             //将滑选数据传入到iframe中
             // console.log('vm' + vm.keyword);
             var arr = [];
@@ -103,6 +143,8 @@ export default {
             //获取iframe
             let iframe = document.getElementById('myIframe');
             // iframe监听是否有数据传入，将传入的数据作为参数传递给pdf.js的find接口
+            this.pdfURL = BackendUrl() + '/files/view/' + this.$route.query.docId
+
             iframe.contentWindow.addEventListener('message', function (e) {
                 //这里打印一下，看是否拿到了传入的数据
                 // console.log("e" + e.data);
@@ -140,6 +182,11 @@ export default {
             }, false);
 
         },
+        handleMouseSelect() {
+            console.log(1)
+            let text = window.getSelection().toString()
+            console.log(text)
+        },
 
         // sendMessage1() {
         //     //获取iframe
@@ -151,7 +198,25 @@ export default {
         //     iframe.contentWindow.postMessage(vm.pageNum, '*');
 
         // },
-
+        WaitForIFrame() {
+            if (iframe.readyState != "complete") {
+                setTimeout("WaitForIFrame();", 200);
+            } else {
+                iframe.contentDocument.addEventListener('mousedown', function (e) {
+                    x = e.pageX;
+                    y = e.pageY;
+                }, true);
+                // 鼠标抬起监听
+                iframe.contentDocument.addEventListener('mouseup', function (e) {
+                    _x = e.pageX;
+                    _y = e.pageY;
+                    // if (x == _x && y == _y) return; //判断点击和抬起的位置，如果相同，则视为没有滑选，不支持双击选中
+                    var choose = iframe.contentWindow.getSelection().toString();
+                    this.selectedText = choose;
+                }, true);
+                console.log("test" + this.selectedText)
+            }
+        },
         // // 接受数据
         // getMessage1() {
         //     //获取iframe
@@ -181,36 +246,42 @@ export default {
 
         // },
         // 滑选事件注册： 获取鼠标选中的文本
-        // getSelectText() {
-        //     console.log("test" + this.selectedText)
+        getSelectText() {
+            let _this = this;
+            console.log("test" + this.selectedText)
 
-        //     let iframe = document.getElementById('myIframe');
-        //     let x = '';
-        //     let y = '';
-        //     let _x = '';
-        //     let _y = '';
-        //     // console.log("test" + this.selectedText)
-        //     // iframe 加载完成后执行并将双击事件过滤掉，因为双击事件可能也触发滑选，所以为了不误操作，将其剔除
-        //     // iframe.onload = function () {
-        //     // 鼠标点击监听
-        //     // setTimeout(() => {
+            let iframe = document.getElementById('myIframe');
 
-        //     iframe.contentDocument.addEventListener('mousedown', function (e) {
-        //         x = e.pageX;
-        //         y = e.pageY;
-        //     }, true);
-        //     // 鼠标抬起监听
-        //     iframe.contentDocument.addEventListener('mouseup', function (e) {
-        //         _x = e.pageX;
-        //         _y = e.pageY;
-        //         // if (x == _x && y == _y) return; //判断点击和抬起的位置，如果相同，则视为没有滑选，不支持双击选中
-        //         var choose = iframe.contentWindow.getSelection().toString();
-        //         this.selectedText = choose;
-        //     }, true);
-        //     console.log("test" + this.selectedText)
-        //     // }, 100);
-        //     // };
-        // },
+            this.pdfURL = BackendUrl() + '/files/view/' + this.$route.query.docId
+            let x = '';
+            let y = '';
+            let _x = '';
+            let _y = '';
+            // console.log("test" + this.selectedText)
+            // iframe 加载完成后执行并将双击事件过滤掉，因为双击事件可能也触发滑选，所以为了不误操作，将其剔除
+            // while (1) {
+            // WaitForIFrame();
+            // 鼠标点击监听
+            // setTimeout(() => {
+            iframe.onload = function () {
+                iframe.contentDocument.addEventListener('mousedown', function (e) {
+                    x = e.pageX;
+                    y = e.pageY;
+                }, true);
+                // 鼠标抬起监听 
+                iframe.contentDocument.addEventListener('mouseup', function (e) {
+                    _x = e.pageX;
+                    _y = e.pageY;
+                    if (x == _x && y == _y) return; //判断点击和抬起的位置，如果相同，则视为没有滑选，不支持双击选中
+                    var choose = iframe.contentWindow.getSelection().toString();
+                    this.selectedText = choose;
+                }, true);
+                console.log("test" + this.selectedText)
+                // }, 100);
+
+            }
+
+        },
         translateText() {
             const salt = Date.now();
             const appid = '20230312001596883';
@@ -246,6 +317,7 @@ export default {
 
             // });
         },
+
 
     }
 }

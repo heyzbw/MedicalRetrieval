@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div @mouseup="handleMouseSelect">
         <div class="nav">
             <Nav></Nav>
         </div>
@@ -30,19 +30,15 @@
                 </div>
             </div>
             <div class="doc-preview">
-                <component :is="component" v-if="component" :previewId="previewId" :keyword="keyword" :pageNum="pageNum" />
+                <component :is="component" v-if="component" :previewId="previewId" :keyword="keyword" :pageNum="pageNum"
+                    @func="getMsgFormSon" />
             </div>
             <!-- <FloatBall @click="changeshow"></FloatBall> -->
             <div>
 
                 <div class="doc-operation-body">
-                    <doc-operation
-                        :likeStatus="likeStatus"
-                        :collectStatus="collectStatus"
-                        @addLike="addLike"
-                        @addCollect="addCollect"
-
-                    />
+                    <doc-operation :likeStatus="likeStatus" :collectStatus="collectStatus" @addLike="addLike"
+                        @addCollect="addCollect" />
                 </div>
                 <div class="doc-comment">
                     <comment-page />
@@ -96,8 +92,8 @@
                                         </p>
                                         <div v-show="infoVisible"
                                             style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                                margin-top: 8px;
-                                                                                                                                                                                                                                                                                                                                                ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                    margin-top: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                    ">
                                             <span v-if="this.docState === 'SUCCESS'">
                                                 索引建立成功，可以下载<span style="color: #408FFF; cursor: pointer"
                                                     @click="downloadTxt(this)">文本文件</span>。
@@ -123,7 +119,7 @@
                                         </p>
                                     </div>
                                     <div style="padding-top: 10px">
-                                        <p><strong>分类</strong> {{ this['category'] }}</p>
+                                        <p><strong>分类</strong> {{ this.category }}</p>
                                     </div>
                                     <div style="padding-top: 10px">
                                         <p><strong style="padding-top: 10px;">标签</strong></p>
@@ -165,7 +161,7 @@
                                 <el-tab-pane label="翻译" name="tab_second" style="height: 380px">
                                     <div style="text-align: center; padding-top: 40px">
                                         <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" placeholder="请输入内容"
-                                            prefix-icon="el-icon-search" v-model="selectText">
+                                            prefix-icon="el-icon-search" v-model="selectedText">
                                         </el-input>
                                         <el-button style="margin:15px 0px 15px 0px" @click="translateText">翻译</el-button>
                                         <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 6 }" placeholder="请输入内容"
@@ -216,8 +212,8 @@ export default {
             selectText: "",
             collectCount: 0,
             likeCount: 0,
-            likeStatus: 0,
-            collectStatus: 0,
+            likeStatus: false,
+            collectStatus: false,
             previewId: null,
             keyword: "",
             infoVisible: false,
@@ -242,8 +238,9 @@ export default {
             yPum: "",
             movb: 1,
             num: 1,
-            hasCollect:false,
-            hasLike:false
+            hasCollect: false,
+            hasLike: false,
+            selectedText: '',
         }
     },
     components: {
@@ -252,24 +249,25 @@ export default {
     mounted() {
         this.getSelectText();
         this.getMessage();
-        document.addEventListener('mouseup', () => {
-            const selection = window.getSelection();
+        // document.addEventListener('mouseup', () => {
+        //     const selection = window.getSelection();
 
-            let iframe = document.getElementById('myIframe');
+        //     let iframe = document.getElementById('myIframe');
 
 
-            iframe.onload = function () {
-                setTimeout(() => {
-                    console.log(iframe.contentWindow.getSelection().toString())
-                    let iframe = document.getElementById('myIframe');
-                    this.selectText = iframe.contentWindow.getSelection().toString();
-                    console.log(iframe.contentWindow)
-                }, 100);
-            }
-            if (selection.toString().length > 0) {
-                this.selectedText = selection.toString();
-            }
-        });
+        //     iframe.onload = function () {
+        //         setTimeout(() => {
+        //             console.log(iframe.contentWindow.getSelection().toString())
+        //             let iframe = document.getElementById('myIframe');
+        //             this.selectText = iframe.contentWindow.getSelection().toString();
+        //             console.log(iframe.contentWindow)
+        //         }, 100);
+        //     }
+        //     if (selection.toString().length > 0) {
+        //         this.selectedText = selection.toString();
+        //     }
+        // });
+
         this.left = this.$refs.fu.offsetLeft - 150;
         this.top = this.$refs.fu.offsetTop
     },
@@ -315,8 +313,8 @@ export default {
 
                     this.hasLike = response.data.hasLike
                     this.hasCollect = response.data.hasCollect
-                    console.log("hasLike:"+this.hasLike)
-                    console.log("hasCollect:"+this.hasCollect)
+                    console.log("hasLike:" + this.hasLike)
+                    console.log("hasCollect:" + this.hasCollect)
                     this.previewId = response.data.previewFileId
                     // console.log("keyword" + { keyword })
                     let suffix = title.split(".")[title.split('.').length - 1];
@@ -353,6 +351,12 @@ export default {
                     }
                 }
             })
+        },
+
+        handleMouseSelect() {
+
+            let text = window.getSelection().toString()
+            console.log(text)
         },
 
         renderTags(tags) {
@@ -420,59 +424,59 @@ export default {
         // },
 
 
-      // 添加点赞
-      async addLike(entityType) {
-        if (entityType !== 2) {
-          return
-        }
-        let params = {
-          entityType: entityType,
-          entityId: this.docId
-        }
-        await DocRequest.addLike({params}).then(res => {
-          if (res.code == 200) {
-            let result = res.data;
-            this.likeCount = result.likeCount || 0;
-            this.likeStatus = result.likeStatus || 0;
-            if (this.likeStatus === 0) {
-              this.$Message.info("取消点赞！")
+        // 添加点赞
+        async addLike(entityType) {
+            if (entityType !== 2) {
+                return
             }
-            else {
-              this.$Message.success("点赞成功！")
+            let params = {
+                entityType: entityType,
+                entityId: this.docId
             }
-          } else {
-            this.$Message.info("error")
-          }
-        }).catch(err => {
-          this.$Message.info("error")
-        })
-      },
+            await DocRequest.addLike({ params }).then(res => {
+                if (res.code == 200) {
+                    let result = res.data;
+                    this.likeCount = result.likeCount || 0;
+                    this.likeStatus = result.likeStatus || 0;
+                    if (this.likeStatus === 0) {
+                        this.$Message.info("取消点赞！")
+                    }
+                    else {
+                        this.$Message.success("点赞成功！")
+                    }
+                } else {
+                    this.$Message.info("error")
+                }
+            }).catch(err => {
+                this.$Message.info("error")
+            })
+        },
 
         // 添加收藏
         async addCollect(entityType) {
-          if (entityType !== 1) {
-            return
-          }
-          let params = {
-            docId: this.docId
-          }
-          await DocRequest.addCollect({params}).then(res => {
-            if (res.code == 200) {
-              let result = res.data;
-              console.log("res data:",res.data)
-              // this.collectCount = result.likeCount || 0;
-              // this.collectStatus = result.likeStatus || 0;
-              if (result === "SUCCESS_REMOVE_COLLECT") {
-                this.$Message.info("取消收藏！")
-              } else {
-                this.$Message.success("收藏成功！")
-              }
-            } else {
-              this.$Message.info("error")
+            if (entityType !== 1) {
+                return
             }
-          }).catch(err => {
-            this.$Message.info("error")
-          })
+            let params = {
+                docId: this.docId
+            }
+            await DocRequest.addCollect({ params }).then(res => {
+                if (res.code == 200) {
+                    let result = res.data;
+                    console.log("res data:", res.data)
+                    // this.collectCount = result.likeCount || 0;
+                    // this.collectStatus = result.likeStatus || 0;
+                    if (result === "SUCCESS_REMOVE_COLLECT") {
+                        this.$Message.info("取消收藏！")
+                    } else {
+                        this.$Message.success("收藏成功！")
+                    }
+                } else {
+                    this.$Message.info("error")
+                }
+            }).catch(err => {
+                this.$Message.info("error")
+            })
         },
         /**
          * 对文档进行重新建立索引
@@ -536,14 +540,14 @@ export default {
             const key = '75c2j7YXfCFdiwiZO_0b';
             const from = 'auto';
             const to = 'zh';
-            const sign = md5(`${appid}${this.selectText}${salt}${key}`);
+            const sign = md5(`${appid}${this.selectedText}${salt}${key}`);
             // setTimeout(
             //     () => {
             axios.get('/api/trans/vip/translate', {
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 params: {
-                    q: this.selectText,
+                    q: this.selectedText,
                     from: from,
                     to: to,
                     appid: appid,
@@ -559,14 +563,18 @@ export default {
                 // 处理错误
                 console.log(error);
                 console.log(sign);
-                console.log(this.selectText);
+                console.log(this.selectedText);
                 // console.log(params);
             }, 100)
 
             // });
         },
+        getMsgFormSon(data) {
+            this.selectedText = data
+            this.selectedText = this.selectedText.replace(/\r|\n/ig, "")
+            console.log(this.selectedText)
+        },
         out2() {
-            this.menu = false;
         },
         over2() { },
         out() {
