@@ -213,7 +213,6 @@ public class ElasticServiceImpl implements ElasticService {
 
         double max_content_score = getMaxScore(hits);
         double max_click_num = (double) getMaxValue(hits, CLICK_RATE);
-        double max_like_num = (double) getMaxValue(hits, LIKE_NUM);
 
         for (SearchHit hit : hits) {
             EsSearch esSearch = new EsSearch();
@@ -243,36 +242,15 @@ public class ElasticServiceImpl implements ElasticService {
                 contentScore = 0;
             }
 
-            double clickScore = 0;
-
-
-            if(max_click_num > 0)
-            {
-                clickScore = ((int)hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
-            }
-            else {
-                clickScore = 0;
-            }
-
-            double likeScore = 0;
-
-            if(max_like_num > 0)
-            {
-                likeScore = ((int) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
-            }
-            else {
-                likeScore = 0;
-            }
-
 
 //           查询返回的字段为： "click_rate", "collect_num", "collect_num","name", "type","md5","fileId","id",
-            esSearch.setClickScore(clickScore);
-            esSearch.setLikeScore(likeScore);
+
             esSearch.setContentScore(contentScore);
+            esSearch.setClick_num(((Integer) objectMap.get("click_rate")).longValue());
             esSearch.setName((String) objectMap.get("name"));
             esSearch.setType((String) objectMap.get("type"));
             esSearch.setMd5((String) objectMap.get("id"));
-            esSearch.setId((String) objectMap.get("fileId"));
+            esSearch.setFileId((String) objectMap.get("fileId"));
 
 //            从innerhit中获取文本内容
             if(innerContentHits.getTotalHits().value != 0){
@@ -414,7 +392,6 @@ public class ElasticServiceImpl implements ElasticService {
 
             double clickScore = 0;
 
-            System.out.println("click_rate_max:"+max_click_num);
 
             if(max_click_num > 0)
             {
@@ -443,7 +420,7 @@ public class ElasticServiceImpl implements ElasticService {
             esSearch.setName((String) objectMap.get("name"));
             esSearch.setType((String) objectMap.get("type"));
             esSearch.setMd5((String) objectMap.get("id"));
-            esSearch.setId((String) objectMap.get("fileId"));
+            esSearch.setFileId((String) objectMap.get("fileId"));
 
 //            从innerhit中获取文本内容
             if(innerContentHits.getTotalHits().value != 0){
@@ -689,12 +666,6 @@ public class ElasticServiceImpl implements ElasticService {
 
 //        三个值分别代表最大的内容得分、点击量得分与点赞量得分
         double max_content_score = getMaxScore(hits);
-        int max_click_num = getMaxValue(hits, CLICK_RATE);
-        int max_like_num = getMaxValue(hits, LIKE_NUM);
-
-        System.out.println("max_content_score:"+max_content_score);
-        System.out.println("max_click_num:"+max_click_num);
-        System.out.println("max_like_num:"+max_like_num);
 
         while (iterator.hasNext()) {
             SearchHit hit = iterator.next();
@@ -711,35 +682,12 @@ public class ElasticServiceImpl implements ElasticService {
 //            分别以60、30、10来计算三个得分
 //            后期可能会加上源自于图片的得分与源自于content的得分
             double contentScore = score / max_content_score * CONTENT_WEIGHT;
-            double clickScore = 0;
-            double likeScore = 0;
-
-            if(max_click_num > 0)
-            {
-                clickScore = ((int) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
-            }
-            else {
-                clickScore = 0;
-            }
-
-            if(max_like_num > 0)
-            {
-                likeScore = ((int) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
-            }
-            else {
-                likeScore = 0;
-            }
-
-            System.out.println("score:"+contentScore);
-            System.out.println("clickScore:"+clickScore);
-            System.out.println("likeScore:"+likeScore);
 
             //统计找到了几条
             count++;
 
             //这个就会把匹配到的文本返回，而且只返回匹配到的部分文本docId = -1
             Map<String, HighlightField> highlightFields = hit.getHighlightFields();
-            System.out.println("highlightFields:"+highlightFields);
             HighlightField highlightField = highlightFields.get(PIPELINE_NAME);
 //            float[] scores = highlightField.
             StringBuilder stringBuilder1 = new StringBuilder();
@@ -768,8 +716,8 @@ public class ElasticServiceImpl implements ElasticService {
 
                     // 得分
                     fileDocument.setContentScore(contentScore);
-                    fileDocument.setClickScore(clickScore);
-                    fileDocument.setLikeScore(likeScore);
+//                    fileDocument.setClickScore(clickScore);
+//                    fileDocument.setLikeScore(likeScore);
 
                     if (fileDocument == null) {
                         System.out.println("mongodb没有这个md5对应的文件信息");
@@ -893,98 +841,6 @@ public class ElasticServiceImpl implements ElasticService {
 //
 //        stringBuilder.append("查询到").append(count).append("条记录");
 //        return fileDocumentList;
-//    }
-
-
-    /**
-     * 根据关键词，搜索对应的文件信息
-     * 查询文件中的文本内容
-     * 默认会search出所有的东西来
-     * SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
-     * <p>
-     * // srb.query(QueryBuilders.matchQuery("attachment.content", keyword).analyzer("ik_smart"));
-     *
-     //     * @param keyword String
-     * @return list
-     * @throws IOException ioexception
-     *
-     */
-
-//加入了OCR后的结构
-//    @Override
-//    public List<FileDocument> search(String keyword) throws IOException {
-//
-//        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
-//
-//        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-//        boolQueryBuilder.must(QueryBuilders.matchQuery(OCR_RESULT_LIST_TEXT, keyword));
-////        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery(OCR_RESULT_LIST_TEXT,keyword);
-//
-//
-////        NestedQueryBuilder queryBuilders = QueryBuilders.nestedQuery(OCR_RESULT_LIST, matchQueryBuilder, ScoreMode.None);
-//
-//        searchSourceBuilder.query(boolQueryBuilder);
-//        searchRequest.source(searchSourceBuilder);
-//
-//        // 执行查询请求
-//        SearchResponse searchResponse = client.search(
-//                searchRequest,RequestOptions.DEFAULT);
-////        System.out.println("searchResponse:"+searchResponse);
-//
-//
-////        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-////        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-////        MatchQueryBuilder matchQueryBuilder1 = QueryBuilders.matchQuery("attachment.syn",keyword).boost(3);
-////        MatchQueryBuilder matchQueryBuilder2 = QueryBuilders.matchQuery("attachment.nosyn",keyword);
-////        boolQueryBuilder.should(matchQueryBuilder1).should(matchQueryBuilder2);
-////        sourceBuilder.query(boolQueryBuilder);
-////
-////        searchRequest.source(sourceBuilder);
-////                .query(QueryBuilders.termQuery("fileId", keyword));
-//
-//
-//        // 处理查询结果
-//        SearchHit[] hits = searchResponse.getHits().getHits();
-////        System.out.println("hits:"+hits);
-//        System.out.println("hits.length:"+hits.length);
-////        for (SearchHit hit : hits) {
-////            System.out.println(hit.getSourceAsString());
-////        }
-//        return null;
-
-//        List<FileDocument> fileDocumentList = new ArrayList<>();
-//        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
-//        // 使用lk分词器查询，会把插入的字段分词，然后进行处理
-//        SearchSourceBuilder srb = new SearchSourceBuilder();
-//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-//        MatchQueryBuilder synQuery = QueryBuilders.matchQuery(PIPELINE_NAME, keyword).boost(3);
-//        MatchQueryBuilder noSynQuery = QueryBuilders.matchQuery("content_nosyno", keyword);
-//        boolQueryBuilder.should(synQuery).should(noSynQuery);
-//
-//        srb.query(boolQueryBuilder);
-//        searchRequest.source(srb);
-//        SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
-//
-//        SearchHits hits = searchResponse.getHits();
-//        System.out.println("ES一共查询到了"+hits.getTotalHits().value+"条文档");
-//
-//        //hits是一个迭代器，所以需要迭代返回每一个hits
-//        Iterator<SearchHit> iterator = hits.iterator();
-//        int count = 0;
-//        StringBuilder stringBuilder = new StringBuilder();
-//        Set<String> idSet = Sets.newHashSet();
-//
-//
-//        while (iterator.hasNext()) {
-//            SearchHit hit = iterator.next();
-//            System.out.println("Search Hit hit score:"+hit.getScore());
-//            System.out.println("Search Hit hit filename:"+hit.getId());
-//
-//        }
-//
-//        return null;
-
 //    }
 
 

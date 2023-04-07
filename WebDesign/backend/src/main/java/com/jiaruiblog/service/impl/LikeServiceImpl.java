@@ -1,9 +1,7 @@
 package com.jiaruiblog.service.impl;
 
-import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.entity.LikeDocRelationship;
 import com.jiaruiblog.service.LikeService;
-import com.jiaruiblog.util.BaseApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,7 +13,6 @@ import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Date;
@@ -48,6 +45,7 @@ public class LikeServiceImpl implements LikeService {
     private MongoTemplate mongoTemplate;
     @Autowired
     private ElasticServiceImpl elasticService;
+
 
     @Override
     public void like(String userId, Integer entityType, String entityId) throws IOException {
@@ -141,5 +139,10 @@ public class LikeServiceImpl implements LikeService {
         );
     }
 
+    @Override
+    public Long likeNum(String docId) {
+        Query query = new Query().addCriteria(Criteria.where(DOC_ID).is(docId));
+        return mongoTemplate.count(query, LikeDocRelationship.class, INDEX_NAME);
+    }
 
 }

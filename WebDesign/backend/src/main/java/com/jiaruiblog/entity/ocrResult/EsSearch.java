@@ -33,7 +33,8 @@ public class EsSearch {
     //    来做点赞数量的分数
     private double likeScore;
 
-
+    private Long click_num;
+    private Long like_num;
     private String thumbId;
 
     private Date date;

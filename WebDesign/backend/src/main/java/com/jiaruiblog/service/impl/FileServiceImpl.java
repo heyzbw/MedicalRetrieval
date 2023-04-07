@@ -22,6 +22,7 @@ import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.BaseApiResult;
 import com.jiaruiblog.util.CallFlask;
 import com.jiaruiblog.util.PdfUtil;
+import com.jiaruiblog.util.QuantileNormalization;
 import com.jiaruiblog.util.converter.ImageToPdfConverter;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
@@ -797,7 +798,13 @@ public class FileServiceImpl implements IFileService {
                         {
                             esSearch.setOcrResultList(OcrResultFromDB(esSearch,keyWord));
                         }
+                        esSearch.setLike_num(getLikeNumByDocId(esSearch.getFileId()));
                     }
+//                    QuantileNormalization.quantileNormalize(esSearchList,"like",0,30,false);
+//                    QuantileNormalization.quantileNormalize(esSearchList,"click",0,10,false);
+
+                    QuantileNormalization.linearNormalize(esSearchList,"like",0,30,false);
+                    QuantileNormalization.linearNormalize(esSearchList,"click",0,10,false);
 
 //                    将es的查询结果转为一个List<fileDocument>
                     esDoc = getListFileDocumentFromEsOutcome(esSearchList);
@@ -1650,6 +1657,14 @@ public class FileServiceImpl implements IFileService {
         System.out.println(resultStrings);
 
         return resultStrings;
+    }
+    private Long getLikeNumByDocId(String docId){
+        System.out.println("fileId是："+docId);
+        return likeService.likeNum(docId);
+    }
+
+    private Long getCollectNumByDocId(String docId){
+        return collectServiceImpl.collectNum(docId);
     }
 
 //    private static class CustomMultipartFile implements MultipartFile {

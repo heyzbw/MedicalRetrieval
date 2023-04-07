@@ -39,5 +39,7 @@ public interface LikeService {
     int findEntityLikeStatus(String userId, Integer entityType, String entityId);
 
     LikeDocRelationship getExistLikeRelationship(String username, String docId);
+
+    Long likeNum(String docId);
 //    Long queryByDocId(String docId);
 }
