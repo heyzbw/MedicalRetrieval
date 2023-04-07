@@ -299,8 +299,14 @@ export default {
                 if (this.items.length != 1) {
                     for (let i = 0; i < this.items.length; i++) {
                         if (i == this.items.length - 1) {
-                            console.log(this.items[i])
-                            this.advancedsearch = this.advancedsearch + ' | ' + this.items[i];
+                            if (this.logi[i] == 1 || this.logi[i - 1] == 1) {
+                                console.log(this.items[i])
+                                this.advancedsearch = this.advancedsearch + ' | ' + this.items[i];
+                            }
+                            else {
+                                console.log(this.items[i])
+                                this.advancedsearch = this.advancedsearch + this.items[i];
+                            }
                         }
                         else {
                             if (this.logi[i] == 0 || this.logi[i + 1] == 0) {
@@ -308,9 +314,26 @@ export default {
                                 console.log(this.items[i])
                             }
                             else {
-                                this.advancedsearch = this.advancedsearch + '( ' + this.items[i] + ' & ' + this.items[i + 1] + ' ) ';
+                                let m = 0
+                                let h = 1
+                                this.advancedsearch = this.advancedsearch + '( '
+                                for (let n = i; n < this.items.length; n++) {
+                                    if (parseInt(this.logi[n + 1]) * h != 0 && (n + 1) != this.items.length) {
+                                        console.log(parseInt(this.logi[n + 1]))
+                                        h = this.logi[n] * h
+                                        m = m + 1
+                                        this.advancedsearch = this.advancedsearch + this.items[n] + ' & '
+                                    }
+                                    else {
+                                        this.advancedsearch = this.advancedsearch + this.items[n] + ' ) ';
+                                        if ((n + 1) != this.items.length) {
+                                            this.advancedsearch = this.advancedsearch + '| '
+                                        }
+                                        break
+                                    }
+                                }
                                 console.log(this.items[i])
-                                i = i + 1;
+                                i = i + m;
                             }
                         }
                     }
@@ -322,8 +345,8 @@ export default {
                     this.time = parseInt(this.time);
                 }
 
-                console.log(typeof (this.time));
-                console.log(this.time)
+                // console.log(typeof (this.time));
+                // console.log(this.time)
                 this.$router.push({
                     path: '/superSearch',
                     query: {
