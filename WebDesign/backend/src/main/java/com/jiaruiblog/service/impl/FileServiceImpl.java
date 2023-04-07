@@ -777,15 +777,15 @@ public class FileServiceImpl implements IFileService {
             case FILTER:
                 Set<String> docIdSet = new HashSet<>();
                 String keyWord = Optional.of(documentDTO).map(DocumentDTO::getFilterWord).orElse("");
-                // 模糊查询 分类
-                docIdSet.addAll(categoryServiceImpl.fuzzySearchDoc(keyWord));
-                // 模糊查询 标签
-                docIdSet.addAll(tagServiceImpl.fuzzySearchDoc(keyWord));
-                // 模糊查询 文件标题
-                docIdSet.addAll(fuzzySearchDoc(keyWord));
-                // 模糊查询 评论内容
 
-                docIdSet.addAll(commentServiceImpl.fuzzySearchDoc(keyWord));
+//                docIdSet.addAll(categoryServiceImpl.fuzzySearchDoc(keyWord));
+//                // 模糊查询 标签
+//                docIdSet.addAll(tagServiceImpl.fuzzySearchDoc(keyWord));
+//                // 模糊查询 文件标题
+//                docIdSet.addAll(fuzzySearchDoc(keyWord));
+//                // 模糊查询 评论内容
+//
+//                docIdSet.addAll(commentServiceImpl.fuzzySearchDoc(keyWord));
                 List<FileDocument> esDoc = null;
 
                 try {

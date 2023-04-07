@@ -77,8 +77,7 @@ export default {
             this.loading = true
             this.searchifag = false
             this.searchpubmed = true
-            //let keyword = this.$route.query.keyWord
-            //this.keyword = keyword
+
             console.log(this.keyword)
             if (this.keyword === "") return;
             this.$axios({

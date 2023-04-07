@@ -33,7 +33,7 @@
                 <component :is="component" v-if="component" :previewId="previewId" :keyword="keyword" :pageNum="pageNum"
                     @func="getMsgFormSon" />
             </div>
-            <!-- <FloatBall @click="changeshow"></FloatBall> -->
+
             <div>
 
                 <div class="doc-operation-body">
@@ -141,21 +141,6 @@
                                         <p><strong>创建时间</strong> {{ this.createTime }}</p>
                                     </div>
 
-                                    <!-- <el-descriptions :column="1">
-                                        <el-descriptions-item label="标题">{{ this.title }}</el-descriptions-item>
-                                        <el-descriptions-item label="大小">{{ this.size }}</el-descriptions-item>
-                                        <el-descriptions-item label="索引状况">苏州市</el-descriptions-item>
-                                        <el-descriptions-item label="创建人">{{ this.userName }}</el-descriptions-item>
-                                        <el-descriptions-item label="分类"></el-descriptions-item>
-                                        <el-descriptions-item label="文档概述">{{ this.descriptions }}</el-descriptions-item>
-                                        <el-tag size="small" :color="item.color" v-for="item in tags" :index="item.index">{{
-                                            item.name
-                                        }}</el-tag>
-                                        <el-descriptions-item label="创建时间">{{ this.createTime }}</el-descriptions-item>
-                                    </el-descriptions>
-                                    <el-tag size="small" :color="item.color" v-for="item in tags" :index="item.index">{{
-                                        item.name
-                                    }}</el-tag> -->
                                 </el-tab-pane>
 
                                 <el-tab-pane label="翻译" name="tab_second" style="height: 380px">
@@ -249,24 +234,6 @@ export default {
     mounted() {
         this.getSelectText();
         this.getMessage();
-        // document.addEventListener('mouseup', () => {
-        //     const selection = window.getSelection();
-
-        //     let iframe = document.getElementById('myIframe');
-
-
-        //     iframe.onload = function () {
-        //         setTimeout(() => {
-        //             console.log(iframe.contentWindow.getSelection().toString())
-        //             let iframe = document.getElementById('myIframe');
-        //             this.selectText = iframe.contentWindow.getSelection().toString();
-        //             console.log(iframe.contentWindow)
-        //         }, 100);
-        //     }
-        //     if (selection.toString().length > 0) {
-        //         this.selectedText = selection.toString();
-        //     }
-        // });
 
         this.left = this.$refs.fu.offsetLeft - 150;
         this.top = this.$refs.fu.offsetTop
@@ -297,7 +264,6 @@ export default {
                 if (response.code === 200) {
                     this.title = response.data.title;
                     this.userName = response.data.userName;
-                    console.log(response.data);
                     this.size = fileTool.bytesToSize(response.data.size)
                     this.thumbId = response.data.thumbId;
                     var docTime = response.data.createTime;
@@ -305,7 +271,6 @@ export default {
                     this.docState = response.data.docState
                     this.txtID = response.data.txtId
                     this.createTime = parseTime(new Date(docTime), '{y}年{m}月{d}日 {h}:{i}:{s}');
-
                     let tagList = response.data['tagVOList'];
                     this.tags = this.renderTags(tagList);
 
@@ -313,10 +278,8 @@ export default {
 
                     this.hasLike = response.data.hasLike
                     this.hasCollect = response.data.hasCollect
-                    console.log("hasLike:" + this.hasLike)
-                    console.log("hasCollect:" + this.hasCollect)
+
                     this.previewId = response.data.previewFileId
-                    // console.log("keyword" + { keyword })
                     let suffix = title.split(".")[title.split('.').length - 1];
                     switch (suffix) {
                         case 'pdf':
@@ -354,7 +317,6 @@ export default {
         },
 
         handleMouseSelect() {
-
             let text = window.getSelection().toString()
             console.log(text)
         },
@@ -386,43 +348,6 @@ export default {
                 this.$Message.info("error")
             })
         },
-        // async addLike(entityType) {
-        //     if (entityType !== 1 && entityType !== 2) {
-        //         return
-        //     }
-        //
-        //     let params = {
-        //         entityType: entityType,
-        //         entityId: this.docId
-        //     }
-        //     await DocRequest.addLike({ params }).then(res => {
-        //         if (res.code == 200) {
-        //             let result = res.data;
-        //             if (entityType === 1) {
-        //                 this.likeCount = result.likeCount || 0;
-        //                 this.likeStatus = result.likeStatus || 0;
-        //                 if (this.likeStatus === 0) {
-        //                     this.$Message.info("取消点赞！")
-        //                 } else {
-        //                     this.$Message.success("点赞成功！")
-        //                 }
-        //             } else {
-        //                 this.collectCount = result.likeCount || 0;
-        //                 this.collectStatus = result.likeStatus || 0;
-        //                 if (this.collectStatus === 0) {
-        //                     this.$Message.info("取消收藏！")
-        //                 } else {
-        //                     this.$Message.success("收藏成功！")
-        //                 }
-        //             }
-        //         } else {
-        //             this.$Message.info("error")
-        //         }
-        //     }).catch(err => {
-        //         this.$Message.info("error")
-        //     })
-        // },
-
 
         // 添加点赞
         async addLike(entityType) {
@@ -440,9 +365,11 @@ export default {
                     this.likeStatus = result.likeStatus || 0;
                     if (this.likeStatus === 0) {
                         this.$Message.info("取消点赞！")
+                        this.likeStatus = false
                     }
                     else {
                         this.$Message.success("点赞成功！")
+                       this.likeStatus = true
                     }
                 } else {
                     this.$Message.info("error")
@@ -457,6 +384,8 @@ export default {
             if (entityType !== 1) {
                 return
             }
+          //   变化状态
+
             let params = {
                 docId: this.docId
             }
@@ -468,8 +397,10 @@ export default {
                     // this.collectStatus = result.likeStatus || 0;
                     if (result === "SUCCESS_REMOVE_COLLECT") {
                         this.$Message.info("取消收藏！")
+                        this.collectStatus = false
                     } else {
                         this.$Message.success("收藏成功！")
+                      this.collectStatus = true
                     }
                 } else {
                     this.$Message.info("error")

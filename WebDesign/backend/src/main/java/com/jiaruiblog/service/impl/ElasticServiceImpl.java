@@ -84,9 +84,9 @@ public class ElasticServiceImpl implements ElasticService {
     @Autowired
     private FileServiceImpl fileServiceImpl;
 
-    private static int FRAGMENTSIZE = 80;
+    private static int FRAGMENTSIZE = 150;
 
-    private static int FRAGMENTNUMS = 5;
+    private static int FRAGMENTNUMS = 2;
     private static String em_front = "<em>";
     private static String em_last = "</em>";
     private static String zhuanyizfu = "/r";
@@ -139,6 +139,7 @@ public class ElasticServiceImpl implements ElasticService {
     }
 
     public List<EsSearch> search_new(String keyword) throws IOException {
+        System.out.println("search_new方法");
 
         SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
 
@@ -565,23 +566,22 @@ public class ElasticServiceImpl implements ElasticService {
     }
 
     private BoolQueryBuilder createSingleBoolQueryBuilder(String keyword){
-
         //      加高亮
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field(CONTENT_EACH_PAGE_LIST_CONTENT);
         highlightBuilder.preTags("<em>").postTags("</em>");
-        highlightBuilder.fragmentSize(150);
+        highlightBuilder.fragmentSize(FRAGMENTSIZE);
 
         HighlightBuilder highlightBuilder_syno = new HighlightBuilder();
         highlightBuilder_syno.field(CONTENT_EACH_PAGE_LIST_CONTENT_SYNO);
         highlightBuilder_syno.preTags("<bm>").postTags("</bm>");
-        highlightBuilder_syno.fragmentSize(150);
+        highlightBuilder_syno.fragmentSize(FRAGMENTSIZE);
 
 //        根据内容去匹配
         MatchPhraseQueryBuilder matchContent = QueryBuilders.matchPhraseQuery(CONTENT_EACH_PAGE_LIST_CONTENT, keyword).boost(NO_SYNO_WEIGHT);
         BoolQueryBuilder contentboolQueryBuilder = new BoolQueryBuilder().should(matchContent);
 
-        matchContent.boost(0.7f);
+        matchContent.boost(1f);
 
         NestedQueryBuilder nestedContent = QueryBuilders.nestedQuery(CONTENT_EACH_PAGE_LIST, contentboolQueryBuilder,ScoreMode.Total);
         nestedContent.innerHit(
@@ -607,7 +607,6 @@ public class ElasticServiceImpl implements ElasticService {
 
 //        ocr文本匹配
         MatchPhraseQueryBuilder matchOcrText = QueryBuilders.matchPhraseQuery(OCR_RESULT_LIST_OCRTEXT, keyword).boost(NO_SYNO_WEIGHT);
-//        MatchPhraseQueryBuilder matchOcrTextSyno = QueryBuilders.matchPhraseQuery(OCR_RESULT_LIST_OCRTEXT_SYNO, keyword).boost(NO_SYNO_WEIGHT);
         BoolQueryBuilder ocrBoolQueryBuilder = new BoolQueryBuilder().should(matchOcrText);
         ocrBoolQueryBuilder.boost(0.3f);
 
@@ -617,7 +616,6 @@ public class ElasticServiceImpl implements ElasticService {
                         new FetchSourceContext(true, new String[]{OCR_RESULT_LIST_OCRTEXT, OCR_RESULT_LIST_MONGODB_ID}, null)
                 )
         );
-
 
         //        构建bool查询条件
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
@@ -793,176 +791,6 @@ public class ElasticServiceImpl implements ElasticService {
         stringBuilder.append("查询到").append(count).append("条记录");
         return fileDocumentList;
     }
-
-//    3.18版本
-//    @Override
-//    public List<FileDocument> search(String keyword) throws IOException {
-//
-//        List<FileDocument> fileDocumentList = new ArrayList<>();
-//        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
-//        // 使用lk分词器查询，会把插入的字段分词，然后进行处理
-//        SearchSourceBuilder srb = new SearchSourceBuilder();
-//
-//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-//        MatchQueryBuilder matchQueryBuilder_ocr = QueryBuilders.matchQuery(OCR_RESULT_LIST_TEXT,keyword);
-//        MatchPhraseQueryBuilder matchQueryBuilder_content = QueryBuilders.matchPhraseQuery(PIPELINE_NAME, keyword);
-//        boolQueryBuilder.should(matchQueryBuilder_ocr).should(matchQueryBuilder_content);
-//
-//        srb.query(boolQueryBuilder);
-//        // 每页10个数据
-//        srb.size(10);
-//        // 起始位置从0开始
-//        srb.from(0);
-//
-//        //设置highlighting
-//        HighlightBuilder highlightBuilder = new HighlightBuilder();
-//        HighlightBuilder.Field highlightContent = new HighlightBuilder.Field(PIPELINE_NAME);
-//        highlightContent.highlighterType();
-//        highlightBuilder.field(highlightContent).fragmentSize(FRAGMENTSIZE).numOfFragments(FRAGMENTNUMS);
-//        highlightBuilder.preTags("<em>");
-//        highlightBuilder.postTags("</em>");
-//
-//        //highlighting会自动返回匹配到的文本，所以就不需要再次返回文本了
-//        String[] includeFields = new String[]{"name", "id", LIKE_NUM, CLICK_RATE, COLLECT_NUM, OCR_RESULT_LIST};
-//        String[] excludeFields = new String[]{PIPELINE_NAME};
-//        srb.fetchSource(includeFields, excludeFields);
-//
-//        //把刚才设置的值导入进去
-//        srb.highlighter(highlightBuilder);
-//
-//        //查询
-//        searchRequest.source(srb);
-//        SearchResponse res;
-//        try {
-//            res = client.search(searchRequest, RequestOptions.DEFAULT);
-//        } catch (ConnectException e) {
-//            log.error("连接es失败！", e.getCause());
-//            res = null;
-//        }
-//
-//        if (res == null || res.getHits() == null) {
-//            return Lists.newArrayList();
-//        }
-//        //获取hits，这样就可以获取查询到的记录了
-//        SearchHits hits = res.getHits();
-//
-//        //hits是一个迭代器，所以需要迭代返回每一个hits
-//        Iterator<SearchHit> iterator = hits.iterator();
-//        int count = 0;
-//
-//        StringBuilder stringBuilder = new StringBuilder();
-//
-//        Set<String> idSet = Sets.newHashSet();
-//
-////        三个值分别代表最大的内容得分、点击量得分与点赞量得分
-//        double max_content_score = getMaxScore(hits);
-//        int max_click_num = getMaxValue(hits, CLICK_RATE);
-//        int max_like_num = getMaxValue(hits, LIKE_NUM);
-//
-//        System.out.println("max_content_score:"+max_content_score);
-//        System.out.println("max_click_num:"+max_click_num);
-//        System.out.println("max_like_num:"+max_like_num);
-//
-//        while (iterator.hasNext()) {
-//            SearchHit hit = iterator.next();
-//
-//            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-//            List<Map<String, Object>> ocrResultListMaps = (List<Map<String, Object>>) hit.getSourceAsMap().get("ocrResultList");
-//
-//            //从es中读取ocr结果
-//            List<OcrResult> ocrResultList = readFromES(ocrResultListMaps,keyword);
-//
-//            //根据内容去检索，得到的得分
-//            float score = hit.getScore();
-//
-////            System.out.println("click_num"+hit.getSourceAsMap().get(CLICK_RATE));
-////            System.out.println("like_num"+hit.getSourceAsMap().get(LIKE_NUM));
-////            分别以60、30、10来计算三个得分
-////            后期可能会加上源自于图片的得分与源自于content的得分
-//            double contentScore = score / max_content_score * CONTENT_WEIGHT;
-//            double clickScore = 0;
-//            double likeScore = 0;
-//
-//            if(max_click_num > 0)
-//            {
-//                clickScore = ((int) hit.getSourceAsMap().get(CLICK_RATE)) / max_click_num * CLICK_RATE_WEIGHT;
-//            }
-//            else {
-//                clickScore = 0;
-//            }
-//
-//            if(max_like_num > 0)
-//            {
-//                likeScore = ((int) hit.getSourceAsMap().get(LIKE_NUM)) / max_like_num * LIKE_NUM_WEIGHT;
-//            }
-//            else {
-//                likeScore = 0;
-//            }
-//
-//            System.out.println("score:"+contentScore);
-//            System.out.println("clickScore:"+clickScore);
-//            System.out.println("likeScore:"+likeScore);
-//
-//            //获取返回的字段
-//            //Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-//
-//            //统计找到了几条
-//            count++;
-//
-//            //这个就会把匹配到的文本返回，而且只返回匹配到的部分文本docId = -1
-//            Map<String, HighlightField> highlightFields = hit.getHighlightFields();
-//            System.out.println("highlightFields:"+highlightFields);
-//            HighlightField highlightField = highlightFields.get(PIPELINE_NAME);
-////            float[] scores = highlightField.
-//            StringBuilder stringBuilder1 = new StringBuilder();
-////            有很多条，然后每一条
-//            List<String> stringList = new ArrayList<>();
-//            if(highlightField!=null)
-//            {
-//                for (Text fragment : highlightField.getFragments()) {
-//                    String fragmentString = fragment.toString();
-//                    fragmentString = fragmentString.replace(em_front,"");
-//                    fragmentString = fragmentString.replace(em_last,"");
-//                    stringList.add(fragmentString);
-////                System.out.println("fragmentString长度为："+fragmentString.length());
-//                    stringBuilder1.append(fragment.toString());
-//                }
-//            }
-//            String abstractString = stringBuilder1.toString();
-//            if (abstractString.length() > 500) {
-//                abstractString = abstractString.substring(0, 500);
-//            }
-//
-//            if (sourceAsMap.containsKey("id")) {
-//                String id = (String) sourceAsMap.get("id");
-//                if (id != null && !idSet.contains(id)) {
-//                    idSet.add(id);
-//                    FileDocument fileDocument = fileServiceImpl.getByMd5(id);
-//
-//                    // 得分
-//                    fileDocument.setContentScore(contentScore);
-//                    fileDocument.setClickScore(clickScore);
-//                    fileDocument.setLikeScore(likeScore);
-//
-//                    if (fileDocument == null) {
-//                        System.out.println("mongodb没有这个md5对应的文件信息");
-//                        //从redis中剔除该doc，并跳过循环
-//                        continue;
-//                    }
-//                    fileDocument.setDescription(abstractString);
-//                    fileDocument.setDescription_highLighter(stringList);
-//                    fileDocument.setOcrResultList(ocrResultList);
-//
-//                    fileDocumentList.add(fileDocument);
-//                }
-//            }
-//
-//            stringBuilder.append(highlightFields);
-//        }
-//
-//        stringBuilder.append("查询到").append(count).append("条记录");
-//        return fileDocumentList;
-//    }
 
 //    原作者的版本
 //    @Override

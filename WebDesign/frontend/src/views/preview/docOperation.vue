@@ -58,12 +58,10 @@ export default {
             else if (item.index === "1") {
               this.$emit("addCollect", Number(item.index))
               console.log("发出收藏事件")
-              this.collectStatus = !this.collectStatus
             }
             else if (item.index === "2"){
               this.$emit("addLike", Number(item.index))
               console.log("发出点赞事件")
-              this.likeStatus = !this.likeStatus
             }
         }
     }
