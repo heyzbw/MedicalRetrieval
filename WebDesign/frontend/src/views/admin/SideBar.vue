@@ -56,11 +56,11 @@ export default {
     },
     methods: {
         turnUrl(name) {
+
             this.$router.push(name);
         }
     },
     mounted() {
-      // config.headers.id = localStorage.getItem("id")
           console.log("userId", localStorage.getItem("id"))
           let params = {
             id:localStorage.getItem("id")

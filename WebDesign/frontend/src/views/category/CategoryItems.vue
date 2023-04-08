@@ -6,14 +6,11 @@
                 <span> {{ titleName }}</span>
             </p>
         </div>
-        <div style="background-color: #fdffe8; font-size: 12px; color: #badc62;padding: 0 16px; position: absolute;
-                                top: 52px; left: 0;z-index: 999; width: 100%;">
-            <span>右键可操作</span>
-        </div>
+
         <Table context-menu show-context-menu highlight-row ref="currentRowTable" :columns="columns" :data="listData"
             @on-contextmenu="handleContextMenu" :show-header="false" @on-row-click="changeCategoryValue" :height=tableHeight
             @on-current-change="handleCurrentChange" :loading="loading">
-            <template #contextMenu>
+            <template #contextMenu v-if="this.permission === 'ADMIN'">
                 <div class="ivu-dropdown-item" @click="handleContextMenuAdd">增加一条记录</div>
                 <div class="ivu-dropdown-item" @click="handleContextMenuEdit">重新编辑</div>
                 <div class="ivu-dropdown-item" @click="handleContextMenuDelete" style="color: #ed4014">删除</div>
@@ -47,6 +44,7 @@
 </template>
 <script>
 import CategoryRequest from "@/api/category";
+import UserRequest from "@/api/user";
 
 export default {
     data() {
@@ -72,7 +70,7 @@ export default {
             remove_modal: false,
             remove_loading: false,
             remove_item: {},
-
+            permission:"",
             loading: false
         }
     },
@@ -86,6 +84,19 @@ export default {
     computed: {},
     mounted() {
         this.calcTableHeight();
+
+        console.log("userId", localStorage.getItem("id"))
+        let params = {
+          id:localStorage.getItem("id")
+        }
+
+        UserRequest.getUser(params).then(response => {
+          if (response.code === 200) {
+            console.log("data:",response.data)
+            this.permission = response.data.permissionEnum
+          }
+        })
+
     },
     methods: {
         calcTableHeight() {
