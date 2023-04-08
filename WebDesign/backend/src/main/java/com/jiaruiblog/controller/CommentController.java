@@ -10,6 +10,7 @@ import com.jiaruiblog.entity.dto.CommentDTO;
 import com.jiaruiblog.entity.dto.CommentListDTO;
 import com.jiaruiblog.service.ICommentService;
 import com.jiaruiblog.util.BaseApiResult;
+import com.jiaruiblog.util.PermissionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,10 +123,17 @@ public class CommentController {
      * @Date 14:38 2022/12/10
      * @Param [pageDTO, request]
      **/
-    @Permission(PermissionEnum.ADMIN)
+    @Permission({PermissionEnum.ADMIN,PermissionEnum.USER})
     @ApiOperation(value = "查询全部的用户评论", notes = "只有管理员有权限进行所有评论的分类查询")
     @PostMapping(value = "/auth/allComments")
-    public BaseApiResult queryAllComments(@RequestBody BasePageDTO pageDTO) {
-        return commentService.queryAllComments(pageDTO, null, true);
+    public BaseApiResult queryAllComments(@RequestBody BasePageDTO pageDTO, HttpServletRequest request) {
+
+        String userId = (String) request.getAttribute("id");
+        PermissionEnum userPermission = PermissionUtil.getUserPermission(request);
+        if (userPermission.getCode() == 1){
+            return commentService.queryAllComments(pageDTO, userId, false);
+        }
+        else
+            return commentService.queryAllComments(pageDTO, null, true);
     }
 }

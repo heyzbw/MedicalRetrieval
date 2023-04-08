@@ -4,7 +4,7 @@
         <Icon type="md-arrow-round-up" />
         添加文档
         </MenuItem>
-        <MenuItem name="docReview">
+        <MenuItem name="docReview" v-if="permission === 'ADMIN'">
         <Icon type="md-checkmark-circle-outline" />
         文档审核
         </MenuItem>
@@ -24,33 +24,50 @@
         <Icon type="md-chatboxes" />
         评论管理
         </MenuItem>
-        <MenuItem name="users">
+        <MenuItem name="users" v-if="permission === 'ADMIN'">
         <Icon type="md-contact" />
         用户管理
         </MenuItem>
-        <MenuItem name="stats">
+        <MenuItem name="stats" v-if="permission === 'ADMIN'">
         <Icon type="ios-podium" />
         文档统计
         </MenuItem>
-        <MenuItem name="systemConfig">
+        <MenuItem name="systemConfig" v-if="permission === 'ADMIN'">
         <Icon type="ios-hammer" />
         系统设置
         </MenuItem>
     </Menu>
 </template>
 <script>
+import UserRequest from '@/api/user'
+
 export default {
     data() {
         return {
-            theme: 'light'
+            theme: 'light',
+            permission: 'ADMIN'
         }
     },
     methods: {
         turnUrl(name) {
-            console.log("name是什么：" + name)
+
             this.$router.push(name);
         }
     },
+    mounted() {
+        console.log("userId", localStorage.getItem("id"))
+        let params = {
+            id: localStorage.getItem("id")
+        }
+
+
+        UserRequest.getUser(params).then(response => {
+            if (response.code === 200) {
+                console.log("data:", response.data)
+                this.permission = response.data.permissionEnum
+            }
+        })
+    }
 }
 </script>
 
