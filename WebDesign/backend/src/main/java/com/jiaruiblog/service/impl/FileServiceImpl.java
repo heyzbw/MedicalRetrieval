@@ -1221,7 +1221,13 @@ public class FileServiceImpl implements IFileService {
             documentVO = convertDocument(documentVO, fileDocument);
             documentVos.add(documentVO);
         }
-        return documentVos;
+
+        // 对documentVos按照sum_score降序排序
+        List<DocumentVO> sortedDocumentVos = documentVos.stream()
+                .sorted(Comparator.comparing(DocumentVO::getSum_score).reversed())
+                .collect(Collectors.toList());
+
+        return sortedDocumentVos;
     }
 
     /**
@@ -1271,6 +1277,7 @@ public class FileServiceImpl implements IFileService {
         documentVO.setContent_score(fileDocument.getContentScore());
         documentVO.setClick_score(fileDocument.getClickScore());
         documentVO.setLike_score(fileDocument.getLikeScore());
+        documentVO.setSum_score(fileDocument.getClickScore()+fileDocument.getContentScore()+fileDocument.getLikeScore());
 
         documentVO.setHasCollect(fileDocument.isHasCollect());
         documentVO.setHasLike(fileDocument.isHasLike());

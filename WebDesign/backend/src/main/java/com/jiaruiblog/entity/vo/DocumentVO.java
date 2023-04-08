@@ -66,6 +66,8 @@ DocumentVO {
 
     private double like_score;
 
+    private double sum_score;
+
     private boolean hasCollect;
     private boolean hasLike;
 }

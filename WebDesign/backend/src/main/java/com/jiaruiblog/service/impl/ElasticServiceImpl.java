@@ -246,11 +246,8 @@ public class ElasticServiceImpl implements ElasticService {
 //           查询返回的字段为： "click_rate", "collect_num", "collect_num","name", "type","md5","fileId","id",
 
             esSearch.setContentScore(contentScore);
-            esSearch.setClick_num(((Integer) objectMap.get("click_rate")).longValue());
-            esSearch.setName((String) objectMap.get("name"));
-            esSearch.setType((String) objectMap.get("type"));
-            esSearch.setMd5((String) objectMap.get("id"));
-            esSearch.setFileId((String) objectMap.get("fileId"));
+
+            setEsSearch(esSearch,objectMap);
 
 //            从innerhit中获取文本内容
             if(innerContentHits.getTotalHits().value != 0){
@@ -417,10 +414,7 @@ public class ElasticServiceImpl implements ElasticService {
             esSearch.setClickScore(clickScore);
             esSearch.setLikeScore(likeScore);
             esSearch.setContentScore(contentScore);
-            esSearch.setName((String) objectMap.get("name"));
-            esSearch.setType((String) objectMap.get("type"));
-            esSearch.setMd5((String) objectMap.get("id"));
-            esSearch.setFileId((String) objectMap.get("fileId"));
+            setEsSearch(esSearch,objectMap);
 
 //            从innerhit中获取文本内容
             if(innerContentHits.getTotalHits().value != 0){
@@ -1020,6 +1014,16 @@ public class ElasticServiceImpl implements ElasticService {
             }
         }
         return null;
+    }
+
+    private void setEsSearch(EsSearch esSearch,Map<String,Object> objectMap)
+    {
+        esSearch.setClick_num(((Integer) objectMap.get("click_rate")).longValue());
+        esSearch.setName((String) objectMap.get("name"));
+        esSearch.setType((String) objectMap.get("type"));
+        esSearch.setMd5((String) objectMap.get("id"));
+        esSearch.setFileId((String) objectMap.get("fileId"));
+        esSearch.setId((String) objectMap.get("fileId") );
     }
 }
 
