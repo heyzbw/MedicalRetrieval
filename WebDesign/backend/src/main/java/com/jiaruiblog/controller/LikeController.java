@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,6 +72,8 @@ public class LikeController{
             likeStatus = likeService.findEntityLikeStatus(userId, entityType, entityId);
         } catch (RedisConnectionFailureException | RedisConnectionException e) {
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         // 返回的结果，封装成一个Map集合

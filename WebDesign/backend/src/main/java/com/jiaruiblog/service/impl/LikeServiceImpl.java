@@ -1,9 +1,7 @@
 package com.jiaruiblog.service.impl;
 
-import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.entity.LikeDocRelationship;
 import com.jiaruiblog.service.LikeService;
-import com.jiaruiblog.util.BaseApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,7 +13,7 @@ import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Date;
 
@@ -45,23 +43,32 @@ public class LikeServiceImpl implements LikeService {
     private FileServiceImpl fileServiceImpl;
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private ElasticServiceImpl elasticService;
+
 
     @Override
-    public void like(String userId, Integer entityType, String entityId){
+    public void like(String userId, Integer entityType, String entityId) throws IOException {
         if (!userServiceImpl.isExist(userId) || !fileServiceImpl.isExist(entityId)) {
             return ;
         }
 
         LikeDocRelationship likeDb = getExistLikeRelationship(userId,entityId);
+
+//        点赞过了，那就取消点赞吧
         if(likeDb != null){
             remove(userId,entityId);
+            elasticService.NumberOperation(entityId,"MINI","like_num");
         }
-
-        likeDb = new LikeDocRelationship();
-        likeDb.setUserId(userId);
-        likeDb.setDocId(entityId);
-        likeDb.setCreateDate(new Date());
-        likeDb.setUpdateDate(new Date());
+//        没有添加过点赞，那就点赞吧
+        else {
+            likeDb = new LikeDocRelationship();
+            likeDb.setUserId(userId);
+            likeDb.setDocId(entityId);
+            likeDb.setCreateDate(new Date());
+            likeDb.setUpdateDate(new Date());
+            elasticService.NumberOperation(entityId,"ADD","like_num");
+        }
 
         mongoTemplate.save(likeDb,INDEX_NAME);
 
@@ -95,16 +102,6 @@ public class LikeServiceImpl implements LikeService {
         });
     }
 
-
-//     LikeDocRelationship getExistLikeRelationship(String username,String docId){
-//        Query query = new Query()
-//                .addCriteria(Criteria.where(DOC_ID).is(docId)
-//                        .and("userId").is(username));
-//
-//        return mongoTemplate.findOne(
-//          query,LikeDocRelationship.class,INDEX_NAME
-//        );
-//    }
 
     private void remove(String userId,String docId){
         LikeDocRelationship liekDb = getExistLikeRelationship(userId,docId);
@@ -142,5 +139,10 @@ public class LikeServiceImpl implements LikeService {
         );
     }
 
+    @Override
+    public Long likeNum(String docId) {
+        Query query = new Query().addCriteria(Criteria.where(DOC_ID).is(docId));
+        return mongoTemplate.count(query, LikeDocRelationship.class, INDEX_NAME);
+    }
 
 }

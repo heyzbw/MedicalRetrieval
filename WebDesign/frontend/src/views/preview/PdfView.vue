@@ -53,14 +53,9 @@ export default {
         vm.getSelectText();
         function getWord() {
 
-            // 非iframe中获取文字的方法
-            // var word = window.getSelection?window.getSelection():document.selection.createRange().text;
-
             // iframe中获取选中文字的方法
             var word = document.getElementById("myIframe").contentWindow.getSelection().toString();
-            // this.selectedText = word
-            // console.log(this.selectedText)
-            // alert(word)
+
             console.log(word)
             vm.$emit('func', word)
         }
@@ -129,6 +124,7 @@ export default {
             let vm = this;
             //获取iframe
             let iframe = document.getElementById('myIframe');
+
             this.pdfURL = BackendUrl() + '/files/view/' + this.$route.query.docId
 
             //将滑选数据传入到iframe中
@@ -151,33 +147,25 @@ export default {
             iframe.contentWindow.addEventListener('message', function (e) {
                 //这里打印一下，看是否拿到了传入的数据
                 // console.log("e" + e.data);
-                console.log(iframe.contentWindow)
+                console.log("iframe.contentWindow:", iframe.contentWindow)
                 // 这里打印的是pdf.js暴露出来的find接口
 
                 iframe.onload = function () {
                     setTimeout(() => {
                         let iframe = document.getElementById('myIframe');
-                        console.log(iframe.contentWindow);
+                        console.log(iframe.contentWindow.PDFViewerApplication);
                         // console.log(e.data[1])
                         // 输入查询数据
-                        //iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
-                        setTimeout(() => {
-                            vm.$refs.topicScroll.scrollTop = 0
-                        }, 10)
-                        //console.log(iframe.contentWindow.PDFViewerApplication.page)
+                        iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
+
+                        console.log(iframe.contentWindow.PDFViewerApplication.page)
                         iframe.contentWindow.PDFViewerApplication.findBar.findField.value = e.data[0];
                         // 要求查询结果全体高亮
                         iframe.contentWindow.PDFViewerApplication.findBar.highlightAll.checked = true;
                         // 上面两部已经OK，触发highlightallchange方法。
                         iframe.contentWindow.PDFViewerApplication.findBar.dispatchEvent('highlightallchange');
-                        console.log(parseInt(e.data[1]))
-                        // setTimeout(() => {
-                        iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1]);
-                        // }, 1000);
-                        //iframe.contentWindow.PDFViewerApplication.pdfViewer.currentPageLabel = parseInt(e.data[1])
-                        //console.log(iframe.contentWindow.PDFViewerApplication.page)
-                        //console.log(iframe.contentWindow.PDFViewerApplication.toolbar.pageNumber)
-                        //iframe.contentWindow.PDFViewerApplication.toolbar.pageNumber = iframe.contentWindow.PDFViewerApplication.toolbar.pageNumber
+                        console.log(typeof (e.data[1]))
+                        iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
                         console.log(iframe.contentWindow.PDFViewerApplication.page)
 
                     }, 1000);
@@ -188,7 +176,7 @@ export default {
                     //     console.log(iframe.contentWindow.PDFViewerApplication.page)
 
                     // }, 1000);
-                    iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
+
                 }
             }, false);
 
@@ -200,16 +188,6 @@ export default {
             console.log(text)
         },
 
-        // sendMessage1() {
-        //     //获取iframe
-        //     let vm = this;
-        //     //获取iframe
-        //     let iframe = document.getElementById('myIframe');
-        //     //将滑选数据传入到iframe中
-        //     // console.log('vm' + vm.keyword);
-        //     iframe.contentWindow.postMessage(vm.pageNum, '*');
-
-        // },
         WaitForIFrame() {
             if (iframe.readyState != "complete") {
                 setTimeout("WaitForIFrame();", 200);
@@ -229,34 +207,7 @@ export default {
                 console.log("test" + this.selectedText)
             }
         },
-        // // 接受数据
-        // getMessage1() {
-        //     //获取iframe
-        //     let iframe = document.getElementById('myIframe');
-        //     // iframe监听是否有数据传入，将传入的数据作为参数传递给pdf.js的find接口
-        //     iframe.contentWindow.addEventListener('message', function (e) {
-        //         //这里打印一下，看是否拿到了传入的数据
-        //         // console.log("e" + e.data);
-        //         // console.log(iframe.contentWindow)
-        //         // 这里打印的是pdf.js暴露出来的find接口
 
-        //         iframe.onload = function () {
-        //             setTimeout(() => {
-        //                 let iframe = document.getElementById('myIframe');
-        //                 console.log(iframe.contentWindow.PDFViewerApplication);
-        //                 // 输入查询数据
-        //                 iframe.contentWindow.PDFViewerApplication.page = e.data
-        //                 // iframe.contentWindow.PDFViewerApplication.findBar.findField.value = e.data;
-        //                 // // 要求查询结果全体高亮
-        //                 // iframe.contentWindow.PDFViewerApplication.findBar.highlightAll.checked = true;
-        //                 // // 上面两部已经OK，触发highlightallchange方法。OK。全部完成，效果如文章开头，因为项目保密，所以就不这么着吧。
-        //                 // iframe.contentWindow.PDFViewerApplication.findBar.dispatchEvent('highlightallchange');
-        //             }, 200);
-
-        //         }
-        //     }, false);
-
-        // },
         // 滑选事件注册： 获取鼠标选中的文本
         getSelectText() {
             let _this = this;

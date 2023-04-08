@@ -2,6 +2,8 @@ package com.jiaruiblog.service;
 
 import com.jiaruiblog.entity.LikeDocRelationship;
 
+import java.io.IOException;
+
 /**
  * @ClassName LikeService
  * @Description 用户对某个文档进行点赞或者收藏的操作
@@ -17,7 +19,7 @@ public interface LikeService {
      * @param entityType 实体类型：1：点赞；2：收藏
      * @param entityId 实体的id
      */
-    void like(String userId, Integer entityType, String entityId);
+    void like(String userId, Integer entityType, String entityId) throws IOException;
 
     /**
      * 获取点赞的数量
@@ -37,5 +39,7 @@ public interface LikeService {
     int findEntityLikeStatus(String userId, Integer entityType, String entityId);
 
     LikeDocRelationship getExistLikeRelationship(String username, String docId);
+
+    Long likeNum(String docId);
 //    Long queryByDocId(String docId);
 }
