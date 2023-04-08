@@ -76,6 +76,17 @@ public class UserController {
         return BaseApiResult.success(one);
     }
 
+//    @ApiOperation(value = "根据id查询", notes = "批量新增用户")
+//    @PostMapping(value = "/getById")
+//    public BaseApiResult getById(@RequestParam("id") String id) {
+//        System.out.println("userId："+id);
+//        User user = new User();
+//        user.setId(id);
+//        Query query = new Query(Criteria.where("_id").is(user.getId()));
+//        User one = template.findOne(query, User.class, COLLECTION_NAME);
+//        return BaseApiResult.success(one);
+//    }
+
     @ApiOperation(value = "根据用户名称查询", notes = "根据用户名称查询")
     @PostMapping(value = "/getByUsername")
     public BaseApiResult getByUsername(@RequestBody User user) {

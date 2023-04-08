@@ -56,6 +56,7 @@ public class User {
 
     private Date updateDate;
 
+
     @Override
     public String toString () {
         return JSON.toJSONString(this);
