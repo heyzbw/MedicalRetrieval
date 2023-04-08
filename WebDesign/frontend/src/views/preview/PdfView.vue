@@ -27,15 +27,14 @@ import axios from 'axios';
 
 export default {
     name: "PdfView",
-
     data() {
         return {
-            //pdfURL: BackendUrl() + '/files/view/' + this.$route.query.docId,
+            pdfURL: BackendUrl() + '/files/view/' + this.$route.query.docId,
             keyword: this.$route.query.keyword,
             selectedText: '',
             view_flag: false,
             translateResult: '',
-            pageNum: this.$route.query.pageNum
+            pageNum: this.$route.query.pageNum,
         };
     },
     watch() {
@@ -76,20 +75,20 @@ export default {
                 getWord()
             }
         }
+        document.getElementById("myIframe").contentWindow.PDFViewerApplication.page = vm.pageNum
 
         // this.translateText();
         document.addEventListener('mouseup', () => {
             const selection = window.getSelection();
-
             let iframe = document.getElementById('myIframe');
-
-
             iframe.onload = function () {
                 setTimeout(() => {
                     console.log(iframe.contentWindow.getSelection().toString())
                     let iframe = document.getElementById('myIframe');
                     this.selectedText = iframe.contentWindow.getSelection().toString();
-                    console.log(iframe.contentWindow)
+                    // iframe.contentWindow.PDFViewerApplication.page = vm.pageNum
+
+                    // console.log(iframe.contentWindow)
                 }, 100);
             }
             if (selection.toString().length > 0) {
@@ -110,6 +109,9 @@ export default {
         //this.getSelectText();
     },
     methods: {
+        getDateTime() {
+            return parseInt(new Date().getTime());
+        },
         getPdfText() {
             let docId = this.$route.query.docId;
             this.keyword = this.$route.query.keyword;
@@ -136,6 +138,7 @@ export default {
 
         // 接受数据
         getMessage() {
+            let vm = this;
             //获取iframe
             let iframe = document.getElementById('myIframe');
             // iframe监听是否有数据传入，将传入的数据作为参数传递给pdf.js的find接口
@@ -151,25 +154,35 @@ export default {
                     setTimeout(() => {
                         let iframe = document.getElementById('myIframe');
                         console.log(iframe.contentWindow.PDFViewerApplication);
+                        // console.log(e.data[1])
                         // 输入查询数据
                         iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
 
-                        console.log("page:", iframe.contentWindow.PDFViewerApplication.page)
+                        console.log(iframe.contentWindow.PDFViewerApplication.page)
                         iframe.contentWindow.PDFViewerApplication.findBar.findField.value = e.data[0];
                         // 要求查询结果全体高亮
                         iframe.contentWindow.PDFViewerApplication.findBar.highlightAll.checked = true;
                         // 上面两部已经OK，触发highlightallchange方法。
                         iframe.contentWindow.PDFViewerApplication.findBar.dispatchEvent('highlightallchange');
+                        console.log(typeof (e.data[1]))
                         iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
                         console.log(iframe.contentWindow.PDFViewerApplication.page)
 
                     }, 1000);
+                    // setTimeout(() => {
+                    //     let iframe = document.getElementById('myIframe');
+                    //     console.log(iframe.contentWindow.PDFViewerApplication.page)
+                    //     iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
+                    //     console.log(iframe.contentWindow.PDFViewerApplication.page)
+
+                    // }, 1000);
 
                 }
             }, false);
 
         },
         handleMouseSelect() {
+
             console.log(1)
             let text = window.getSelection().toString()
             console.log(text)

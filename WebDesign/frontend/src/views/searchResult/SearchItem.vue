@@ -32,77 +32,83 @@
         </div>
         <div class="doc-abstract" v-show="ocrResultListin">
             <div style="padding:0 0 0 30px">
+                <!-- <div @click="getDocView()" v-if="contentResultSize>=1">【第{{ esSearchContentList[0].pageNum }}页】 <div style="color:blue">来源于文本</div>
+                    <p v-html="esSearchContentList[0].contentHighLight[0]"></p>
+                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                </div>
 
-<!--              源于文本的内容-->
+                <div @click="getDocView1()" v-if="contentResultSize>=2">【第{{ esSearchContentList[1].pageNum }}页】 <div style="color:blue">来源于文本</div>
+                    <p v-html="esSearchContentList[1].contentHighLight[0]"></p>
+                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                </div>
+                <div v-if="this.contentshow &&  contentResultSize>=3" @click="getDocView2()" >【第{{ esSearchContentList[2].pageNum }}页】 <div style="color:blue">来源于文本</div>
+                    <p v-html="esSearchContentList[2].contentHighLight[0]"></p>
+                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                </div>
+                <div v-if="this.ocrshow" @click="getDocView3()">【第{{ ocrResultList[0].pdfPage + 1 }}页】 <div
+                        style="color:red">
+                        来源于图片</div>
+                    <p v-html="ocrResultList[0].ocrText"></p>
+                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                </div> -->
                 <el-tabs type="card" width="100%" style="height: 100%" v-model="activeTab">
                     <el-tab-pane label="来源于文本" name="first" width="100%">
                         <!--用一个循环来写-->
-                        <div
-                            v-for="(item, index) in esSearchContentList"
-                            :key="index"
-                            @click="getDocView(item)"
-                            v-if="contentResultSize >= index + 1"
-                        >
-                          【第{{ item.pageNum }}页】
-                          <div style="color:blue">来源于文本</div>
-                          <p v-html="item.contentHighLight[0]"></p>
-                          <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        <div v-for="(item, index) in esSearchContentList" :key="index" @click="getDocView(item)"
+                            v-if="contentResultSize >= index + 1">
+                            【第{{ item.pageNum }}页】
+                            <div style="color:blue">来源于文本</div>
+                            <p v-html="item.contentHighLight[0]"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                         </div>
 
                     </el-tab-pane>
 
                     <el-tab-pane label="来源于同义词" name="tab_second" width="100%" v-if="esSearchContentList_synoSize">
-                      <div
-                          v-for="(item, index) in esSearchContentList_syno"
-                          :key="index"
-                          @click="getSynoView(item)"
-                      >
-                        【第{{ item.pageNum }}页】
-                        <div style="color:green">来源于同义词</div>
-                        <p v-html="item.contentHighLight[0]"></p>
-                        <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                      </div>
+                        <div v-for="(item, index) in esSearchContentList_syno" :key="index" @click="getSynoView(item)">
+                            【第{{ item.pageNum }}页】
+                            <div style="color:green">来源于同义词</div>
+                            <p v-html="item.contentHighLight[0]"></p>
+                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                        </div>
                     </el-tab-pane>
+                    <el-tab-pane label="来源于图片" name="tab_third" width="100%" v-if="ocrResultListSize">
 
-                  <el-tab-pane label="来源于图片" name="tab_third" width="100%" v-if="ocrResultListSize">
-                    <div
-                        v-for="(item, index) in ocrResultList"
-                        :key="index"
-                        @click="getPicView(item)"
-                    >
-                      【第{{ item.pdfPage + 1 }}页】
-                      <div style="color:red">来源于图片</div>
-                      <p v-html="item.ocrText"></p>
-                      <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                    </div>
-                  </el-tab-pane>
+                        <el-tooltip placement="bottom" effect="light">
+                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 1">
+                                <highlight-rect :image="ocrResultList[0].image" :textResult="ocrResultList[0].textResult" />
+                            </div>
+                            <div v-if="ocrResultListSize >= 1" @click="getpicView()">【第{{ ocrResultList[0].pdfPage + 1 }}页】
+                                <div style="color:red">
+                                    来源于图片</div>
+                                <p v-html="ocrResultList[0].ocrText"></p>
+                                <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                            </div>
+                        </el-tooltip>
+                        <el-tooltip placement="bottom" effect="light">
+                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 2">
+                                <highlight-rect :image="ocrResultList[1].image" :textResult="ocrResultList[1].textResult" />
+                            </div>
+                            <div v-if="ocrResultListSize >= 2" @click="getpicView1()">【第{{ ocrResultList[1].pdfPage + 1 }}页】
+                                <div style="color:red">
+                                    来源于图片</div>
+                                <p v-html="ocrResultList[1].ocrText"></p>
+                                <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                            </div>
+                        </el-tooltip>
+                        <el-tooltip placement="bottom" effect="light">
+                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 3">
+                                <highlight-rect :image="ocrResultList[2].image" :textResult="ocrResultList[2].textResult" />
+                            </div>
+                            <div v-if="ocrResultListSize >= 3" @click="getpicView2()">【第{{ ocrResultList[2].pdfPage + 1 }}页】
+                                <div style="color:red">
+                                    来源于图片</div>
+                                <p v-html="ocrResultList[2].ocrText"></p>
+                                <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                            </div>
+                        </el-tooltip>
 
-                  <!--                    <el-tab-pane label="来源于图片" name="tab_third" width="100%" v-if="ocrResultListSize">-->
-<!--                        <div v-if="ocrResultListSize >= 1" @click="getDocView3()">【第{{ ocrResultList[0].pdfPage + 1 }}页】-->
-<!--                            <div style="color:red">-->
-<!--                                来源于图片</div>-->
-<!--                            <p v-html="ocrResultList[0].ocrText"></p>-->
-<!--                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">-->
-<!--                        </div>-->
-<!--                        <div v-if="ocrResultListSize >= 2" @click="getDocView3()">【第{{ ocrResultList[1].pdfPage + 1 }}页】-->
-<!--                            <div style="color:red">-->
-<!--                                来源于图片</div>-->
-<!--                            <p v-html="ocrResultList[1].ocrText"></p>-->
-<!--                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">-->
-<!--                        </div>-->
-<!--                        <div v-if="ocrResultListSize >= 3" @click="getDocView3()">【第{{ ocrResultList[2].pdfPage + 1 }}页】-->
-<!--                            <div style="color:red">-->
-<!--                                来源于图片</div>-->
-<!--                            <p v-html="ocrResultList[2].ocrText"></p>-->
-<!--                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">-->
-<!--                        </div>-->
-
-<!--                      <highlight-rect-->
-<!--                          :image="ocrResultList[0].image"-->
-<!--                          :textResult="ocrResultList[0].textResult"-->
-<!--                      />-->
-
-<!--                    </el-tab-pane>-->
+                    </el-tab-pane>
                 </el-tabs>
             </div>
         </div>
@@ -135,7 +141,7 @@ import HighlightRect from '@/components/HighlightRect.vue'
 export default {
     name: "SearchItem",
     components: {
-      HighlightRect
+        HighlightRect
     },
     data() {
         return {
@@ -152,40 +158,43 @@ export default {
         }
     },
     methods: {
-      getDocView(item) {
-        this.$router.push({
-          path: '/preview',
-          query: {
-            docId: this.id,
-            keyword: this.keyword,
-            pageNum: item.pageNum
-          }
-        });
-      },
-      // ...其他方法...
-      getSynoView(item) {
-        this.$router.push({
-          path: '/preview',
-          query: {
-            docId: this.id,
-            keyword: this.keyword,
-            pageNum: item.pageNum
-          }
-        });
-      },
-      getPicView(item) {
-        this.$router.push({
-          path: '/preview',
-          query: {
-            docId: this.id,
-            keyword: this.keyword,
-            pageNum: item.pdfPage + 1
-          }
-        });
-      }
+        getDocView(item) {
+            console.log(this.id)
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: item.pageNum
+                }
+            });
+        },
+        // ...其他方法...
+        getSynoView(item) {
+            console.log(this.id)
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: item.pageNum
+                }
+            });
+        },
+        getPicView(item) {
+            console.log(this.id)
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: item.pdfPage + 1
+                }
+            });
+        }
 
     },
-  props: {
+    props: {
         id: { type: String, requires: true },
         thumbId: { type: String, requires: true },
         title: { type: String, requires: true },
@@ -273,11 +282,11 @@ export default {
     },
     filters: {
         imgSrc(value) {
-          if (value === "" || value == null) {
-            return require('@/assets/source/doc.png')
-          } else {
-            return BackendUrl() + "/files/image2/" + value;
-          }
+            if (value === "" || value == null) {
+                return require('@/assets/source/doc.png')
+            } else {
+                return BackendUrl() + "/files/image2/" + value;
+            }
         }
     }
 }
