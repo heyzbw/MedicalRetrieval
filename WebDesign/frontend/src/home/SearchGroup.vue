@@ -1,10 +1,25 @@
 <template>
     <div class="search-group">
         <div class="ulist">
-            <ul class="tabTagList">
-                <li id="tag01" @click="">检索</li>
-                <li id="tag02">浏览</li>
-            </ul>
+            <!-- <div class="text-box">
+                <div class="circle-cover"></div>
+                医学检索
+
+            </div>
+            <div class="text-box1">
+                <div class="circle-cover1"></div>
+                一触即得
+            </div> -->
+            <div class="box">
+                <div class="sc">
+                    <p>医学文献</p>
+                </div>
+                <div class="sc1">
+                    <p>一触即得</p>
+                </div>
+            </div>
+
+            <!-- </ul> -->
         </div>
         <div class="search-zone">
             <!-- <div class="logo">
@@ -370,26 +385,26 @@ export default {
 <style lang="scss" scoped>
 .search-group {
     width: 100%;
-    height: 340px;
+    height: 440px;
     position: absolute;
     left: 0;
     top: 0;
-    padding-top: 100px;
+    padding-top: 25%;
     //border: 2px solid #000;
 
-    .ulist {
-        display: inline-block;
-        //border: 2px solid #000;
 
-        ul li {
-            display: inline-block;
-            font-size: 24px;
-            font-family: PingFangSC-Medium, PingFang SC, serif;
-            font-weight: 500;
-            color: #000000;
-            padding: 14px 16px 14px 16px;
-        }
+    //display: inline-block;
+    //border: 2px solid #000;
+
+    .tag {
+        //display: inline-block;
+        font-size: 34px;
+        font-family: PingFangSC-Medium, PingFang SC, serif;
+        font-weight: 500;
+        color: #000000;
+        padding: 14px 16px 14px 16px;
     }
+
 
     .search-zone {
         width: 745px;
@@ -427,7 +442,7 @@ export default {
 
                     &:hover {
                         cursor: pointer;
-                        color: #1b933b;
+                        color: #8bdbfb;
                     }
 
                     span {
@@ -438,7 +453,7 @@ export default {
                         line-height: 20px;
 
                         &:hover {
-                            color: #1b933b;
+                            color: #3a7bf2;
                         }
                     }
                 }
@@ -464,7 +479,7 @@ export default {
                 .search-button {
                     &:hover {
                         cursor: pointer;
-                        background-color: #fceac8;
+                        background-color: #72a3ec;
                         border-radius: 0 8px 8px 0;
                     }
                 }
@@ -536,6 +551,110 @@ export default {
                 }
             }
         }
+    }
+}
+
+.box {
+    width: 20%;
+    height: 10%;
+    margin: auto;
+    display: flex;
+    font-style: italic;
+
+}
+
+.sc {
+    width: 300px;
+    height: 200px;
+    //text-align: center;
+    position: absolute;
+    display: flex;
+    top: 68%;
+    left: 40%;
+    margin-top: 0px;
+    margin-left: -15%
+}
+
+.sc1 {
+    width: 300px;
+    height: 200px;
+    //text-align: center;
+    position: absolute;
+    top: 83%;
+    left: 45%;
+    margin-top: 0px;
+    margin-left: -13%
+}
+
+.sc p {
+    font-size: 48px;
+    line-height: 50px;
+    letter-spacing: .1em;
+    transform: translate(0);
+}
+
+.sc1 p {
+    font-size: 48px;
+    line-height: 50px;
+    letter-spacing: .1em;
+    transform: translate(0);
+}
+
+.sc p:nth-child(1) {
+    top: 75%;
+    left: 35%;
+    animation: example1 2s ease-out 1s backwards;
+}
+
+.sc1 p:nth-child(1) {
+    animation: example2 2s ease-in-out 4s backwards;
+}
+
+@keyframes example1 {
+    0% {
+        transform: translate(-60px);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translate(-30px);
+        opacity: .5;
+    }
+
+    100% {
+        transform: translate(0);
+        opacity: 1;
+    }
+}
+
+
+@keyframes example2 {
+    0% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: .8;
+    }
+
+    45% {
+        opacity: .3;
+    }
+
+    50% {
+        opacity: .8;
+    }
+
+    55% {
+        opacity: .3;
+    }
+
+    60% {
+        opacity: .8;
+    }
+
+    100% {
+        opacity: 1;
     }
 }
 </style>

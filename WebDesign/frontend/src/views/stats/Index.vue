@@ -164,7 +164,7 @@ export default {
                     }]
                 };
                 myChart.setOption(option, true);
-            }, 300);
+            }, 600);
 
         },
         getmain() {

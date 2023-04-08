@@ -33,7 +33,7 @@ export default {
     props: {
         category: {
             type: Object,
-            default () {
+            default() {
                 return {}
             }
         }
@@ -57,20 +57,20 @@ export default {
     },
     methods: {
         routeToCategory(value) {
-            if(value === "" || value === undefined) {
+            if (value === "" || value === undefined) {
                 return;
             }
             this.$router.push({
-                path:'/admin/category',
-                query:{
+                path: '/admin/category',
+                query: {
                     cateId: value
                 }
             })
         },
         routeToAllDoc(value) {
             this.$router.push({
-                path:'/preview',
-                query:{
+                path: '/preview',
+                query: {
                     docId: value
                 }
             })
@@ -86,6 +86,7 @@ export default {
     font-size: 12px;
     width: 280px;
 }
+
 .category-title {
     line-height: 36px;
     height: 36px;
@@ -93,7 +94,7 @@ export default {
     padding: 0 10px;
     font-size: 16px;
     border-bottom: 1px solid #dcdee2;
-    color: #f1db77;
+    color: #8ffaa6;
     font-weight: 700;
 }
 
@@ -107,7 +108,9 @@ export default {
     height: 161px;
     font-size: 12px;
 }
-ul,li {
+
+ul,
+li {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -130,6 +133,7 @@ ul,li {
     /*line-height: 32px;*/
     padding: 0 10px;
 }
+
 .more-info-button {
     border: 1px solid #dcdee2;
     border-radius: 24px;
@@ -137,13 +141,12 @@ ul,li {
     padding: 4px 16px;
     font-size: 12px;
 }
+
 .more-info-button:hover {
-    background-color: #f1db77;
+    background-color: #8ffaa6;
     color: #fff;
-    border-color: #f1db77;
+    border-color: #8ffaa6;
     cursor: pointer;
     display: block;
 
-}
-
-</style>
+}</style>

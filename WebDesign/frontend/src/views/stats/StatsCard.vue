@@ -36,6 +36,6 @@ export default {
     line-height: 120px;
     font-size: 36px;
     font-weight: 100;
-    color: #f4d057;
+    color: #71cdf5;
 }
 </style>

@@ -104,15 +104,15 @@
                         <Col>
                         <div class="upload-button"
                             style="width: 180px; height: 45px; border: 2px solid #000;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background: #FFF7D6;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    box-shadow: 0 0 10px 0 rgba(129,100,0,0.3);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    border-radius: 8px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    justify-content: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background: #65c3f2;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    box-shadow: 0 0 4px 0 rgba(129,100,0,0.3);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    border-radius: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    display: flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    justify-content: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
                             @click="uploadFile">
                             <div style="padding: 5px; line-height: 45px;">
-                                <img :src="buttonSrc" width="24px" height="28px" alt="pic" />
+                                <!-- <img :src="buttonSrc" width="24px" height="28px" alt="pic" /> -->
                             </div>
 
                             <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">点我上传文档</span>
@@ -181,7 +181,7 @@ export default {
     data() {
         return {
             placeholder: "输入一些内容",
-            buttonSrc: require("@/assets/source/folder.png"),
+            buttonSrc: require("@/assets/source/fileupload.png"),
             actionUrl: BackendUrl() + "/files/upload",
             actionUrl_multi: BackendUrl() + "/files/uploadMultiFile",
             filename: '',
@@ -256,9 +256,9 @@ export default {
             formData.set("fileName", param.fileId);
             formData.set("file", param.file);
             formData.set("fileChoice", param.file_choice)
-            formData.set("labels",this.items)
-            formData.set("userid",localStorage.getItem("id"))
-            formData.set("username",localStorage.getItem("username"))
+            formData.set("labels", this.items)
+            formData.set("userid", localStorage.getItem("id"))
+            formData.set("username", localStorage.getItem("username"))
             const config = {
                 // headers: {},
                 onUploadProgress: (progressEvent) => {
@@ -271,11 +271,11 @@ export default {
             };
 
             // 添加用户信息
-          //   config.headers.authorization = localStorage.getItem("token");
-          //   config.headers.id = localStorage.getItem("id")
-          //   config.headers.username = localStorage.getItem("username")
-          //   console.log("config.headers.id",config.headers.id)
-          // console.log("localStorage.getItem(id)",localStorage.getItem("id"))
+            //   config.headers.authorization = localStorage.getItem("token");
+            //   config.headers.id = localStorage.getItem("id")
+            //   config.headers.username = localStorage.getItem("username")
+            //   console.log("config.headers.id",config.headers.id)
+            // console.log("localStorage.getItem(id)",localStorage.getItem("id"))
 
             this.progressFlag = true;
             console.log(formData)
@@ -386,8 +386,8 @@ export default {
                 for (let i = 0; i < this.files.length; i++) {
                     formData.append("files", this.files[i])
                 }
-                formData.set("userid",localStorage.getItem("id"))
-                formData.set("username",localStorage.getItem("username"))
+                formData.set("userid", localStorage.getItem("id"))
+                formData.set("username", localStorage.getItem("username"))
 
                 const config = {
                     onUploadProgress: (progressEvent) => {

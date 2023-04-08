@@ -42,7 +42,7 @@ export default {
     height: 80px;
     /*margin: auto;*/
     padding-top: 20px;
-    /*background-color: #f1db77;*/
+    /*background-color: #8ffaa6;*/
 }
 
 /deep/ .ivu-input-group {
@@ -54,7 +54,7 @@ export default {
     border-bottom-left-radius: 60px;
     border: none;
     /*outline：none;*/
-    /*background-color: #f1db77;*/
+    /*background-color: #8ffaa6;*/
 }
 
 /deep/ .ivu-input:focus {
@@ -76,11 +76,11 @@ export default {
     bottom: 5px;
     left: -1px;
     background: inherit;
-    background-color: #f1db77;
+    background-color: #8ffaa6;
 }
 
 /deep/ .ivu-input-search {
     background-color: #ffffff !important;
-    color: #f1db77 !important;
+    color: #8ffaa6 !important;
 }
 </style>

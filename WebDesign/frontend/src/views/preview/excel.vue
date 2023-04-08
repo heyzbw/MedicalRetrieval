@@ -2,7 +2,7 @@
     <div class="word-wrap">
         <div v-show="view_flag" style="padding: 400px; color: #ffcc4f;">
             <div class="demo-spin-icon-load">
-                <Icon type="md-refresh" style="font-size: 48px;"/>
+                <Icon type="md-refresh" style="font-size: 48px;" />
             </div>
             <div style='font-size:16px'>加载中...</div>
         </div>
@@ -49,7 +49,7 @@ export default {
 
             let docId = this.$route.query.docId;
 
-            let wordURL = 'http://localhost:8082/files/view/' + docId
+            let wordURL = 'http://121.36.201.185:8082/files/view/' + docId
 
             axios({
                 method: 'get',
@@ -57,17 +57,17 @@ export default {
                 data: {},
                 url: wordURL,
             }).then(res => {
-                    // 表格类型的用xlsx插件
-                    this.xlsFile = true
-                    let XLSX = require("xlsx")
-                    this.XLSX = XLSX
-                    // 这里不需要进行转换，已经是xlsx的文件
-                    // this.execlType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    // let blob = new Blob([res], {type: this.execlType})
-                    let reader = new FileReader()
-                    reader.readAsArrayBuffer(res.data) // blob类型转换为ArrayBuffer类型
-                    this.tabChange(0, reader)
-                }
+                // 表格类型的用xlsx插件
+                this.xlsFile = true
+                let XLSX = require("xlsx")
+                this.XLSX = XLSX
+                // 这里不需要进行转换，已经是xlsx的文件
+                // this.execlType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                // let blob = new Blob([res], {type: this.execlType})
+                let reader = new FileReader()
+                reader.readAsArrayBuffer(res.data) // blob类型转换为ArrayBuffer类型
+                this.tabChange(0, reader)
+            }
             )
 
         },
@@ -88,7 +88,7 @@ export default {
                     let arraybufferData = this.result
                     this.execlArraybufferData = arraybufferData
                     let data = new Uint8Array(arraybufferData) // es2017的方法
-                    let workbook = XLSX.read(data, {type: "array"})  // 得到表格的array数据
+                    let workbook = XLSX.read(data, { type: "array" })  // 得到表格的array数据
                     _this.workbooks = workbook  // 赋值到此组件最外面，一会要用
                     let sheetNames = workbook.SheetNames; // 得到execl工作表名称集合，结果类似这样['sheet1','sheet2']
                     _this.sheetNames = sheetNames  // 赋值到此组件最外面，一会要用
@@ -135,7 +135,7 @@ export default {
             const xhr = new XMLHttpRequest();
             let docId = this.$route.query.docId;
 
-            this.wordURL = 'http://localhost:8082/files/view/' + docId
+            this.wordURL = 'http://121.36.201.185:8082/files/view/' + docId
 
             xhr.open("get", this.wordURL, true);
             // xhr.responseType = "arraybuffer";
@@ -154,7 +154,7 @@ export default {
             xhr.onload = () => {
                 if (xhr.status == 200) {
                     console.log(xhr)
-                    mammoth.convertToHtml({arrayBuffer: xhr.response}).then((resultObject) => {
+                    mammoth.convertToHtml({ arrayBuffer: xhr.response }).then((resultObject) => {
                         this.$nextTick(() => {
                             this.wordText = resultObject.value;
                         });
@@ -185,9 +185,11 @@ export default {
     from {
         transform: rotate(0deg);
     }
+
     50% {
         transform: rotate(180deg);
     }
+
     to {
         transform: rotate(360deg);
     }
@@ -208,28 +210,29 @@ export default {
 
 <!--由于采用了v-html所以采用这种方式进行样式渲染-->
 <style scoped>
->>> table {
+>>>table {
     border-collapse: collapse;
     margin: 0 auto;
     text-align: center;
 }
 
->>> table td, table th {
+>>>table td,
+table th {
     border: 1px solid #cad9ea;
     color: #666;
     height: 30px;
 }
 
->>> table thead th {
+>>>table thead th {
     background-color: #CCE8EB;
     width: 100px;
 }
 
->>> table tr:nth-child(odd) {
+>>>table tr:nth-child(odd) {
     background: #fff;
 }
 
->>> table tr:nth-child(even) {
+>>>table tr:nth-child(even) {
     background: #F5FAFA;
 }
 </style>

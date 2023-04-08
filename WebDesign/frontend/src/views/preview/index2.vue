@@ -2,7 +2,7 @@
     <div class="home_wrap">
         <div v-show="view_flag" style="padding: 400px; color: #ffcc4f;">
             <div class="demo-spin-icon-load">
-                <Icon type="md-refresh" style="font-size: 48px;"/>
+                <Icon type="md-refresh" style="font-size: 48px;" />
             </div>
             <div style='font-size:16px'>加载中...</div>
         </div>
@@ -14,8 +14,8 @@
         </div>
 
 
-        <div :style="{width:pdf_div_width,margin:'0 auto', height: '500'}">
-            <canvas v-for="page in pdf_pages" :id="'the_canvas'+page" :key="page"></canvas>
+        <div :style="{ width: pdf_div_width, margin: '0 auto', height: '500' }">
+            <canvas v-for="page in pdf_pages" :id="'the_canvas' + page" :key="page"></canvas>
         </div>
     </div>
 </template>
@@ -111,7 +111,7 @@ export default {
                         ctx.oBackingStorePixelRatio ||
                         ctx.backingStorePixelRatio || 1
                     let ratio = dpr / bsr
-                    let viewport = page.getViewport({scale: this.pdf_scale})
+                    let viewport = page.getViewport({ scale: this.pdf_scale })
 
                     canvas.width = viewport.width * ratio
                     canvas.height = viewport.height * ratio
@@ -185,9 +185,11 @@ export default {
     from {
         transform: rotate(0deg);
     }
+
     50% {
         transform: rotate(180deg);
     }
+
     to {
         transform: rotate(360deg);
     }

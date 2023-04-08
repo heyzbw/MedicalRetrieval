@@ -78,7 +78,8 @@
                             <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 1">
                                 <highlight-rect :image="ocrResultList[0].image" :textResult="ocrResultList[0].textResult" />
                             </div>
-                            <div v-if="ocrResultListSize >= 1" @click="getpicView()">【第{{ ocrResultList[0].pdfPage + 1 }}页】
+                            <div v-if="ocrResultListSize >= 1" @click="getPicView(ocrResultList[0])">【第{{
+                                ocrResultList[0].pdfPage + 1 }}页】
                                 <div style="color:red">
                                     来源于图片</div>
                                 <p v-html="ocrResultList[0].ocrText"></p>
@@ -89,7 +90,8 @@
                             <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 2">
                                 <highlight-rect :image="ocrResultList[1].image" :textResult="ocrResultList[1].textResult" />
                             </div>
-                            <div v-if="ocrResultListSize >= 2" @click="getpicView1()">【第{{ ocrResultList[1].pdfPage + 1 }}页】
+                            <div v-if="ocrResultListSize >= 2" @click="getPicView(ocrResultList[0])">【第{{
+                                ocrResultList[1].pdfPage + 1 }}页】
                                 <div style="color:red">
                                     来源于图片</div>
                                 <p v-html="ocrResultList[1].ocrText"></p>
@@ -100,7 +102,8 @@
                             <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 3">
                                 <highlight-rect :image="ocrResultList[2].image" :textResult="ocrResultList[2].textResult" />
                             </div>
-                            <div v-if="ocrResultListSize >= 3" @click="getpicView2()">【第{{ ocrResultList[2].pdfPage + 1 }}页】
+                            <div v-if="ocrResultListSize >= 3" @click="getPicView(ocrResultList[0])">【第{{
+                                ocrResultList[2].pdfPage + 1 }}页】
                                 <div style="color:red">
                                     来源于图片</div>
                                 <p v-html="ocrResultList[2].ocrText"></p>
@@ -382,5 +385,4 @@ li {
 
 .sl-abstract {
     margin: 2px 0 0 0;
-}
-</style>
+}</style>

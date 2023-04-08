@@ -57,8 +57,8 @@
                     </Button>
                 </p>
                 <div v-show="infoVisible" style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
-                        margin-top: 8px;
-        ">
+                            margin-top: 8px;
+            ">
                     <span v-if="document_info['docState'] === 'SUCCESS'">
                         索引建立成功，可以下载<span style="color: #408FFF; cursor: pointer"
                             @click="downloadTxt(document_info)">文本文件</span>。
@@ -280,7 +280,7 @@ export default {
     },
     mounted() {
         this.getListData()
-        console.log("CATEGORYID:",this.cateId)
+        console.log("CATEGORYID:", this.cateId)
     },
     computed: {
         filterColumns() {
@@ -349,8 +349,8 @@ export default {
                 "tagId": categoryId,
                 "type": this.currentType
             }
-          //   console.log("你的type是个啥？",this.currentType)
-          // console.log("你的categoryId是个啥？",categoryId)
+            //   console.log("你的type是个啥？",this.currentType)
+            // console.log("你的categoryId是个啥？",categoryId)
             DocumentRequest.getListData(params).then(res => {
                 this.loading = false
                 if (res.code === 200) {
@@ -472,7 +472,7 @@ export default {
 }
 
 .doc-title {
-    color: #8d7b25;
+    color: #80e3c8;
 }
 
 .doc-title:hover {

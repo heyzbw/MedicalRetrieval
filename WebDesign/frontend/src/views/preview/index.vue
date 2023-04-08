@@ -92,8 +92,8 @@
                                         </p>
                                         <div v-show="infoVisible"
                                             style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                    margin-top: 8px;
-                                                                                                                                                                                                                                                                                                                                                                                                                    ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                        margin-top: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                        ">
                                             <span v-if="this.docState === 'SUCCESS'">
                                                 索引建立成功，可以下载<span style="color: #408FFF; cursor: pointer"
                                                     @click="downloadTxt(this)">文本文件</span>。
@@ -369,7 +369,7 @@ export default {
                     }
                     else {
                         this.$Message.success("点赞成功！")
-                       this.likeStatus = true
+                        this.likeStatus = true
                     }
                 } else {
                     this.$Message.info("error")
@@ -384,7 +384,7 @@ export default {
             if (entityType !== 1) {
                 return
             }
-          //   变化状态
+            //   变化状态
 
             let params = {
                 docId: this.docId
@@ -400,7 +400,7 @@ export default {
                         this.collectStatus = false
                     } else {
                         this.$Message.success("收藏成功！")
-                      this.collectStatus = true
+                        this.collectStatus = true
                     }
                 } else {
                     this.$Message.info("error")

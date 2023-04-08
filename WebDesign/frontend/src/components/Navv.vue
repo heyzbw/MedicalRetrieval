@@ -3,6 +3,10 @@
         <div class="nav-logo" @click="$router.push('/')">
             <img :src="logoSrc" width="30%" height="30%" alt="" />
         </div>
+        <div class="text-box">
+            <div class="circle-cover"></div>
+            MeidcalRetrieval
+        </div>
         <div class="sd">
             <div @click="$router.push('/')">首页</div>
             <div> / </div>
@@ -40,7 +44,7 @@ export default {
         return {
             buttonSize: "min",
             defaultAvatar: require("../assets/source/user.png"),
-            userAvatar: require("../assets/source/user1.png"),
+            userAvatar: require("../assets/source/user.png"),
             logoSrc: require("../assets/newlogo.png"),
         }
     },
@@ -108,13 +112,13 @@ export default {
     /*width: 200px;*/
     float: left;
     cursor: pointer;
-    padding: 20px 0 0 50px;
+    padding: 20px 0 0 20px;
     font-family: Helvetica-Bold, Helvetica;
     font-weight: bold;
     color: #6c6025;
     /*color: red;*/
 
-    padding-left: 12%;
+    padding-left: 10%;
 }
 
 .user-zone {
@@ -158,5 +162,52 @@ export default {
 
 .nav-setting {
     float: right;
+}
+
+.text-box {
+    width: 300px;
+    height: 60px;
+    color: black;
+
+    line-height: 60px;
+    font-size: 36px;
+    font-style: italic;
+    font-weight: bold;
+    position: absolute;
+    top: 45%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+
+    overflow: hidden;
+}
+
+.circle-cover {
+    width: 700px;
+    height: 200px;
+    background-color: rgb(240, 240, 240);
+
+    position: absolute;
+    left: 0;
+    top: -70px;
+    /*top=circle-cover.height/2+text-box.height/2*/
+
+    box-shadow: 0 0 100px 10px rgb(218, 218, 218);
+
+    animation: move-cover 3s infinite ease-in-out;
+
+}
+
+@keyframes move-cover {
+    0% {
+        left: 0;
+    }
+
+    50% {
+        left: 50%;
+    }
+
+    100% {
+        left: 100%;
+    }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="banner-container">
         <div class="search-zone">
-            <Input search enter-button="搜索" placeholder="请输入文档关键字" @on-search="searchValue"/>
+            <Input search enter-button="搜索" placeholder="请输入文档关键字" @on-search="searchValue" />
         </div>
     </div>
 </template>
@@ -14,10 +14,10 @@ export default {
     },
     methods: {
         searchValue(value) {
-            if(value !== "" ) {
+            if (value !== "") {
                 this.$router.push({
-                    path:'/searchResult',
-                    query:{
+                    path: '/searchResult',
+                    query: {
                         keyWord: value
                     }
                 })
@@ -40,6 +40,7 @@ export default {
     border: 1px solid rgba(244, 219, 101, 100);
 
 }
+
 .search-zone {
     width: 800px;
     line-height: 200px;
@@ -74,11 +75,11 @@ export default {
     bottom: 5px;
     left: -1px;
     background: inherit;
-    background-color: #f1db77;
+    background-color: #8ffaa6;
 }
 
 /deep/ .ivu-input-search {
     background-color: #ffffff !important;
-    color: #f1db77 !important;
+    color: #8ffaa6 !important;
 }
 </style>

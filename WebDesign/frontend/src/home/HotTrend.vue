@@ -60,11 +60,11 @@ export default {
         xxx(value) {
             if (value < 2) {
                 return {
-                    backgroundColor: "#00c026"
+                    backgroundColor: "#4694f2"
                 }
             } else if (value < 4) {
                 return {
-                    backgroundColor: "#b9ff83"
+                    backgroundColor: "#4fddf3"
                 }
             } else {
                 return {
@@ -190,7 +190,7 @@ export default {
                 left: 0px;
                 width: 58px;
                 height: 24px;
-                background-color: #00c427;
+                background-color: #2032ff;
                 border: 1px solid #b8b8b8;
                 border-radius: 2px 0px 100px 0px;
                 text-align: center;
@@ -237,7 +237,7 @@ export default {
 
             &:hover {
                 cursor: pointer;
-                background-color: #f1f2f3;
+                background-color: #d8d8d8;
                 border-radius: 4px;
             }
 

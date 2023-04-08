@@ -6,8 +6,8 @@
         <div class="main-container">
             <div class="title-info">
                 <div class="doc-trim" style="text-align: center">
-                    <img :src=" thumbId | imgSrc " alt="thumb"
-                         style="width: 36px;max-height: 48px;border: 1px solid #dcdee2; border-radius: 2px">
+                    <img :src="thumbId | imgSrc" alt="thumb"
+                        style="width: 36px;max-height: 48px;border: 1px solid #dcdee2; border-radius: 2px">
                 </div>
                 <div class="doc-info">
                     <div class="doc-info-title">
@@ -24,19 +24,17 @@
             </div>
             <div class="doc-preview">
                 <!--                <PdfView></PdfView>-->
-                <component :is="component"
-                           v-if="component"/>
+                <component :is="component" v-if="component" />
             </div>
             <div class="doc-operation-body">
-                <doc-operation/>
+                <doc-operation />
             </div>
             <div class="doc-comment">
-                <comment-page/>
+                <comment-page />
             </div>
 
         </div>
     </div>
-
 </template>
 
 <script>
@@ -45,7 +43,7 @@ import { BackendUrl } from '@/api/request'
 
 import Nav from "@/components/Nav"
 import DocRequest from "@/api/document"
-import {parseTime} from "@/utils/index"
+import { parseTime } from "@/utils/index"
 
 import DocOperation from "./docOperation"
 
@@ -143,7 +141,7 @@ export default {
 
 <style lang="scss" scoped>
 .nav {
-    background-color: #f4d057;
+    background-color: #65c3f2;
     width: 100%;
     height: 50px;
     //position: absolute;
@@ -250,5 +248,4 @@ export default {
         padding: 36px 40px;
     }
 }
-
 </style>

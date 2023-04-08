@@ -3,15 +3,15 @@
 
         <div class="item" v-for="item in data" @click="operate(item)">
             <div class="item-logo">
-                <img :src="item.src" :alt="item.src">
+                <img :src="item.src" :alt="item.src" style="height: 75%;width:75%">
             </div>
             <div class="operation-title">
                 {{ item.name }}
             </div>
         </div>
-
+        <!-- 
         <div>{{ collectStatus }}</div>
-        <div>{{ likeStatus }}</div>
+        <div>{{ likeStatus }}</div> -->
     </div>
 </template>
 
@@ -26,7 +26,7 @@ export default {
             data: [
                 {
                     name: "马上收藏",
-                    src: require("@/assets/source/heart.png"),
+                    src: require("@/assets/source/cancelcollect.png"),
                     index: "1"
                 },
                 {
@@ -59,13 +59,21 @@ export default {
                 this.$emit("addCollect", Number(item.index))
                 console.log("发出收藏事件")
                 this.collectStatus = !this.collectStatus
+                console.log("collectStatus:" + this.collectStatus)
+                if (this.collectStatus == true) {
+                    this.data[0].src = require("@/assets/source/collect.png")
+                }
+                else {
+                    this.data[0].src = require("@/assets/source/cancelcollect.png")
+
+                }
             }
             else if (item.index === "2") {
                 this.$emit("addLike", Number(item.index))
                 console.log("发出点赞事件")
                 this.likeStatus = !this.likeStatus
             }
-        }
+        },
     }
 }
 </script>
@@ -90,9 +98,8 @@ export default {
 }
 
 .item:hover {
-
     cursor: pointer;
-    border: 2px #2d2c2b solid;
+
 }
 
 .operation-title {

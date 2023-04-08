@@ -132,7 +132,7 @@ export default {
             var arr = [];
             arr[0] = vm.keyword
             arr[1] = vm.pageNum
-            console.log(arr[1])
+            console.log(arr)
             iframe.contentWindow.postMessage(arr, '*');
         },
 
@@ -154,9 +154,9 @@ export default {
                     setTimeout(() => {
                         let iframe = document.getElementById('myIframe');
                         console.log(iframe.contentWindow.PDFViewerApplication);
-                        // console.log(e.data[1])
+
                         // 输入查询数据
-                        iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
+                        // iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
 
                         console.log(iframe.contentWindow.PDFViewerApplication.page)
                         iframe.contentWindow.PDFViewerApplication.findBar.findField.value = e.data[0];
@@ -164,20 +164,19 @@ export default {
                         iframe.contentWindow.PDFViewerApplication.findBar.highlightAll.checked = true;
                         // 上面两部已经OK，触发highlightallchange方法。
                         iframe.contentWindow.PDFViewerApplication.findBar.dispatchEvent('highlightallchange');
-                        console.log(typeof (e.data[1]))
-                        iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
-                        console.log(iframe.contentWindow.PDFViewerApplication.page)
+                        var number = Number(e.data[1])
+                        setTimeout(() => {
 
-                    }, 1000);
-                    // setTimeout(() => {
-                    //     let iframe = document.getElementById('myIframe');
-                    //     console.log(iframe.contentWindow.PDFViewerApplication.page)
-                    //     iframe.contentWindow.PDFViewerApplication.page = parseInt(e.data[1])
-                    //     console.log(iframe.contentWindow.PDFViewerApplication.page)
-
-                    // }, 1000);
-
+                            iframe.contentWindow.PDFViewerApplication.pdfViewer.currentPageNumber = number;
+                            iframe.contentWindow.PDFViewerApplication.page = number
+                        }, 2000);
+                    }, 500);
                 }
+                setTimeout(() => {
+
+                    iframe.contentWindow.PDFViewerApplication.pdfViewer.currentPageNumber = number;
+                    iframe.contentWindow.PDFViewerApplication.page = number
+                }, 2000);
             }, false);
 
         },

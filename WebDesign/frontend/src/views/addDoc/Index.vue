@@ -1,13 +1,7 @@
 <template>
-    <Upload
-        multiple
-        type="drag"
-        :action="actionUrl"
-        :on-error="response"
-        :on-success="response"
-    >
+    <Upload multiple type="drag" :action="actionUrl" :on-error="response" :on-success="response">
         <div style="padding: 20px 0">
-            <Icon type="ios-cloud-upload" size="52" style="color: #f4d057;"></Icon>
+            <Icon type="ios-cloud-upload" size="52" style="color: #65c3f2;"></Icon>
             <p>点击上传</p>
         </div>
     </Upload>
