@@ -73,26 +73,40 @@
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="来源于图片" name="tab_third" width="100%" v-if="ocrResultListSize">
-                        <div v-if="ocrResultListSize >= 1" @click="getDocView3()">【第{{ ocrResultList[0].pdfPage + 1 }}页】
-                            <div style="color:red">
-                                来源于图片</div>
-                            <p v-html="ocrResultList[0].ocrText"></p>
-                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                        </div>
-                        <div v-if="ocrResultListSize >= 2" @click="getDocView3()">【第{{ ocrResultList[1].pdfPage + 1 }}页】
-                            <div style="color:red">
-                                来源于图片</div>
-                            <p v-html="ocrResultList[1].ocrText"></p>
-                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                        </div>
-                        <div v-if="ocrResultListSize >= 3" @click="getDocView3()">【第{{ ocrResultList[2].pdfPage + 1 }}页】
-                            <div style="color:red">
-                                来源于图片</div>
-                            <p v-html="ocrResultList[2].ocrText"></p>
-                            <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                        </div>
 
-                        <highlight-rect :image="ocrResultList[0].image" :textResult="ocrResultList[0].textResult" />
+                        <el-tooltip placement="bottom" effect="light">
+                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 1">
+                                <highlight-rect :image="ocrResultList[0].image" :textResult="ocrResultList[0].textResult" />
+                            </div>
+                            <div v-if="ocrResultListSize >= 1" @click="getpicView()">【第{{ ocrResultList[0].pdfPage + 1 }}页】
+                                <div style="color:red">
+                                    来源于图片</div>
+                                <p v-html="ocrResultList[0].ocrText"></p>
+                                <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                            </div>
+                        </el-tooltip>
+                        <el-tooltip placement="bottom" effect="light">
+                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 2">
+                                <highlight-rect :image="ocrResultList[1].image" :textResult="ocrResultList[1].textResult" />
+                            </div>
+                            <div v-if="ocrResultListSize >= 2" @click="getpicView1()">【第{{ ocrResultList[1].pdfPage + 1 }}页】
+                                <div style="color:red">
+                                    来源于图片</div>
+                                <p v-html="ocrResultList[1].ocrText"></p>
+                                <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                            </div>
+                        </el-tooltip>
+                        <el-tooltip placement="bottom" effect="light">
+                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 3">
+                                <highlight-rect :image="ocrResultList[2].image" :textResult="ocrResultList[2].textResult" />
+                            </div>
+                            <div v-if="ocrResultListSize >= 3" @click="getpicView2()">【第{{ ocrResultList[2].pdfPage + 1 }}页】
+                                <div style="color:red">
+                                    来源于图片</div>
+                                <p v-html="ocrResultList[2].ocrText"></p>
+                                <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                            </div>
+                        </el-tooltip>
 
                     </el-tab-pane>
                 </el-tabs>
@@ -145,6 +159,7 @@ export default {
     },
     methods: {
         getDocView(item) {
+            console.log(this.id)
             this.$router.push({
                 path: '/preview',
                 query: {
@@ -156,6 +171,7 @@ export default {
         },
         // ...其他方法...
         getSynoView(item) {
+            console.log(this.id)
             this.$router.push({
                 path: '/preview',
                 query: {
@@ -166,6 +182,7 @@ export default {
             });
         },
         getPicView(item) {
+            console.log(this.id)
             this.$router.push({
                 path: '/preview',
                 query: {
