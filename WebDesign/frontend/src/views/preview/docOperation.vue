@@ -10,8 +10,8 @@
             </div>
         </div>
 
-      <div>{{collectStatus}}</div>
-      <div>{{likeStatus}}</div>
+        <div>{{ collectStatus }}</div>
+        <div>{{ likeStatus }}</div>
     </div>
 </template>
 
@@ -43,9 +43,9 @@ export default {
             docId: this.$route.query.docId
         }
     },
-    props:{
-      collectStatus:{type:Boolean,request:true,default:false},
-      likeStatus:{type:Boolean,request:true,default:false}
+    props: {
+        collectStatus: { type: Boolean, request: true, default: false },
+        likeStatus: { type: Boolean, request: true, default: false }
     },
     mounted() {
 
@@ -56,14 +56,14 @@ export default {
                 window.open(BackendUrl() + "/files/view/" + this.docId, "_blank");
             }
             else if (item.index === "1") {
-              this.$emit("addCollect", Number(item.index))
-              console.log("发出收藏事件")
-              this.collectStatus = !this.collectStatus
+                this.$emit("addCollect", Number(item.index))
+                console.log("发出收藏事件")
+                this.collectStatus = !this.collectStatus
             }
-            else if (item.index === "2"){
-              this.$emit("addLike", Number(item.index))
-              console.log("发出点赞事件")
-              this.likeStatus = !this.likeStatus
+            else if (item.index === "2") {
+                this.$emit("addLike", Number(item.index))
+                console.log("发出点赞事件")
+                this.likeStatus = !this.likeStatus
             }
         }
     }
@@ -87,12 +87,10 @@ export default {
     margin: auto;
     position: relative;
 
-    background: #FACF36;
-    border: 2px solid #000000;
 }
 
 .item:hover {
-    background-color: #f1db77;
+
     cursor: pointer;
     border: 2px #2d2c2b solid;
 }
