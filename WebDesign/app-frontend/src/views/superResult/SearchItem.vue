@@ -1,0 +1,313 @@
+<template>
+    <div class="search-doc">
+        <div class="doc-title-group">
+            <div class="doc-pic" style="text-align: center;">
+                <img :src="thumbId | imgSrc" alt="thumb"
+                    style="width: 36px;max-height: 48px;border: 1px solid #dcdee2; border-radius: 2px">
+            </div>
+            <div class="title-group">
+                <div class="doc-title-info">
+                    {{ title }}
+
+                </div>
+
+                <div class="description">
+                    <div class="description-item">
+                        {{ timeIn }}
+                    </div>
+                    <div class="description-item">
+                        {{ userName }}
+                    </div>
+                    <div class="description-item" v-show="categoryIn">
+                        {{ categoryIn }}
+                    </div>
+                    <Tag color="blue" v-for="item in tagsIn">{{ item }}</Tag>
+                </div>
+            </div>
+            <div class="defen">得分:{{ this.score }}</div>
+        </div>
+        <div class="doc-abstract" v-show="ocrResultListin">
+
+            <div style="padding:0 0 0 30px">
+                <div @click="getDocView()">【第{{ esSearchContentList[0].pageNum }}页】 <div style="color:blue">来源于文本</div>
+                    <p v-html="esSearchContentList[0].contentHighLight[0]"></p>
+                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                </div>
+
+                <div @click="getDocView1()">【第{{ esSearchContentList[1].pageNum }}页】 <div style="color:blue">来源于文本</div>
+                    <p v-html="esSearchContentList[1].contentHighLight[0]"></p>
+                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                </div>
+                <div v-if="this.contentshow" @click="getDocView2()">【第{{ esSearchContentList[2].pageNum }}页】 <div
+                        style="color:blue">来源于文本</div>
+                    <p v-html="esSearchContentList[2].contentHighLight[0]"></p>
+                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                </div>
+                <div v-if="this.ocrshow" @click="getDocView3()">【第{{ ocrResultList[0].pdfPage + 1 }}页】 <div style="color:red">
+                        来源于图片</div>
+                    <p v-html="ocrResultList[0].ocrText"></p>
+                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
+                </div>
+            </div>
+
+
+
+        </div>
+        <ul class="ivu-list-item-action">
+            <li>
+                <i class="ivu-icon ivu-icon-ios-star-outline"></i>
+                {{ collectNum }}
+            </li>
+            <li>
+                <i class="ivu-icon ivu-icon-ios-thumbs-up-outline"></i>1
+            </li>
+            <li>
+                <i class="ivu-icon ivu-icon-ios-chatbubbles-outline"></i>
+                {{ commentNum }}
+            </li>
+        </ul>
+        <!--        </div>-->
+    </div>
+</template>
+
+<script>
+
+import { parseTime } from "@/utils/index"
+import { BackendUrl } from '@/api/request'
+
+export default {
+    name: "SearchItem",
+    data() {
+        return {
+            pageNum: '',
+            ocrshow: '',
+            contentshow: '',
+            ocrNum: '',
+            score: this.like_score + this.content_score + this.click_score
+        }
+    },
+    props: {
+        id: { type: String, requires: true },
+        thumbId: { type: String, requires: true },
+        title: { type: String, requires: true },
+        time: { type: String, requires: true, default: "232" },
+        userName: { type: String, requires: true, default: 'admin' },
+        category: { type: Object, requires: false, default: '' },
+        tags: { type: Array, requires: false, default: [] },
+        collectNum: { type: Number, requires: false, default: 0 },
+        commentNum: { type: Number, requires: false, default: 0 },
+        keyword: { type: String, requires: true },
+        esSearchContentList: { type: Array, requires: false, default: [] },
+        ocrResultList: { type: Array, requires: false, default: [] },
+        like_score: { type: Number, requires: false },
+        content_score: { type: Number, requires: false },
+        click_score: { type: Number, requires: false },
+    },
+    // 将 prop 数据转换为本地数据
+    created() {
+        console.log(this.like_score)
+        console.log(this.content_score)
+        console.log(this.click_score)
+        console.log(this.esSearchContentList[0])
+        console.log(this.esSearchContentList[0].pageNum)
+
+        this.score = this.like_score + this.content_score + this.click_score
+    },
+    computed: {
+        categoryIn: function () {
+            if (this.category === null || this.category.name === null) {
+                return null;
+            } else {
+                let temp = this.category.name
+                if (temp.length > 6) {
+                    temp = temp.substring(0, 6) + '...'
+                }
+                return temp;
+            }
+        },
+        tagsIn: function () {
+            if (this.tags === null || this.tags.length === 0) {
+                return []
+            } else {
+                let temp = []
+                // console.log(this.stringList)
+                this.tags.forEach(item => {
+                    let temp1 = item.name
+                    if (temp1.length > 8) {
+                        temp1 = temp1.substring(0, 8) + '...'
+                    }
+                    temp.push(temp1)
+                })
+                return temp
+            }
+        },
+        timeIn: function () {
+            return parseTime(new Date(this.time), '{y}年{m}月{d}日 {h}:{i}:{s}');
+        },
+
+        esSearchContentListin: function () {
+            return this.esSearchContentList
+        },
+        ocrResultListin: function () {
+            // console.log(this.esSearchContentList)
+            if (this.ocrResultList === null || this.ocrResultList === 0) {
+                this.ocrshow = false
+                this.contentshow = true
+            } else {
+                this.contentshow = false
+                this.ocrshow = true
+            }
+            return true
+        },
+        getDocView() {
+            // console.log(x)
+            console.log(typeof (this.esSearchContentList[0].pageNum))
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.esSearchContentList[0].pageNum
+
+                }
+            })
+
+        },
+        getDocView1() {
+            console.log(this.esSearchContentList[1].pageNum)
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.esSearchContentList[1].pageNum
+                }
+            })
+
+        },
+        getDocView2() {
+            // console.log(x)
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.esSearchContentList[2].pageNum
+                }
+            })
+
+        },
+        getDocView3() {
+            console.log(this.ocrNum)
+            console.log(typeof (this.ocrResultList[0].pdfPage))
+            this.$router.push({
+                path: '/preview',
+                query: {
+                    docId: this.id,
+                    keyword: this.keyword,
+                    pageNum: this.ocrResultList[0].pdfPage + 1
+                }
+            })
+
+        },
+    },
+    filters: {
+        imgSrc(value) {
+            if (value === "" || value === undefined || value == null) {
+                return BackendUrl() + "/files/image2/d2d9933cf295443990b2bed036a534ec";
+            } else {
+                return BackendUrl() + "/files/image2/" + value;
+            }
+        }
+    }
+}
+</script>
+
+<style scoped>
+.search-doc {
+    padding: 12px 12px;
+    border-bottom: 1px solid #e8eaec;
+}
+
+.search-doc:hover {
+    background-color: rgba(245, 245, 245, 100);
+    cursor: pointer;
+}
+
+
+.doc-title-group {
+    height: 48px;
+    margin-bottom: 16px;
+    /*display: flex;*/
+    /*flex: 1;*/
+    /*align-items: flex-start;*/
+    display: block;
+}
+
+.doc-pic {
+    height: 48px;
+    width: 48px;
+    float: left;
+    line-height: 48px;
+    margin: auto;
+}
+
+.title-group {
+    height: 48px;
+    float: left;
+    width: calc(100% - 60px);
+}
+
+.doc-title-info {
+    height: 22px;
+    /*line-height: 36px;*/
+    /*margin-bottom: 12px;*/
+    color: rgba(208, 164, 1, 100);
+    font-size: 16px;
+    font-weight: 700;
+
+}
+
+.defen {
+    display: inline-block;
+    height: 22px;
+    float: right;
+}
+
+.doc-title-info:hover {
+    text-decoration: underline;
+    color: rgba(208, 164, 1, 100);
+}
+
+.description {
+    height: 26px;
+    line-height: 26px;
+    display: block;
+    color: rgba(0, 0, 0, .45);
+    font-size: 14px;
+    float: left;
+}
+
+.description-item {
+    width: 200px;
+    line-height: 24px;
+    padding-top: 2px;
+    float: left;
+}
+
+ul {
+    margin: 16px 0 0;
+}
+
+li {
+    padding: 0 20px;
+}
+
+.doc-abstract>>>em {
+    background-color: yellow;
+}
+
+.sl-abstract {
+    margin: 2px 0 0 0;
+}
+</style>

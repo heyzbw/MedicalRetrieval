@@ -1,0 +1,132 @@
+<template>
+    <div class="operation-container">
+
+        <div class="item" v-for="item in data" @click="operate(item)">
+            <div class="item-logo">
+                <img :src="item.src" :alt="item.src" style="height: 85%;width:85%">
+            </div>
+            <div class="operation-title">
+                {{ item.name }}
+            </div>
+        </div>
+        <!-- 
+        <div>{{ collectStatus }}</div>
+        <div>{{ likeStatus }}</div> -->
+    </div>
+</template>
+
+<script>
+import CollectRequest from '@/api/collect'
+import { BackendUrl } from '@/api/request'
+
+export default {
+    name: "docOperation",
+    data() {
+        return {
+            data: [
+                {
+                    name: "马上收藏",
+                    src: require("@/assets/source/cancelcollect.png"),
+                    index: "1"
+                },
+                {
+                    name: "竖个大拇指",
+                    src: require("@/assets/source/like.png"),
+                    index: "2"
+                },
+                {
+                    name: "立马下载",
+                    src: require("@/assets/source/download.png"),
+                    index: "3"
+                },
+            ],
+            docId: this.$route.query.docId
+        }
+    },
+    props: {
+        collectStatus: { type: Boolean, request: true, default: false },
+        likeStatus: { type: Boolean, request: true, default: false }
+    },
+    mounted() {
+
+    },
+    methods: {
+        operate(item) {
+            if (item.index === "3") {
+                window.open(BackendUrl() + "/files/view/" + this.docId, "_blank");
+            }
+            else if (item.index === "1") {
+                this.$emit("addCollect", Number(item.index))
+                console.log("发出收藏事件")
+                this.collectStatus = !this.collectStatus
+                console.log("collectStatus:" + this.collectStatus)
+                if (this.collectStatus == true) {
+                    this.data[0].src = require("@/assets/source/collect.png")
+                }
+                else {
+                    this.data[0].src = require("@/assets/source/cancelcollect.png")
+
+                }
+            }
+            else if (item.index === "2") {
+                this.$emit("addLike", Number(item.index))
+                console.log("发出点赞事件")
+                this.likeStatus = !this.likeStatus
+            }
+        },
+    }
+}
+</script>
+
+<style scoped>
+.operation-container {
+    width: 30%;
+    min-width: 300px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    height: 150px;
+}
+
+.item {
+    width: 100px;
+    height: 100px;
+    border-radius: 120px;
+    margin: auto;
+    position: relative;
+
+}
+
+.item:hover {
+    cursor: pointer;
+
+}
+
+.operation-title {
+    font-size: 14px;
+    font-family: PingFangSC-Medium, PingFang SC, serif;
+    font-weight: 500;
+    color: #000000;
+    line-height: 20px;
+}
+
+.item-logo {
+    height: 80px;
+    line-height: 80px;
+    width: 120px;
+}
+
+.item-logo img {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+}
+
+img {
+    /*width: 48px;*/
+    /*height: 48px;*/
+}
+</style>
