@@ -4,7 +4,7 @@
             <!-- <p>{{ selectedText }}</p> -->
             <!-- <button @click="translateText">翻译</button> -->
         </div>
-        <div v-show="view_flag" style="padding: 400px; color: #ffcc4f;">
+        <div v-show="view_flag" style="padding: 100px; color: #ffcc4f;">
             <div class="demo-spin-icon-load">
                 <Icon type="md-refresh" style="font-size: 48px;" />
             </div>
@@ -260,6 +260,6 @@ export default {
         width: 100%;
     }
 
-    height: 98.7vh;
+    height: 65vh;
 }
 </style>

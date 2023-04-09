@@ -10,10 +10,10 @@
             <Icon type="md-checkmark-circle-outline" />
             文档审核
             </MenuItem> -->
-            <MenuItem name="allDocuments" style="padding:5px">
+            <!-- <MenuItem name="allDocuments" style="padding:5px">
             <Icon type="md-folder-open" />
             全部文档
-            </MenuItem>
+            </MenuItem> -->
             <MenuItem name="category" style="padding:5px">
             <Icon type="md-archive" />
             文档分类

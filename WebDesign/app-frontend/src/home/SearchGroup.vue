@@ -314,12 +314,14 @@ export default {
 
 <style lang="scss" scoped>
 .search-group {
-    width: 100%;
+    width: 95%;
     height: 340px;
     position: absolute;
     left: 0;
     top: 0;
     padding-top: 20%;
+    padding-left: 5%;
+
     //border: 2px solid #000;
 
     .ulist {
@@ -362,11 +364,11 @@ export default {
                 align-content: center;
 
                 .search-selection {
-                    width: 12%;
+                    width: 20%;
                     border-right: 1.5px solid #000;
                     margin-right: 5px;
-                    height: 50px;
-                    line-height: 45px;
+                    height: 47px;
+                    line-height: 43px;
                     display: inline-block;
                     vertical-align: middle;
 

@@ -1,20 +1,28 @@
 {
   root: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/frontend',
-  registry: 'https://registry.npmmirror.com',
-  pkgs: [],
+  registry: 'https://registry.npmjs.org/',
+  pkgs: [
+    {
+      name: 'vue-image-size',
+      version: 'latest',
+      type: 'tag',
+      alias: undefined,
+      arg: [Result]
+    }
+  ],
   production: false,
   cacheStrict: false,
   cacheDir: null,
   env: {
-    npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/panyibo/.cnpmrc","--disturl=https://npmmirror.com/mirrors/node","--registry=https://registry.npmmirror.com","-g","@vue/cli@4.5.13"],"original":["--fix-bug-versions","--china","--userconfig=/Users/panyibo/.cnpmrc","--disturl=https://npmmirror.com/mirrors/node","--registry=https://registry.npmmirror.com","-g","@vue/cli@4.5.13"]}',
+    npm_config_registry: 'https://registry.npmjs.org/',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/panyibo/.cnpmrc","--disturl=https://npmmirror.com/mirrors/node","--registry=https://registry.npmjs.org/","vue-image-size"],"original":["--fix-bug-versions","--china","--userconfig=/Users/panyibo/.cnpmrc","--disturl=https://npmmirror.com/mirrors/node","--registry=https://registry.npmjs.org/","vue-image-size"]}',
     npm_config_user_agent: 'npminstall/7.4.2 npm/? node/v14.17.4 darwin x64',
     NODE: '/usr/local/bin/node',
     npm_node_execpath: '/usr/local/bin/node',
     npm_execpath: '/usr/local/lib/node_modules/cnpm/node_modules/npminstall/bin/install.js',
     npm_config_userconfig: '/Users/panyibo/.cnpmrc',
     npm_config_disturl: 'https://npmmirror.com/mirrors/node',
-    npm_config_r: 'https://registry.npmmirror.com',
+    npm_config_r: 'https://registry.npmjs.org/',
     NODEJS_ORG_MIRROR: 'https://cdn.npmmirror.com/binaries/node',
     NVM_NODEJS_ORG_MIRROR: 'https://cdn.npmmirror.com/binaries/node',
     PHANTOMJS_CDNURL: 'https://cdn.npmmirror.com/binaries/phantomjs',
@@ -176,13 +184,11 @@
   strictSSL: true,
   ignoreScripts: false,
   ignoreOptionalDependencies: false,
-  detail: true,
+  detail: false,
   forceLinkLatest: false,
   trace: false,
   engineStrict: false,
   registryOnly: false,
   client: false,
-  autoFixVersion: [Function: autoFixVersion],
-  targetDir: null,
-  binDir: null
+  autoFixVersion: [Function: autoFixVersion]
 }

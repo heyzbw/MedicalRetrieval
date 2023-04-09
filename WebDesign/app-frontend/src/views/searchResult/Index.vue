@@ -19,7 +19,7 @@
             <div class="page-container" v-show="datapubmed.length > 0 || this.data.length > 0">
                 <Page :model-value="currentPage" :total="totalItems" :page-size="pageSize" @on-change="pageChange" />
             </div>
-            <div style="padding: 30px 10px; color: #555" v-show="data.length < 1">
+            <div style="padding: 30px 10px; color: #555 ; font-size: 15px" v-show="data.length < 1">
                 <span v-if="!loading">暂无内容，试试其他呢～</span>
                 <span v-else>拼命查找中，请等待...</span>
             </div>

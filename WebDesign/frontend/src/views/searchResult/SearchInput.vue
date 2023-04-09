@@ -42,6 +42,7 @@ export default {
     height: 80px;
     /*margin: auto;*/
     padding-top: 20px;
+    color: #637cfd;
     /*background-color: #8ffaa6;*/
 }
 
@@ -76,11 +77,11 @@ export default {
     bottom: 5px;
     left: -1px;
     background: inherit;
-    background-color: #8ffaa6;
+    background-color: #637cfd;
 }
 
 /deep/ .ivu-input-search {
     background-color: #ffffff !important;
-    color: #8ffaa6 !important;
+    color: #8fb6fa !important;
 }
 </style>

@@ -63,7 +63,7 @@ export default {
 .container {
     height: 100vh;
     width: 100%;
-    background-image: url("../../assets/source/background.png");
+    background-image: url("../../assets/source/medicine.png");
 }
 
 .login-wrapper {
@@ -105,7 +105,7 @@ export default {
     padding: 10px;
     width: 100%;
     margin-top: 40px;
-    background-image: linear-gradient(to right, #b3eea6, #fafbc2);
+    background-image: linear-gradient(to right, #a6e7ee, #6893f6);
     color: #fff;
     cursor: pointer;
 }

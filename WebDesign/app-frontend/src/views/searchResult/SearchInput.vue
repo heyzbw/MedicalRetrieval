@@ -37,11 +37,13 @@ export default {
 
 <style scoped>
 .search-zone {
-    width: 100%;
+    width: 90%;
     line-height: 80px;
     height: 80px;
     /*margin: auto;*/
     padding-top: 20px;
+    padding-left: 5%;
+
     /*background-color: #f1db77;*/
 }
 

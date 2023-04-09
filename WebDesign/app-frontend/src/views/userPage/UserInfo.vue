@@ -1,5 +1,5 @@
 <template>
-    <div style="text-align: left; padding: 10px; position: relative; width: 400px; height: 100%;">
+    <div style="text-align: left; padding: 10px; position: relative; width: 300px; height: 100%;">
         <div class="basic-info">
             基本信息
         </div>
@@ -7,35 +7,38 @@
             <FormItem label="用户名">
                 <Row>
                     <Col span="6">
-                    <Input v-model="userForm.username" :placeholder="placeholder" disabled></Input>
+                    <Input v-model="userForm.username" :placeholder="placeholder" disabled style="width:80px;"></Input>
+
                     </Col>
                 </Row>
             </FormItem>
             <FormItem label="密码">
                 <Row>
                     <Col span="6">
-                    <Input v-model="userForm.checkPassword" type="password" :placeholder="placeholder"></Input>
+                    <Input v-model="userForm.checkPassword" type="password" :placeholder="placeholder"
+                        style="width:100px;"></Input>
                     </Col>
                 </Row>
             </FormItem>
             <FormItem label="确认密码">
                 <Row>
                     <Col span="6">
-                    <Input v-model="userForm.password" type="password" :placeholder="placeholder"></Input>
+                    <Input v-model="userForm.password" type="password" :placeholder="placeholder"
+                        style="width:100px;"></Input>
                     </Col>
                 </Row>
             </FormItem>
             <FormItem label="手机号">
                 <Row>
                     <Col span="6">
-                    <Input v-model="userForm.phoneNum" :placeholder="placeholder"></Input>
+                    <Input v-model="userForm.phoneNum" :placeholder="placeholder" style="width:100px;"></Input>
                     </Col>
                 </Row>
             </FormItem>
             <FormItem label="邮箱">
                 <Row>
                     <Col span="6">
-                    <Input v-model="userForm.mail" :placeholder="placeholder"></Input>
+                    <Input v-model="userForm.mail" :placeholder="placeholder" style="width:100px;"></Input>
                     </Col>
                 </Row>
             </FormItem>
@@ -61,8 +64,8 @@
             </FormItem>
         </Form>
 
-        <div style="position: absolute; right: 40px; top: 40px;">
-            <div class="user-img-container" style="border-radius: 8px; width: 120px; height: 120px">
+        <div style="position: absolute; right: 10px; top: 40px;">
+            <div class="user-img-container" style="border-radius: 8px; width: 100px; height: 100px">
                 <img :src="userSrc" alt="" width="100%" style="" referrerpolicy="no-referrer" />
             </div>
             <div style="position: absolute; top: 0px; right: 0;">
