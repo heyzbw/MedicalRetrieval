@@ -31,7 +31,7 @@ export default {
                 },
                 {
                     name: "竖个大拇指",
-                    src: require("@/assets/source/like.png"),
+                    src: require("@/assets/source/like-empty.png"),
                     index: "2"
                 },
                 {
@@ -48,6 +48,9 @@ export default {
         likeStatus: { type: Boolean, request: true, default: false }
     },
     mounted() {
+
+    },
+    created() {
 
     },
     methods: {
@@ -72,6 +75,13 @@ export default {
                 this.$emit("addLike", Number(item.index))
                 console.log("发出点赞事件")
                 this.likeStatus = !this.likeStatus
+                if (this.collectStatus == true) {
+                    this.data[1].src = require("@/assets/source/like-fill.png")
+                }
+                else {
+                    this.data[1].src = require("@/assets/source/like.png")
+
+                }
             }
         },
     }

@@ -78,7 +78,7 @@ export default {
 .container {
 
     width: 100%;
-    background-image: url("../../assets/source/loginground.png");
+
     background-size: 100%;
     height: 1000px;
 }
@@ -122,7 +122,7 @@ export default {
     padding: 10px;
     width: 100%;
     margin-top: 40px;
-    background-image: linear-gradient(to right, #eaeea6, #c2fbce);
+    background-image: linear-gradient(to right, #a6e7ee, #6893f6);
     color: #fff;
     cursor: pointer;
 }

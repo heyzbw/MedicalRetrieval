@@ -8,9 +8,7 @@
                     <filter-list-page :data="docList" :total="total" :pageNum="pageNum" :pageSize="pageSize"
                         @on-page-change="changePage"></filter-list-page>
                 </TabPane>
-                <TabPane label="人气排名" name="name2" v-if="true">
-                    <filter-list-page></filter-list-page>
-                </TabPane>
+
             </Tabs>
         </div>
     </div>

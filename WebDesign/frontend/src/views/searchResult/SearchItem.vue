@@ -32,27 +32,8 @@
         </div>
         <div class="doc-abstract" v-show="ocrResultListin">
             <div style="padding:0 0 0 30px">
-                <!-- <div @click="getDocView()" v-if="contentResultSize>=1">【第{{ esSearchContentList[0].pageNum }}页】 <div style="color:blue">来源于文本</div>
-                    <p v-html="esSearchContentList[0].contentHighLight[0]"></p>
-                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                </div>
-
-                <div @click="getDocView1()" v-if="contentResultSize>=2">【第{{ esSearchContentList[1].pageNum }}页】 <div style="color:blue">来源于文本</div>
-                    <p v-html="esSearchContentList[1].contentHighLight[0]"></p>
-                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                </div>
-                <div v-if="this.contentshow &&  contentResultSize>=3" @click="getDocView2()" >【第{{ esSearchContentList[2].pageNum }}页】 <div style="color:blue">来源于文本</div>
-                    <p v-html="esSearchContentList[2].contentHighLight[0]"></p>
-                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                </div>
-                <div v-if="this.ocrshow" @click="getDocView3()">【第{{ ocrResultList[0].pdfPage + 1 }}页】 <div
-                        style="color:red">
-                        来源于图片</div>
-                    <p v-html="ocrResultList[0].ocrText"></p>
-                    <hr style="height:1px;border:none;border-top:1px solid lightgray;">
-                </div> -->
                 <el-tabs type="card" class="description" width="100%" style="height: 100%" v-model="activeTab">
-                    <el-tab-pane label="来源于文本" name="first" width="100%">
+                    <el-tab-pane label="来源于文本" name="first" width="100%" v-if="contentResultSize">
                         <!--用一个循环来写-->
                         <div v-for="(item, index) in esSearchContentList" :key="index" @click="getDocView(item)"
                             v-if="contentResultSize >= index + 1">
@@ -233,6 +214,17 @@ export default {
         if (this.esSearchContentList_syno !== [] && this.esSearchContentList_syno !== null) {
             this.esSearchContentList_synoSize = this.esSearchContentList_syno.length
         }
+        console.log(this.contentResultSize)
+        console.log(this.ocrResultListSize)
+
+        if (this.contentResultSize == 0) {
+            if (this.ocrResultListSize != 0) {
+                this.activeTab = 'tab_third'
+            }
+            else {
+                this.activeTab = 'tab_second'
+            }
+        }
         console.log("esSearchContentList:", this.esSearchContentList)
 
     },
@@ -349,9 +341,13 @@ export default {
     float: right;
 }
 
-.doc-title-info:hover {
-    text-decoration: underline;
-    color: rgba(208, 164, 1, 100);
+.doc-title-info {
+    height: 22px;
+    /*line-height: 36px;*/
+    /*margin-bottom: 12px;*/
+    color: rgb(29, 27, 27);
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .description {

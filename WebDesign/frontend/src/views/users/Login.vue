@@ -78,7 +78,7 @@ export default {
 .container {
     height: 100vh;
     width: 100%;
-    background-image: url("../../assets/source/background.png");
+    background-image: url("../../assets/source/medicine.png");
     background-size: 100%;
 }
 
@@ -89,7 +89,7 @@ export default {
     border-radius: 15px;
     padding: 0 50px;
     position: relative;
-    left: 80%;
+    left: 55%;
     top: 50%;
     transform: translate(-50%, -50%);
 }
@@ -121,7 +121,7 @@ export default {
     padding: 10px;
     width: 100%;
     margin-top: 40px;
-    background-image: linear-gradient(to right, #eaeea6, #c2fbce);
+    background-image: linear-gradient(to right, #a6e7ee, #6893f6);
     color: #fff;
     cursor: pointer;
 }
@@ -143,7 +143,7 @@ a {
     position: absolute;
     width: 791px;
     height: 103px;
-    left: 10%;
+    left: 3%;
     top: 50%;
     display: flex;
     align-items: center;
@@ -155,7 +155,7 @@ a {
     text-align: center;
     font: 700 222px/289px "Rounded Mplus 1c Bold", sans-serif;
     position: absolute;
-    left: 8%;
+    left: 2%;
     top: 20%;
     width: 518px;
     height: 308px;
@@ -168,7 +168,7 @@ a {
     width: 315px;
     height: 301px;
     position: absolute;
-    left: 36%;
+    left: 24%;
     top: 20%;
 }
 </style>

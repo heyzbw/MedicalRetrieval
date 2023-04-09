@@ -204,9 +204,13 @@ export default {
     font-weight: 700;
 }
 
-.doc-title-info:hover {
-    text-decoration: underline;
-    color: rgba(208, 164, 1, 100);
+.doc-title-info {
+    height: 22px;
+    /*line-height: 36px;*/
+    /*margin-bottom: 12px;*/
+    color: rgb(18, 135, 243);
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .description {
