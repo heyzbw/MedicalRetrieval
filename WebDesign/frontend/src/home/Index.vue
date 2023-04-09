@@ -419,9 +419,9 @@ footer {
 
 .hotdots {
     width: 100%;
-    height: 240px;
+    height: 20%;
     position: absolute;
-    left: -32%;
+    left: -36%;
     top: 73%;
 
 }

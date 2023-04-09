@@ -25,7 +25,7 @@
                 </div>
             </div>
             <el-tooltip class="item" effect="dark" placement="bottom">
-                <div slot="content">{{ this.tooltips }} </div>
+                <div slot="content" style="font-size: 15px;">{{ this.tooltips }} </div>
                 <div class="defen">得分:{{ this.score }}</div>
             </el-tooltip>
 
@@ -51,7 +51,7 @@
                     <p v-html="ocrResultList[0].ocrText"></p>
                     <hr style="height:1px;border:none;border-top:1px solid lightgray;">
                 </div> -->
-                <el-tabs type="card" width="100%" style="height: 100%" v-model="activeTab">
+                <el-tabs type="card" class="description" width="100%" style="height: 100%" v-model="activeTab">
                     <el-tab-pane label="来源于文本" name="first" width="100%">
                         <!--用一个循环来写-->
                         <div v-for="(item, index) in esSearchContentList" :key="index" @click="getDocView(item)"
@@ -75,7 +75,7 @@
                     <el-tab-pane label="来源于图片" name="tab_third" width="100%" v-if="ocrResultListSize">
 
                         <el-tooltip placement="bottom" effect="light">
-                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 1">
+                            <div slot="content" style="width: 600px;text-align: center" v-if="ocrResultListSize >= 1">
                                 <highlight-rect :image="ocrResultList[0].image" :textResult="ocrResultList[0].textResult" />
                             </div>
                             <div v-if="ocrResultListSize >= 1" @click="getPicView(ocrResultList[0])">【第{{
@@ -87,7 +87,7 @@
                             </div>
                         </el-tooltip>
                         <el-tooltip placement="bottom" effect="light">
-                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 2">
+                            <div slot="content" style="width: 600px;text-align: center" v-if="ocrResultListSize >= 2">
                                 <highlight-rect :image="ocrResultList[1].image" :textResult="ocrResultList[1].textResult" />
                             </div>
                             <div v-if="ocrResultListSize >= 2" @click="getPicView(ocrResultList[0])">【第{{
@@ -99,7 +99,7 @@
                             </div>
                         </el-tooltip>
                         <el-tooltip placement="bottom" effect="light">
-                            <div slot="content" style="width: 500px;text-align: center" v-if="ocrResultListSize >= 3">
+                            <div slot="content" style="width: 600px;text-align: center" v-if="ocrResultListSize >= 3">
                                 <highlight-rect :image="ocrResultList[2].image" :textResult="ocrResultList[2].textResult" />
                             </div>
                             <div v-if="ocrResultListSize >= 3" @click="getPicView(ocrResultList[0])">【第{{
@@ -343,6 +343,9 @@ export default {
 .defen {
     display: inline-block;
     height: 22px;
+    font-style: italic;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
     float: right;
 }
 
@@ -385,4 +388,5 @@ li {
 
 .sl-abstract {
     margin: 2px 0 0 0;
-}</style>
+}
+</style>

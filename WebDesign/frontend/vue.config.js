@@ -67,19 +67,7 @@ module.exports = {
                     javascriptEnabled: true
                 }
             },
-            // postcss: {
-            //     plugins: [
-            //         require('postcss-pxtorem')({
-            //             rootValue: 97.5,
-            //             propList: ['*']
-            //         })
-            //     ]
-            // },
-            // sass: {
-            //     // 配置scss文件全局变量,没有分号会报错
-            //     //data: `@import "@ui/common.scss";`,// 旧版sass-loader写法(8.0以下)
-            //     prependData: `@import "@ui/common.scss";` // 新版scss-loader(8.0及以上)
-            // }
+
         },
 
         // 为所有的 CSS 及其预处理文件开启 CSS Modules。

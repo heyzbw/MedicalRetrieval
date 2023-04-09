@@ -29,7 +29,7 @@
             <div class="search-input">
                 <div class="search-input-top">
                     <div class="search-selection" @click="routeTo">
-                        <span>全部</span>
+                        <span>文库</span>
                     </div>
                     <input :placeholder="placeholder" v-model="searchValue" @focus="userInputFlag = true"
                         @blur="whenInputBlur" @keyup.enter="clickToSearch(searchValue)" @input="changeItem" ref="input">
@@ -409,6 +409,7 @@ export default {
     .search-zone {
         width: 745px;
         margin: auto;
+        margin-right: 25%;
         display: flex;
         justify-content: flex-start;
 
@@ -557,8 +558,9 @@ export default {
 .box {
     width: 20%;
     height: 10%;
-    margin: auto;
-    display: flex;
+    margin: -10% 0 -4% 15%;
+    //display: flex;
+    position: relative;
     font-style: italic;
 
 }
@@ -567,23 +569,26 @@ export default {
     width: 300px;
     height: 200px;
     //text-align: center;
-    position: absolute;
-    display: flex;
-    top: 68%;
+    //position: absolute;
+    //display: flex;
+    top: 3%;
     left: 40%;
-    margin-top: 0px;
-    margin-left: -15%
+    position: relative;
+    margin-top: -5%;
+    margin-left: 15%;
+    margin-bottom: 0%
 }
 
 .sc1 {
     width: 300px;
     height: 200px;
     //text-align: center;
-    position: absolute;
-    top: 83%;
-    left: 45%;
-    margin-top: 0px;
-    margin-left: -13%
+    position: relative;
+    //position: absolute;
+    top: 3%;
+    left: 65%;
+    margin-top: -30%;
+    margin-left: 23%
 }
 
 .sc p {

@@ -1,7 +1,8 @@
 <template>
   <div style="position: relative">
-    <img :src="image | imgSrc" alt="docId" referrerpolicy="no-referrer" ref="image" />
-    <canvas ref="canvas" style="position: absolute; top: 0; left: 0; z-index: 1;"></canvas>
+    <img :src="image | imgSrc" alt="docId" referrerpolicy="no-referrer" ref="image" :width="width" :height="height" />
+    <canvas ref="canvas" :width="width" :height="height"
+      style="position: absolute; top: 0; left: 0; z-index: 1;"></canvas>
   </div>
 </template>
 
@@ -9,6 +10,12 @@
 import { BackendUrl } from '@/api/request';
 
 export default {
+  data() {
+    return {
+      width: 600, // 缩略图宽度
+      height: 600 // 缩略图高度
+    }
+  },
   props: {
     image: String,
     textResult: {
@@ -16,7 +23,7 @@ export default {
       default: () => []
     }
   },
-  
+
   filters: {
     imgSrc(value) {
       if (value === '' || value == null) {
@@ -50,10 +57,14 @@ export default {
     onImageLoad() {
       const canvasElement = this.$refs.canvas;
       const imageElement = this.$refs.image;
-
+      const ctx = canvasElement.getContext('2d')
       canvasElement.width = imageElement.offsetWidth;
       canvasElement.height = imageElement.offsetHeight;
+      ctx.drawImage(imageElement, 0, 0, this.width, this.height)
+      const dataUrl = canvasElement.toDataURL()
 
+      // 在控制台输出缩略图的数据URL
+      console.log(dataUrl)
       this.textResult.forEach(item => {
         this.drawHighlightRect(item);
       });
