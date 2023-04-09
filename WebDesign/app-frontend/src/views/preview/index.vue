@@ -154,7 +154,8 @@ export default {
             this.keyword = this.$route.query.keyword
             this.pageNum = this.$route.query.pageNum
             var params = {
-                docId: this.docId
+                docId: this.docId,
+                userId: localStorage.getItem("id")
             }
             DocRequest.getData(params).then(response => {
                 if (response.code === 200) {
@@ -492,7 +493,7 @@ export default {
         box-shadow: 0px 0px 5px 0px rgba(64, 64, 64, 0.3000);
         border-radius: 8px;
         background-color: #fffeff;
-        padding: 36px;
+        padding: 12px;
         display: block;
 
         .doc-trim {
@@ -508,15 +509,15 @@ export default {
             display: block;
             width: calc(100% - 40px);
             float: left;
-            padding: 0 10px;
+            padding: 0 0px;
             text-align: left;
 
             .doc-info-title {
-                font-size: 24px;
+                font-size: 14px;
                 font-family: PingFangSC-Semibold, PingFang SC;
-                font-weight: 600;
+                font-weight: 200;
                 color: #000000;
-                line-height: 33px;
+                line-height: 20px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 display: -webkit-box;
@@ -529,7 +530,7 @@ export default {
                 line-height: 40px;
                 display: flex;
                 align-items: flex-start;
-                padding-top: 8px;
+                padding-top: 3px;
             }
 
             .doc-info-detail {
@@ -546,8 +547,8 @@ export default {
 
     .doc-preview {
         margin: 15px 0;
-        overflow-y: auto;
-        height: 100vh;
+        //overflow-y: auto;
+        height: 70%;
         padding: 5px 0;
         box-shadow: 0px 0px 5px 0px rgba(64, 64, 64, 0.3000);
         border-radius: 8px;

@@ -8,50 +8,56 @@
                 <!--                <DocPage></DocPage>-->
                 <Layout>
                     <Sider hide-trigger :style="{
-                        'max-width': '150px', 'width': '150px', 'height': '900px', 'background': 'none',
-                        'padding': '10px'
+                        'max-width': '100px', 'width': '100px', 'height': '900px', 'background': 'none',
+                        'padding-top': '10px', 'margin-right': '-80px'
                     }">
-                        <div style="width: 240px;height: 900px;
-                                                    background-color: #FFFFFF;
-                                                    box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.3);border-radius: 8px;
-                                                    padding: 60px 30px 0px 30px;
-                                                    ">
+                        <div
+                            style="width: 100px;height: 900px;
+                                                                                                                                                                                                                        background-color: #FFFFFF;
+                                                                                                                                                                                                                        box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.3);border-radius: 8px;
+                                                                                                                                                                                                                        padding: 60px 0px 0px 0px;
+                                                                                                                                                                                                                        ">
                             <div style="width: 100%; height: 35%; text-align: center">
-                                <div class="user-avatar" style=" border-radius: 120px; width: 120px; height: 120px;
-                            margin: auto;">
+                                <div class="user-avatar"
+                                    style=" border-radius: 80px; width: 80px; height: 80px;
+                                                                                                                                                                                                margin: auto;">
                                     <img :src="0 | userAvatar" alt="" />
                                 </div>
-                                <div style="height: 22px; width: 100%; white-space: nowrap;color: #000;font-size: 16px; font-weight: 600px;
-                            line-height: 22px; margin-top: 18px;">
+                                <div
+                                    style="height: 22px; width: 100%; white-space: nowrap;color: #000;font-size: 16px; font-weight: 600px;
+                                                                                                                                                                                                line-height: 22px; margin-top: 18px;">
                                     <span>{{ username }}</span>
                                 </div>
                                 <div
                                     style="line-height: 22px; color: #aaa; font-size: 12px; font-weight: 400; line-height: 22px;">
                                     <span>{{ type }}</span>
                                 </div>
-                                <div style="padding: 30px 0px;">
-                                    <div class="upload-button" style="width: 180px; height: 45px; border: 2px solid #000;
-                                                                background: #fff;
-                            box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
-                            border-radius: 8px;
-                            display: flex;
-                            justify-content: center;
-                            " @click="selected(uploadRoute)">
-                                        <div style="padding: 5px; line-height: 45px;">
-                                            <img :src="buttonSrc" width="24px" height="28px" />
+                                <div style="padding: 20px 0px;">
+                                    <div class="upload-button"
+                                        style="width: 80px; height: 25px; border: 2px solid #000;
+                                                                                                                                                                                                                                    background: #fff;
+                                                                                                                                                                                                box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
+                                                                                                                                                                                                border-radius: 8px;
+                                                                                                                                                                                                display: flex;
+                                                                                                                                                                                                justify-content: center;
+                                                                                                                                                                                                "
+                                        @click="selected(uploadRoute)">
+                                        <div style="padding: 1px; line-height: 15px;">
+                                            <img :src="buttonSrc" width="18px" height="24px" />
                                         </div>
-                                        <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">
-                                            点我上传文档</span>
+                                        <span style="line-height: 25px; color: #000; font-size: 10px; font-weight: 600;">
+                                            上传文档</span>
 
                                     </div>
                                 </div>
                             </div>
 
-                            <div style="width: 100%;
-                                                        height: 50%;
-                                                        border-top: 1px solid #E7E7E7;
-                                                        padding: 15px;">
-                                <ul>
+                            <div
+                                style="width: 100%;
+                                                                                                                                                                                                                            height: 50%;
+                                                                                                                                                                                                                            border-top: 1px solid #E7E7E7;
+                                                                                                                                                                                                                            padding: 1px;">
+                                <ul style="font-size: 12px;">
                                     <li v-for="item in navData" @click="selected(item)"
                                         :class="{ activeNav: checkedNav.name == item.name }">
                                         {{ item.name }}
@@ -60,12 +66,12 @@
                             </div>
                         </div>
                     </Sider>
-                    <Content style="margin-left: 70px;padding: 10px;">
+                    <Content style="margin-left: 1px;padding-top: 10px;">
                         <div
                             style="width: 100%;
-                                                     height: 900px; background-color: #FFFFFF;
-                                                     z-index: 2;
-                                                     box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.3);border-radius: 8px; overflow-y: hidden">
+                                                                                                                                                                                                                         height: 900px; background-color: #FFFFFF;
+                                                                                                                                                                                                                         z-index: 2;
+                                                                                                                                                                                                                         box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.3);border-radius: 8px; overflow-y: hidden">
                             <router-view v-if="isRouterAlive"></router-view>
                         </div>
                     </Content>
