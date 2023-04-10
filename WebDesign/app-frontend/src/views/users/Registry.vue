@@ -104,6 +104,7 @@ export default {
     text-align: center;
     padding: 10px;
     width: 100%;
+    font-size: 18px;
     margin-top: 40px;
     background-image: linear-gradient(to right, #a6e7ee, #6893f6);
     color: #fff;
@@ -113,6 +114,7 @@ export default {
 .msg {
     text-align: center;
     line-height: 88px;
+    font-size: 18px;
 }
 
 a {

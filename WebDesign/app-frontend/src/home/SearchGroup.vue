@@ -319,7 +319,7 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
-    padding-top: 20%;
+    padding-top: 15%;
     padding-left: 5%;
 
     //border: 2px solid #000;
@@ -420,7 +420,7 @@ export default {
             }
 
             .search-input-bottom {
-                margin-top: 20px;
+                margin-top: 10px;
                 padding-left: 5px;
                 text-align: left;
                 font-size: 14px;

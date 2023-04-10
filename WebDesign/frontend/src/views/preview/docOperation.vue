@@ -26,12 +26,12 @@ export default {
             data: [
                 {
                     name: "马上收藏",
-                    src: require("@/assets/source/cancelcollect.png"),
+                    src: this.collectStatus == false ? require("@/assets/source/cancelcollect.png") : require("@/assets/source/collect.png"),
                     index: "1"
                 },
                 {
                     name: "竖个大拇指",
-                    src: require("@/assets/source/like-empty.png"),
+                    src: this.collectStatus == false ? require("@/assets/source/like-empt.png") : require("@/assets/source/like-fill.png"),
                     index: "2"
                 },
                 {
@@ -50,17 +50,15 @@ export default {
     mounted() {
 
     },
-    created() {
 
-    },
     methods: {
         operate(item) {
             if (item.index === "3") {
                 window.open(BackendUrl() + "/files/view/" + this.docId, "_blank");
             }
             else if (item.index === "1") {
-                this.$emit("addCollect", Number(item.index))
                 console.log("发出收藏事件")
+                this.$emit("addLike", Number(item.index))
                 this.collectStatus = !this.collectStatus
                 console.log("collectStatus:" + this.collectStatus)
                 if (this.collectStatus == true) {
@@ -70,16 +68,19 @@ export default {
                     this.data[0].src = require("@/assets/source/cancelcollect.png")
 
                 }
+
             }
             else if (item.index === "2") {
-                this.$emit("addLike", Number(item.index))
+                this.$emit("addCollect", Number(item.index))
                 console.log("发出点赞事件")
                 this.likeStatus = !this.likeStatus
-                if (this.collectStatus == true) {
+                console.log("likeStatus:" + this.likeStatus)
+
+                if (this.likeStatus == true) {
                     this.data[1].src = require("@/assets/source/like-fill.png")
                 }
                 else {
-                    this.data[1].src = require("@/assets/source/like.png")
+                    this.data[1].src = require("@/assets/source/like-empt.png")
 
                 }
             }

@@ -68,8 +68,9 @@
             <div class="user-img-container" style="border-radius: 8px; width: 100px; height: 100px">
                 <img :src="userSrc" alt="" width="100%" style="" referrerpolicy="no-referrer" />
             </div>
-            <div style="position: absolute; top: 0px; right: 0;">
-                <AvatarUploader @avatarUrl="getAvatarUrl" @deleteAvatar="deleteAvatar"></AvatarUploader>
+            <div style="position: absolute; top: 0px; right: 0; width:100px;height:100px">
+                <AvatarUploader @avatarUrl="getAvatarUrl" @deleteAvatar="deleteAvatar" style="width: 0px;">
+                </AvatarUploader>
             </div>
         </div>
     </div>

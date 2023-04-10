@@ -243,7 +243,7 @@ export default {
             if (entityType !== 1 && entityType !== 2) {
                 return
             }
-
+            console.log("entityType" + entityType)
             let params = {
                 entityType: entityType,
                 entityId: this.docId

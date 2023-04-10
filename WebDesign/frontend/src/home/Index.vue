@@ -181,7 +181,7 @@ export default {
 
     data() {
         return {
-            imgSrc: require("../assets/source/medicine.png"),
+            imgSrc: require("../assets/source/bg1.png"),
             defaultAvatar: require("../assets/source/user_avater.png"),
             data: {},
             currentData: [],
@@ -272,7 +272,7 @@ export default {
     // height: 100vh;
     //padding-bottom: 20px;
     //position: fixed;
-    background-image: url("../assets/source/medicine.png");
+    background-image: url("../assets/source/bg1.png");
     //height: 100%;
 
     .top-group {

@@ -64,16 +64,16 @@ export default {
 .doc-tag {
     width: 24px;
     height: 26px;
-    border: 1px solid;
+    //border: 1px solid;
     border-radius: 2px;
     text-align: center;
-    background-color: #ffffff;
+    //background-color: #ffffff;
 
     span {
         font-size: 16px;
         font-family: PingFangSC-Semibold, PingFang SC, serif;
-        font-weight: 600;
-        line-height: 2px;
+        font-weight: 200;
+        line-height: 20px;
     }
 }
 </style>

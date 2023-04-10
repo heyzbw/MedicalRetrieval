@@ -70,6 +70,7 @@ export default {
       });
     },
     drawHighlightRect({ leftBottom, leftTop, rightBottom, rightTop }) {
+
       const canvasElement = this.$refs.canvas;
       const imageElement = this.$refs.image;
 
@@ -97,17 +98,19 @@ export default {
 
       const width = rightBottomObject.x - leftBottomObject.x;
       const height = leftTopObject.y - leftBottomObject.y;
-
-      ctx.beginPath();
-      ctx.rect(leftBottomObject.x, leftBottomObject.y, width, height);
-      ctx.closePath();
-      ctx.lineWidth = 2;
-      ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
-      ctx.fill();
-      ctx.strokeStyle = 'yellow';
-      ctx.stroke();
+      setTimeout(() => {
+        ctx.beginPath();
+        ctx.rect(leftBottomObject.x, leftBottomObject.y, width, height);
+        ctx.closePath();
+        ctx.lineWidth = 2;
+        ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
+        ctx.fill();
+        ctx.strokeStyle = 'yellow';
+        ctx.stroke();
+      }, 2000);
     }
   }
+
 };
 </script>
 

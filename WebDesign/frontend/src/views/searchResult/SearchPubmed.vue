@@ -70,11 +70,11 @@ div /deep/ .ivu-input-group-append::before {
     bottom: 5px;
     left: -1px;
     background: inherit;
-    background-color: #8ffaa6;
+    background-color: #8fcafa;
 }
 
 div /deep/ .ivu-input-search {
     background-color: #ffffff !important;
-    color: #8ffaa6 !important;
+    color: #8fc6fa !important;
 }
 </style>

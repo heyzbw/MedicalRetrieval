@@ -88,7 +88,7 @@ export default {
     align-items: center;
     font-size: 20px;
     color: #2c3e50;
-    background: #ffff;
+    background: rgb(248, 248, 248);
     box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.3);
 }
 
