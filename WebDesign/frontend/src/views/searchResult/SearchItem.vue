@@ -289,7 +289,7 @@ export default {
 
 <style scoped>
 .search-doc {
-    padding: 12px 12px;
+    padding: 12px 90px 0 50px;
     border-bottom: 1px solid #e8eaec;
 }
 

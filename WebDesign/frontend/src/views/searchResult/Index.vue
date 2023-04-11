@@ -137,7 +137,7 @@ export default {
                 "rows": this.pageSize,
                 "tagId": "",
                 "type": "FILTER",
-                "userType":localStorage.getItem("type")
+                "userType": localStorage.getItem("type")
             }
             console.log(params)
             DocumentRequest.getListData(params).then(res => {
