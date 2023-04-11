@@ -8,23 +8,24 @@
                 <!--                <DocPage></DocPage>-->
                 <Layout>
                     <Sider hide-trigger :style="{
-                        'max-width': '250px', 'width': '250px', 'height': '1200px', 'background': 'none',
+                        'max-width': '250px', 'width': '250px', 'height': '900px', 'background': 'none',
                         'padding': '10px'
                     }">
                         <div
-                            style="width: 240px;height: 1200px;
-                                                                                                                                background-color: #FFFFFF;
-                                                                                                                                box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.3);border-radius: 8px;
-                                                                                                                                padding: 60px 30px 0px 30px;
-                                                                                                                                ">
+                            style="width: 240px;height: 900px;
+                                                                                                                                                background-color: #FFFFFF;
+                                                                                                                                                box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.3);border-radius: 8px;
+                                                                                                                                                padding: 60px 30px 0px 30px;
+                                                                                                                                                ">
                             <div style="width: 100%; height: 35%; text-align: center">
-                                <div class="user-avatar" style=" border-radius: 120px; width: 120px; height: 120px;
-                                                                                                        margin: auto;">
+                                <div class="user-avatar"
+                                    style=" border-radius: 120px; width: 120px; height: 120px;
+                                                                                                                        margin: auto;">
                                     <img :src="0 | userAvatar" alt="" />
                                 </div>
                                 <div
                                     style="height: 22px; width: 100%; white-space: nowrap;color: #000;font-size: 16px; font-weight: 600px;
-                                                                                                        line-height: 22px; margin-top: 18px;">
+                                                                                                                        line-height: 22px; margin-top: 18px;">
                                     <span>{{ username }}</span>
                                 </div>
                                 <div
@@ -32,13 +33,13 @@
                                     <span>{{ type }}</span>
                                 </div>
                                 <div style="padding: 30px 10px 10px ;">
-                                    <div class="upload-button" style="width: 150px; height: 45px; border: 2px solid #000;
-                                                                                                                                            background: #fff;
-                                                                                                        box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
-                                                                                                        border-radius: 8px;
-                                                                                                        display: flex;
-                                                                                                        justify-content: center;
-                                                                                                        "
+                                    <div class="upload-button" style="width: 150px; height: 45px; border: 1px solid #000;
+                                                                                                                                                            background: #fff;
+                                                                                                                        box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
+                                                                                                                        border-radius: 8px;
+                                                                                                                        display: flex;
+                                                                                                                        justify-content: center;
+                                                                                                                        "
                                         @click="selected(uploadRoute)">
                                         <div style="padding: 5px; line-height: 45px;">
                                             <img :src="buttonSrc" width="24px" height="28px" />
@@ -49,13 +50,14 @@
                                     </div>
                                 </div>
                                 <div style="padding: 0px 10px 10px;">
-                                    <div class="upload-button" style="width: 150px; height: 45px; border: 2px solid #000;
-                                                                                                                                                background: #fff;
-                                                                                                            box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
-                                                                                                            border-radius: 8px;
-                                                                                                            display: flex;
-                                                                                                            justify-content: center;
-                                                                                                            "
+                                    <div class="upload-button"
+                                        style="width: 150px; height: 45px; border: 1px solid #000;
+                                                                                                                                                                background: #fff;
+                                                                                                                            box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
+                                                                                                                            border-radius: 8px;
+                                                                                                                            display: flex;
+                                                                                                                            justify-content: center;
+                                                                                                                            "
                                         @click="selected(navData[1])">
                                         <div style="padding: 5px; line-height: 45px;">
                                             <img :src="collectSrc" width="24px" height="28px" />
@@ -65,14 +67,33 @@
 
                                     </div>
                                 </div>
+                                <div style="padding: 0px 10px 10px;">
+                                    <div class="upload-button"
+                                        style="width: 150px; height: 45px; border: 1px solid #000;
+                                                                                                                                                                    background: #fff;
+                                                                                                                                box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
+                                                                                                                                border-radius: 8px;
+                                                                                                                                display: flex;
+                                                                                                                                justify-content: center;
+                                                                                                                                "
+                                        @click="selected(navData[2])">
+                                        <div style="padding: 5px; line-height: 45px;">
+                                            <img :src="myuploadSrc" width="24px" height="28px" />
+                                        </div>
+                                        <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">
+                                            我的上传</span>
+
+                                    </div>
+                                </div>
                                 <div style="padding: 0px 10px;">
-                                    <div class="upload-button" style="width: 150px; height: 45px; border: 2px solid #000;
-                                                                                                                                                background: #fff;
-                                                                                                            box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
-                                                                                                            border-radius: 8px;
-                                                                                                            display: flex;
-                                                                                                            justify-content: center;
-                                                                                                            "
+                                    <div class="upload-button"
+                                        style="width: 150px; height: 45px; border: 1px solid #000;
+                                                                                                                                                                background: #fff;
+                                                                                                                            box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
+                                                                                                                            border-radius: 8px;
+                                                                                                                            display: flex;
+                                                                                                                            justify-content: center;
+                                                                                                                            "
                                         @click="selected(navData[3])">
                                         <div style="padding: 5px; line-height: 45px;">
                                             <img :src="userSrc" width="24px" height="28px" />
@@ -101,9 +122,9 @@
                     <Content style="margin-left: 70px;padding: 10px;">
                         <div
                             style="width: 100%;
-                                                                                                                                 height: 900px; background-color: #FFFFFF;
-                                                                                                                                 z-index: 2;
-                                                                                                                                 box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.3);border-radius: 8px; overflow-y: hidden">
+                                                                                                                                                 height: 900px; background-color: #FFFFFF;
+                                                                                                                                                 z-index: 2;
+                                                                                                                                                 box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.3);border-radius: 8px; overflow-y: hidden">
                             <router-view v-if="isRouterAlive"></router-view>
                         </div>
                     </Content>
@@ -151,6 +172,8 @@ export default {
             collectSrc: require("@/assets/source/collect.png"),
 
             userSrc: require("@/assets/source/user.png"),
+            myuploadSrc: require("@/assets/source/myupload.png"),
+
             uploadRoute: {
                 name: "上传",
                 route: "docUpload"
