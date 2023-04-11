@@ -30,8 +30,8 @@
             </el-tooltip>
 
         </div>
-        <div class="doc-abstract" v-show="ocrResultListin">
-            <div style="padding:0 0 0 30px">
+        <div class="doc-abstract" v-show="ocrResultListin" stretch="true">
+            <div style="padding:0 0 0 30px;">
                 <el-tabs type="card" class="description" width="100%" style="height: 100%" v-model="activeTab">
                     <el-tab-pane label="来源于文本" name="first" width="100%" v-if="contentResultSize">
                         <!--用一个循环来写-->
@@ -110,7 +110,7 @@
                 {{ commentNum }}
             </li>
         </ul>
-        <!--        </div>-->
+
     </div>
 </template>
 
@@ -200,7 +200,6 @@ export default {
     },
     // 将 prop 数据转换为本地数据
     created() {
-
         this.score = this.like_score + this.content_score + this.click_score
         let str = Number(this.content_score);
         str = str.toFixed(2)
@@ -227,7 +226,10 @@ export default {
         }
         console.log("esSearchContentList:", this.esSearchContentList)
 
+        setTimeout(() => {
+        }, 300);
     },
+
     computed: {
         categoryIn: function () {
             if (this.category === null || this.category.name === null) {
@@ -289,8 +291,9 @@ export default {
 
 <style scoped>
 .search-doc {
-    padding: 12px 90px 0 80px;
+    padding: 12px 12px;
     border-bottom: 1px solid #e8eaec;
+
 }
 
 .search-doc:hover {
@@ -380,6 +383,10 @@ li {
 
 .doc-abstract>>>bm {
     background-color: rgb(49, 246, 49);
+}
+
+.doc-abstract {
+    height: 330px;
 }
 
 .sl-abstract {
