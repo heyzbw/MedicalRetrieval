@@ -32,7 +32,7 @@ import java.util.List;
 public abstract class TaskExecutor {
 
     public void execute(TaskData taskData) throws TaskRunException {
-
+        System.out.println("taskExecutor的excute方法");
         // 第一步下载文件，转换为byte数组
         FileDocument fileDocument = taskData.getFileDocument();
         InputStream docInputStream = new ByteArrayInputStream(downFileBytes(fileDocument.getGridfsId()));

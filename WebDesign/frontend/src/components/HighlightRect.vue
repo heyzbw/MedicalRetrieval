@@ -9,6 +9,7 @@
 <script>
 import { BackendUrl } from '@/api/request';
 
+
 export default {
   data() {
     return {
@@ -34,14 +35,15 @@ export default {
     }
   },
   mounted() {
+    console.log("加载图像")
     if (this.$refs.image.complete) {
-      setTimeout(() => {
+      // setTimeout(() => {
         this.onImageLoad();
-      }, 300);
+      // }, 300);
     } else {
-      setTimeout(() => {
+      // setTimeout(() => {
         this.$refs.image.addEventListener('load', this.onImageLoad);
-      }, 300);
+      // }, 300);
     }
   },
   beforeDestroy() {
@@ -69,8 +71,9 @@ export default {
         this.drawHighlightRect(item);
       });
     },
-    drawHighlightRect({ leftBottom, leftTop, rightBottom, rightTop }) {
 
+    drawHighlightRect({ leftBottom, leftTop, rightBottom, rightTop }) {
+      console.log("高亮的区域为：",leftBottom, leftTop, rightBottom, rightTop)
       const canvasElement = this.$refs.canvas;
       const imageElement = this.$refs.image;
 
@@ -98,17 +101,58 @@ export default {
 
       const width = rightBottomObject.x - leftBottomObject.x;
       const height = leftTopObject.y - leftBottomObject.y;
-      setTimeout(() => {
-        ctx.beginPath();
-        ctx.rect(leftBottomObject.x, leftBottomObject.y, width, height);
-        ctx.closePath();
-        ctx.lineWidth = 2;
-        ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
-        ctx.fill();
-        ctx.strokeStyle = 'yellow';
-        ctx.stroke();
-      }, 2000);
+
+      ctx.beginPath();
+      ctx.rect(leftBottomObject.x, leftBottomObject.y, width, height);
+      ctx.closePath();
+      ctx.lineWidth = 2;
+      ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
+      ctx.fill();
+      ctx.strokeStyle = 'yellow';
+      ctx.stroke();
     }
+
+
+    // drawHighlightRect({ leftBottom, leftTop, rightBottom, rightTop }) {
+    //
+    //   const canvasElement = this.$refs.canvas;
+    //   const imageElement = this.$refs.image;
+    //
+    //   const scaleX = imageElement.offsetWidth / imageElement.naturalWidth;
+    //   const scaleY = imageElement.offsetHeight / imageElement.naturalHeight;
+    //
+    //   const ctx = canvasElement.getContext('2d');
+    //
+    //   const leftBottomObject = {
+    //     x: Number(leftBottom.split(',')[0]) * scaleX,
+    //     y: Number(leftBottom.split(',')[1]) * scaleY
+    //   };
+    //   const leftTopObject = {
+    //     x: Number(leftTop.split(',')[0]) * scaleX,
+    //     y: Number(leftTop.split(',')[1]) * scaleY
+    //   };
+    //   const rightBottomObject = {
+    //     x: Number(rightBottom.split(',')[0]) * scaleX,
+    //     y: Number(rightBottom.split(',')[1]) * scaleY
+    //   };
+    //   const rightTopObject = {
+    //     x: Number(rightTop.split(',')[0]) * scaleX,
+    //     y: Number(rightTop.split(',')[1]) * scaleY
+    //   };
+    //
+    //   const width = rightBottomObject.x - leftBottomObject.x;
+    //   const height = leftTopObject.y - leftBottomObject.y;
+    //   setTimeout(() => {
+    //     ctx.beginPath();
+    //     ctx.rect(leftBottomObject.x, leftBottomObject.y, width, height);
+    //     ctx.closePath();
+    //     ctx.lineWidth = 2;
+    //     ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
+    //     ctx.fill();
+    //     ctx.strokeStyle = 'yellow';
+    //     ctx.stroke();
+    //   }, 2000);
+    // }
   }
 
 };

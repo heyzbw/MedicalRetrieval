@@ -57,7 +57,7 @@ cloud:
   elasticsearch:
     host: ${ES_HOST:localhost}
     port: ${ES_PORT:9200}
-#    host: 81.69.247.172
+#    host: 121.36.201.185
 #    port: 8888
 
 all-docs:

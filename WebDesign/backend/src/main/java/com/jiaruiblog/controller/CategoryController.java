@@ -71,6 +71,7 @@ public class CategoryController {
         }
     }
 
+
     @ApiOperation(value = "3.3 更新分类", notes = "更新分类")
     @PutMapping(value = "/update")
     public BaseApiResult update(@RequestBody CategoryDTO categoryDTO) {

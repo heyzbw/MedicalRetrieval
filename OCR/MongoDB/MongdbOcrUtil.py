@@ -4,15 +4,12 @@ import gridfs
 import pymongo
 import json
 
-host_address = "121.36.201.185"
+from MongoDB.MongoFileDataUtil import getMongoDBUtil
 
 
 class MongdbOcrUtil(object):
     def __init__(self):
-        self.host = host_address
-        self.port = 27017
-        self.client = pymongo.MongoClient(host=self.host, port=self.port)
-        self.db = self.client.sqrrow
+        self.db = getMongoDBUtil.getDB()
         self.collections = self.db.ocr_result
         self.fs = gridfs.GridFS(self.db)
 
@@ -59,10 +56,3 @@ class MongdbOcrUtil(object):
     # def getFileByMD5(self,md5):
         # try:
 
-
-
-if __name__ == '__main__':
-    jm = MongdbUtil()
-    # jm.write_database()
-    outcome = jm.search_datebase(query_str="URA")
-    print("outcome", outcome)
