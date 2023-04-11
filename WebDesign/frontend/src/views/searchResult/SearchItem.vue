@@ -375,7 +375,7 @@ li {
 }
 
 .doc-abstract>>>em {
-    background-color: yellow;
+    background-color: rgb(127, 200, 255);
 }
 
 .doc-abstract>>>bm {
