@@ -69,7 +69,7 @@ export default {
     },
     data() {
         return {
-            imgSrc: require("../assets/source/medicine.png"),
+            imgSrc: require("../assets/source/bg1.png"),
             defaultAvatar: require("../assets/source/user.png"),
             data: {},
             currentData: [],
@@ -154,7 +154,7 @@ export default {
 
     .top-group {
         padding: 60px 0 0 0;
-        height: 300px;
+        height: 240px;
         width: 100%;
         //position: fixed;
         z-index: -1;
@@ -195,7 +195,7 @@ export default {
                     font-family: PingFangSC-Semibold, PingFang SC, serif;
                     font-weight: 600;
                     color: #464646;
-                    line-height: 25px;
+                    line-height: 20px;
                 }
             }
 
@@ -210,7 +210,7 @@ export default {
                 //border: 1px solid #000000;
                 padding: 0 10px;
                 margin-left: 20px;
-                line-height: 32px;
+                line-height: 26px;
                 color: #fff;
 
                 span {
@@ -232,7 +232,7 @@ export default {
                 border: 1px solid #AAAAAA;
                 padding: 0 10px;
                 margin-left: 20px;
-                line-height: 32px;
+                line-height: 26px;
                 color: #AAAAAA;
 
                 &:hover {

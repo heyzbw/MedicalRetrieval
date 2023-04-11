@@ -5,121 +5,75 @@
             <div class="image">
                 <div class="mask">
                     <tooltip effect="dark" content="更换头像" placement="top">
-                        <Icon type="md-sync" style="cursor: pointer"
-                              @click="openEditAvatarDialog()"/>
+                        <Icon type="md-sync" style="cursor: pointer" @click="openEditAvatarDialog()" />
                     </tooltip>
                     <tooltip effect="dark" content="删除头像" placement="top">
-                        <Icon type="md-trash" style="cursor: pointer"
-                              @click="deleteAvatar"/>
+                        <Icon type="md-trash" style="cursor: pointer" @click="deleteAvatar" />
                     </tooltip>
                 </div>
             </div>
         </div>
 
         <!-- 修改头像窗口 -->
-        <Modal
-            title="修改头像"
-            v-model="isVisible_editAvatarDialog"
-            width="800"
-        >
+        <Modal title="修改头像" v-model="isVisible_editAvatarDialog" width="800">
             <Row>
                 <Col :span="12" style="height: 300px">
-                    <vue-cropper
-                        ref="cropper"
-                        :img="options.img"
-                        :info="true"
-                        :autoCrop="options.autoCrop"
-                        :autoCropWidth="options.autoCropWidth"
-                        :autoCropHeight="options.autoCropHeight"
-                        :fixedBox="options.fixedBox"
-                        @realTime="realTime"
-                    >
-                    </vue-cropper>
-                    <div style="display: flex; justify-content: space-between; padding-top: 20px; ">
-                        <Upload
-                            ref="uploadCropper"
-                            :before-upload="beforeAvatarUpload"
-                            :show-file-list="false"
-                            action
-                            style="margin-right: 10px"
-                        >
-                            <Button type="primary">选择图片</Button>
-                        </Upload>
-                        <tooltip
-                            class="item"
-                            effect="dark"
-                            content="向左旋转"
-                            placement="top"
-                        >
-                            <Button @click="rotateLeft">
-                                <Icon type="md-refresh" style="transform: rotateY(180deg);"/>
-                            </Button>
-                        </tooltip>
-                        <tooltip
-                            class="item"
-                            effect="dark"
-                            content="向右旋转"
-                            placement="top"
-                        >
-                            <Button @click="rotateRight">
-                                <Icon type="md-refresh"/>
-                            </Button>
-                        </tooltip>
-                        <tooltip
-                            class="item"
-                            effect="dark"
-                            content="放大"
-                            placement="top"
-                        >
-                            <Button @click="changeScale(1)">
-                                <Icon type="md-add"/>
-                            </Button>
-                        </tooltip>
-                        <tooltip
-                            class="item"
-                            effect="dark"
-                            content="缩小"
-                            placement="top"
-                        >
-                            <Button @click="changeScale(-1)">
-                                <Icon type="md-remove"/>
-                            </Button>
-                        </tooltip>
-                    </div>
+                <vue-cropper ref="cropper" :img="options.img" :info="true" :autoCrop="options.autoCrop"
+                    :autoCropWidth="options.autoCropWidth" :autoCropHeight="options.autoCropHeight"
+                    :fixedBox="options.fixedBox" @realTime="realTime">
+                </vue-cropper>
+                <div style="display: flex; justify-content: space-between; padding-top: 20px; ">
+                    <Upload ref="uploadCropper" :before-upload="beforeAvatarUpload" :show-file-list="false" action
+                        style="margin-right: 10px">
+                        <Button type="primary">选择图片</Button>
+                    </Upload>
+                    <tooltip class="item" effect="dark" content="向左旋转" placement="top">
+                        <Button @click="rotateLeft">
+                            <Icon type="md-refresh" style="transform: rotateY(180deg);" />
+                        </Button>
+                    </tooltip>
+                    <tooltip class="item" effect="dark" content="向右旋转" placement="top">
+                        <Button @click="rotateRight">
+                            <Icon type="md-refresh" />
+                        </Button>
+                    </tooltip>
+                    <tooltip class="item" effect="dark" content="放大" placement="top">
+                        <Button @click="changeScale(1)">
+                            <Icon type="md-add" />
+                        </Button>
+                    </tooltip>
+                    <tooltip class="item" effect="dark" content="缩小" placement="top">
+                        <Button @click="changeScale(-1)">
+                            <Icon type="md-remove" />
+                        </Button>
+                    </tooltip>
+                </div>
                 </Col>
                 <Col :span="12" style="height: 300px">
-                    <div class="upload-preview">
-                        <img
-                            :src="previews.url"
-                            :style="previews.img"
-                            v-show="previews.url"
-                        />
-                    </div>
+                <div class="upload-preview">
+                    <img :src="previews.url" :style="previews.img" v-show="previews.url" />
+                </div>
                 </Col>
             </Row>
             <div style="width: 100%; height: 60px;">
             </div>
             <span slot="footer" class="dialog-footer">
                 <Button @click="isVisible_editAvatarDialog = false">关 闭</Button>
-                <Button
-                    type="primary"
-                    :loading="loading"
-                    @click="submitUpdate"
-                >确  认</Button>
+                <Button type="primary" :loading="loading" @click="submitUpdate">确 认</Button>
             </span>
         </Modal>
     </div>
 </template>
 
 <script>
-import {VueCropper} from "vue-cropper";
+import { VueCropper } from "vue-cropper";
 
 import UserRequest from '@/api/user'
-const {BackendUrl} = require("@/api/request");
+const { BackendUrl } = require("@/api/request");
 
 export default {
     name: "AvatarUploader",
-    components: {VueCropper},
+    components: { VueCropper },
     data() {
         return {
             isVisible_editAvatarDialog: false,
@@ -248,7 +202,7 @@ export default {
             while (n--) {
                 u8arr[n] = bstr.charCodeAt(n);
             }
-            return new File([u8arr], filename, {type: mime});
+            return new File([u8arr], filename, { type: mime });
         },
     },
     watch: {},
@@ -258,18 +212,19 @@ export default {
 <style lang="scss" scoped>
 .AvatarUploader {
     //background-color: red;
-    width: 180px;
-    height: 180px;
+    width: 80px;
+    height: 80px;
 
     .image {
         position: relative;
         //display: inline-block;
-        width: 180px;
-        height: 180px;
+        width: 100px;
+        height: 100px;
 
         overflow: hidden; //img如果超出这个div会隐藏超出部分
         display: flex; //flex布局
         align-items: center; //让img放在div的中间，居中
+
         img {
             width: 100%;
             border-radius: 8px;
@@ -301,8 +256,8 @@ export default {
         position: relative;
         top: 50%;
         transform: translate(50%, -50%);
-        width: 200px;
-        height: 200px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         box-shadow: 0 0 4px #bbbbbb;
         overflow: hidden;
@@ -313,8 +268,8 @@ export default {
     position: relative;
     top: 50%;
     transform: translate(50%, -50%);
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     box-shadow: 0 0 4px #bbbbbb;
     overflow: hidden;

@@ -92,8 +92,8 @@
                                         </p>
                                         <div v-show="infoVisible"
                                             style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                        margin-top: 8px;
-                                                                                                                                                                                                                                                                                                                                                                                                                        ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                margin-top: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                ">
                                             <span v-if="this.docState === 'SUCCESS'">
                                                 索引建立成功，可以下载<span style="color: #408FFF; cursor: pointer"
                                                     @click="downloadTxt(this)">文本文件</span>。
@@ -129,13 +129,6 @@
                                             item.name
                                         }}
                                         </Tag>
-                                    </div>
-                                    <div style="padding-top: 10px">
-                                        <strong>文档概述</strong>
-                                        <div
-                                            style="background-color: #f6f8fa;color: #64b687;border-radius: 4px;padding: 4px;font-size: 12px">
-                                            <p>{{ this.descriptions }}</p>
-                                        </div>
                                     </div>
                                     <div style="padding-top: 10px">
                                         <p><strong>创建时间</strong> {{ this.createTime }}</p>
@@ -594,7 +587,7 @@ export default {
 
 <style lang="scss" scoped>
 .nav {
-    background-color: #57f486;
+    background-color: #f4f3f3;
     width: 100%;
     height: 50px;
     //position: absolute;

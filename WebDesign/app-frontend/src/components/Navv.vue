@@ -1,7 +1,7 @@
 <template>
     <div class="nav-container">
         <div class="nav-logo" @click="$router.push('/')">
-            <img :src="logoSrc" width="80%" height="80%" alt="" />
+            <img :src="logoSrc" width="70%" height="70%" alt="" />
         </div>
         <div class="sd">
             <div @onclick="$router.push('/')">首页</div>
@@ -56,7 +56,7 @@ export default {
             if (value === "" || value == null || value === undefined) {
                 return this.defaultAvatar;
             } else {
-                return BackendUrl() + "/files/image2/" + value;
+                this.defaultAvatar = BackendUrl() + "/files/image2/" + value;
             }
         }
     },
@@ -79,7 +79,7 @@ export default {
     position: fixed;
     z-index: 100;
     width: 100%;
-    height: 80px;
+    height: 60px;
     display: flex;
     align-items: center;
     font-size: 20px;
@@ -116,7 +116,7 @@ export default {
 .user-zone {
     position: absolute;
     right: 10px;
-    top: 20px;
+    top: 7px;
     display: flex;
     justify-content: flex-start;
     padding: 5px 5px 0px 5px;

@@ -122,6 +122,7 @@ export default {
     padding: 10px;
     width: 100%;
     margin-top: 40px;
+    font-size: 18px;
     background-image: linear-gradient(to right, #a6e7ee, #6893f6);
     color: #fff;
     cursor: pointer;

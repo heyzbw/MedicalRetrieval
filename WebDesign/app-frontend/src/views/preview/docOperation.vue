@@ -3,7 +3,7 @@
 
         <div class="item" v-for="item in data" @click="operate(item)">
             <div class="item-logo">
-                <img :src="item.src" :alt="item.src" style="height: 85%;width:85%">
+                <img :src="item.src" :alt="item.src" style="height: 75%;width:75%">
             </div>
             <div class="operation-title">
                 {{ item.name }}
@@ -26,13 +26,13 @@ export default {
             data: [
                 {
                     name: "马上收藏",
-                    src: require("@/assets/source/cancelcollect.png"),
-                    index: "1"
+                    src: this.collectStatus == false ? require("@/assets/source/cancelcollect.png") : require("@/assets/source/collect.png"),
+                    index: "2"
                 },
                 {
                     name: "竖个大拇指",
-                    src: require("@/assets/source/like.png"),
-                    index: "2"
+                    src: this.collectStatus == false ? require("@/assets/source/like-empt.png") : require("@/assets/source/like-fill.png"),
+                    index: "1"
                 },
                 {
                     name: "立马下载",
@@ -50,14 +50,46 @@ export default {
     mounted() {
 
     },
+    created() {
+        // if (this.collectStatus == true) {
+        //     this.data[0].src = require("@/assets/source/collect.png")
+        // }
+        // else {
+        //     this.data[0].src = require("@/assets/source/cancelcollect.png")
+
+        // }
+        // if (this.likeStatus == true) {
+        //     this.data[1].src = require("@/assets/source/like-fill.png")
+        // }
+        // else {
+        //     this.data[1].src = require("@/assets/source/like-empt.png")
+
+        // }
+    },
     methods: {
         operate(item) {
             if (item.index === "3") {
                 window.open(BackendUrl() + "/files/view/" + this.docId, "_blank");
             }
             else if (item.index === "1") {
-                this.$emit("addCollect", Number(item.index))
+
+
+                this.$emit("addLike", Number(item.index))
+                console.log("发出点赞事件")
+                this.likeStatus = !this.likeStatus
+                console.log("likeStatus:" + this.likeStatus)
+
+                if (this.likeStatus == true) {
+                    this.data[1].src = require("@/assets/source/like-fill.png")
+                }
+                else {
+                    this.data[1].src = require("@/assets/source/like-empt.png")
+
+                }
+            }
+            else if (item.index === "2") {
                 console.log("发出收藏事件")
+                this.$emit("addLike", Number(item.index))
                 this.collectStatus = !this.collectStatus
                 console.log("collectStatus:" + this.collectStatus)
                 if (this.collectStatus == true) {
@@ -68,11 +100,6 @@ export default {
 
                 }
             }
-            else if (item.index === "2") {
-                this.$emit("addLike", Number(item.index))
-                console.log("发出点赞事件")
-                this.likeStatus = !this.likeStatus
-            }
         },
     }
 }
@@ -80,17 +107,17 @@ export default {
 
 <style scoped>
 .operation-container {
-    width: 30%;
-    min-width: 300px;
+    width: 50%;
+    min-width: 400px;
     display: flex;
     justify-content: space-between;
     margin: auto;
-    height: 150px;
+    height: 200px;
 }
 
 .item {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border-radius: 120px;
     margin: auto;
     position: relative;
