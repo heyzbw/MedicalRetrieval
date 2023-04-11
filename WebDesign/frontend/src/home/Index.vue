@@ -116,6 +116,14 @@
 
         <el-drawer v-drawer title="" :visible.sync="drawer" :direction="direction" class="drawer" :size="size">
             <div class="bottom-group">
+                <div class="right-panel">
+                    <div class="top-container">
+                        <div class="panel-title"><span>热门推荐🔥</span></div>
+                    </div>
+                    <div class="hot-trend">
+                        <HotTrend></HotTrend>
+                    </div>
+                </div>
                 <div class="left-panel">
                     <div class="top-container">
                         <div class="panel-title left-pane-title" style="cursor: pointer" @click="routeTo">
@@ -138,14 +146,7 @@
                         </DocThumb>
                     </div>
                 </div>
-                <div class="right-panel">
-                    <div class="top-container">
-                        <div class="panel-title"><span>热门文档排行 🔥</span></div>
-                    </div>
-                    <div class="hot-trend">
-                        <HotTrend></HotTrend>
-                    </div>
-                </div>
+
             </div>
 
         </el-drawer>
