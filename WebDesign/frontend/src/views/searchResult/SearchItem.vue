@@ -26,7 +26,7 @@
             </div>
             <el-tooltip class="item" effect="dark" placement="bottom">
                 <div slot="content" style="font-size: 15px;">{{ this.tooltips }} </div>
-                <div class="defen">得分:{{ this.score.toFixed(3) }}</div>
+                <div class="defen">得分:{{ this.score }}</div>
             </el-tooltip>
 
         </div>
