@@ -122,7 +122,8 @@ export default {
                 "page": this.currentPage - 1,
                 "rows": this.pageSize,
                 "tagId": "",
-                "type": "FILTER"
+                "type": "FILTER",
+                "userType":localStorage.getItem("type")
             }
             DocumentRequest.getListData(params).then(res => {
                 this.loading = false;
@@ -131,8 +132,6 @@ export default {
                     this.data = res.data.documents;
                     console.log("关键字查询成功，返回内容为：");
                     console.log("data:", res.data)
-                    //console.log("desSearchContentList:", res.data[0].esSearchContentList)
-
                 } else {
                     this.data = []
                 }

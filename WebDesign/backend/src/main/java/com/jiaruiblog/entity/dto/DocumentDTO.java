@@ -39,5 +39,6 @@ public class DocumentDTO {
     private String tagId;
 
     private String userId;
+    private String userType;
     private PermissionEnum Permission;
 }

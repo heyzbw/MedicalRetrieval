@@ -347,7 +347,8 @@ export default {
                 "page": this.currentPage - 1,
                 "rows": this.pageSize,
                 "tagId": categoryId,
-                "type": this.currentType
+                "type": this.currentType,
+                "userType":localStorage.getItem("type")
             }
             //   console.log("你的type是个啥？",this.currentType)
             // console.log("你的categoryId是个啥？",categoryId)

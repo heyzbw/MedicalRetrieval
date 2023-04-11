@@ -9,9 +9,7 @@
                 {{ item.name }}
             </div>
         </div>
-        <!-- 
-        <div>{{ collectStatus }}</div>
-        <div>{{ likeStatus }}</div> -->
+
     </div>
 </template>
 
@@ -58,9 +56,9 @@ export default {
             }
             else if (item.index === "1") {
                 console.log("发出收藏事件")
-                this.$emit("addLike", Number(item.index))
-                this.collectStatus = !this.collectStatus
-                console.log("collectStatus:" + this.collectStatus)
+                this.$emit("addCollect", Number(item.index))
+                // this.collectStatus = !this.collectStatus
+                // console.log("collectStatus:" + this.collectStatus)
                 if (this.collectStatus == true) {
                     this.data[0].src = require("@/assets/source/collect.png")
                 }
@@ -71,10 +69,10 @@ export default {
 
             }
             else if (item.index === "2") {
-                this.$emit("addCollect", Number(item.index))
+                this.$emit("addLike", Number(item.index))
                 console.log("发出点赞事件")
-                this.likeStatus = !this.likeStatus
-                console.log("likeStatus:" + this.likeStatus)
+                // this.likeStatus = !this.likeStatus
+                // console.log("likeStatus:" + this.likeStatus)
 
                 if (this.likeStatus == true) {
                     this.data[1].src = require("@/assets/source/like-fill.png")

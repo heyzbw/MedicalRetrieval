@@ -60,13 +60,14 @@ public class DocumentController {
 
     @ApiOperation(value = "2.1 查询文档的分页列表页", notes = "根据参数查询文档列表")
     @PostMapping(value = "/list")
-    public BaseApiResult list(@RequestBody DocumentDTO documentDTO,HttpServletRequest request)
+    public BaseApiResult list(@RequestBody DocumentDTO documentDTO)
             throws IOException {
 
 //        long startTime = System.currentTimeMillis();
 
 //        System.out.println("进入了查询方法");
         String userId = documentDTO.getUserId();
+        System.out.println("userId:"+userId);
         if (StringUtils.hasText(documentDTO.getFilterWord()) &&
                 documentDTO.getType() == FilterTypeEnum.FILTER) {
             String filterWord = documentDTO.getFilterWord();
@@ -83,9 +84,12 @@ public class DocumentController {
                 }
             }
         }
-        PermissionEnum userPermission = PermissionUtil.getUserPermission(request);
-        documentDTO.setPermission(userPermission);
-        documentDTO.setUserId((String) request.getAttribute("id"));
+//        System.out.println("用户类型为："+ documentDTO.getUserType());
+//        如果我这里得到的UserType为一个String：ADMIN，我怎么得到一个PermissionEnum，并放入permission中？
+        documentDTO.setPermission(PermissionEnum.valueOf(documentDTO.getUserType()));
+//        PermissionEnum userPermission = PermissionUtil.getUserPermission(request);
+//        documentDTO.setPermission(userPermission);
+//        documentDTO.setUserId((String) request.getAttribute("id"));
 //        System.out.println("");
         return iFileService.list(documentDTO);
     }
