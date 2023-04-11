@@ -26,29 +26,32 @@ export default {
 
   filters: {
     imgSrc(value) {
+
+
+
       if (value === '' || value == null) {
         return require('@/assets/source/doc.png');
       } else {
         return BackendUrl() + '/files/image2/' + value;
+
       }
+
     }
+
   },
   mounted() {
     if (this.$refs.image.complete) {
       setTimeout(() => {
         this.onImageLoad();
-      }, 300);
+      }, 1000);
     } else {
-      setTimeout(() => {
-        this.$refs.image.addEventListener('load', this.onImageLoad);
-      }, 300);
+      this.$refs.image.addEventListener('load', this.onImageLoad);
     }
   },
   beforeDestroy() {
     this.$refs.image.removeEventListener('load', this.onImageLoad);
   },
   watch: {
-
     image() {
       this.onImageLoad();
     }
@@ -58,24 +61,32 @@ export default {
       const canvasElement = this.$refs.canvas;
       const imageElement = this.$refs.image;
       const ctx = canvasElement.getContext('2d')
-      canvasElement.width = imageElement.offsetWidth;
-      canvasElement.height = imageElement.offsetHeight;
+      canvasElement.width = 600;
+      canvasElement.height = 600;
       ctx.drawImage(imageElement, 0, 0, this.width, this.height)
-      const dataUrl = canvasElement.toDataURL()
+      //const dataUrl = canvasElement.toDataURL()
+      console.log(canvasElement)
 
       // 在控制台输出缩略图的数据URL
-      console.log(dataUrl)
+      //console.log(dataUrl)
       this.textResult.forEach(item => {
         this.drawHighlightRect(item);
       });
     },
     drawHighlightRect({ leftBottom, leftTop, rightBottom, rightTop }) {
 
+
       const canvasElement = this.$refs.canvas;
       const imageElement = this.$refs.image;
 
-      const scaleX = imageElement.offsetWidth / imageElement.naturalWidth;
-      const scaleY = imageElement.offsetHeight / imageElement.naturalHeight;
+      const scaleX = 600 / imageElement.naturalWidth;
+      const scaleY = 600 / imageElement.naturalHeight;
+      // console.log(imageElement.offsetHeight)
+      console.log(imageElement.offsetWidth)
+
+      // console.log(imageElement.naturalWidth)
+
+      // console.log(imageElement.naturalHeight)
 
       const ctx = canvasElement.getContext('2d');
 
@@ -95,19 +106,26 @@ export default {
         x: Number(rightTop.split(',')[0]) * scaleX,
         y: Number(rightTop.split(',')[1]) * scaleY
       };
+      // console.log(leftBottomObject)
+      // console.log(leftTopObject)
+      // console.log(rightBottomObject)
+
 
       const width = rightBottomObject.x - leftBottomObject.x;
       const height = leftTopObject.y - leftBottomObject.y;
-      setTimeout(() => {
-        ctx.beginPath();
-        ctx.rect(leftBottomObject.x, leftBottomObject.y, width, height);
-        ctx.closePath();
-        ctx.lineWidth = 2;
-        ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
-        ctx.fill();
-        ctx.strokeStyle = 'yellow';
-        ctx.stroke();
-      }, 2000);
+      // console.log(width)
+      // console.log(height)
+
+      ctx.beginPath();
+      ctx.rect(leftBottomObject.x, leftBottomObject.y, width, height);
+      ctx.closePath();
+      ctx.lineWidth = 2;
+      ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
+      ctx.fill();
+      ctx.strokeStyle = 'yellow';
+      ctx.stroke();
+      console.log(ctx)
+
     }
   }
 
