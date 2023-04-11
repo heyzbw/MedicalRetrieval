@@ -7,14 +7,7 @@
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MongoDB/GetMongoDBUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/GetMongoDBUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MongoDB/MongoFileDataUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/MongoFileDataUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/CategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/ElasticServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/ElasticServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/task/executor/TaskExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/task/executor/TaskExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/components/HighlightRect.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/components/HighlightRect.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,6 +241,7 @@
       <workItem from="1681217165056" duration="127000" />
       <workItem from="1681217542417" duration="3000" />
       <workItem from="1681217654788" duration="768000" />
+      <workItem from="1681219159295" duration="1017000" />
     </task>
     <servers />
   </component>
