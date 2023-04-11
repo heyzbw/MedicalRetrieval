@@ -119,7 +119,7 @@ def pic2json(image_np, pageNum, pdfname, image_page):
     for line in result['lines']:
         text_ocr = line["text"]
         position = line["position"]
-        text["ocrText"] += text_ocr
+        text["ocrText"] += text_ocr + " "
 
         textarr = {}
         textarr["text"] = text_ocr

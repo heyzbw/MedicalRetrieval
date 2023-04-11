@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pdf2pic.py" beforeDir="false" afterPath="$PROJECT_DIR$/pdf2pic.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +40,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/study/sqrrow/MedicalRetrieval/OCR&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/study/sqrrow4.9/MedicalRetrieval/OCR&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -229,6 +228,8 @@
       <workItem from="1680699089590" duration="603000" />
       <workItem from="1680702149974" duration="639000" />
       <workItem from="1680847743642" duration="1164000" />
+      <workItem from="1681045953362" duration="2000" />
+      <workItem from="1681045967379" duration="641000" />
     </task>
     <servers />
   </component>
