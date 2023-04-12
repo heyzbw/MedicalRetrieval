@@ -20,12 +20,14 @@ class MongoFileDataUtil(object):
         :return:
         '''
 
-        print("md5",md5)
+        print("md5", md5)
         myquery = {"md5": md5}  # 查询条件
         projection = {"_id": 1, "gridfsId": 1, "name": 1}
         search_results = self.collections.find_one(myquery, projection)
-        if  search_results != None:
+        print("要查询的md5为：", md5)
+        if search_results != None:
             gridfsId = search_results["gridfsId"]
+            print("文件的gridfsid为：", gridfsId)
             file_name = search_results["name"]
             bucket = GridFSBucket(self.db)
             file_mongoDB = bucket.open_download_stream_by_name(gridfsId)

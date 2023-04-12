@@ -25,7 +25,7 @@ import java.util.Map;
 @Slf4j
 @WebFilter(filterName = "JwtFilter", urlPatterns = {
         "/comment/auth/*", "/user/auth/*", "/collect/auth/*", "/document/auth/*",
-        "/docReview/*", "/docLog/*", "/like/*", "/files/auth/*", "/document/list","/document/listWithCategory",
+        "/docReview/*", "/docLog/*", "/like/*", "/files/auth/*", "/document/listWithCategory",
         "/comment/auth/allComments"
 })
 public class JwtFilter implements Filter

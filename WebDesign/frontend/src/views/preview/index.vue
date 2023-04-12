@@ -337,8 +337,8 @@ export default {
                     let result = res.data;
                     this.collectCount = result.collectCount || 0;
                     this.likeCount = result.likeCount || 0;
-                    this.likeStatus = result.likeStatus || 0;
-                    this.collectStatus = result.collectStatus || 0
+                    this.likeStatus = result.likeStatus || false;
+                    this.collectStatus = result.collectStatus || false
                 } else {
                     this.$Message.info("error")
                 }
@@ -349,6 +349,7 @@ export default {
 
         // 添加点赞
         async addLike(entityType) {
+            console.log("添加点赞事件")
             if (entityType !== 2) {
                 return
             }
@@ -359,8 +360,8 @@ export default {
             await DocRequest.addLike({ params }).then(res => {
                 if (res.code == 200) {
                     let result = res.data;
-                    this.likeCount = result.likeCount || 0;
-                    this.likeStatus = result.likeStatus || 0;
+                    // this.likeCount = result.likeCount || 0;
+                    // this.likeStatus = result.likeStatus || false;
                     if (this.likeStatus === 0) {
                         this.$Message.info("取消点赞！")
                         this.likeStatus = false
@@ -379,6 +380,7 @@ export default {
 
         // 添加收藏
         async addCollect(entityType) {
+            console.log("发出收藏事件")
             if (entityType !== 1) {
                 return
             }

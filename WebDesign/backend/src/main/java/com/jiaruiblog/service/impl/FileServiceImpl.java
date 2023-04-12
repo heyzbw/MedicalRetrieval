@@ -404,6 +404,7 @@ public class FileServiceImpl implements IFileService {
     @Override
     public ResponseModel documentUpload_noAuth(UploadFileObj uploadFileObj) throws AuthenticationException {
 
+        System.out.println("我要保存文件");
         MultipartFile file = uploadFileObj.getFile();
         List<String> labels = uploadFileObj.getLabels();
         String userId = uploadFileObj.getUserId();
@@ -425,26 +426,30 @@ public class FileServiceImpl implements IFileService {
                 }
                 String fileMd5 = SecureUtil.md5(file.getInputStream());
 
+                FileDocument fileDocumentInDb = getByMd5(fileMd5);
+                boolean flag_exist = (fileDocumentInDb != null);
+
                 FileDocument fileDocument = saveToDb(fileMd5, file,userId,username);
+
+                if(!flag_exist){
+                    System.out.println("不存在，那就先获取ocr吧");
 //                FileDocument fileDocument = saveFile(fileMd5, file);
+                    saveTagWhenSaveDoc(fileDocument,labels);
+                    //获取OCR识别结果
+                    List<OcrResultNew> ocrResultNewList = file2OcrService.getOcrByPY(fileMd5);
+                    fileDocument.setOcrResultNewList(ocrResultNewList);
 
-                saveTagWhenSaveDoc(fileDocument,labels);
-
-                //获取OCR识别结果
-                List<OcrResultNew> ocrResultNewList = file2OcrService.getOcrByPY(fileMd5);
-                fileDocument.setOcrResultNewList(ocrResultNewList);
-
-                switch (suffix) {
-                    case "pdf":
-                    case "docx":
-                    case "pptx":
-                    case "xlsx":
-                        taskExecuteService.execute(fileDocument);
-                        break;
-                    default:
-                        break;
+                    switch (suffix) {
+                        case "pdf":
+                        case "docx":
+                        case "pptx":
+                        case "xlsx":
+                            taskExecuteService.execute(fileDocument);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-
                 model.setData(fileDocument.getId());
                 model.setCode(ResponseModel.SUCCESS);
                 model.setMessage("上传成功");
@@ -466,7 +471,12 @@ public class FileServiceImpl implements IFileService {
      * @Param [fileMd5, file]
      **/
     private FileDocument saveToDb(String md5, MultipartFile file, String userId, String username) {
-        FileDocument fileDocument;
+
+        FileDocument fileDocument = getByMd5(md5);
+        if (fileDocument != null) {
+            return fileDocument;
+        }
+
         String originFilename = file.getOriginalFilename();
         fileDocument = new FileDocument();
         fileDocument.setName(originFilename);
