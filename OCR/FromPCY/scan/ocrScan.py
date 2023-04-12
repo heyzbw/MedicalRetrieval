@@ -13,6 +13,7 @@ import ocrmypdf as omp
 def getScaner(filePath, filename):
 
     pathToSave = "C:/Users/22533/Desktop/notingDQX/pdf/scan/"
+    print("文件名为：",filename)
     fileToSave = pathToSave + filename
     omp.ocr(filePath, fileToSave,
             deskew=True,

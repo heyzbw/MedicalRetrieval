@@ -128,5 +128,6 @@ public class FileDocument {
 
     private boolean hasCollect;
     private boolean hasLike;
+    private Long click_rate;
 
 }

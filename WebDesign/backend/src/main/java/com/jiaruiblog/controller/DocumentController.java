@@ -191,8 +191,9 @@ public class DocumentController {
     @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
     @PostMapping("/Image")
     public BaseApiResult uploadImage(@RequestParam("filename") String filename, @RequestParam("imageList") MultipartFile[] imageList,HttpServletRequest request) throws IOException, DocumentException, AuthenticationException {
+        String userId = (String) request.getAttribute("id");
+        System.out.println("ImageMethod的UserId为:"+userId);
         iFileService.createScanPDF(filename,imageList,request);
-
         return null;
     }
 

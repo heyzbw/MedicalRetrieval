@@ -225,10 +225,6 @@ def fromMD5(md5):
         if text != False:
             texts.append(text)
 
-    # for image in images:
-    #     text = pic2json(image.image_np, image.pageNum, image.filename)
-    #     if text != False:
-    #         texts.append(text)
 
     return texts
 

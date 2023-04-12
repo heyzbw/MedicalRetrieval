@@ -36,8 +36,29 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.IOException;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+
 public class CollectServiceTest {
 
+    public static void main(String[] args){
+
+        // 创建 MongoDB 的客户端对象
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+
+// 获取要插入的集合对象
+        MongoDatabase database = mongoClient.getDatabase("sqrrow");
+        MongoCollection<Document> collection = database.getCollection("likeCollection");
+
+    // 创建要插入的文档对象
+            Document doc = new Document("userId", "6435ce9f34f8213de25f824e")
+                    .append("docId", "12345");
+//                    .append("liked_at", new Date());
+
+
+    }
 //    @Test
 //    public void insert() {
 //

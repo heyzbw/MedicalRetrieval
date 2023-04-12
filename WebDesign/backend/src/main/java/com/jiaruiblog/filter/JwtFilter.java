@@ -25,7 +25,7 @@ import java.util.Map;
 @Slf4j
 @WebFilter(filterName = "JwtFilter", urlPatterns = {
         "/comment/auth/*", "/user/auth/*", "/collect/auth/*", "/document/auth/*",
-        "/docReview/*", "/docLog/*", "/like/*", "/files/auth/*", "/document/listWithCategory",
+        "/docReview/*", "/docLog/*", "/like/*", "/files/auth/*", "/document/listWithCategory","/document/Image",
         "/comment/auth/allComments"
 })
 public class JwtFilter implements Filter
@@ -61,13 +61,13 @@ public class JwtFilter implements Filter
         }
         // Except OPTIONS, other request should be checked by JWT
         else {
-            System.out.println("进入第二个判断中");
+//            System.out.println("进入第二个判断中");
             if (token == null) {
-                System.out.println("没有token");
+//                System.out.println("没有token");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-            System.out.println("token:"+token);
+//            System.out.println("token:"+token);
             Map<String, Claim> userData = JwtUtil.verifyToken(token);
             if (CollectionUtils.isEmpty(userData)) {
                 System.out.println("发生401错误");

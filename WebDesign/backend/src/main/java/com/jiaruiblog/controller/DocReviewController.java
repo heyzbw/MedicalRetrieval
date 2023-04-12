@@ -138,7 +138,7 @@ public class DocReviewController {
         }
 //        如果是普通用户
         else {
-            System.out.println("他是一个普通用户");
+//            System.out.println("他是一个普通用户");
             // 如果权限不足，返回一个错误响应
             return docReviewService.queryReviewLog(pageParams, (String) request.getAttribute("id"), false);
         }

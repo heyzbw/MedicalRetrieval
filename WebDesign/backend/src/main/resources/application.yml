@@ -9,7 +9,7 @@ spring:
   data:
     mongodb:
       database: ${MONGO_DATABASE:sqrrow}
-      host: ${MONGO_HOST:121.36.201.185}
+      host: ${MONGO_HOST:localhost}
       port: ${MONGO_PORT:27017}
       threads-allowed-to-block-for-connection-multiplier: 20
       connect-timeout: 10000
@@ -19,7 +19,7 @@ spring:
 
   redis:
     database: 0
-    host: ${REDIS_HOST:121.36.201.185}
+    host: ${REDIS_HOST:localhost}
     password: ${REDIS_PWD:123456}
     port: ${REDIS_PORT:6379}
     timeout: 3000
