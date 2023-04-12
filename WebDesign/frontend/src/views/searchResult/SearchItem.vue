@@ -157,7 +157,8 @@ export default {
                 query: {
                     docId: this.id,
                     keyword: this.keyword,
-                    pageNum: item.pageNum
+                    pageNum: item.pageNum,
+                    score: this.score
                 }
             });
         },
@@ -169,7 +170,8 @@ export default {
                 query: {
                     docId: this.id,
                     keyword: this.keyword,
-                    pageNum: item.pageNum
+                    pageNum: item.pageNum,
+                    score: this.score
                 }
             });
         },
@@ -180,7 +182,8 @@ export default {
                 query: {
                     docId: this.id,
                     keyword: this.keyword,
-                    pageNum: item.pdfPage + 1
+                    pageNum: item.pdfPage + 1,
+                    score: this.score
                 }
             });
         }
