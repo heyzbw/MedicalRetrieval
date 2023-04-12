@@ -788,7 +788,7 @@ public class FileServiceImpl implements IFileService {
             case FILTER:
                 Set<String> docIdSet = new HashSet<>();
                 String keyWord = Optional.of(documentDTO).map(DocumentDTO::getFilterWord).orElse("");
-                keyWord = keyWord.replaceAll("\\s+", "");
+//                keyWord = keyWord.replaceAll("\\s+", "");
 //                docIdSet.addAll(categoryServiceImpl.fuzzySearchDoc(keyWord));
 //                // 模糊查询 标签
 //                docIdSet.addAll(tagServiceImpl.fuzzySearchDoc(keyWord));

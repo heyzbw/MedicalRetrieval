@@ -10,7 +10,7 @@
             <SearchItem v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)" :id="item.id"
                 :thumbId="item.thumbId" :title="item.title" :esSearchContentList="item.esSearchContentList"
                 :time="item.createTime" :user-name="item.userName" :category="item.categoryVO" :tags="item.tagVOList"
-                :collect-num="item.collectNum" :comment-num="item.commentNum" :ocrResultList="item.ocrResultList"
+                :collect-num="item.collectNum" :comment-num="item.commentNum" :ocrResultList="item.ocrResultList" :click-num="item.click_num"
                 :keyword="keyword" :click_score="item.click_score" :content_score="item.content_score"
                 :like_score="item.like_score">
             </SearchItem>
