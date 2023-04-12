@@ -84,7 +84,7 @@ public class ElasticServiceImpl implements ElasticService {
     @Autowired
     private FileServiceImpl fileServiceImpl;
 
-    private static int FRAGMENTSIZE = 150;
+    private static int FRAGMENTSIZE = 250;
 
     private static int FRAGMENTNUMS = 2;
     private static String em_front = "<em>";
@@ -131,7 +131,7 @@ public class ElasticServiceImpl implements ElasticService {
      * 3.文件的data 64编码
      */
     public void upload(FileObj file) throws IOException {
-        System.out.println("保存文件吧");
+//        System.out.println("保存文件吧");
         IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
         //上传同时，使用attachment pipeline 进行提取文件
         indexRequest.source(JSON.toJSONString(file), XContentType.JSON);
@@ -1025,6 +1025,7 @@ public class ElasticServiceImpl implements ElasticService {
         esSearch.setMd5((String) objectMap.get("id"));
         esSearch.setFileId((String) objectMap.get("fileId"));
         esSearch.setId((String) objectMap.get("fileId") );
+        esSearch.setClick_num(((Integer) objectMap.get("click_rate")).longValue());
     }
 }
 

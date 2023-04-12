@@ -31,6 +31,7 @@ import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.http.auth.AuthenticationException;
+import org.elasticsearch.common.recycler.Recycler;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -495,7 +496,6 @@ public class FileServiceImpl implements IFileService {
         try {
             String gridfsId = uploadFileToGridFs(file.getInputStream(), file.getContentType());
             fileDocument.setGridfsId(gridfsId);
-            System.out.println("用户的id为："+fileDocument.getUserId());
             fileDocument = mongoTemplate.save(fileDocument, COLLECTION_NAME);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -788,7 +788,7 @@ public class FileServiceImpl implements IFileService {
             case FILTER:
                 Set<String> docIdSet = new HashSet<>();
                 String keyWord = Optional.of(documentDTO).map(DocumentDTO::getFilterWord).orElse("");
-
+                keyWord = keyWord.replaceAll("\\s+", "");
 //                docIdSet.addAll(categoryServiceImpl.fuzzySearchDoc(keyWord));
 //                // 模糊查询 标签
 //                docIdSet.addAll(tagServiceImpl.fuzzySearchDoc(keyWord));
@@ -809,15 +809,18 @@ public class FileServiceImpl implements IFileService {
                             esSearch.setOcrResultList(OcrResultFromDB(esSearch,keyWord));
                         }
                         esSearch.setLike_num(getLikeNumByDocId(esSearch.getFileId()));
+//                        esSearch
                     }
 //                    QuantileNormalization.quantileNormalize(esSearchList,"like",0,30,false);
 //                    QuantileNormalization.quantileNormalize(esSearchList,"click",0,10,false);
 
                     QuantileNormalization.linearNormalize(esSearchList,"like",0,30,false);
                     QuantileNormalization.linearNormalize(esSearchList,"click",0,10,false);
-
 //                    将es的查询结果转为一个List<fileDocument>
                     esDoc = getListFileDocumentFromEsOutcome(esSearchList);
+
+                    setUserNameFromDB(esDoc);
+
                     esDoc = getThumbIdAndDateFromDB(esDoc);
 
                     if (!CollectionUtils.isEmpty(esDoc)) {
@@ -910,7 +913,11 @@ public class FileServiceImpl implements IFileService {
                     {
                         esSearch.setOcrResultList(OcrResultFromDB(esSearch,advanceString));
                     }
+                    esSearch.setLike_num(getLikeNumByDocId(esSearch.getFileId()));
                 }
+
+                QuantileNormalization.linearNormalize(esSearchList,"like",0,30,false);
+                QuantileNormalization.linearNormalize(esSearchList,"click",0,10,false);
 
 //                    将es的查询结果转为一个List<fileDocument>
                 esDoc = getListFileDocumentFromEsOutcome(esSearchList);
@@ -954,8 +961,9 @@ public class FileServiceImpl implements IFileService {
             }
 //            按照时间进行查找
             else {
-                int year_to_compare = advanceDocumentDTO.getTime();
 
+                int year_to_compare = advanceDocumentDTO.getTime();
+                System.out.println("他要过滤的时间为："+year_to_compare);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 //                Date dateTemp = sdf.parse(year_to_compare);
                 Date dateTemp = transformIntToDate(year_to_compare);
@@ -1004,8 +1012,6 @@ public class FileServiceImpl implements IFileService {
             query.with(Sort.by(Sort.Direction.DESC, "uploadDate"));
 
             List<FileDocument> fileDocuments = mongoTemplate.find(query, FileDocument.class, COLLECTION_NAME);;
-
-//            System.out.println("fileDocumentList:"+fileDocumentList);
 
             documentVos = convertDocuments(fileDocuments);
             Map<String, Object> result = new HashMap<>(8);
@@ -1109,11 +1115,14 @@ public class FileServiceImpl implements IFileService {
 
         List<FileDocument> fileDocuments ;
 
+
         if(documentDTO.getPermission() == PermissionEnum.USER){
+            System.out.println("普通用户查看");
             fileDocuments = fuzzySearchDocWithPage(filterWord, page, row,documentDTO.getUserId());
         }
         else{
             fileDocuments = fuzzySearchDocWithPage(filterWord, page, row);
+            System.out.println("管理员查看的文档数量为"+fileDocuments.size());
         }
 
         long totalNum = fileDocuments.size();
@@ -1291,6 +1300,7 @@ public class FileServiceImpl implements IFileService {
 
         documentVO.setHasCollect(fileDocument.isHasCollect());
         documentVO.setHasLike(fileDocument.isHasLike());
+        documentVO.setClick_num(fileDocument.getClick_rate());
 
         return documentVO;
     }
@@ -1607,6 +1617,9 @@ public class FileServiceImpl implements IFileService {
 
             fileDocument.setThumbId(esSearch.getThumbId());
             fileDocument.setUploadDate(esSearch.getDate());
+
+            fileDocument.setClick_rate(esSearch.getClick_num());
+
             fileDocuments.add(fileDocument);
         }
         return fileDocuments;
@@ -1650,10 +1663,22 @@ public class FileServiceImpl implements IFileService {
         // Convert the byte array to a MultipartFile object
         MultipartFile multipartFile = new CustomMultipartFile(file.getName(), "application/pdf", fileBytes);
         UploadFileObj uploadFileObj = new UploadFileObj();
+        String userId = (String) request.getAttribute("id");
+        String username = (String) request.getAttribute("username");
+        uploadFileObj.setUserId(userId);
+        uploadFileObj.setUsername(username);
         uploadFileObj.setFile(multipartFile);
+
         return documentUpload_noAuth(uploadFileObj);
     }
 
+    private void setUserNameFromDB(List<FileDocument> fileDocumentList){
+        for(FileDocument fileDocument:fileDocumentList){
+            Query query = new Query(Criteria.where("_id").is(fileDocument.getId()));
+            FileDocument result = mongoTemplate.findOne(query, FileDocument.class,COLLECTION_NAME);
+            fileDocument.setUserName(result.getUserName());
+        }
+    }
     private List<String> getSearchWord(String advanceWords){
 
         List<String> resultStrings = new ArrayList<>();

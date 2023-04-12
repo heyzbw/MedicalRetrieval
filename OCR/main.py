@@ -33,13 +33,6 @@ def call_pdf2pic():
     # 读取文件，并进行处理
     texts = fromMD5(md5)
 
-    # 去除object_id
-    # json_data = [{'ocrnpm runText': text['ocrText'],
-    #               'pdfURL': text['pdfURL'],
-    #               'pdfPage': text['pdfPage'],
-    #               'image': text['image'],
-    #               'textResult': text['textResult']} for text in texts]
-
     json_data = [{'ocrText': text['ocrText'],
                   'recordId': str(text['_id'])}
                  for text in texts]

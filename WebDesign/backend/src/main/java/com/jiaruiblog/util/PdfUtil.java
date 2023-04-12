@@ -84,6 +84,8 @@ public class PdfUtil {
 //                System.out.println("text:"+text);
                 text = text.replace("\n", "");
                 text = text.replace("\r", "");
+                text = text.replaceAll("\\s+", "");
+//                text = text.replace()
 //                System.out.println("text_new:"+text);
 //                text = text.trim();
 //                System.out.println("读取到的内容为："+text);

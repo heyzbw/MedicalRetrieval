@@ -475,7 +475,8 @@ export default {
                         this.$refs.upload.clearFiles();
                         this.$message.success("发布成功！");
                     } else {
-                        this.info3(false)
+                        this.$message.success("成功创建PDF文件");
+                        // this.info3("成功创建PDF文件")
                     }
                 })
             }

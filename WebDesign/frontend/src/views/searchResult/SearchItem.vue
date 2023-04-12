@@ -26,7 +26,7 @@
             </div>
             <el-tooltip class="item" effect="dark" placement="bottom">
                 <div slot="content" style="font-size: 15px;">{{ this.tooltips }} </div>
-                <div class="defen">得分:{{ this.score }}</div>
+                <div class="defen">得分:{{ this.score.toFixed(3) }}</div>
             </el-tooltip>
 
         </div>
@@ -45,7 +45,7 @@
 
                     </el-tab-pane>
 
-                    <el-tab-pane label="来源于同义词" name="tab_second" width="100%" v-if="esSearchContentList_synoSize">
+                    <el-tab-pane label="来源于同义词" name="tab_second" width="100%" v-if="esSearchContentList_synoSize && filterWordLen < 5">
                         <div v-for="(item, index) in esSearchContentList_syno" :key="index" @click="getSynoView(item)">
                             【第{{ item.pageNum }}页】
                             <div style="color:green">来源于同义词</div>
@@ -109,6 +109,13 @@
                 <i class="ivu-icon ivu-icon-ios-chatbubbles-outline"></i>
                 {{ commentNum }}
             </li>
+            <li>
+<!--              <el-icon><RefreshRight /></el-icon>-->
+<!--              <Icon type="ios-eye"></Icon>-->
+<!--              <Icon type="eye"></Icon>-->
+              <i class="ivu-icon ivu-icon-ios-eye-outline"></i>
+                {{ clickNum }}
+            </li>
         </ul>
 
     </div>
@@ -139,6 +146,7 @@ export default {
             esSearchContentList_synoSize: 0,
             activeTab: 'first',
             tooltips: '',
+            filterWordLen:""
         }
     },
     methods: {
@@ -189,6 +197,7 @@ export default {
         collectNum: { type: Number, requires: false, default: 0 },
         commentNum: { type: Number, requires: false, default: 10 },
         likeNum: { type: Number, requires: false, default: 0 },
+        clickNum: {type: Number,requires: false,default: 0},
         keyword: { type: String, requires: true },
         esSearchContentList: { type: Array, requires: false, default: [] },
         esSearchContentList_syno: { type: Array, requires: false, default: [] },
@@ -203,7 +212,7 @@ export default {
         this.score = this.like_score + this.content_score + this.click_score
         let str = Number(this.content_score);
         str = str.toFixed(2)
-        this.tooltips = '内容得分' + str + ', ' + '点赞得分' + this.like_score + ', ' + '浏览得分' + this.click_score
+        this.tooltips = '内容得分' + str + ', ' + '点赞得分' + this.like_score.toFixed(3) + ', ' + '浏览得分' + this.click_score.toFixed(3)
         if (this.esSearchContentList !== [] && this.esSearchContentList !== null) {
             this.contentResultSize = this.esSearchContentList.length
         }
@@ -226,8 +235,27 @@ export default {
         }
         console.log("esSearchContentList:", this.esSearchContentList)
 
-        setTimeout(() => {
-        }, 300);
+        // 统计字符个数
+        if (this.keyword) {
+          let chineseChars = this.keyword.match(/[\u4e00-\u9fa5]/g);
+          if (chineseChars && chineseChars.length > 0) {
+            // 如果关键词包含中文字符，按字符个数统计
+            this.filterWordLen = chineseChars.length;
+            // console.log("中文的个数为：",this.filterWordLen)
+            // 将非中文字符转换为数组，再计算数组长度
+            let nonChineseChars = this.keyword.replace(/[\u4e00-\u9fa5]/g, ' ').trim();
+            // console.log("nonChineseChars为",nonChineseChars)
+            let temp = nonChineseChars.split(/\s+/);
+
+            this.filterWordLen += temp.length;
+          } else {
+            // 如果关键词不包含中文字符，按单词个数统计
+            this.filterWordLen = this.keyword.trim().split(/\s+/).length;
+          }
+        } else {
+          this.filterWordLen = 0;
+        }
+
     },
 
     computed: {
@@ -363,7 +391,7 @@ export default {
 }
 
 .description-item {
-    width: 200px;
+    width: 300px;
     line-height: 24px;
     padding-top: 2px;
     float: left;

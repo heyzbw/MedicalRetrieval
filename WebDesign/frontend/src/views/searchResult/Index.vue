@@ -14,7 +14,7 @@
             <SearchItem v-if="searchifag" v-for="item in data.slice((currentPage - 1) * pageSize, (currentPage) * pageSize)"
                 :id="item.id" :thumbId="item.thumbId" :title="item.title" :esSearchContentList="item.esSearchContentList"
                 :time="item.createTime" :user-name="item.userName" :category="item.categoryVO" :tags="item.tagVOList"
-                :collect-num="item.collectNum" :like-num="item.likeNum" :comment-num="item.commentNum"
+                :collect-num="item.collectNum" :like-num="item.likeNum" :comment-num="item.commentNum" :click-num="item.click_num"
                 :ocrResultList="item.ocrResultList" :keyword="keyword" :click_score="item.click_score"
                 :content_score="item.content_score" :esSearchContentList_syno="item.esSearchContentList_syno"
                 :like_score="item.like_score">
@@ -59,6 +59,7 @@ export default {
             datapubmed: [],
             searchifag: true,
             searchpubmed: false,
+            filterWordLen:0
         }
     },
     components: {
@@ -74,6 +75,7 @@ export default {
     },
     methods: {
         getListDatap() {
+
             this.loading = true
             this.searchifag = false
             this.searchpubmed = true
@@ -124,6 +126,33 @@ export default {
             this.currentPage = page
         },
         getListData() {
+
+
+            // 统计字符个数
+            if (this.keyword) {
+              let chineseChars = this.keyword.match(/[\u4e00-\u9fa5]/g);
+              if (chineseChars && chineseChars.length > 0) {
+                // 如果关键词包含中文字符，按字符个数统计
+                this.filterWordLen = chineseChars.length;
+                console.log("中文的个数为：",this.filterWordLen)
+                // 将非中文字符转换为数组，再计算数组长度
+                let nonChineseChars = this.keyword.replace(/[\u4e00-\u9fa5]/g, ' ').trim();
+                console.log("nonChineseChars为",nonChineseChars)
+                let temp = nonChineseChars.split(/\s+/);
+
+                this.filterWordLen += temp.length;
+              } else {
+                // 如果关键词不包含中文字符，按单词个数统计
+                this.filterWordLen = this.keyword.trim().split(/\s+/).length;
+              }
+            } else {
+              this.filterWordLen = 0;
+            }
+
+
+          console.log("搜索的字符个数为：",this.filterWordLen)
+
+
             this.loading = true
             this.searchifag = true
             this.searchpubmed = false

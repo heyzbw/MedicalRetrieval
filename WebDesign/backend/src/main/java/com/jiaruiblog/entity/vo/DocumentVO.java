@@ -34,6 +34,7 @@ DocumentVO {
     private Long likeNum;
     private Long commentNum;
 
+    private Long click_num;
     private CategoryVO categoryVO;
 
     private List<TagVO> tagVOList;

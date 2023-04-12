@@ -195,7 +195,6 @@ public class FileController {
                                     @RequestParam("labels")List<String> labels,
                                     @RequestParam("userid")String userId,
                                     @RequestParam("username")String username
-//                                    HttpServletRequest request
     ) throws IOException, AuthenticationException {
 
         UploadFileObj uploadFileObj = new UploadFileObj();
