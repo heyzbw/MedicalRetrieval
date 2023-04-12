@@ -71,6 +71,9 @@
                                         <p><strong>得分</strong> {{ this.score }}</p>
                                     </div>
                                     <div style="padding-top: 10px">
+                                        <p>{{ this.tooltips }}</p>
+                                    </div>
+                                    <div style="padding-top: 10px">
                                         <p><strong style="vertical-align: bottom;">索引状态</strong>
                                             <span> </span>
                                             <Button style="margin-left: 10px" v-if="this.docState === 'SUCCESS'"
@@ -95,8 +98,8 @@
                                         </p>
                                         <div v-show="infoVisible"
                                             style="background-color: #f6f8fa;color: #da702b;border-radius: 4px;padding: 4px;font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    margin-top: 8px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                    ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            margin-top: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
                                             <span v-if="this.docState === 'SUCCESS'">
                                                 索引建立成功，可以下载<span style="color: #408FFF; cursor: pointer"
                                                     @click="downloadTxt(this)">文本文件</span>。
@@ -223,6 +226,7 @@ export default {
             hasLike: false,
             selectedText: '',
             score: 0,
+            tooltips: '',
         }
     },
     components: {
@@ -254,6 +258,7 @@ export default {
             this.keyword = this.$route.query.keyword
             this.pageNum = this.$route.query.pageNum
             this.score = this.$route.query.score
+            this.tooltips = this.$route.query.tooltips
             var params = {
                 docId: this.docId,
                 userId: localStorage.getItem("id")

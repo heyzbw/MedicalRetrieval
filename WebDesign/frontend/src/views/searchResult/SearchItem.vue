@@ -150,7 +150,9 @@ export default {
                     docId: this.id,
                     keyword: this.keyword,
                     pageNum: item.pageNum,
-                    score: this.score
+                    score: this.score,
+                    tooltips: this.tooltips
+
                 }
             });
         },
@@ -163,7 +165,9 @@ export default {
                     docId: this.id,
                     keyword: this.keyword,
                     pageNum: item.pageNum,
-                    score: this.score
+                    score: this.score,
+                    tooltips: this.tooltips
+
                 }
             });
         },
@@ -175,7 +179,8 @@ export default {
                     docId: this.id,
                     keyword: this.keyword,
                     pageNum: item.pdfPage + 1,
-                    score: this.score
+                    score: this.score,
+                    tooltips: this.tooltips
                 }
             });
         }
