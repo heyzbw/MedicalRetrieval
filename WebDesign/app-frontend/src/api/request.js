@@ -5,7 +5,8 @@ import router from '../router/index';
 let vm = new Vue();
 
 const instance = axios.create({
-    baseURL: 'http://121.36.201.185:8082/api/v1.0',
+    // baseURL: 'http://121.36.201.185:8082/api/v1.0',
+    baseURL: 'http://localhost:8082/api/v1.0',
     timeout: 100000,
     headers: {
         post: {

@@ -13,6 +13,7 @@ import requests
 from flask import Flask, send_from_directory, send_file, make_response
 from Bio import Entrez
 from Bio import Medline
+
 # from FromPCY.scan.ocrScan import getScaner
 
 # 创建一个服务，赋值给APP
@@ -131,7 +132,12 @@ def pdfdownload():
     return response
 
 
+@app.route('/')  # 这个路由将根URL映射到了hello——world函数上
+def hello_world():  # 定义视图函数
+    return 'Hello World!'  # 返回响应对象
+
+
 if __name__ == '__main__':
     # 这个host：windows就一个网卡，可以不写，而linux有多个网卡，写成0.0.0.0可以接受任意网卡信息
     # 端口号默认5000，可以手动设置，这里我设置成了8803
-    app.run(host='0.0.0.0', port=8083,  debug=False)
+    app.run(host='0.0.0.0', port=8083, debug=False)

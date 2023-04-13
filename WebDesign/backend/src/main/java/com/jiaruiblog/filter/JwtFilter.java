@@ -69,7 +69,7 @@ public class JwtFilter implements Filter
 //            System.out.println("token:"+token);
             Map<String, Claim> userData = JwtUtil.verifyToken(token);
             if (CollectionUtils.isEmpty(userData)) {
-                System.out.println("发生401错误");
+//                System.out.println("发生401错误");
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             } else {
