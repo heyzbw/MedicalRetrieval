@@ -168,9 +168,7 @@ export default {
         this.init();
     },
     mounted() {
-        // this.$nextTick(() => {
-        //     this.$refs.input.focus()
-        // })
+
     },
     methods: {
         routeTo() {
@@ -195,7 +193,6 @@ export default {
             }, 100)
         },
         clickToSearch(value) {
-            console.log("待查询的关键词为：" + value)
             if (value !== "") {
                 this.$router.push({
                     path: '/searchResult',

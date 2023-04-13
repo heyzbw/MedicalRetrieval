@@ -56,19 +56,13 @@ public class CollectController {
     @ApiOperation(value = "根据分类、标签查询", notes = "查询文档列表信息")
     @PostMapping(value = "/getDocByUserId")
 //    public BaseApiResult getDocByTagCateKeyWord(@ModelAttribute("pageDTO") QueryDocByTagCateDTO pageDTO, HttpServletRequest request) {
-    public BaseApiResult getDocByTagCateKeyWord(@RequestParam("cateId") String cateId,
-                                                @RequestParam("tagId") String tagId,
-                                                @RequestParam("keyword") String keyword,
-                                                @RequestParam("page") int page,
-                                                @RequestParam("rows") int rows,
+    public BaseApiResult getDocByTagCateKeyWord(@RequestBody QueryDocByTagCateDTO pageDTO,
                                                 HttpServletRequest request) {
         System.out.println("request:"+request);
         String userId = (String) request.getAttribute("id");
         System.out.println("userId_origin:"+userId);
-        return null;
-//        System.out.println("");
-//        return collectServiceImpl.getDocByTagAndCateAndUserid(pageDTO.getCateId(), pageDTO.getTagId(), pageDTO.getKeyword(),
-//                Integer.toUnsignedLong(pageDTO.getPage() - 1), Integer.toUnsignedLong(pageDTO.getRows()),userId);
+        return collectServiceImpl.getDocByTagAndCateAndUserid(pageDTO.getCateId(), pageDTO.getTagId(), pageDTO.getKeyword(),
+                Integer.toUnsignedLong(pageDTO.getPage() - 1), Integer.toUnsignedLong(pageDTO.getRows()),userId);
     }
 
 

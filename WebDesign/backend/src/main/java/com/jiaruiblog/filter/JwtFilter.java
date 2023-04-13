@@ -26,7 +26,7 @@ import java.util.Map;
 @WebFilter(filterName = "JwtFilter", urlPatterns = {
         "/comment/auth/*", "/user/auth/*", "/collect/auth/*", "/document/auth/*",
         "/docReview/*", "/docLog/*", "/like/*", "/files/auth/*", "/document/listWithCategory","/document/Image",
-        "/comment/auth/allComments"
+        "/comment/auth/allComments","/collect/getDocByUserId"
 })
 public class JwtFilter implements Filter
 {
@@ -54,7 +54,6 @@ public class JwtFilter implements Filter
 
         //获取 header里的token
         final String token = request.getHeader("authorization");
-        System.out.println("request.getMethod():"+request.getMethod());
         if (OPTIONS.equals(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             chain.doFilter(request, response);
@@ -74,7 +73,7 @@ public class JwtFilter implements Filter
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             } else {
-                System.out.println("拦截器 拿到用户信息，放到request中");
+//                System.out.println("拦截器 拿到用户信息，放到request中");
                 //拦截器 拿到用户信息，放到request中
                 request.setAttribute("id", userData.get("id").asString());
                 request.setAttribute("username", userData.get("username").asString());

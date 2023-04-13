@@ -1,6 +1,6 @@
 <template>
     <div class="tag-panel">
-        <div class="tag-title">文件类型</div>
+        <div class="tag-title">文档标签</div>
         <div class="tag-list">
             <div class="tag-item"
                  v-for="tagName in tagNames"

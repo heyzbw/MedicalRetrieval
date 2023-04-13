@@ -4,13 +4,13 @@
         <tag-filter @changeTag="changeTag"></tag-filter>
         <div class="tab">
             <Tabs value="name1">
-                <TabPane label="最近上传" name="name1">
+                <TabPane label="最近收藏" name="name1">
                     <filter-list-page :data="docList" :total="total" :pageNum="pageNum" :pageSize="pageSize"
                         @on-page-change="changePage"></filter-list-page>
                 </TabPane>
-                <TabPane label="人气排名" name="name2" v-if="true">
-                    <filter-list-page></filter-list-page>
-                </TabPane>
+<!--                <TabPane label="人气排名" name="name2" v-if="true">-->
+<!--                    <filter-list-page></filter-list-page>-->
+<!--                </TabPane>-->
             </Tabs>
         </div>
     </div>
@@ -22,6 +22,7 @@ import TagFilter from '@/views/filterDoc/TagFilter'
 import CategoryFilter from '@/views/filterDoc/CategoryFilter'
 import FilterListPage from '@/views/filterDoc/FilterListPage'
 import CategoryRequest from "@/api/category"
+import CollectRequest from '@/api/collect'
 
 export default {
     name: "DocPage",
@@ -54,7 +55,7 @@ export default {
                 page: this.pageNum,
                 rows: this.pageSize
             }
-            CategoryRequest.getDocList(param).then(res => {
+            CollectRequest.getUserCollect(param).then(res => {
                 if (res.code === 200) {
                     console.log(res.data)
                     let result = res.data;

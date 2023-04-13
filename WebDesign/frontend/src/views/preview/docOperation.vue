@@ -48,6 +48,24 @@ export default {
     mounted() {
 
     },
+    watch: {
+      collectStatus(newValue, oldValue) {
+        // 根据新的值修改对应的图片
+        if (newValue) {
+          this.data[0].src = require("@/assets/source/collect.png");
+        } else {
+          this.data[0].src = require("@/assets/source/cancelcollect.png");
+        }
+      },
+      likeStatus(newValue, oldValue) {
+        // 根据新的值修改对应的图片
+        if (newValue) {
+          this.data[1].src = require("@/assets/source/like-fill.png");
+        } else {
+          this.data[1].src = require("@/assets/source/like-empt.png");
+        }
+      }
+    },
 
     methods: {
         operate(item) {
@@ -55,32 +73,10 @@ export default {
                 window.open(BackendUrl() + "/files/view/" + this.docId, "_blank");
             }
             else if (item.index === "1") {
-                console.log("发出收藏事件")
                 this.$emit("addCollect", Number(item.index))
-                // this.collectStatus = !this.collectStatus
-                // console.log("collectStatus:" + this.collectStatus)
-                if (this.collectStatus == true) {
-                    this.data[0].src = require("@/assets/source/collect.png")
-                }
-                else {
-                    this.data[0].src = require("@/assets/source/cancelcollect.png")
-
-                }
-
             }
             else if (item.index === "2") {
                 this.$emit("addLike", Number(item.index))
-                console.log("发出点赞事件")
-                // this.likeStatus = !this.likeStatus
-                // console.log("likeStatus:" + this.likeStatus)
-
-                if (this.likeStatus == true) {
-                    this.data[1].src = require("@/assets/source/like-fill.png")
-                }
-                else {
-                    this.data[1].src = require("@/assets/source/like-empt.png")
-
-                }
             }
         },
     }

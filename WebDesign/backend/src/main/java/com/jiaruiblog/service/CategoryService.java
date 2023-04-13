@@ -79,4 +79,5 @@ public interface CategoryService {
      **/
     BaseApiResult getDocByTagAndCate(String cateId, String tagId, String keyword, Long pageNum, Long pageSize);
 
+    BaseApiResult getDocByTagAndCate_Collection(String cateId, String tagId, String keyword, Long pageNum, Long pageSize, String userId);
 }

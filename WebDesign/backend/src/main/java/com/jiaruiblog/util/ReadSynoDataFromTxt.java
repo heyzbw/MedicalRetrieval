@@ -47,6 +47,11 @@ public  class ReadSynoDataFromTxt {
 
     public static String tokenNotSYno(String target,List<String> list){
 
+        System.out.println("原本的数据为："+target);
+        System.out.print("同义词有：");
+        for(String word:list){
+            System.out.print(word);
+        }
         String regex = "<bm>([^*<>]+)</bm>";
         String replacement = "$1";
         Pattern pattern = Pattern.compile(regex);
@@ -54,6 +59,7 @@ public  class ReadSynoDataFromTxt {
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             String s = matcher.group(1);
+            System.out.println("正则表达式输出为："+s);
             if (!list.contains(s)) {
                 matcher.appendReplacement(sb, replacement.replace("$1", s));
             }

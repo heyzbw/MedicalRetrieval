@@ -68,9 +68,9 @@ public class LikeServiceImpl implements LikeService {
             likeDb.setCreateDate(new Date());
             likeDb.setUpdateDate(new Date());
             elasticService.NumberOperation(entityId,"ADD","like_num");
-        }
 
-        mongoTemplate.save(likeDb,INDEX_NAME);
+            mongoTemplate.save(likeDb,INDEX_NAME);
+        }
 
         redisTemplate.execute(new SessionCallback() {
             @Override

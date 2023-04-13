@@ -348,6 +348,7 @@ export default {
                 "rows": this.pageSize,
                 "tagId": categoryId,
                 "type": this.currentType,
+                "userId":localStorage.getItem("id"),
                 "userType":localStorage.getItem("type")
             }
             //   console.log("你的type是个啥？",this.currentType)

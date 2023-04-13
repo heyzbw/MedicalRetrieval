@@ -37,8 +37,8 @@
             <div>
 
                 <div class="doc-operation-body">
-                    <doc-operation :likeStatus="likeStatus" :collectStatus="collectStatus" @addLike="addLike"
-                        @addCollect="addCollect" />
+                    <doc-operation :likeStatus="likeStatus" :collectStatus="collectStatus"
+                                   @addLike="addLike" @addCollect="addCollect" />
                 </div>
                 <div class="doc-comment">
                     <comment-page />
@@ -233,6 +233,9 @@ export default {
         Nav, DocOperation, CommentPage, FloatBall
     },
     mounted() {
+
+        console.log("进入全部文档界面")
+
         this.getSelectText();
         this.getMessage();
 
@@ -332,12 +335,12 @@ export default {
             return tags;
         },
 
-        async getLikeInfo() {
+      getLikeInfo() {
             let param = {
                 entityId: this.docId,
                 userId: localStorage.getItem("id")
             }
-            await DocRequest.getLikeInfo(param).then(res => {
+          DocRequest.getLikeInfo(param).then(res => {
                 if (res.code == 200) {
                     let result = res.data;
                     this.collectCount = result.collectCount || 0;
@@ -365,9 +368,8 @@ export default {
             await DocRequest.addLike({ params }).then(res => {
                 if (res.code == 200) {
                     let result = res.data;
-                    // this.likeCount = result.likeCount || 0;
-                    // this.likeStatus = result.likeStatus || false;
-                    if (this.likeStatus === 0) {
+                    console.log("result:",result)
+                    if (result.likeStatus === 0) {
                         this.$Message.info("取消点赞！")
                         this.likeStatus = false
                     }
@@ -389,8 +391,6 @@ export default {
             if (entityType !== 1) {
                 return
             }
-            //   变化状态
-
             let params = {
                 docId: this.docId
             }
@@ -398,8 +398,6 @@ export default {
                 if (res.code == 200) {
                     let result = res.data;
                     console.log("res data:", res.data)
-                    // this.collectCount = result.likeCount || 0;
-                    // this.collectStatus = result.likeStatus || 0;
                     if (result === "SUCCESS_REMOVE_COLLECT") {
                         this.$Message.info("取消收藏！")
                         this.collectStatus = false
