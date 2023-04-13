@@ -60,9 +60,8 @@ public class LikeController{
         }
         // 获取到当前用户
         String userId = (String) request.getAttribute("id");
-        System.out.println("userId:"+userId);
         long likeCount = 0;
-        int likeStatus = 0;
+        int likeStatus;
         try {
             // 点赞
             likeService.like(userId, entityType, entityId);
@@ -71,11 +70,12 @@ public class LikeController{
             // 获取当前用户点赞的状态
             likeStatus = likeService.findEntityLikeStatus(userId, entityType, entityId);
         } catch (RedisConnectionFailureException | RedisConnectionException e) {
+            System.out.println("redis连接错误");
             return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, e.getMessage());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        System.out.println("likeStatus:"+likeStatus);
         // 返回的结果，封装成一个Map集合
         Map<String, Object> map = new HashMap<>();
         map.put("likeCount", likeCount);

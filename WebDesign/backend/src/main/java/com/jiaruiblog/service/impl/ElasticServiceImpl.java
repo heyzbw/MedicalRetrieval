@@ -881,7 +881,7 @@ public class ElasticServiceImpl implements ElasticService {
             updateRequest.doc(jsonMap);
 
             UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
-            System.out.println(updateResponse.getResult().toString());
+//            System.out.println(updateResponse.getResult().toString());
         }
         else {
             System.out.println("No documents found for fileId " + fileId);

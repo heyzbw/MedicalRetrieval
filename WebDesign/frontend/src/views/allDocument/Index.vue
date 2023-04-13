@@ -19,10 +19,7 @@ export default {
                     slot: 'name',
                     // key: "title"
                 },
-                // {
-                //     title: '摘要',
-                //     key: 'abstract'
-                // },
+
                 {
                     title: '大小',
                     width: 120,
@@ -46,10 +43,6 @@ export default {
                         ]);
                     }
                 },
-                // {
-                //     title: '标签',
-                //     key: 'tag'
-                // },
                 {
                     title: '创建人',
                     width: 120,

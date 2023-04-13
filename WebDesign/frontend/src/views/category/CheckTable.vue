@@ -16,6 +16,7 @@
                     </template>
                 </Table>
             </div>
+
             <div class="page-container">
                 <Page :model-value="currentPage" :total="totalItems" :page-size="pageSize" @on-change="pageChange" />
             </div>
@@ -199,6 +200,7 @@ export default {
                 "filterWord": filterWord || this.filterWord,
                 "page": this.currentPage - 1,
                 "rows": this.pageSize,
+
             }
             console.log(params)
             DocumentRequest.getDataWithCheck(params).then(res => {

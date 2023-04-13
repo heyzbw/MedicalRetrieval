@@ -5,10 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/admin/allDocumnetUser.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/app-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/app-frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/PdfUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/PdfUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/home/SearchGroup.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/home/SearchGroup.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/request.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/admin/SideBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/admin/SideBar.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/allDocument/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/allDocument/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/category/CategoryItems.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/category/CategoryItems.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/category/CheckTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/category/CheckTable.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/category/DocTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/category/DocTable.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/preview/docOperation.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/preview/docOperation.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/preview/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/preview/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/users/UserTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/users/UserTable.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +257,12 @@
       <workItem from="1681239687826" duration="679000" />
       <workItem from="1681244015127" duration="1819000" />
       <workItem from="1681271320974" duration="444000" />
-      <workItem from="1681271781469" duration="5047000" />
+      <workItem from="1681271781469" duration="6166000" />
+      <workItem from="1681311071383" duration="650000" />
+      <workItem from="1681313582844" duration="788000" />
+      <workItem from="1681322831738" duration="365000" />
+      <workItem from="1681326286146" duration="633000" />
+      <workItem from="1681327716328" duration="1215000" />
     </task>
     <servers />
   </component>

@@ -74,8 +74,7 @@ const GET_LIKE_URL = '/queryLikeInfo/';
 
 const COLLECT_ADD_URL = '/collect/auth/insert'; // 收藏增加
 const COLLECT_REMOVE_URL = '/collect/auth/remove'; // 收藏减少
-
-
+const COLLECT_GET_URL = '/collect/getDocByUserId'; //根据用户的ID去获取收藏
 
 module.exports = {
     ADD_RELATE_URL,
@@ -99,6 +98,7 @@ module.exports = {
 
     COLLECT_ADD_URL,
     COLLECT_REMOVE_URL,
+    COLLECT_GET_URL,
 
     USER_ADD_URL,
     USER_REMOVE_URL,

@@ -18,11 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @Author Jarrett Luo
@@ -158,10 +156,7 @@ public class CollectServiceImpl implements CollectService {
         Query queryCollect = new Query(Criteria.where(COLLECTION_NAME_USER_ID).is(userId));
 //        queryCollect.fields().include(COLLECTION_NAME_DOC_ID);
         List<CollectDocRelationship> collectDocRelationships = mongoTemplate.find(queryCollect, CollectDocRelationship.class,COLLECTION_NAME);
-        System.out.println("size:"+collectDocRelationships.size());
-
-
-
+        Set<String> docIdSet = collectDocRelationships.stream().map(CollectDocRelationship::getDocId).collect(Collectors.toSet());
 
         Criteria criteria = new Criteria();
         if (StringUtils.hasText(cateId) && StringUtils.hasText(tagId)) {
@@ -176,8 +171,6 @@ public class CollectServiceImpl implements CollectService {
             criteria.andOperator(Criteria.where("name").regex(Pattern.compile(keyword, Pattern.CASE_INSENSITIVE)));
         }
 
-        // 查询审核完毕的文档
-//        criteria.and("reviewing").is(false);
 
         Aggregation countAggregation = Aggregation.newAggregation(
                 // 选择某些字段
@@ -209,11 +202,16 @@ public class CollectServiceImpl implements CollectService {
         AggregationResults<FileDocumentDTO> aggregate = mongoTemplate.aggregate(aggregation,
                 FileServiceImpl.COLLECTION_NAME, FileDocumentDTO.class);
         List<FileDocumentDTO> mappedResults = aggregate.getMappedResults();
-        System.out.println("mappedResults:"+mappedResults);
 
+        // 筛选出 mappedResults 中 docId 在 Set 集合中的项
+        List<FileDocumentDTO> filteredResults = mappedResults.stream()
+                .filter(dto -> docIdSet.contains(dto.getId()))
+                .collect(Collectors.toList());
+
+        count = filteredResults.size();
 
         Map<String, Object> result = new HashMap<>(20);
-        result.put("data", mappedResults);
+        result.put("data", filteredResults);
         result.put("total", count);
         result.put("pageNum", pageNum);
         result.put("pageSize", pageSize);

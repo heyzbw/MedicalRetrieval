@@ -35,7 +35,8 @@
             <!-- <FloatBall @click="changeshow"></FloatBall> -->
             <div>
                 <div class="doc-operation-body">
-                    <doc-operation :likeStatus="likeStatus" :collectStatus="collectStatus" @addLike="addLike" />
+                    <doc-operation :likeStatus="likeStatus" :collectStatus="collectStatus"
+                                   @addLike="addLike"  @addCollect="addCollect" />
                 </div>
                 <div class="doc-comment">
                     <comment-page />
@@ -275,6 +276,34 @@ export default {
                 this.$Message.info("error")
             })
         },
+
+        async addCollect(entityType) {
+          console.log("发出收藏事件")
+          if (entityType !== 1) {
+            return
+          }
+          let params = {
+            docId: this.docId
+          }
+          await DocRequest.addCollect({ params }).then(res => {
+            if (res.code == 200) {
+              let result = res.data;
+              console.log("res data:", res.data)
+              if (result === "SUCCESS_REMOVE_COLLECT") {
+                this.$Message.info("取消收藏！")
+                this.collectStatus = false
+              } else {
+                this.$Message.success("收藏成功！")
+                this.collectStatus = true
+              }
+            } else {
+              this.$Message.info("error")
+            }
+          }).catch(err => {
+            this.$Message.info("error")
+          })
+        },
+
         downloadTxt(doc) {
             let fileId = this.txtID
             if (fileId === null || fileId === '') {

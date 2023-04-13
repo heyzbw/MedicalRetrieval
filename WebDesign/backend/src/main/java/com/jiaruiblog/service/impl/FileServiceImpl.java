@@ -1096,6 +1096,8 @@ public class FileServiceImpl implements IFileService {
         tagServiceImpl.removeRelateByDocId(id);
         elasticServiceImpl.deleteByDocId(id);
 
+        elasticServiceImpl.deleteByDocId(id);
+
         return BaseApiResult.success(MessageConstant.SUCCESS);
     }
 
@@ -1115,17 +1117,17 @@ public class FileServiceImpl implements IFileService {
 
         List<FileDocument> fileDocuments ;
 
-
+        long totalNum;
         if(documentDTO.getPermission() == PermissionEnum.USER){
             System.out.println("普通用户查看");
             fileDocuments = fuzzySearchDocWithPage(filterWord, page, row,documentDTO.getUserId());
+            totalNum = getDocTotalNum(documentDTO.getUserId());
         }
         else{
             fileDocuments = fuzzySearchDocWithPage(filterWord, page, row);
             System.out.println("管理员查看的文档数量为"+fileDocuments.size());
+            totalNum = getDocTotalNum();
         }
-
-        long totalNum = fileDocuments.size();
 
         List<DocWithCateVO> documentVos = Lists.newArrayList();
         switch (documentDTO.getType()) {
@@ -1133,7 +1135,9 @@ public class FileServiceImpl implements IFileService {
                 restrictId = documentDTO.getCategoryId();
                 for (FileDocument fileDocument : fileDocuments) {
                     boolean relateExist = categoryServiceImpl.relateExist(restrictId, fileDocument.getId());
-                    documentVos.add(entityTransfer(relateExist, fileDocument));
+//                    if(relateExist){
+                        documentVos.add(entityTransfer(relateExist, fileDocument));
+//                    }
                 }
                 break;
             case TAG:
@@ -1210,6 +1214,7 @@ public class FileServiceImpl implements IFileService {
     }
 
     private DocWithCateVO entityTransfer(boolean checkState, FileDocument fileDocument) {
+//        if()
         DocWithCateVO doc = new DocWithCateVO();
         String docId = fileDocument.getId();
         doc.setId(docId);
@@ -1218,10 +1223,27 @@ public class FileServiceImpl implements IFileService {
         doc.setCreateTime(fileDocument.getUploadDate());
         doc.setTitle(fileDocument.getName());
         doc.setTagVOList(tagServiceImpl.queryByDocId(docId));
-        doc.setUserName("admin");
+        doc.setUserName(fileDocument.getUserName());
         doc.setChecked(checkState);
         return doc;
     }
+
+//    private DocWithCateVO entityTransfer_category(boolean checkState, FileDocument fileDocument) {
+//        if(checkState){
+//            DocWithCateVO doc = new DocWithCateVO();
+//            String docId = fileDocument.getId();
+//            doc.setId(docId);
+//            doc.setCategoryVO(categoryServiceImpl.queryByDocId(docId));
+//            doc.setSize(fileDocument.getSize());
+//            doc.setCreateTime(fileDocument.getUploadDate());
+//            doc.setTitle(fileDocument.getName());
+//            doc.setTagVOList(tagServiceImpl.queryByDocId(docId));
+//            doc.setUserName(fileDocument.getUserName());
+//            doc.setChecked(checkState);
+//        }
+//
+//        return doc;
+//    }
 
     /**
      * @return java.util.List<com.jiaruiblog.entity.vo.DocumentVO>
@@ -1700,6 +1722,15 @@ public class FileServiceImpl implements IFileService {
 
         return resultStrings;
     }
+
+    private Long getDocTotalNum(){
+        return mongoTemplate.count(new Query(),COLLECTION_NAME);
+    }
+    private Long getDocTotalNum(String userId){
+        Query query = new Query(Criteria.where("userId").is(userId));
+        return mongoTemplate.count(query,COLLECTION_NAME);
+    }
+
     private Long getLikeNumByDocId(String docId){
         System.out.println("fileId是："+docId);
         return likeService.likeNum(docId);

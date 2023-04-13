@@ -2,9 +2,15 @@
     <div class="homepage">
         <Navv></Navv>
         <div class="hotdots">
-            <div id="tagbox">
+
+<!--            <div id="tagbox">-->
+<!--              <a v-for="item in tagsData" :href="item.link" :class="item.class" :style="item.style">{{ item.text }}</a>-->
+<!--            </div>-->
+
+
+          <div id="tagbox">
                 <a href="http://localhost:8080/#/searchResult?keyWord=新生儿黄疸" class="blue" zycate="jb" zyid="yssh0405"
-                    style="left: 109.69px; top: 127.802px; font-size: 21px; opacity: 2.55039; z-index: 0;">新生儿黄疸</a><a
+                    style="left: 109.69px; top: 127.802px; font-size: 21px; opacity: 2.55039; z-index: 0;">癌症</a><a
                     href="http://localhost:8080/#/searchResult?keyWord=Reye综合症" class="blue" zycate="jb" zyid="ysj00525"
                     style="left: 54.9179px; top: 189.706px; font-size: 19px; opacity: 1.84858; z-index: 1;">Reye综合症</a><a
                     href="http://localhost:8080/#/searchResult?keyWord=奥美拉唑" class="fivecolor" zycate="hxyw" zyid="hxy10474"
@@ -105,7 +111,7 @@
                     href="http://localhost:8080/#/searchResult?keyWord=前列腺液常规检查" class="yellow" zycate="jc" zyid="EX000269"
                     style="left: 285.566px; top: 190.467px; font-size: 12px; opacity: -0.0107012; z-index: 48;">前列腺液常规检查</a><a
                     href="http://localhost:8080/#/searchResult?keyWord=胼胝体发育不全或缺如" class="blue" zycate="jb" zyid="ysj01426"
-                    style="left: 330.413px; top: 246.596px; font-size: 12px; opacity: 0.0766935; z-index: 49;">胼胝体发育不全或缺如</a>
+                    style="left: 330.413px; top: 246.596px; font-size: 12px; opacity: 0.0766935; z-index: 49;">癌症</a>
             </div>
         </div>
         <img :src="imgSrc" width="100%" height="100%" alt="" />
@@ -192,6 +198,15 @@ export default {
             direction: 'btt',
             size: '80%',
             logoSrc: require("../assets/source/up.png"),
+            tagsData:[
+              { name: '新生儿黄疸', url: 'http://localhost:8080/#/searchResult?keyWord=新生儿黄疸', color: 'blue' },
+              { name: 'Reye综合症', url: 'http://localhost:8080/#/searchResult?keyWord=Reye综合症', color: 'blue' },
+              { name: '奥美拉唑', url: 'http://localhost:8080/#/searchResult?keyWord=奥美拉唑', color: 'fivecolor' },
+              { name: '磷酸氯喹', url: 'http://localhost:8080/#/searchResult?keyWord=磷酸氯喹', color: 'fivecolor' },
+              { name: '金花消痤丸', url: 'http://localhost:8080/#/searchResult?keyWord=金花消痤丸', color: 'green' },
+              { name: '癌胚抗原(CEA)检测', url: 'http://localhost:8080/#/searchResult?keyWord=癌胚抗原(CEA)检测', color: 'yellow' },
+              { name: '丘疹', url: 'http://localhost:8080/#/searchResult?keyWord=丘疹', color: 'red' }
+            ]
         }
     },
     computed: {

@@ -127,7 +127,6 @@ export default {
         },
         getListData() {
 
-
             // 统计字符个数
             if (this.keyword) {
               let chineseChars = this.keyword.match(/[\u4e00-\u9fa5]/g);
@@ -148,10 +147,6 @@ export default {
             } else {
               this.filterWordLen = 0;
             }
-
-
-          console.log("搜索的字符个数为：",this.filterWordLen)
-
 
             this.loading = true
             this.searchifag = true
@@ -176,7 +171,6 @@ export default {
                     this.data = res.data.documents;
                     console.log("关键字查询成功，返回内容为：");
                     console.log("data:", res.data)
-                    //console.log("desSearchContentList:", res.data[0].esSearchContentList)
 
                 } else {
                     this.data = []

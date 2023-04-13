@@ -50,7 +50,7 @@ export default {
     },
     methods: {
         turnUrl(name) {
-
+            console.log("要跳转到", name, "中")
             this.$router.push(name);
         }
     },
