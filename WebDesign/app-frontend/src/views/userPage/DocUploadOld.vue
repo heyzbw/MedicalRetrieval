@@ -50,7 +50,7 @@
                         <Icon type="ios-arrow-down"></Icon>
                     </a>
                     <template #list>
-                        <DropdownMenu>
+                        <DropdownMenu style="height: 50%;">
                             <DropdownItem v-for="item in categoryOption" :name="item.id">
                                 {{ item.seeName }}
                             </DropdownItem>

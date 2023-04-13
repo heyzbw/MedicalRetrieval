@@ -74,6 +74,7 @@
 </template>
 
 <script>
+
 import StatsRequest from "@/api/stats";
 import maintainCondition from "../api/maintainCondition";
 
@@ -315,11 +316,11 @@ export default {
 <style lang="scss" scoped>
 .search-group {
     width: 95%;
-    height: 340px;
+    height: 360px;
     position: absolute;
     left: 0;
     top: 0;
-    padding-top: 15%;
+    padding-top: 13%;
     padding-left: 5%;
 
     //border: 2px solid #000;
