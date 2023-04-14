@@ -3,7 +3,7 @@
 
         <div class="item" v-for="item in data" @click="operate(item)">
             <div class="item-logo">
-                <img :src="item.src" :alt="item.src" style="height: 75%;width:75%">
+                <img :src="item.src" :alt="item.src" style="height: 55%;width:55%">
             </div>
             <div class="operation-title">
                 {{ item.name }}
@@ -49,22 +49,22 @@ export default {
 
     },
     watch: {
-      collectStatus(newValue, oldValue) {
-        // 根据新的值修改对应的图片
-        if (newValue) {
-          this.data[0].src = require("@/assets/source/collect.png");
-        } else {
-          this.data[0].src = require("@/assets/source/cancelcollect.png");
+        collectStatus(newValue, oldValue) {
+            // 根据新的值修改对应的图片
+            if (newValue) {
+                this.data[0].src = require("@/assets/source/collect.png");
+            } else {
+                this.data[0].src = require("@/assets/source/cancelcollect.png");
+            }
+        },
+        likeStatus(newValue, oldValue) {
+            // 根据新的值修改对应的图片
+            if (newValue) {
+                this.data[1].src = require("@/assets/source/like-fill.png");
+            } else {
+                this.data[1].src = require("@/assets/source/like-empt.png");
+            }
         }
-      },
-      likeStatus(newValue, oldValue) {
-        // 根据新的值修改对应的图片
-        if (newValue) {
-          this.data[1].src = require("@/assets/source/like-fill.png");
-        } else {
-          this.data[1].src = require("@/assets/source/like-empt.png");
-        }
-      }
     },
 
     methods: {

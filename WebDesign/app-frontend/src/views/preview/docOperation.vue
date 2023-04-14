@@ -3,7 +3,7 @@
 
         <div class="item" v-for="item in data" @click="operate(item)">
             <div class="item-logo">
-                <img :src="item.src" :alt="item.src" style="height: 75%;width:75%">
+                <img :src="item.src" :alt="item.src" style="height: 65%;width:65%">
             </div>
             <div class="operation-title">
                 {{ item.name }}
@@ -52,22 +52,22 @@ export default {
     },
 
     watch: {
-      collectStatus(newValue, oldValue) {
-        // 根据新的值修改对应的图片
-        if (newValue) {
-          this.data[0].src = require("@/assets/source/collect.png");
-        } else {
-          this.data[0].src = require("@/assets/source/cancelcollect.png");
+        collectStatus(newValue, oldValue) {
+            // 根据新的值修改对应的图片
+            if (newValue) {
+                this.data[0].src = require("@/assets/source/collect.png");
+            } else {
+                this.data[0].src = require("@/assets/source/cancelcollect.png");
+            }
+        },
+        likeStatus(newValue, oldValue) {
+            // 根据新的值修改对应的图片
+            if (newValue) {
+                this.data[1].src = require("@/assets/source/like-fill.png");
+            } else {
+                this.data[1].src = require("@/assets/source/like-empt.png");
+            }
         }
-      },
-      likeStatus(newValue, oldValue) {
-        // 根据新的值修改对应的图片
-        if (newValue) {
-          this.data[1].src = require("@/assets/source/like-fill.png");
-        } else {
-          this.data[1].src = require("@/assets/source/like-empt.png");
-        }
-      }
     },
 
     created() {
@@ -128,7 +128,7 @@ export default {
 <style scoped>
 .operation-container {
     width: 50%;
-    min-width: 400px;
+    min-width: 300px;
     display: flex;
     justify-content: space-between;
     margin: auto;
@@ -136,8 +136,8 @@ export default {
 }
 
 .item {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: 120px;
     margin: auto;
     position: relative;
@@ -154,7 +154,7 @@ export default {
     font-family: PingFangSC-Medium, PingFang SC, serif;
     font-weight: 500;
     color: #000000;
-    line-height: 20px;
+    line-height: 10px;
 }
 
 .item-logo {
@@ -166,7 +166,7 @@ export default {
 .item-logo img {
     position: absolute;
     top: 40%;
-    left: 50%;
+    left: 45%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
