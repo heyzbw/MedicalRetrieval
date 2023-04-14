@@ -13,7 +13,7 @@ import requests
 from flask import Flask, send_from_directory, send_file, make_response
 from Bio import Entrez
 from Bio import Medline
-# from FromPCY.scan.ocrScan import getScaner
+from FromPCY.scan.ocrScan import getScaner
 
 # 创建一个服务，赋值给APP
 app = Flask(__name__)
@@ -76,13 +76,21 @@ def call_getpubmed():
     text['Papers'] = []
 
     for i in record1:
+        print(i.get('SO'))
+        doi = re.findall(r"10\.[0-9]+/\S+\.", i.get('SO'))
+        if doi == []:
+            continue
         textarr = {}
-        textarr['Title'] = i.get('TI')
+        title = i.get('TI')
+        if title[-1] == '.':
+            textarr['Title'] = title[:-1]
+        else:
+            textarr['Title'] = title
         textarr['Author'] = i.get('AU')
         textarr['Journal'] = i.get('JT')
         textarr['ISSN'] = i.get('IS')
         textarr['Source'] = i.get('SO')
-        textarr['doi'] = re.findall(r"10\.[0-9]+/\S+", i.get('SO'))[0][:-1]
+        textarr['doi'] = doi[0][:-1]
         textarr['Abstract'] = i.get('AB')
         text['Papers'].append(textarr)
     jtext = json.dumps(text, indent=4, ensure_ascii=False)
@@ -120,7 +128,7 @@ def pdfdownload():
             break
         f.write(buffer)
     f.close()
-    print(type(f))
+    # print(type(f))
     downloadpath = 'papers/' + file_name
     print("Sucessful to download" + " " + file_name)
     response = make_response(
