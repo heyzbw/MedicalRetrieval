@@ -2,116 +2,122 @@
     <div class="homepage">
         <Navv></Navv>
         <div class="hotdots">
-
-<!--            <div id="tagbox">-->
-<!--              <a v-for="item in tagsData" :href="item.link" :class="item.class" :style="item.style">{{ item.text }}</a>-->
-<!--            </div>-->
-
-
-          <div id="tagbox">
-                <a href="http://localhost:8080/#/searchResult?keyWord=新生儿黄疸" class="blue" zycate="jb" zyid="yssh0405"
+            <!--            <div id="tagbox">-->
+            <!--              <a v-for="item in tagsData" :href="item.link" :class="item.class" :style="item.style">{{ item.text }}</a>-->
+            <!--            </div>-->
+            <div id="tagbox" style="width: 30%; height: 100%;">
+                <a href="http://localhost:8080/#/searchResult?keyWord=癌症" class="blue" zycate="jb" zyid="yssh0405"
                     style="left: 109.69px; top: 127.802px; font-size: 21px; opacity: 2.55039; z-index: 0;">癌症</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=Reye综合症" class="blue" zycate="jb" zyid="ysj00525"
-                    style="left: 54.9179px; top: 189.706px; font-size: 19px; opacity: 1.84858; z-index: 1;">Reye综合症</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=奥美拉唑" class="fivecolor" zycate="hxyw" zyid="hxy10474"
-                    style="left: 113.834px; top: 241.575px; font-size: 23px; opacity: 2.94355; z-index: 2;">奥美拉唑</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=磷酸氯喹" class="fivecolor" zycate="hxyw" zyid="hxy10674"
-                    style="left: 148.46px; top: 197.349px; font-size: 29px; opacity: 4.77725; z-index: 3;">磷酸氯喹</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=金花消痤丸" class="green" zycate="zcy" zyid="62"
-                    style="left: 199.314px; top: 111.577px; font-size: 26px; opacity: 3.7817; z-index: 4;">金花消痤丸</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=癌胚抗原(CEA)检测" class="yellow" zycate="jc"
-                    zyid="EX000008"
-                    style="left: 156.373px; top: 57.6685px; font-size: 19px; opacity: 1.97793; z-index: 5;">癌胚抗原(CEA)检测</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=丘疹" class="red" zycate="zz" zyid="SY000020"
-                    style="left: 75.6025px; top: 70.4171px; font-size: 16px; opacity: 1.1174; z-index: 6;">丘疹</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=尼尔雌醇" class="fivecolor" zycate="hxyw" zyid="hxy10005"
-                    style="left: 1.70483px; top: 139.649px; font-size: 15px; opacity: 0.825342; z-index: 7;">尼尔雌醇</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=氧分压" class="yellow" zycate="jc" zyid="EX000051"
-                    style="left: 36.002px; top: 228.445px; font-size: 15px; opacity: 0.872314; z-index: 8;">氧分压</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=肝舒乐颗粒" class="green" zycate="zcy" zyid="713"
-                    style="left: 101.956px; top: 296.276px; font-size: 17px; opacity: 1.23708; z-index: 9;">肝舒乐颗粒</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=呼吸急促" class="red" zycate="zz" zyid="SY000007"
-                    style="left: 153.154px; top: 316.233px; font-size: 19px; opacity: 2.02285; z-index: 10;">呼吸急促</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=重组人粒细胞巨噬细胞集落刺激因子" class="fivecolor" zycate="hxyw"
+                    href="http://localhost:8080/#/searchResult?keyWord=强迫症" class="blue" zycate="jb" zyid="ysj00525"
+                    style="left: 54.9179px; top: 189.706px; font-size: 19px; opacity: 1.84858; z-index: 1;">强迫症</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=肾病" class="fivecolor" zycate="hxyw" zyid="hxy10474"
+                    style="left: 113.834px; top: 241.575px; font-size: 23px; opacity: 2.94355; z-index: 2;">肾病</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=失眠症" class="fivecolor" zycate="hxyw" zyid="hxy10674"
+                    style="left: 148.46px; top: 197.349px; font-size: 29px; opacity: 4.77725; z-index: 3;">失眠症</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=糖尿病" class="green" zycate="zcy" zyid="62"
+                    style="left: 199.314px; top: 111.577px; font-size: 26px; opacity: 3.7817; z-index: 4;">糖尿病</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=cancer" class="yellow" zycate="jc" zyid="EX000008"
+                    style="left: 156.373px; top: 57.6685px; font-size: 19px; opacity: 1.97793; z-index: 5;">cancer</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=中风" class="red" zycate="zz" zyid="SY000020"
+                    style="left: 75.6025px; top: 70.4171px; font-size: 16px; opacity: 1.1174; z-index: 6;">中风</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Arthritis" class="fivecolor" zycate="hxyw"
+                    zyid="hxy10005"
+                    style="left: 1.70483px; top: 139.649px; font-size: 15px; opacity: 0.825342; z-index: 7;">Arthritis</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=哮喘" class="yellow" zycate="jc" zyid="EX000051"
+                    style="left: 36.002px; top: 228.445px; font-size: 15px; opacity: 0.872314; z-index: 8;">哮喘</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Diabetes" class="green" zycate="zcy" zyid="713"
+                    style="left: 101.956px; top: 296.276px; font-size: 17px; opacity: 1.23708; z-index: 9;">Diabetes</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=肝炎" class="red" zycate="zz" zyid="SY000007"
+                    style="left: 153.154px; top: 316.233px; font-size: 19px; opacity: 2.02285; z-index: 10;">肝炎</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Hypertension" class="fivecolor" zycate="hxyw"
                     zyid="hxy10419"
-                    style="left: 199.778px; top: 282.533px; font-size: 24px; opacity: 3.23574; z-index: 11;">重组人粒细胞巨噬细胞集落刺激因子</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=小儿肠胃康颗粒" class="green" zycate="zcy" zyid="1568"
-                    style="left: 274.387px; top: 209.036px; font-size: 26px; opacity: 3.97511; z-index: 12;">小儿肠胃康颗粒</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=茵山莲颗粒" class="green" zycate="zcy" zyid="727"
-                    style="left: 228.62px; top: 121.796px; font-size: 23px; opacity: 3.15698; z-index: 13;">茵山莲颗粒</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=血常规检查" class="yellow" zycate="jc" zyid="EX000151"
-                    style="left: 276.388px; top: 49.3408px; font-size: 19px; opacity: 1.89941; z-index: 14;">血常规检查</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=拉米夫定" class="fivecolor" zycate="hxyw" zyid="hxy11018"
-                    style="left: 197.682px; top: 13.856px; font-size: 16px; opacity: 1.06154; z-index: 15;">拉米夫定</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=尿常规检查" class="yellow" zycate="jc" zyid="EX000165"
-                    style="left: 109.201px; top: 25.4562px; font-size: 14px; opacity: 0.604361; z-index: 16;">尿常规检查</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=白消安" class="fivecolor" zycate="hxyw" zyid="hxy12102"
-                    style="left: 87.4754px; top: 80.4446px; font-size: 13px; opacity: 0.380792; z-index: 17;">白消安</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=地塞米松" class="fivecolor" zycate="hxyw" zyid="hxy10088"
-                    style="left: 58.2006px; top: 163.379px; font-size: 13px; opacity: 0.308486; z-index: 18;">地塞米松</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=自身免疫性肝病相关抗体检测" class="yellow" zycate="jc"
+                    style="left: 199.778px; top: 282.533px; font-size: 24px; opacity: 3.23574; z-index: 11;">Hypertension</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=抑郁症" class="green" zycate="zcy" zyid="1568"
+                    style="left: 274.387px; top: 209.036px; font-size: 26px; opacity: 3.97511; z-index: 12;">抑郁症</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Depression" class="green" zycate="zcy" zyid="727"
+                    style="left: 228.62px; top: 121.796px; font-size: 23px; opacity: 3.15698; z-index: 13;">Depression</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=贫血" class="yellow" zycate="jc" zyid="EX000151"
+                    style="left: 276.388px; top: 49.3408px; font-size: 19px; opacity: 1.89941; z-index: 14;">贫血</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Asthma" class="fivecolor" zycate="hxyw"
+                    zyid="hxy11018"
+                    style="left: 197.682px; top: 13.856px; font-size: 16px; opacity: 1.06154; z-index: 15;">Asthma</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=近视" class="yellow" zycate="jc" zyid="EX000165"
+                    style="left: 109.201px; top: 25.4562px; font-size: 14px; opacity: 0.604361; z-index: 16;">近视</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Acne" class="fivecolor" zycate="hxyw" zyid="hxy12102"
+                    style="left: 87.4754px; top: 80.4446px; font-size: 13px; opacity: 0.380792; z-index: 17;">Acne</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=脱发" class="fivecolor" zycate="hxyw" zyid="hxy10088"
+                    style="left: 58.2006px; top: 163.379px; font-size: 13px; opacity: 0.308486; z-index: 18;">脱发</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Cardiovascular Disease" class="yellow" zycate="jc"
                     zyid="EX000248"
-                    style="left: 37.1065px; top: 251.918px; font-size: 13px; opacity: 0.356974; z-index: 19;">自身免疫性肝病相关抗体检测</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=养血荣筋丸" class="green" zycate="zcy" zyid="1473"
-                    style="left: 100.174px; top: 322.954px; font-size: 14px; opacity: 0.529744; z-index: 20;">养血荣筋丸</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=京万红" class="green" zycate="zcy" zyid="14"
-                    style="left: 167.364px; top: 358.495px; font-size: 15px; opacity: 0.851694; z-index: 21;">京万红</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=参莲胶囊" class="green" zycate="zcy" zyid="628"
-                    style="left: 243.478px; top: 349.931px; font-size: 17px; opacity: 1.33301; z-index: 22;">参莲胶囊</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=环磷酰胺" class="fivecolor" zycate="hxyw" zyid="hxy12101"
-                    style="left: 226.343px; top: 299.865px; font-size: 19px; opacity: 1.84871; z-index: 23;">环磷酰胺</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=反跳痛" class="red" zycate="zz" zyid="SY000067"
-                    style="left: 352.298px; top: 221.21px; font-size: 19px; opacity: 2.02993; z-index: 24;">反跳痛</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=葡萄糖耐量试验" class="yellow" zycate="jc" zyid="EX000020"
-                    style="left: 359.976px; top: 133.885px; font-size: 18px; opacity: 1.67218; z-index: 25;">葡萄糖耐量试验</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=阿巴卡韦" class="fivecolor" zycate="hxyw" zyid="hxy11029"
-                    style="left: 332.527px; top: 59.9115px; font-size: 16px; opacity: 1.10089; z-index: 26;">阿巴卡韦</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=肥胖" class="red" zycate="zz" zyid="SY000025"
-                    style="left: 284.831px; top: 18.045px; font-size: 14px; opacity: 0.630247; z-index: 27;">肥胖</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=鳞屑" class="red" zycate="zz" zyid="SY000099"
-                    style="left: 210.628px; top: 19.1481px; font-size: 13px; opacity: 0.323662; z-index: 28;">鳞屑</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=结晶" class="yellow" zycate="jc" zyid="EX000179"
-                    style="left: 148.988px; top: 63.3786px; font-size: 13px; opacity: 0.149836; z-index: 29;">结晶</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=扑翼样震颤" class="red" zycate="zz" zyid="SY000068"
-                    style="left: 116.859px; top: 139.892px; font-size: 12px; opacity: 0.0751812; z-index: 30;">扑翼样震颤</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=不安腿综合征" class="blue" zycate="jb" zyid="yssh0503"
-                    style="left: 97.7218px; top: 229.243px; font-size: 12px; opacity: 0.0821707; z-index: 31;">不安腿综合征</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=隐睾" class="blue" zycate="jb" zyid="yssh0002"
-                    style="left: 129.387px; top: 308.067px; font-size: 13px; opacity: 0.167813; z-index: 32;">隐睾</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=囟膨隆" class="red" zycate="zz" zyid="SY000029"
-                    style="left: 204.805px; top: 355.086px; font-size: 13px; opacity: 0.33644; z-index: 33;">囟膨隆</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=1型糖尿病" class="blue" zycate="jb" zyid="ysj01218"
-                    style="left: 266.389px; top: 357.036px; font-size: 14px; opacity: 0.578687; z-index: 34;">1型糖尿病</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=斜视" class="red" zycate="zz" zyid="SY000048"
-                    style="left: 335.785px; top: 312.978px; font-size: 15px; opacity: 0.822143; z-index: 35;">斜视</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=肿瘤标志物" class="yellow" zycate="jc" zyid="EX000208"
-                    style="left: 386.416px; top: 235.608px; font-size: 15px; opacity: 0.907424; z-index: 36;">肿瘤标志物</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=获得性免疫缺陷综合征" class="blue" zycate="jb" zyid="zlzn0214"
-                    style="left: 384.518px; top: 148.714px; font-size: 15px; opacity: 0.745505; z-index: 37;">获得性免疫缺陷综合征</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=奈韦拉平" class="fivecolor" zycate="hxyw" zyid="hxy11017"
-                    style="left: 349.983px; top: 80.8252px; font-size: 14px; opacity: 0.460122; z-index: 38;">奈韦拉平</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=降钙素" class="yellow" zycate="jc" zyid="EX000217"
-                    style="left: 274.232px; top: 56.1897px; font-size: 13px; opacity: 0.207987; z-index: 39;">降钙素</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=活血消炎丸" class="green" zycate="zcy" zyid="1"
-                    style="left: 229.762px; top: 85.4326px; font-size: 12px; opacity: 0.0469843; z-index: 40;">活血消炎丸</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=先天性白血病" class="blue" zycate="jb" zyid="yssh0005"
-                    style="left: 201.979px; top: 159.114px; font-size: 12px; opacity: -0.0210021; z-index: 41;">先天性白血病</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=颈静脉怒张" class="red" zycate="zz" zyid="SY000141"
-                    style="left: 183.47px; top: 247.694px; font-size: 12px; opacity: -0.00205437; z-index: 42;">颈静脉怒张</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=醒消丸" class="green" zycate="zcy" zyid="9"
-                    style="left: 253.904px; top: 310.496px; font-size: 12px; opacity: 0.100102; z-index: 43;">醒消丸</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=安神健脑液" class="green" zycate="zcy" zyid="1440"
-                    style="left: 321.685px; top: 313.697px; font-size: 13px; opacity: 0.257684; z-index: 44;">安神健脑液</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=手足口病" class="blue" zycate="jb" zyid="yssh0003"
-                    style="left: 366.678px; top: 252.71px; font-size: 13px; opacity: 0.358355; z-index: 45;">手足口病</a><a
+                    style="left: 37.1065px; top: 251.918px; font-size: 13px; opacity: 0.356974; z-index: 19;">Cardiovascular
+                    Disease</a><a href="http://localhost:8080/#/searchResult?keyWord=结肠炎" class="green" zycate="zcy"
+                    zyid="1473"
+                    style="left: 100.174px; top: 322.954px; font-size: 14px; opacity: 0.529744; z-index: 20;">结肠炎</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Epilepsy" class="green" zycate="zcy" zyid="14"
+                    style="left: 167.364px; top: 358.495px; font-size: 15px; opacity: 0.851694; z-index: 21;">Epilepsy</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=白内障" class="green" zycate="zcy" zyid="628"
+                    style="left: 243.478px; top: 349.931px; font-size: 17px; opacity: 1.33301; z-index: 22;">白内障</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Influenza" class="fivecolor" zycate="hxyw"
+                    zyid="hxy12101"
+                    style="left: 226.343px; top: 299.865px; font-size: 19px; opacity: 1.84871; z-index: 23;">Influenza</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=静脉曲张" class="red" zycate="zz" zyid="SY000067"
+                    style="left: 352.298px; top: 221.21px; font-size: 19px; opacity: 2.02993; z-index: 24;">静脉曲张</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Gastroenteritis" class="yellow" zycate="jc"
+                    zyid="EX000020"
+                    style="left: 359.976px; top: 133.885px; font-size: 18px; opacity: 1.67218; z-index: 25;">Gastroenteritis</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=结石症" class="fivecolor" zycate="hxyw" zyid="hxy11029"
+                    style="left: 332.527px; top: 59.9115px; font-size: 16px; opacity: 1.10089; z-index: 26;">结石症</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Jaundice" class="red" zycate="zz" zyid="SY000025"
+                    style="left: 284.831px; top: 18.045px; font-size: 14px; opacity: 0.630247; z-index: 27;">Jaundice</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=失眠症" class="red" zycate="zz" zyid="SY000099"
+                    style="left: 210.628px; top: 19.1481px; font-size: 13px; opacity: 0.323662; z-index: 28;">失眠症</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Lupus" class="yellow" zycate="jc" zyid="EX000179"
+                    style="left: 148.988px; top: 63.3786px; font-size: 13px; opacity: 0.149836; z-index: 29;">Lupus</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=脂肪肝" class="red" zycate="zz" zyid="SY000068"
+                    style="left: 116.859px; top: 139.892px; font-size: 12px; opacity: 0.0751812; z-index: 30;">脂肪肝</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Kidney Stones" class="blue" zycate="jb"
+                    zyid="yssh0503"
+                    style="left: 97.7218px; top: 229.243px; font-size: 12px; opacity: 0.0821707; z-index: 31;">Kidney
+                    Stones</a><a href="http://localhost:8080/#/searchResult?keyWord=恶性肿瘤" class="blue" zycate="jb"
+                    zyid="yssh0002"
+                    style="left: 129.387px; top: 308.067px; font-size: 13px; opacity: 0.167813; z-index: 32;">恶性肿瘤</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Carcinoma" class="red" zycate="zz" zyid="SY000029"
+                    style="left: 204.805px; top: 355.086px; font-size: 13px; opacity: 0.33644; z-index: 33;">Carcinoma</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=癌性疾病" class="blue" zycate="jb" zyid="ysj01218"
+                    style="left: 266.389px; top: 357.036px; font-size: 14px; opacity: 0.578687; z-index: 34;">癌性疾病</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Psoriasis" class="red" zycate="zz" zyid="SY000048"
+                    style="left: 335.785px; top: 312.978px; font-size: 15px; opacity: 0.822143; z-index: 35;">Psoriasis</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=肿瘤" class="yellow" zycate="jc" zyid="EX000208"
+                    style="left: 386.416px; top: 235.608px; font-size: 15px; opacity: 0.907424; z-index: 36;">肿瘤</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Pimples" class="blue" zycate="jb" zyid="zlzn0214"
+                    style="left: 384.518px; top: 148.714px; font-size: 15px; opacity: 0.745505; z-index: 37;">Pimples</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=乙型肝炎" class="fivecolor" zycate="hxyw" zyid="hxy11017"
+                    style="left: 349.983px; top: 80.8252px; font-size: 14px; opacity: 0.460122; z-index: 38;">乙型肝炎</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Obesity" class="yellow" zycate="jc" zyid="EX000217"
+                    style="left: 274.232px; top: 56.1897px; font-size: 13px; opacity: 0.207987; z-index: 39;">Obesity</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=气管炎" class="green" zycate="zcy" zyid="1"
+                    style="left: 229.762px; top: 85.4326px; font-size: 12px; opacity: 0.0469843; z-index: 40;">气管炎</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Heart Disease" class="blue" zycate="jb"
+                    zyid="yssh0005"
+                    style="left: 201.979px; top: 159.114px; font-size: 12px; opacity: -0.0210021; z-index: 41;">Heart
+                    Disease</a><a href="http://localhost:8080/#/searchResult?keyWord=高血压" class="red" zycate="zz"
+                    zyid="SY000141"
+                    style="left: 183.47px; top: 247.694px; font-size: 12px; opacity: -0.00205437; z-index: 42;">高血压</a><a
+                    href="http://localhost:8080/#/searchResult?keyWor心脏病消丸" class="green" zycate="zcy" zyid="9"
+                    style="left: 253.904px; top: 310.496px; font-size: 12px; opacity: 0.100102; z-index: 43;">心脏病</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Osteoarthritis" class="green" zycate="zcy"
+                    zyid="1440"
+                    style="left: 321.685px; top: 313.697px; font-size: 13px; opacity: 0.257684; z-index: 44;">Osteoarthritis</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=Bone Loss" class="blue" zycate="jb" zyid="yssh0003"
+                    style="left: 366.678px; top: 252.71px; font-size: 13px; opacity: 0.358355; z-index: 45;">Bone Loss</a><a
                     href="http://localhost:8080/#/searchResult?keyWord=宫颈肿瘤" class="blue" zycate="jb" zyid="zlzn0145"
                     style="left: 384.038px; top: 167.511px; font-size: 13px; opacity: 0.27025; z-index: 46;">宫颈肿瘤</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=食欲亢进" class="red" zycate="zz" zyid="SY000073"
-                    style="left: 321.627px; top: 131.551px; font-size: 12px; opacity: 0.0828413; z-index: 47;">食欲亢进</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=前列腺液常规检查" class="yellow" zycate="jc" zyid="EX000269"
-                    style="left: 285.566px; top: 190.467px; font-size: 12px; opacity: -0.0107012; z-index: 48;">前列腺液常规检查</a><a
-                    href="http://localhost:8080/#/searchResult?keyWord=胼胝体发育不全或缺如" class="blue" zycate="jb" zyid="ysj01426"
-                    style="left: 330.413px; top: 246.596px; font-size: 12px; opacity: 0.0766935; z-index: 49;">癌症</a>
+                    href="http://localhost:8080/#/searchResult?keyWord=阿尔茨海默症" class="red" zycate="zz" zyid="SY000073"
+                    style="left: 321.627px; top: 131.551px; font-size: 12px; opacity: 0.0828413; z-index: 47;">阿尔茨海默症</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=SLE" class="yellow" zycate="jc" zyid="EX000269"
+                    style="left: 285.566px; top: 190.467px; font-size: 12px; opacity: -0.0107012; z-index: 48;">SLE</a><a
+                    href="http://localhost:8080/#/searchResult?keyWord=风湿症" class="blue" zycate="jb" zyid="ysj01426"
+                    style="left: 330.413px; top: 246.596px; font-size: 12px; opacity: 0.0766935; z-index: 49;"></a>
             </div>
         </div>
         <img :src="imgSrc" width="100%" height="100%" alt="" />
@@ -198,14 +204,14 @@ export default {
             direction: 'btt',
             size: '80%',
             logoSrc: require("../assets/source/up.png"),
-            tagsData:[
-              { name: '新生儿黄疸', url: 'http://localhost:8080/#/searchResult?keyWord=新生儿黄疸', color: 'blue' },
-              { name: 'Reye综合症', url: 'http://localhost:8080/#/searchResult?keyWord=Reye综合症', color: 'blue' },
-              { name: '奥美拉唑', url: 'http://localhost:8080/#/searchResult?keyWord=奥美拉唑', color: 'fivecolor' },
-              { name: '磷酸氯喹', url: 'http://localhost:8080/#/searchResult?keyWord=磷酸氯喹', color: 'fivecolor' },
-              { name: '金花消痤丸', url: 'http://localhost:8080/#/searchResult?keyWord=金花消痤丸', color: 'green' },
-              { name: '癌胚抗原(CEA)检测', url: 'http://localhost:8080/#/searchResult?keyWord=癌胚抗原(CEA)检测', color: 'yellow' },
-              { name: '丘疹', url: 'http://localhost:8080/#/searchResult?keyWord=丘疹', color: 'red' }
+            tagsData: [
+                { name: '新生儿黄疸', url: 'http://localhost:8080/#/searchResult?keyWord=新生儿黄疸', color: 'blue' },
+                { name: 'Reye综合症', url: 'http://localhost:8080/#/searchResult?keyWord=Reye综合症', color: 'blue' },
+                { name: '奥美拉唑', url: 'http://localhost:8080/#/searchResult?keyWord=奥美拉唑', color: 'fivecolor' },
+                { name: '磷酸氯喹', url: 'http://localhost:8080/#/searchResult?keyWord=磷酸氯喹', color: 'fivecolor' },
+                { name: '金花消痤丸', url: 'http://localhost:8080/#/searchResult?keyWord=金花消痤丸', color: 'green' },
+                { name: '癌胚抗原(CEA)检测', url: 'http://localhost:8080/#/searchResult?keyWord=癌胚抗原(CEA)检测', color: 'yellow' },
+                { name: '丘疹', url: 'http://localhost:8080/#/searchResult?keyWord=丘疹', color: 'red' }
             ]
         }
     },
@@ -288,6 +294,7 @@ export default {
     // height: 100vh;
     //padding-bottom: 20px;
     //position: fixed;
+    position: relative;
     background-image: url("../assets/source/bg1.png");
     //height: 100%;
 
@@ -435,11 +442,11 @@ footer {
 
 .hotdots {
     width: 100%;
-    height: 20%;
+    height: 10%;
     position: absolute;
-    left: -36%;
-    top: 73%;
-
+    left: 0%;
+    top: 53%;
+    justify-content: space-between;
 }
 
 

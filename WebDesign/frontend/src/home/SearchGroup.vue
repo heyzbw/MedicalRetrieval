@@ -404,9 +404,11 @@ export default {
 
 
     .search-zone {
-        width: 745px;
+        width: 100%;
         margin: auto;
         margin-right: 25%;
+        margin-left: 35%;
+
         display: flex;
         justify-content: flex-start;
 
@@ -555,7 +557,7 @@ export default {
 .box {
     width: 20%;
     height: 10%;
-    margin: -10% 0 -4% 15%;
+    margin: -10% 0 -6% 15%;
     //display: flex;
     position: relative;
     font-style: italic;

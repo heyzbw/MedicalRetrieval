@@ -204,14 +204,14 @@ export default {
                 //border: 1px solid #000000;
                 padding: 0 10px;
                 margin-left: 20px;
-                line-height: 26px;
+                line-height: 20px;
                 color: #fff;
 
                 span {
                     font-size: 18px;
                     font-family: PingFangSC-Regular, PingFang SC, serif;
                     font-weight: 400;
-                    line-height: 20px;
+                    line-height: 15px;
                 }
 
                 &:hover {
@@ -226,7 +226,7 @@ export default {
                 border: 1px solid #AAAAAA;
                 padding: 0 10px;
                 margin-left: 15px;
-                line-height: 26px;
+                line-height: 22px;
                 color: #AAAAAA;
 
                 &:hover {
@@ -287,7 +287,7 @@ export default {
 }
 
 #tagbox a {
-    position: absolute;
+    position: relative;
     padding: 3px 6px;
     font-family: Microsoft YaHei;
     color: #fff;

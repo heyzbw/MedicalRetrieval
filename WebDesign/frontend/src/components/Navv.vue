@@ -10,7 +10,7 @@
         <div class="sd">
             <div @click="$router.push('/')">首页</div>
             <div> / </div>
-            <div @click="logout()">登陆</div>
+            <div @click="logout()">登录</div>
         </div>
         <div class="user-zone" v-if="true">
             <Dropdown>
@@ -173,9 +173,9 @@ export default {
     font-size: 36px;
     font-style: italic;
     font-weight: bold;
-    position: absolute;
+    position: relative;
     top: 45%;
-    left: 35%;
+    right: 5%;
     transform: translate(-50%, -50%);
 
     overflow: hidden;
