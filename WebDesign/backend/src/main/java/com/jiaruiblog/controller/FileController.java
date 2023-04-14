@@ -205,6 +205,7 @@ public class FileController {
         uploadFileObj.setUsername(username);
 
         if(fileChoice.equals("2")){
+            System.out.println("用户希望保存扫描件");
             CallFlask callFlask = new CallFlask();
             String filename = file.getOriginalFilename();
             String filePath = callFlask.toScan(file,filename);

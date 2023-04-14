@@ -89,6 +89,7 @@ export default {
                 "keyword": this.keyword,
                 "time": this.time,
                 "title": this.title
+
             }
             console.log("params",params)
             DocumentRequest.getSuperData(params).then(res => {

@@ -458,8 +458,6 @@ export default {
         // 点击按钮触发
         async submitUpload() {
 
-
-
             let formData = new FormData();
             if (this.imagefile != "") {
 
