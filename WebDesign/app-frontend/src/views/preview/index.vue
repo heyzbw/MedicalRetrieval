@@ -234,10 +234,10 @@ export default {
                     this.likeStatus = result.likeStatus || 0;
                     this.collectStatus = result.collectStatus || 0
                 } else {
-                    this.$Message.info("error")
+                    // this.$Message.info("error")
                 }
             }).catch(err => {
-                this.$Message.info("error")
+                // this.$Message.info("error")
             })
         },
         async addLike(entityType) {

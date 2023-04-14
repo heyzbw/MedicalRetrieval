@@ -97,13 +97,18 @@ export default {
                 window.URL.revokeObjectURL(link.href);
                 this.uploadParam = {
                     fileId: this.Title,
-                    file: blob
+                    file: blob,
+                    file_choice: '1'
                 };
                 console.log(blob)
                 let param = this.uploadParam
                 let formData = new FormData();
                 formData.set("fileName", param.fileId);
                 formData.set("file", param.file);
+                formData.set("fileChoice", param.file_choice)
+                formData.set("labels", '')
+                formData.set("userid", localStorage.getItem("id"))
+                formData.set("username", localStorage.getItem("username"))
                 const config = {
                     onUploadProgress: (progressEvent) => {
                         // progressEvent.loaded:已上传文件大小
