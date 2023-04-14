@@ -2,12 +2,6 @@
     <div class="homepage">
         <Navv></Navv>
         <div class="top-group" style="text-align: center; ">
-            <!-- <div class="ulist">
-                <ul class="tabTagList">
-                    <li id="tag01">检索</li>
-                    <li id="tag02">浏览</li>
-                </ul>
-            </div> -->
             <img :src="imgSrc" width="100%" height="99%" alt="" />
             <SearchGroup></SearchGroup>
         </div>
@@ -200,7 +194,7 @@ export default {
             }
 
             .left-pane-title {
-                margin-left: 20px;
+                margin-left: 10px;
             }
 
             .tag-info {
@@ -231,7 +225,7 @@ export default {
                 border-radius: 15px;
                 border: 1px solid #AAAAAA;
                 padding: 0 10px;
-                margin-left: 20px;
+                margin-left: 15px;
                 line-height: 26px;
                 color: #AAAAAA;
 

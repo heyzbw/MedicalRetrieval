@@ -6,7 +6,7 @@
         <div class="sd">
             <div @onclick="$router.push('/')">首页</div>
             <div> / </div>
-            <div @click="logout()">登陆</div>
+            <div @click="logout()">登录</div>
         </div>
         <div class="user-zone" v-if="true">
             <Dropdown>
