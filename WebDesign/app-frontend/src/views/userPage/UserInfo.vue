@@ -1,9 +1,9 @@
 <template>
-    <div style="text-align: left; padding: 10px; position: relative; width: 300px; height: 100%;">
+    <div style="text-align: left; padding: 0px; position: relative; width: 200px; height: 100%;">
         <div class="basic-info">
             基本信息
         </div>
-        <Form :model="userForm" :label-width="100">
+        <Form :model="userForm" :label-width="70">
             <FormItem label="用户名">
                 <Row>
                     <Col span="6">
@@ -64,11 +64,11 @@
             </FormItem>
         </Form>
 
-        <div style="position: absolute; right: 10px; top: 40px;">
-            <div class="user-img-container" style="border-radius: 8px; width: 100px; height: 100px">
-                <img :src="userSrc" alt="" width="100%" style="" referrerpolicy="no-referrer" />
+        <div style="position: absolute; right: -30px; top: 20px;">
+            <div class="user-img-container" style="border-radius: 8px; width: 75px; height: 75px">
+                <img :src="userSrc" alt="" width="50%" style="" referrerpolicy="no-referrer" />
             </div>
-            <div style="position: absolute; top: 0px; right: 0; width:100px;height:100px">
+            <div style="position: absolute; top: 0px; right: 0; width:50px;height:50px">
                 <AvatarUploader @avatarUrl="getAvatarUrl" @deleteAvatar="deleteAvatar" style="width: 0px;">
                 </AvatarUploader>
             </div>

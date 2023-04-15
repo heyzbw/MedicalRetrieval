@@ -338,7 +338,7 @@ export default {
                                     }
                                     else {
                                         this.advancedsearch = this.advancedsearch + this.items[n] + ' ) ';
-                                        if ((n + 1) != this.items.length) {
+                                        if ((n + 1) != this.items.length - 1) {
                                             this.advancedsearch = this.advancedsearch + '| '
                                         }
                                         break
