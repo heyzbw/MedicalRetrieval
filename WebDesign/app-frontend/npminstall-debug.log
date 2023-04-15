@@ -1,14 +1,22 @@
 {
-  root: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/frontend',
+  root: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/app-frontend',
   registry: 'https://registry.npmmirror.com',
-  pkgs: [],
+  pkgs: [
+    {
+      name: 'vue-awesome-mui',
+      version: 'latest',
+      type: 'tag',
+      alias: undefined,
+      arg: [Result]
+    }
+  ],
   production: false,
   cacheStrict: false,
   cacheDir: null,
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/panyibo/.cnpmrc","--disturl=https://npmmirror.com/mirrors/node","--registry=https://registry.npmmirror.com","-g","@vue/cli@4.5.13"],"original":["--fix-bug-versions","--china","--userconfig=/Users/panyibo/.cnpmrc","--disturl=https://npmmirror.com/mirrors/node","--registry=https://registry.npmmirror.com","-g","@vue/cli@4.5.13"]}',
-    npm_config_user_agent: 'npminstall/7.4.2 npm/? node/v14.17.4 darwin x64',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/panyibo/.cnpmrc","--disturl=https://npmmirror.com/mirrors/node","--registry=https://registry.npmmirror.com","--save","vue-awesome-mui"],"original":["--fix-bug-versions","--china","--userconfig=/Users/panyibo/.cnpmrc","--disturl=https://npmmirror.com/mirrors/node","--registry=https://registry.npmmirror.com","--save","vue-awesome-mui"]}',
+    npm_config_user_agent: 'npminstall/7.4.2 npm/? node/v14.17.5 darwin x64',
     NODE: '/usr/local/bin/node',
     npm_node_execpath: '/usr/local/bin/node',
     npm_execpath: '/usr/local/lib/node_modules/cnpm/node_modules/npminstall/bin/install.js',
@@ -37,8 +45,8 @@
     npm_config_sharp_binary_host: 'https://cdn.npmmirror.com/binaries/sharp',
     npm_config_sharp_libvips_binary_host: 'https://cdn.npmmirror.com/binaries/sharp-libvips',
     npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
-    npm_rootpath: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/frontend',
-    INIT_CWD: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/frontend',
+    npm_rootpath: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/app-frontend',
+    INIT_CWD: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/app-frontend',
     npm_config_cache: '/Users/panyibo/.npminstall_tarball'
   },
   binaryMirrors: {
@@ -170,19 +178,17 @@
   disableFallbackStore: false,
   workspacesMap: Map(0) {},
   enableWorkspace: false,
-  workspaceRoot: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/frontend',
+  workspaceRoot: '/Users/panyibo/Downloads/MedicalRetrieval/WebDesign/app-frontend',
   isWorkspaceRoot: true,
   isWorkspacePackage: false,
   strictSSL: true,
   ignoreScripts: false,
   ignoreOptionalDependencies: false,
-  detail: true,
+  detail: false,
   forceLinkLatest: false,
   trace: false,
   engineStrict: false,
   registryOnly: false,
   client: false,
-  autoFixVersion: [Function: autoFixVersion],
-  targetDir: null,
-  binDir: null
+  autoFixVersion: [Function: autoFixVersion]
 }

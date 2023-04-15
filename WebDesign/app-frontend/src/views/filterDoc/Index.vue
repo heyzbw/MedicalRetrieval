@@ -3,9 +3,9 @@
         <Header>
             <Nav></Nav>
         </Header>
-        <Content style="margin: auto;padding: 30px 0;background: #F7F7F7;">
+        <Content style="margin: auto;padding: 10px 0;background: #F7F7F7;">
             <div class="filter-page" style="background-color: #FFFFFF;
-                            box-shadow: 0 0 5px 0 rgba(64,64,64,0.3); border-radius: 8px;">
+                                        box-shadow: 0 0 5px 0 rgba(64,64,64,0.3); border-radius: 8px;">
                 <DocPage></DocPage>
             </div>
         </Content>

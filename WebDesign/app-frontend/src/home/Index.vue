@@ -287,7 +287,7 @@ export default {
 }
 
 #tagbox a {
-    position: relative;
+    position: absolute;
     padding: 3px 6px;
     font-family: Microsoft YaHei;
     color: #fff;

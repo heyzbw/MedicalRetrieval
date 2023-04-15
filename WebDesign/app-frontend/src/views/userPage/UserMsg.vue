@@ -9,7 +9,7 @@
                         <div class="info-item" v-for="item in infoList" @click="userRead(item)">
                             <div class="info-title">
                                 <span class="tile-span">{{ item.title }}</span>
-                                <span class="ok-span">  管理员审核</span>
+                                <span class="ok-span"> 管理员审核</span>
                                 <span class="ok-span" v-if="item.checkState">通过</span>
                                 <span class="no-span" v-else>不通过，原因 {{ item.errorMsg }}</span>
                             </div>
@@ -21,12 +21,8 @@
                         </div>
                     </div>
                     <div class="page-bottom">
-                        <Page
-                            :model-value="currentPage"
-                            :total="totalItems"
-                            :page-size="pageSize"
-                            @on-change="pageChange"
-                        />
+                        <Page :model-value="currentPage" :total="totalItems" :page-size="pageSize"
+                            @on-change="pageChange" />
                     </div>
                 </div>
 
@@ -37,12 +33,13 @@
                 <div class="page-panel">
                     <div class="info-group">
                         <div class="" style="width: 100%; padding: 15px; text-align: left;
-                        border-bottom: 1px solid #f1f2f3;" v-for="item in comments">
+                                                                                    border-bottom: 1px solid #f1f2f3;"
+                            v-for="item in comments">
 
                             <div class="tile-span doc-title" style="height: 22px; width: 100%;
-                            overflow: hidden; white-space: nowrap;text-overflow: ellipsis;
-                            color: #8F6100;
-                            " @click="documentPreview(item)">
+                                                                                        overflow: hidden; white-space: nowrap;text-overflow: ellipsis;
+                                                                                        color: #8F6100;
+                                                                                        " @click="documentPreview(item)">
                                 {{ item.docName }}
                             </div>
                             <div style="padding: 5px 0;">
@@ -54,17 +51,13 @@
                                 <span class="doc-time">
                                     {{ item.createTime }}
                                 </span>
-                                <Icon type="md-trash" style="cursor: pointer" @click="removeDocument(item)"/>
+                                <Icon type="md-trash" style="cursor: pointer" @click="removeDocument(item)" />
                             </div>
                         </div>
                     </div>
                     <div class="page-bottom">
-                        <Page
-                            :model-value="commentCurrentPage"
-                            :total="commentTotalItems"
-                            :page-size="commentPageSize"
-                            @on-change="commentPageChange"
-                            />
+                        <Page :model-value="commentCurrentPage" :total="commentTotalItems" :page-size="commentPageSize"
+                            @on-change="commentPageChange" />
                     </div>
                 </div>
             </TabPane>
@@ -74,7 +67,7 @@
 
 <script>
 import docReviewRequest from '@/api/docReview'
-import {parseTime} from "@/utils"
+import { parseTime } from "@/utils"
 import commentRequest from '@/api/comment'
 
 export default {
@@ -166,7 +159,7 @@ export default {
         },
 
         async userRead(item) {
-            if(item.readState === true) {
+            if (item.readState === true) {
                 return;
             }
             let param = {
@@ -183,7 +176,7 @@ export default {
         },
 
         switchTab(name) {
-            switch (name){
+            switch (name) {
                 case "name1":
                     this.getAllReviews()
                     break;
@@ -194,8 +187,8 @@ export default {
         },
         documentPreview(item) {
             this.$router.push({
-                path:'/preview',
-                query:{
+                path: '/preview',
+                query: {
                     docId: item.docId
                 }
             })
@@ -207,7 +200,7 @@ export default {
                 userId: item.userId
             }
             commentRequest.deleteData(param).then(res => {
-                if (res.code === 200){
+                if (res.code === 200) {
                     let data = res.data
                     this.getPageData()
                 }
@@ -221,9 +214,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .main-container {
-    padding: 30px;
+    padding: 20px;
 
     .tab {
         /deep/ .ivu-tabs-nav {
@@ -265,8 +257,8 @@ export default {
             cursor: pointer;
 
             .info-title {
-                width: calc(100% - 120px);
-                padding: 15px;
+                width: calc(100%);
+                padding: 5px;
                 text-align: left;
 
                 font-size: 14px;
@@ -275,7 +267,7 @@ export default {
                 line-height: 20px;
 
                 .tile-span {
-                    color: #8F6100;
+                    color: #0014a9;
                 }
 
                 .ok-span {
@@ -327,7 +319,7 @@ export default {
     font-weight: 500;
     line-height: 20px;
 
-    color: #8F6100;
+    color: #00298f;
     cursor: pointer;
 }
 
@@ -338,6 +330,4 @@ export default {
     color: #464646;
     line-height: 17px;
 }
-
-
 </style>

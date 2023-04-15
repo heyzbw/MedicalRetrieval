@@ -39,7 +39,7 @@ export default {
     position: relative;
 
     .doc-thumb-group {
-        width: 100%;
+        width: 170%;
         height: calc(100% - 60px);
         position: relative;
         overflow-y: auto;

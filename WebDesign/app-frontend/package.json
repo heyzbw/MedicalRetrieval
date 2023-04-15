@@ -32,8 +32,10 @@
     "store": "^2.0.12",
     "view-design": "^4.7.0",
     "vue": "^2.5.13",
+    "vue-awesome-mui": "^1.7.3",
     "vue-cropper": "^0.5.8",
     "vue-demi": "^0.13.11",
+    "vue-directive-touch": "^1.0.28",
     "vue-router": "^3.2.0",
     "vuex": "^4.1.0",
     "xlsx": "^0.18.5"

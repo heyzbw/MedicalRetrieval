@@ -1,17 +1,13 @@
 <template>
     <div class="tag-panel">
-        <div class="tag-title">文件类型</div>
+        <!-- <div class="tag-title">文件类型</div> -->
         <div class="tag-list">
-            <div class="tag-item"
-                 v-for="tagName in tagNames"
-                 @click="selected(tagName)"
-                 :class="{activeTag: activeTagName === tagName}"
-            >
+            <div class="tag-item" v-for="tagName in tagNames" @click="selected(tagName)"
+                :class="{ activeTag: activeTagName === tagName }">
                 {{ tagName.name }}
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -24,7 +20,7 @@ export default {
         return {
             // {id: "All", name: "全部"}
             tagNames: [],
-            activeTagName: {id: 'ALL', name: '全部'},
+            activeTagName: { id: 'ALL', name: '全部' },
             categoryType: 'TAG'
         }
     },
@@ -52,7 +48,7 @@ export default {
                     return;
                 }
                 this.listLoading = false
-                this.tagNames = [{id: "ALL", name: "全部分类", createDate: '', updateDate: ''}]
+                this.tagNames = [{ id: "ALL", name: "全部分类", createDate: '', updateDate: '' }]
                 if (response.data.length > 0) {
                     response.data.forEach(item => {
                         if (item.name.length > 8) {
@@ -85,7 +81,8 @@ export default {
         width: 64px;
         height: 22px;
         margin-right: 40px;
-        white-space: nowrap; /*规定段落中的文本不进行换行 */
+        white-space: nowrap;
+        /*规定段落中的文本不进行换行 */
 
     }
 
@@ -95,21 +92,21 @@ export default {
         flex-wrap: wrap;
         max-height: 120px;
         overflow-y: auto;
+        font-size: 14px;
 
         .tag-item {
             padding-right: 20px;
             cursor: pointer;
 
             &:hover {
-                color: #F2A500;
+                color: #008df2;
             }
         }
 
         .activeTag {
-            color: #F2A500;
+            color: #005df2;
         }
 
     }
 }
-
 </style>
