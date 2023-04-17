@@ -88,6 +88,8 @@ public class DocumentController {
         else {
             documentDTO.setPermission(PermissionEnum.valueOf(documentDTO.getUserType()));
         }
+
+
         return iFileService.list(documentDTO);
     }
 

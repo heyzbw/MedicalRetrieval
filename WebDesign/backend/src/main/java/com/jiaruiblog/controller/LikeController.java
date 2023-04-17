@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,6 @@ public class LikeController{
     public BaseApiResult like(@RequestParam("entityType") int entityType,
                               @RequestParam("entityId") String entityId,
                               HttpServletRequest request) {
-
         if (entityType != 1 && entityType != 2) {
             return BaseApiResult.error(MessageConstant.PARAMS_ERROR_CODE, MessageConstant.PARAMS_FORMAT_ERROR);
         }
@@ -63,33 +63,48 @@ public class LikeController{
         String userId = (String) request.getAttribute("id");
         long likeCount = 0;
         int likeStatus;
-        try {
-            // 点赞
-            likeService.like(userId, entityType, entityId);
-            // 获取点赞的数量
-            likeCount = likeService.findEntityLikeCount(entityType, entityId);
-            // 获取当前用户点赞的状态
-            likeStatus = likeService.findEntityLikeStatus(userId, entityType, entityId);
-        } catch (RedisConnectionFailureException | RedisConnectionException e) {
-            System.out.println("redis连接错误");
-            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, e.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("likeStatus:"+likeStatus);
-        // 返回的结果，封装成一个Map集合
-        Map<String, Object> map = new HashMap<>();
-        map.put("likeCount", likeCount);
-        map.put("likeStatus", likeStatus);
+        if(userId != null){
+            try {
+                // 点赞
+                likeService.like(userId, entityType, entityId);
+                // 获取点赞的数量
+                likeCount = likeService.findEntityLikeCount(entityType, entityId);
+                // 获取当前用户点赞的状态
+                likeStatus = likeService.findEntityLikeStatus(userId, entityType, entityId);
+            } catch (RedisConnectionFailureException | RedisConnectionException e) {
+                System.out.println("redis连接错误");
+                return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, e.getMessage());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-        return BaseApiResult.success(map);
+            System.out.println("likeStatus:"+likeStatus);
+            // 返回的结果，封装成一个Map集合
+            Map<String, Object> map = new HashMap<>();
+            map.put("likeCount", likeCount);
+            map.put("likeStatus", likeStatus);
+
+            return BaseApiResult.success(map);
+        }
+        else {
+            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE,MessageConstant.OPERATE_FAILED);
+        }
+
+
     }
 
     @GetMapping("queryLikeInfo")
-    public BaseApiResult queryLikeInfo(@RequestBody QueryLikeInfoDTO queryLikeInfoDTO) {
+    public BaseApiResult queryLikeInfo(
+            @RequestParam("entityId") @NotNull(message = MessageConstant.PARAMS_IS_NOT_NULL) String entityId,
+            @RequestParam(value = "userId", required = false) String userId
+    ) {
+
+        QueryLikeInfoDTO queryLikeInfoDTO = new QueryLikeInfoDTO();
+
+        queryLikeInfoDTO.setEntityId(entityId);
+        queryLikeInfoDTO.setUserId(userId);
         Map<String, Object> map = new HashMap<>();
-        String userId = queryLikeInfoDTO.getUserId();
-        String entityId = queryLikeInfoDTO.getEntityId();
+
         if(userId != null){
             try {
                 // 获取点赞的数量
@@ -116,8 +131,6 @@ public class LikeController{
             map.put("collectCount", 0);
             map.put("collectStatus", 0);
         }
-
         return BaseApiResult.success(map);
-
     }
 }

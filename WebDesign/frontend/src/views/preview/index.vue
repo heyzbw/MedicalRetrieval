@@ -234,11 +234,6 @@ export default {
     },
     mounted() {
 
-        console.log("进入全部文档界面")
-
-        // this.getSelectText();
-        // this.getMessage();
-
         this.left = this.$refs.fu.offsetLeft - 150;
         this.top = this.$refs.fu.offsetTop
     },
@@ -292,7 +287,6 @@ export default {
                     let suffix = title.split(".")[title.split('.').length - 1];
                     switch (suffix) {
                         case 'pdf':
-                          console.log("！！pdfView！！")
                             this.component = () => import('@/views/preview/PdfView')
                             break
                         case 'png':
@@ -355,10 +349,11 @@ export default {
                     this.likeStatus = result.likeStatus || false;
                     this.collectStatus = result.collectStatus || false
                 } else {
-                    this.$Message.info("error")
+                    console.log("res:",res)
+                    this.$Message.info("error!")
                 }
             }).catch(err => {
-                this.$Message.info("error")
+                this.$Message.info("error!!")
             })
         },
 
@@ -437,40 +432,6 @@ export default {
                 this.getListData(this.cateId, this.filterWord)
             })
         },
-        // getSelectText() {
-        //     let _this = this;
-        //     let iframe = document.getElementById('myIframe');
-        //     let x = '';
-        //     let y = '';
-        //     let _x = '';
-        //     let _y = '';
-        //     // iframe 加载完成后执行并将双击事件过滤掉，因为双击事件可能也触发滑选，所以为了不误操作，将其剔除
-        //     iframe.onload = function () {
-        //         // 鼠标点击监听
-        //         setTimeout(() => {
-        //             console.log("qwe" + iframe)
-        //             iframe.contentDocument.addEventListener('mousedown', function (e) {
-        //                 x = e.pageX;
-        //                 y = e.pageY;
-        //             }, true);
-        //             // 鼠标抬起监听
-        //             iframe.contentDocument.addEventListener('mouseup', function (e) {
-        //                 _x = e.pageX;
-        //                 _y = e.pageY;
-        //                 if (x == _x && y == _y) return; //判断点击和抬起的位置，如果相同，则视为没有滑选，不支持双击选中
-        //                 var choose = iframe.contentWindow.getSelection().toString();
-        //                 _this.selectText = choose;
-        //             }, true);
-        //         }, 100);
-        //     };
-        // },
-        // sendMessage() {
-        //     let vm = this;
-        //     //获取iframe
-        //     let iframe = document.getElementById('myIframe');
-        //     //将滑选数据传入到iframe中
-        //     iframe.contentWindow.postMessage(vm.selectText, '*');
-        // },
         changeshow() {
             console.log(value)
             this.showtab = !this.showtab
@@ -505,10 +466,8 @@ export default {
                 console.log(error);
                 console.log(sign);
                 console.log(this.selectedText);
-                // console.log(params);
             }, 100)
 
-            // });
         },
         getMsgFormSon(data) {
             this.selectedText = data
@@ -595,7 +554,6 @@ export default {
             } else {
                 this.menu = !this.menu;
             }
-            // this.$emit("click");
         },
     }
 

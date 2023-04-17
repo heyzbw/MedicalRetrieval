@@ -42,8 +42,7 @@ export default {
     this.getSelectText();
   },
   mounted() {
-    console.log("PdfURL:",this.pdfURL)
-    //这是滑选事件
+     //这是滑选事件
 
     let vm = this;
 
@@ -53,8 +52,7 @@ export default {
     let iframe = document.getElementById('myIframe');
 
     iframe.onload = function() {
-      console.log("这个时mounted里面的onload方法")
-      // 在这里调用 getSelectText 方法
+       // 在这里调用 getSelectText 方法
       vm.getSelectText();
 
       // document.body.addEventListener("click", getWord, false);
@@ -165,8 +163,6 @@ export default {
       iframe.contentWindow.addEventListener('message', function (e) {
         //这里打印一下，看是否拿到了传入的数据
 
-        console.log("iframe.contentWindow:", iframe.contentWindow)
-        // 这里打印的是pdf.js暴露出来的find接口
 
         setTimeout(() => {
           let iframe = document.getElementById('myIframe');
@@ -191,8 +187,6 @@ export default {
           console.log("length of e",e.data.length)
           if(e.data.length > 2)
           {
-
-
             highLight_content = highLight_content.replaceAll("<em>","").replaceAll("</em>","")
             console.log("要高亮的内容为：",highLight_content)
             // iframe.contentWindow.PDFViewerApplication.findBar.findField.value = highLight_content;
