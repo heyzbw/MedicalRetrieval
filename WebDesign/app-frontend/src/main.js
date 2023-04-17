@@ -12,8 +12,13 @@ import 'amfe-flexible';
 //配置后端的访问地址
 // import homeback  from  '../homeback.js';
 // global.homeback = homeback;
+import touch from 'vue-directive-touch';
+Vue.use(touch);
 
 import * as echarts from 'echarts';
+import Mui from 'vue-awesome-mui'
+
+Vue.use(Mui)
 Vue.prototype.$ = jquery;
 Vue.prototype.$echarts = echarts
 Vue.use(VueRouter);

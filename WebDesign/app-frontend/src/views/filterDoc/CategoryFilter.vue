@@ -24,16 +24,7 @@
                 </Dropdown>
             </div>
         </div>
-        <div class="cate-right">
-            <div class="search-input-top">
-                <input :placeholder="placeholder" v-model="searchValue" @keyup.enter="clickToSearch(searchValue)">
-                <div class="search-button"
-                    style="width: 100px; line-height: 45px; display: flex; align-content: center; flex-wrap: wrap; justify-content: center;"
-                    @click="clickToSearch(searchValue)">
-                    <img :src="searchSrc" width="16px" height="16px" alt="" style="display: inline-block;" />
-                </div>
-            </div>
-        </div>
+
     </div>
 </template>
 
@@ -110,7 +101,7 @@ export default {
 
     .cate-left {
         text-align: left;
-        width: 50%;
+        width: 100%;
         display: flex;
         justify-content: flex-start;
 
@@ -123,15 +114,17 @@ export default {
             font-weight: 600;
             color: #000000;
             position: relative;
+            //padding-right: 100px;
 
             p {
                 -o-text-overflow: ellipsis;
-                overflow: hidden;
+                //overflow: hidden;
                 /*超出部分隐藏*/
                 text-overflow: ellipsis;
                 /* 超出部分显示省略号 */
                 white-space: nowrap;
                 /*规定段落中的文本不进行换行 */
+                width: 120px;
             }
 
             .category-title-tip {
@@ -150,23 +143,23 @@ export default {
 
         .cate-dropdown {
             text-align: center;
-            width: 117px;
-            height: 45px;
+            margin-top: 5px;
+            height: 35px;
             background: #FFFFFF;
             border-radius: 8px;
             border: 0.5px solid #000000;
             margin-left: 10px;
-
-            font-size: 14px;
+            width: 300px;
+            font-size: 16px;
             font-family: PingFangSC-Medium, PingFang SC, serif;
-            font-weight: 500;
+            font-weight: 400;
             color: #000000;
-            line-height: 45px;
+            line-height: 35px;
         }
     }
 
     .cate-right {
-        width: 40%;
+
         text-align: right;
         padding-top: 10px;
 

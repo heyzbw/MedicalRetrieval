@@ -212,14 +212,15 @@ export default {
 <style lang="scss" scoped>
 .AvatarUploader {
     //background-color: red;
-    width: 80px;
-    height: 80px;
+    width: 75px;
+    height: 75px;
 
     .image {
         position: relative;
+        right: 25px;
         //display: inline-block;
-        width: 100px;
-        height: 100px;
+        width: 75px;
+        height: 75px;
 
         overflow: hidden; //img如果超出这个div会隐藏超出部分
         display: flex; //flex布局
