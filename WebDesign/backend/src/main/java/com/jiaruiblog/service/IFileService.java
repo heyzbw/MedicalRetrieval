@@ -8,6 +8,7 @@ import com.jiaruiblog.entity.UploadFileObj;
 import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
+import com.jiaruiblog.entity.dto.PreviewDocumentDTO;
 import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.BaseApiResult;
@@ -164,7 +165,8 @@ public interface IFileService {
      * @param id ->Long
      * @return ApiResult
      */
-    BaseApiResult detail(String id,String username) throws IOException;
+//    BaseApiResult detail(String id,String username) throws IOException;
+    BaseApiResult detail(PreviewDocumentDTO previewDocumentDTO) throws IOException;
 
     /**
      * 删除掉已经存在的文档

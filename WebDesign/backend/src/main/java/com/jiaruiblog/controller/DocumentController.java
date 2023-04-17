@@ -5,10 +5,7 @@ import com.jiaruiblog.auth.PermissionEnum;
 import com.jiaruiblog.common.MessageConstant;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.User;
-import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
-import com.jiaruiblog.entity.dto.DocumentDTO;
-import com.jiaruiblog.entity.dto.ImageDataDTO;
-import com.jiaruiblog.entity.dto.RemoveObjectDTO;
+import com.jiaruiblog.entity.dto.*;
 import com.jiaruiblog.enums.FilterTypeEnum;
 import com.jiaruiblog.intercepter.SensitiveFilter;
 import com.jiaruiblog.service.IDocLogService;
@@ -28,6 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+
+import com.jiaruiblog.common.MessageConstant;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -63,11 +63,7 @@ public class DocumentController {
     public BaseApiResult list(@RequestBody DocumentDTO documentDTO)
             throws IOException {
 
-//        long startTime = System.currentTimeMillis();
-
-//        System.out.println("进入了查询方法");
         String userId = documentDTO.getUserId();
-        System.out.println("userId:"+userId);
         if (StringUtils.hasText(documentDTO.getFilterWord()) &&
                 documentDTO.getType() == FilterTypeEnum.FILTER) {
             String filterWord = documentDTO.getFilterWord();
@@ -77,6 +73,7 @@ public class DocumentController {
             //存在非法字符
             if (n > 0) {
                 log.error("这个人输入了非法字符--> {},不知道他到底要查什么~", filterWord);
+                return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE,MessageConstant.EXIST_SENSITIVE_VOCABULARY);
             } else {
                 redisService.incrementScoreByUserId(filterWord, RedisServiceImpl.SEARCH_KEY);
                 if (StringUtils.hasText(userId)) {
@@ -84,13 +81,13 @@ public class DocumentController {
                 }
             }
         }
-//        System.out.println("用户类型为："+ documentDTO.getUserType());
-//        如果我这里得到的UserType为一个String：ADMIN，我怎么得到一个PermissionEnum，并放入permission中？
-        documentDTO.setPermission(PermissionEnum.valueOf(documentDTO.getUserType()));
-//        PermissionEnum userPermission = PermissionUtil.getUserPermission(request);
-//        documentDTO.setPermission(userPermission);
-//        documentDTO.setUserId((String) request.getAttribute("id"));
-//        System.out.println("");
+
+        if(documentDTO.getUserType() == null){
+            documentDTO.setPermission(PermissionEnum.valueOf("USER"));
+        }
+        else {
+            documentDTO.setPermission(PermissionEnum.valueOf(documentDTO.getUserType()));
+        }
         return iFileService.list(documentDTO);
     }
 
@@ -102,9 +99,6 @@ public class DocumentController {
         System.out.println("docunmentDTO:"+documentDTO);
         System.out.println("title"+documentDTO.getTitle());
 
-//        long startTime = System.currentTimeMillis();
-
-//        System.out.println("进入了查询方法");
         String userId = documentDTO.getUserId();
         if (StringUtils.hasText(documentDTO.getFilterWord()) &&
                 documentDTO.getType() == FilterTypeEnum.FILTER) {
@@ -127,9 +121,18 @@ public class DocumentController {
 
     @ApiOperation(value = "2.2 查询文档的详细信息", notes = "查询文档的详细信息")
     @GetMapping(value = "/detail")
-    public BaseApiResult detail(@RequestParam(value = "docId") String id,@RequestParam(value = "userId") String userId) throws IOException {
-        System.out.println("username:"+userId);
-        return iFileService.detail(id,userId);
+    public BaseApiResult detail(
+            @RequestParam("docId") @NotNull(message = MessageConstant.PARAMS_IS_NOT_NULL) String docId,
+            @RequestParam(value = "userId", required = false) String userId
+    ) throws IOException {
+
+        System.out.println("check:"+docId);
+        System.out.println("userId:"+userId);
+        PreviewDocumentDTO previewDocumentDTO = new PreviewDocumentDTO();
+        previewDocumentDTO.setDocId(docId);
+        previewDocumentDTO.setUserId(userId);
+//        return null;
+        return iFileService.detail(previewDocumentDTO);
     }
 
     @ApiOperation(value = "3.2 删除某个文档", notes = "删除某个文档")

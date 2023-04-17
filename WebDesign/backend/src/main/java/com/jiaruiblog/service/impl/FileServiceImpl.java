@@ -13,6 +13,7 @@ import com.jiaruiblog.entity.data.ThumbIdAndDate;
 import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
+import com.jiaruiblog.entity.dto.PreviewDocumentDTO;
 import com.jiaruiblog.entity.ocrResult.*;
 import com.jiaruiblog.entity.vo.DocWithCateVO;
 import com.jiaruiblog.entity.vo.DocumentVO;
@@ -1045,26 +1046,32 @@ public class FileServiceImpl implements IFileService {
      * @Param [id]
      **/
     @Override
-    public BaseApiResult detail(String id,String username) throws IOException {
+    public BaseApiResult detail(PreviewDocumentDTO previewDocumentDTO) throws IOException {
+        System.out.println("check document:"+previewDocumentDTO.getDocId());
+        String id = previewDocumentDTO.getDocId();
+
         FileDocument fileDocument = queryById(id);
-        boolean hasLike,hasCollect;
+        boolean hasLike = false ,hasCollect = false;
 
-        LikeDocRelationship likeDB = likeService.getExistLikeRelationship(username,id);
-        if(likeDB == null){
-            hasLike = false;
-        }
-        else
-            hasLike = true;
+        if(previewDocumentDTO.getUserId() != null){
+            String username = previewDocumentDTO.getUserId();
+            LikeDocRelationship likeDB = likeService.getExistLikeRelationship(username,id);
+            if(likeDB == null){
+                hasLike = false;
+            }
+            else
+                hasLike = true;
 
-        CollectDocRelationship collect = new CollectDocRelationship();
-        collect.setUserId(username);
-        collect.setDocId(id);
-        CollectDocRelationship collectDocRelationship = collectServiceImpl.getExistRelationship(collect);
-        if(collectDocRelationship == null){
-            hasCollect = false;
+            CollectDocRelationship collect = new CollectDocRelationship();
+            collect.setUserId(username);
+            collect.setDocId(id);
+            CollectDocRelationship collectDocRelationship = collectServiceImpl.getExistRelationship(collect);
+            if(collectDocRelationship == null){
+                hasCollect = false;
+            }
+            else
+                hasCollect = true;
         }
-        else
-            hasCollect = true;
 
         fileDocument.setHasCollect(hasCollect);
         fileDocument.setHasLike(hasLike);
@@ -1649,6 +1656,22 @@ public class FileServiceImpl implements IFileService {
 
     private List<FileDocument> getThumbIdAndDateFromDB(List<FileDocument> esDocs){
 
+        Iterator<FileDocument> iterator = esDocs.iterator();
+        while(iterator.hasNext()){
+            FileDocument esDoc = iterator.next();
+            Query query = new Query(Criteria.where("_id").is(esDoc.getId()));
+            query.fields().include(UPLOAD_DATE_FILED_NAME).include(THUMBID_FILED_NAME);
+
+            ThumbIdAndDate document = mongoTemplate.findOne(query, ThumbIdAndDate.class, COLLECTION_NAME);
+
+            if(document == null){
+                iterator.remove();
+            }
+            else {
+                esDoc.setUploadDate(document.getUploadDate());
+                esDoc.setThumbId(document.getThumbId());
+            }
+        }
         for(FileDocument esDoc:esDocs) {
 //            System.out.println("md5:" + esDoc.getMd5());
             Query query = new Query(Criteria.where("_id").is(esDoc.getId()));
@@ -1695,12 +1718,19 @@ public class FileServiceImpl implements IFileService {
     }
 
     private void setUserNameFromDB(List<FileDocument> fileDocumentList){
-        for(FileDocument fileDocument:fileDocumentList){
+        Iterator<FileDocument> iterator = fileDocumentList.iterator();
+        while (iterator.hasNext()) {
+            FileDocument fileDocument = iterator.next();
             Query query = new Query(Criteria.where("_id").is(fileDocument.getId()));
-            FileDocument result = mongoTemplate.findOne(query, FileDocument.class,COLLECTION_NAME);
-            fileDocument.setUserName(result.getUserName());
+            FileDocument result = mongoTemplate.findOne(query, FileDocument.class, COLLECTION_NAME);
+            if (result != null) {
+                fileDocument.setUserName(result.getUserName());
+            } else {
+                iterator.remove();
+            }
         }
     }
+
     private List<String> getSearchWord(String advanceWords){
 
         List<String> resultStrings = new ArrayList<>();

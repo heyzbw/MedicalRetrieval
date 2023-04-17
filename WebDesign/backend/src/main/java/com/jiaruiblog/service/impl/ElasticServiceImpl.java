@@ -56,10 +56,7 @@ import javax.annotation.Resource;
 public class ElasticServiceImpl implements ElasticService {
 
     private static final String INDEX_NAME = "docwrite";
-
-    //    private static final String INDEX_NAME = "synonym_test";
     private static final String PIPELINE_NAME = "attachment.content";
-
     private static final String FILE_ID = "fileId";
 
     //ocr结果的字段
@@ -155,8 +152,14 @@ public class ElasticServiceImpl implements ElasticService {
         //查询并返回结果
         searchSourceBuilder.query(boolQueryBuilder);
         searchRequest.source(searchSourceBuilder);
+
+        long startTime = System.currentTimeMillis();;
+
         SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
 
+        long endTime = System.currentTimeMillis();;
+
+        System.out.println("es的查询时间为："+(endTime-startTime));
         SearchHits hits = searchResponse.getHits();
         return process_outcome(hits,keyword);
     }

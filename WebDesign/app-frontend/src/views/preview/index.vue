@@ -154,6 +154,7 @@ export default {
             this.docId = this.$route.query.docId;
             this.keyword = this.$route.query.keyword
             this.pageNum = this.$route.query.pageNum
+            // let
             var params = {
                 docId: this.docId,
                 userId: localStorage.getItem("id")

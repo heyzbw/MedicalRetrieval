@@ -70,6 +70,7 @@ public class FileController {
      */
     @GetMapping("/view/{id}")
     public ResponseEntity<Object> serveFileOnline(@PathVariable String id) throws UnsupportedEncodingException {
+        System.out.println("查看的文献Id为："+id);
         Optional<FileDocument> file = fileService.getById(id);
         if (file.isPresent()) {
             return ResponseEntity.ok()
@@ -234,7 +235,7 @@ public class FileController {
         multiFilesUploadObj.setUserId(userId);
         multiFilesUploadObj.setUsername(username);
 
-        System.out.println("userId"+userId);
+        System.out.println("userId(uploadMultiFile)"+userId);
 
         return fileService.documentUpload_noAuth_multi(multiFilesUploadObj);
     }

@@ -42,6 +42,7 @@ export default {
     this.getSelectText();
   },
   mounted() {
+    console.log("PdfURL:",this.pdfURL)
     //这是滑选事件
 
     let vm = this;

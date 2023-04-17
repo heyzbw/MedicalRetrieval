@@ -1,6 +1,7 @@
 package com.jiaruiblog.controller;
 
 import com.jiaruiblog.common.MessageConstant;
+import com.jiaruiblog.entity.dto.QueryLikeInfoDTO;
 import com.jiaruiblog.service.LikeService;
 import com.jiaruiblog.util.BaseApiResult;
 import io.lettuce.core.RedisConnectionException;
@@ -85,34 +86,35 @@ public class LikeController{
     }
 
     @GetMapping("queryLikeInfo")
-    public BaseApiResult queryLikeInfo(@RequestParam("entityId") String entityId,@RequestParam("userId") String userId,
-                                       HttpServletRequest request) {
-        // 获取到当前用户
-        System.out.println("userId"+userId);
-        // 返回的结果，封装成一个Map集合
+    public BaseApiResult queryLikeInfo(@RequestBody QueryLikeInfoDTO queryLikeInfoDTO) {
         Map<String, Object> map = new HashMap<>();
-        map.put("likeCount", 0);
-        map.put("likeStatus", 0);
-        map.put("collectCount", 0);
-        map.put("collectStatus", 0);
+        String userId = queryLikeInfoDTO.getUserId();
+        String entityId = queryLikeInfoDTO.getEntityId();
+        if(userId != null){
+            try {
+                // 获取点赞的数量
+                long likeCount = likeService.findEntityLikeCount(1, entityId);
+                map.put("likeCount", likeCount);
+                // 获取当前用户点赞的状态
+                int likeStatus = likeService.findEntityLikeStatus(userId, 1, entityId);
+                map.put("likeStatus", likeStatus);
 
-        try {
-            // 获取点赞的数量
-            long likeCount = likeService.findEntityLikeCount(1, entityId);
-            map.put("likeCount", likeCount);
-            // 获取当前用户点赞的状态
-            int likeStatus = likeService.findEntityLikeStatus(userId, 1, entityId);
-            map.put("likeStatus", likeStatus);
+                // 获取收藏的数量
+                long collectCount = likeService.findEntityLikeCount(2, entityId);
+                map.put("collectCount", collectCount);
+                // 获取当前用户收藏的状态
+                int collectStatus = likeService.findEntityLikeStatus(userId, 2, entityId);
+                map.put("collectStatus", collectStatus);
 
-            // 获取收藏的数量
-            long collectCount = likeService.findEntityLikeCount(2, entityId);
-            map.put("collectCount", collectCount);
-            // 获取当前用户收藏的状态
-            int collectStatus = likeService.findEntityLikeStatus(userId, 2, entityId);
-            map.put("collectStatus", collectStatus);
-
-        } catch (RedisConnectionFailureException | RedisConnectionException e) {
-            return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, e.getMessage());
+            } catch (RedisConnectionFailureException | RedisConnectionException e) {
+                return BaseApiResult.error(MessageConstant.PROCESS_ERROR_CODE, e.getMessage());
+            }
+        }
+        else {
+            map.put("likeCount", 0);
+            map.put("likeStatus", 0);
+            map.put("collectCount", 0);
+            map.put("collectStatus", 0);
         }
 
         return BaseApiResult.success(map);
