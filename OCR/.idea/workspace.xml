@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OCR.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FromPCY/scan/ocrScan.py" beforeDir="false" afterPath="$PROJECT_DIR$/FromPCY/scan/ocrScan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MongoDB/GetMongoDBUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/GetMongoDBUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/app-frontend/src/api/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/app-frontend/src/api/request.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/CallFlask.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/CallFlask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Call_API.py" beforeDir="false" afterPath="$PROJECT_DIR$/FromPCY/Call_API.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pdf2pic.py" beforeDir="false" afterPath="$PROJECT_DIR$/pdf2pic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,22 +40,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/study/sqrrow4.9/MedicalRetrieval/OCR&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/22533/Desktop/docker",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Flask server.Flask (main.py)">
+}]]></component>
+  <component name="RunManager" selected="Python.OCR">
     <configuration name="Call_API" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="OCR" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -262,6 +261,9 @@
       <workItem from="1681387272741" duration="3049000" />
       <workItem from="1681390984300" duration="148000" />
       <workItem from="1681391200760" duration="1403000" />
+      <workItem from="1683100833146" duration="97000" />
+      <workItem from="1683107789272" duration="1739000" />
+      <workItem from="1683118178204" duration="33000" />
     </task>
     <servers />
   </component>
@@ -274,6 +276,7 @@
     <SUITE FILE_PATH="coverage/OCR$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680089665661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/heart_disease_json$ocrScan.coverage" NAME="ocrScan Coverage Results" MODIFIED="1680335033809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FromPCY/scan" />
     <SUITE FILE_PATH="coverage/heart_disease_json$Call_API.coverage" NAME="Call_API Coverage Results" MODIFIED="1680522579317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$OCR.coverage" NAME="OCR Coverage Results" MODIFIED="1683110394656" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1681287320932" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/OCR$pdf2pic.coverage" NAME="pdf2pic Coverage Results" MODIFIED="1680084220920" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>

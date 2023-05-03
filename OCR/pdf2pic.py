@@ -17,7 +17,7 @@ import os
 
 from MongoDB.MongdbOcrUtil import MongdbOcrUtil
 from MongoDB.MongoFileDataUtil import MongoFileDataUtil
-from Call_API import CommonOcr
+from FromPCY.Call_API import CommonOcr
 
 mongdbOcrUtil = MongdbOcrUtil()
 commonOcr = CommonOcr()
