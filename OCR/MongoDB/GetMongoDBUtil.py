@@ -1,6 +1,6 @@
 import pymongo
 
-host_address = '121.36.201.185'
+host_address = '121.37.67.19'
 # host_address = 'localhost'
 
 

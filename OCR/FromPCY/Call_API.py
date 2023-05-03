@@ -9,10 +9,10 @@ class CommonOcr(object):
     def __init__(self):
         # 请登录后前往 “工作台-账号设置-开发者信息” 查看 x-ti-app-id
         # 示例代码中 x-ti-app-id 非真实数据
-        self._app_id = 'd18d5be24bcd2fcff0acca40b1bd51da'
+        self._app_id = '62f2553027fcb01e78fcb9431213aa29'
         # 请登录后前往 “工作台-账号设置-开发者信息” 查看 x-ti-secret-code
         # 示例代码中 x-ti-secret-code 非真实数据
-        self._secret_code = '323884d267018e39e7f12cd4f2a8e079'
+        self._secret_code = '8962982f28aaab75dcda5074739d3905'
         # self._img = img
 
     def recognize(self,image):

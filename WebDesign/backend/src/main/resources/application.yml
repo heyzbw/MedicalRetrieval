@@ -1,5 +1,8 @@
 # 服务器的地址为：121.36.201.185
 
+global:
+  server-ip: 121.37.67.19
+
 server:
   port: 8082
   servlet:
@@ -9,7 +12,7 @@ spring:
   data:
     mongodb:
       database: ${MONGO_DATABASE:sqrrow}
-      host: ${MONGO_HOST:121.36.201.185}
+      host: ${MONGO_HOST:${global.server-ip}}
       port: ${MONGO_PORT:27017}
       username: sqrrow111
       password: MedicalRetrieval
@@ -22,7 +25,7 @@ spring:
 
   redis:
     database: 0
-    host: ${REDIS_HOST:121.36.201.185}
+    host: ${REDIS_HOST:${global.server-ip}}
     password: ${REDIS_PWD:123456}
     port: ${REDIS_PORT:6379}
     timeout: 3000
@@ -52,14 +55,22 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+#logging:
+#  level:
+#    root: ${LOGGING_LEVEL:ERROR}
+
+#日志的配置
 logging:
+  config: classpath:logback-spring.xml
   level:
-    root: ${LOGGING_LEVEL:ERROR}
+    com.jiaruiblog: trace
 
 cloud:
   elasticsearch:
-    host: ${ES_HOST:121.36.201.185}
+    host: ${ES_HOST:${global.server-ip}}
     port: ${ES_PORT:9200}
+    username: ${ES_USER:elastic}
+    password: ${ES_PASSWORD:dqxlz0821}
 #    host: 121.36.201.185
 #    port: 8888
 
