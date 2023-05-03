@@ -1,27 +1,16 @@
-
-# 第一阶段：构建镜像
-FROM node:14.21.3 AS builder
-
+# 第一阶段：构建和安装依赖
+FROM python:3.7-slim AS builder
 WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY package*.json ./
-
-RUN npm install
-
+# 第二阶段：复制所需文件并设置环境
+FROM python:3.7-slim
+WORKDIR /app
+COPY --from=builder /app /app
 COPY . .
-
-RUN npm run build
-
-# 第二阶段：运行镜像
-FROM node:14.21.3-slim
-
-WORKDIR /app
-
-COPY --from=builder /app/dist /app/dist
-
-EXPOSE 8080
-
-CMD ["node", "/app/dist/server.js"]
+EXPOSE 8083
+CMD ["python", "main.py"]
 
 # # 第一阶段：构建镜像
 # FROM node:14.21.3 AS builder
