@@ -103,20 +103,38 @@
 
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- <div
-                                style="width: 100%;
-                                                                                                                            height: 50%;
-                                                                                                                            border-top: 1px solid #E7E7E7;
-                                                                                                                            padding: 15px;">
-                                <ul>
-                                    <li v-for="item in navData" @click="selected(item)"
-                                        :class="{ activeNav: checkedNav.name == item.name }">
-                                        {{ item.name }}
-                                    </li>
-                                </ul>
-                            </div> -->
+                              <div style="padding: 0px 10px;">
+                                <div class="upload-button"
+                                     style="width: 150px; height: 45px; border: 1px solid #000;
+                                                                                                                                                                background: #fff;
+                                                                                                                            box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
+                                                                                                                            border-radius: 8px;
+                                                                                                                            display: flex;
+                                                                                                                            justify-content: center;
+                                                                                                                            "
+                                     @click="selected(navData[4])">
+
+                                  <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">
+                                            辅助诊断</span>
+                                </div>
+                              </div>
+
+                              <div style="padding: 0px 10px;">
+                                <div class="upload-button"
+                                     style="width: 150px; height: 45px; border: 1px solid #000;
+                                                                                                                                                                background: #fff;
+                                                                                                                            box-shadow: 0px 0px 10px 0px rgba(129,100,0,0.3);
+                                                                                                                            border-radius: 8px;
+                                                                                                                            display: flex;
+                                                                                                                            justify-content: center;
+                                                                                                                            "
+                                     @click="selected(navData[5])">
+                                  <span style="line-height: 45px; color: #000; font-size: 16px; font-weight: 600;">
+                                            诊断记录</span>
+                                </div>
+                              </div>
+                            </div>
                         </div>
                     </Sider>
                     <Content style="margin-left: 70px;padding: 10px;">
@@ -161,6 +179,14 @@ export default {
                 {
                     name: '个人设置',
                     route: 'userInfo'
+                },
+                {
+                  name: '辅助诊断',
+                  route: 'AuxiliaryDiagnosis'
+                },
+                {
+                  name: '诊断记录',
+                  route: 'AIDiagnosisRecord'
                 }
             ],
             checkedNav: {
@@ -173,6 +199,8 @@ export default {
 
             userSrc: require("@/assets/source/user.png"),
             myuploadSrc: require("@/assets/source/myupload.png"),
+            AuxiliaryDiagnosis:require("@/assets/source/search.png"),
+
 
             uploadRoute: {
                 name: "上传",

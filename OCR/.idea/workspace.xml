@@ -5,13 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OCR.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/cws_constant.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/medical_ner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/bert_lstm_crf.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/crf.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/._config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/model.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/pytorch_model.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/vocab.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/ner_constant.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/run_ner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/train_example.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/train_ner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NLP_medical/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/PredictCCaseItem.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/PredictionCase.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/AIDiagnosisRecord.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/AuxiliaryDiagnosis.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Call_API.py" beforeDir="false" afterPath="$PROJECT_DIR$/FromPCY/Call_API.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FromPCY/Call_API.py" beforeDir="false" afterPath="$PROJECT_DIR$/FromPCY/Call_API.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pdf2pic.py" beforeDir="false" afterPath="$PROJECT_DIR$/pdf2pic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/document.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/document.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/request.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/url.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/url.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/components/Navv.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/components/Navv.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/Index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +72,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/22533/Desktop/docker",
+    "last_opened_file_path": "C:/Users/22533/Desktop/KD/MeachineLearningDqx",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -55,7 +82,12 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.OCR">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\study\code\NLP_SQRROW\NLP_version\MedicalRetrieval\OCR" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Flask server.Flask (main.py)">
     <configuration name="Call_API" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="OCR" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -144,7 +176,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="testForAPI" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="run_ner" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="OCR" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -152,12 +184,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/NLP_medical" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testForAPI.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/NLP_medical/run_ner.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -184,10 +216,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Flask server.Flask (main.py)" />
+        <item itemvalue="Python.run_ner" />
         <item itemvalue="Python.Call_API" />
         <item itemvalue="Python.pdf2pic" />
         <item itemvalue="Python.ocrScan" />
-        <item itemvalue="Python.testForAPI" />
       </list>
     </recent_temporary>
   </component>
@@ -264,6 +296,29 @@
       <workItem from="1683100833146" duration="97000" />
       <workItem from="1683107789272" duration="1739000" />
       <workItem from="1683118178204" duration="33000" />
+      <workItem from="1683258273524" duration="3000" />
+      <workItem from="1683258293632" duration="1446000" />
+      <workItem from="1683260605986" duration="4255000" />
+      <workItem from="1683266847351" duration="122000" />
+      <workItem from="1683267027224" duration="2498000" />
+      <workItem from="1683272354821" duration="5000" />
+      <workItem from="1683272453442" duration="328000" />
+      <workItem from="1683277650291" duration="911000" />
+      <workItem from="1683280552768" duration="314000" />
+      <workItem from="1683282507010" duration="5000" />
+      <workItem from="1683282583458" duration="4909000" />
+      <workItem from="1683296951061" duration="1218000" />
+      <workItem from="1683305025263" duration="761000" />
+      <workItem from="1683306985625" duration="2666000" />
+      <workItem from="1683310346002" duration="45000" />
+      <workItem from="1683310603362" duration="724000" />
+      <workItem from="1683361230214" duration="646000" />
+      <workItem from="1683364843137" duration="6000" />
+      <workItem from="1683364903920" duration="393000" />
+      <workItem from="1683365653086" duration="835000" />
+      <workItem from="1683368397923" duration="664000" />
+      <workItem from="1683532592107" duration="211000" />
+      <workItem from="1683533359296" duration="628000" />
     </task>
     <servers />
   </component>
@@ -273,11 +328,12 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/OCR$testForAPI.coverage" NAME="testForAPI Coverage Results" MODIFIED="1680083529401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/heart_disease_json$pdf2pic.coverage" NAME="pdf2pic Coverage Results" MODIFIED="1680522017777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$run_ner.coverage" NAME="run_ner Coverage Results" MODIFIED="1683261880811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/NLP_medical" />
     <SUITE FILE_PATH="coverage/OCR$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680089665661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/heart_disease_json$ocrScan.coverage" NAME="ocrScan Coverage Results" MODIFIED="1680335033809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FromPCY/scan" />
     <SUITE FILE_PATH="coverage/heart_disease_json$Call_API.coverage" NAME="Call_API Coverage Results" MODIFIED="1680522579317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$OCR.coverage" NAME="OCR Coverage Results" MODIFIED="1683110394656" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1681287320932" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$OCR.coverage" NAME="OCR Coverage Results" MODIFIED="1683261384266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1683368552179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/OCR$pdf2pic.coverage" NAME="pdf2pic Coverage Results" MODIFIED="1680084220920" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

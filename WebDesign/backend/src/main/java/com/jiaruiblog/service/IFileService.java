@@ -1,14 +1,12 @@
 package com.jiaruiblog.service;
 
 import com.itextpdf.text.DocumentException;
-import com.jiaruiblog.entity.FileDocument;
-import com.jiaruiblog.entity.MultiFilesUploadObj;
-import com.jiaruiblog.entity.ResponseModel;
-import com.jiaruiblog.entity.UploadFileObj;
+import com.jiaruiblog.entity.*;
 import com.jiaruiblog.entity.dto.AdvanceDocumentDTO;
 import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
 import com.jiaruiblog.entity.dto.PreviewDocumentDTO;
+import com.jiaruiblog.entity.vo.DiagnosisVO;
 import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.task.exception.TaskRunException;
 import com.jiaruiblog.util.BaseApiResult;
@@ -245,4 +243,8 @@ public interface IFileService {
 
 
     ResponseModel createScanPDF(String filename, MultipartFile[] files, HttpServletRequest request) throws DocumentException, IOException, AuthenticationException;
+
+    BaseApiResult createCase(String filename, MultipartFile[] files, HttpServletRequest request,String diagnosisDiseaseTypes) throws DocumentException, IOException, AuthenticationException;
+
+    List<DiagnosisVO> SearchDiagnosisRecord(String userId);
 }

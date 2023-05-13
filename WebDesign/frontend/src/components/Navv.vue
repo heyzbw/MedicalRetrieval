@@ -7,11 +7,15 @@
             <div class="circle-cover"></div>
             MeidcalRetrieval
         </div>
-        <div class="sd">
+
+
+
+      <div class="sd">
             <div @click="$router.push('/')">首页</div>
             <div> / </div>
             <div @click="logout()">登录</div>
         </div>
+
         <div class="user-zone" v-if="true">
             <Dropdown>
                 <a class="user-tag" href="javascript:void(0)" style="text-align: center; width: 36px;">

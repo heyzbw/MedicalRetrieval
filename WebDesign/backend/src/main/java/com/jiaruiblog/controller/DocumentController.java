@@ -1,11 +1,12 @@
 package com.jiaruiblog.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.itextpdf.text.DocumentException;
 import com.jiaruiblog.auth.PermissionEnum;
 import com.jiaruiblog.common.MessageConstant;
-import com.jiaruiblog.entity.FileDocument;
-import com.jiaruiblog.entity.User;
+import com.jiaruiblog.entity.*;
 import com.jiaruiblog.entity.dto.*;
+import com.jiaruiblog.entity.vo.DiagnosisVO;
 import com.jiaruiblog.enums.FilterTypeEnum;
 import com.jiaruiblog.intercepter.SensitiveFilter;
 import com.jiaruiblog.service.IDocLogService;
@@ -31,6 +32,7 @@ import com.jiaruiblog.common.MessageConstant;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,7 +90,6 @@ public class DocumentController {
         else {
             documentDTO.setPermission(PermissionEnum.valueOf(documentDTO.getUserType()));
         }
-
 
         return iFileService.list(documentDTO);
     }
@@ -203,12 +204,39 @@ public class DocumentController {
     }
 
 //    @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
-//    @PostMapping("/Image")
-//    public BaseApiResult uploadImage(@RequestBody ImageDataDTO imageDataDTO) {
-//        String filename = imageDataDTO.getFilename();
-//        MultipartFile[] imageList = imageDataDTO.getImageList();
-//        // 进行后续处理
-//        return null;
+//    @PostMapping("/Case")
+//    public BaseApiResult uploadImage_case(@RequestParam("filename") String filename,
+//                                          @RequestParam("imageList") MultipartFile[] imageList,
+//                                          @RequestParam("diagnosisDiseaseTypes") String diagnosisDiseaseTypes,
+////                                              private String diagnosisDiseaseTypes
+//                                          HttpServletRequest request) throws IOException, DocumentException, AuthenticationException {
+//
+//        return BaseApiResult.success("111");
+////        return iFileService.createCase(filename,imageList,request,diagnosisDiseaseTypes);
 //    }
+    @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
+    @PostMapping("/Case")
+    public BaseApiResult uploadImage_case(@RequestParam("filename") String filename,
+                                          @RequestParam("imageList") MultipartFile[] imageList,
+                                          @RequestParam("diagnosisDiseaseTypes") String diagnosisDiseaseTypes,
+//                                              private String diagnosisDiseaseTypes
+                                          HttpServletRequest request) throws IOException, DocumentException, AuthenticationException {
+        String userId = (String) request.getAttribute("id");
+        System.out.println("ImageMethod的UserId为:"+userId);
+        List<FileDocument> list = new ArrayList<>();
+
+        return iFileService.createCase(filename,imageList,request,diagnosisDiseaseTypes);
+    }
+
+    @ApiOperation(value = "2.1 高级查询文档的分页列表页", notes = "根据参数查询文档列表")
+    @PostMapping("/diagnosis")
+    public BaseApiResult getDiagnosis(){
+
+        List<DiagnosisVO> list = iFileService.SearchDiagnosisRecord("ZBW");
+
+        return BaseApiResult.success(list);
+    }
+
+
 
 }

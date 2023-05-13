@@ -40,6 +40,14 @@ const routes = [
         }
     },
     {
+        path: "/PredictionCase",
+        name: "PredictionCase",
+        component: function () {
+            return import("../views/searchResult/PredictionCase")
+        }
+    },
+
+    {
         path: "/superSearch",
         name: "superSearch",
         component: function () {
@@ -188,6 +196,20 @@ const routes = [
                     return import("../views/userPage/DocUpload")
                 }
             },
+            {
+                path: "AuxiliaryDiagnosis",
+                name: "AuxiliaryDiagnosis",
+                component: function () {
+                    return import("../views/userPage/AuxiliaryDiagnosis")
+                }
+            },
+            {
+                path: "AIDiagnosisRecord",
+                name: "AIDiagnosisRecord",
+                component: function () {
+                    return import("../views/userPage/AIDiagnosisRecord")
+                }
+            }
 
 
         ]

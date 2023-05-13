@@ -3,6 +3,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Sets;
 import com.jiaruiblog.entity.FileDocument;
 import com.jiaruiblog.entity.FileObj;
+import com.jiaruiblog.entity.PredictCaseOutcome;
 import com.jiaruiblog.entity.ocrResult.*;
 import com.jiaruiblog.service.ElasticService;
 import com.jiaruiblog.util.InfixToRPN;
@@ -164,8 +165,87 @@ public class ElasticServiceImpl implements ElasticService {
         return process_outcome(hits,keyword);
     }
 
+    public List<EsSearch> getCasePredict(PredictCaseOutcome outcome){
 
-//    根据bool表达式去创建一个查询
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        // 要返回的字段的信息
+        String[] include = {"name", "type", "md5", "fileId", "id"};
+        searchSourceBuilder.fetchSource(include, null);
+
+        //创建bool查询条件
+        BoolQueryBuilder boolQueryBuilder = createPredictCaseBuilder(outcome);
+
+        //查询并返回结果
+        searchSourceBuilder.query(boolQueryBuilder);
+        searchRequest.source(searchSourceBuilder);
+
+        long startTime = System.currentTimeMillis();
+
+        SearchResponse searchResponse = null;
+        try {
+            searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("es的查询时间为：" + (endTime - startTime));
+        SearchHits hits = searchResponse.getHits();
+
+        return processCaseOutcome(hits);
+    }
+
+    public BoolQueryBuilder createPredictCaseBuilder(PredictCaseOutcome outcome) {
+        BoolQueryBuilder mainBoolQueryBuilder = QueryBuilders.boolQuery();
+
+        BoolQueryBuilder orBoolQueryBuilder = QueryBuilders.boolQuery();
+
+        List<String> allPredictions = new ArrayList<>();
+        allPredictions.addAll(outcome.getDisease());
+        allPredictions.addAll(outcome.getBody());
+        allPredictions.addAll(outcome.getSymptom());
+        allPredictions.addAll(outcome.getMedicalProcedure());
+        allPredictions.addAll(outcome.getMedicalEquipment());
+        allPredictions.addAll(outcome.getMedicine());
+        allPredictions.addAll(outcome.getDepartment());
+        allPredictions.addAll(outcome.getMicroorganism());
+        allPredictions.addAll(outcome.getMedicalExamination());
+
+        int counter = 0;
+        for (String prediction : allPredictions) {
+            MatchPhraseQueryBuilder matchPrediction = QueryBuilders.matchPhraseQuery(CONTENT_EACH_PAGE_LIST_CONTENT, prediction);
+            float boostValue;
+            if(outcome.getDisease().contains(prediction)) {
+                boostValue = 1.0f;
+            } else if(outcome.getSymptom().contains(prediction)) {
+                boostValue = 0.7f;
+            } else {
+                boostValue = 0.3f;
+            }
+            matchPrediction.boost(boostValue);
+            NestedQueryBuilder nestedQuery = QueryBuilders.nestedQuery(CONTENT_EACH_PAGE_LIST, matchPrediction, ScoreMode.Total);
+            nestedQuery.innerHit(new InnerHitBuilder("inner_hit_" + counter));
+            orBoolQueryBuilder.should(nestedQuery);
+            counter++;
+        }
+        orBoolQueryBuilder.minimumShouldMatch(1);
+
+        mainBoolQueryBuilder.must(orBoolQueryBuilder);
+
+        // Add diagnosisDiseaseTypes as an additional AND condition if not empty
+//        if (!outcome.getDiagnosisDiseaseTypes().isEmpty()) {
+//            MatchPhraseQueryBuilder matchDiagnosisDiseaseType = QueryBuilders.matchPhraseQuery(CONTENT_EACH_PAGE_LIST_CONTENT, outcome.getDiagnosisDiseaseTypes());
+//            mainBoolQueryBuilder.must(matchDiagnosisDiseaseType);
+//        }
+
+        return mainBoolQueryBuilder;
+    }
+
+
+    //    根据bool表达式去创建一个查询
     private BoolQueryBuilder[] createBuilder(List<String> list){
 
         Stack<BoolQueryBuilder> boolQueryBuildersContent = new Stack<>();
@@ -355,6 +435,32 @@ public class ElasticServiceImpl implements ElasticService {
             {
                 esSearchList.add(esSearch);
             }
+        }
+
+        return esSearchList;
+    }
+    public List<EsSearch> processCaseOutcome(SearchHits hits){
+        List<EsSearch> esSearchList = new ArrayList<>();
+
+        double max_content_score = getMaxScore(hits);
+
+        for (SearchHit hit : hits) {
+            EsSearch esSearch = new EsSearch();
+
+            Map<String, Object> objectMap = hit.getSourceAsMap();
+
+            float score = hit.getScore();
+
+            double contentScore = 0;
+
+            if (max_content_score > 0) {
+                contentScore = score / max_content_score * 100;
+            } else {
+                contentScore = 0;
+            }
+            esSearch.setContentScore(contentScore);
+            setEsSearch(esSearch,objectMap);
+            esSearchList.add(esSearch);
         }
 
         return esSearchList;
@@ -738,110 +844,6 @@ public class ElasticServiceImpl implements ElasticService {
         return fileDocumentList;
     }
 
-//    原作者的版本
-//    @Override
-//    public List<FileDocument> search(String keyword) throws IOException {
-//
-//        List<FileDocument> fileDocumentList = new ArrayList<>();
-//        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
-//        // 使用lk分词器查询，会把插入的字段分词，然后进行处理
-//        SearchSourceBuilder srb = new SearchSourceBuilder();
-//        srb.query(QueryBuilders.matchQuery(PIPELINE_NAME, keyword));
-//
-//        // 每页10个数据
-//        srb.size(10);
-//        // 起始位置从0开始
-//        srb.from(0);
-//
-//        //设置highlighting
-//        HighlightBuilder highlightBuilder = new HighlightBuilder();
-//        HighlightBuilder.Field highlightContent = new HighlightBuilder.Field(PIPELINE_NAME);
-//        highlightContent.highlighterType();
-//        highlightBuilder.field(highlightContent).fragmentSize(FRAGMENTSIZE).numOfFragments(FRAGMENTNUMS);
-//        highlightBuilder.preTags("<em>");
-//        highlightBuilder.postTags("</em>");
-////        highlightBuilder.highlighterOptions(
-////
-////        );
-//
-//        //highlighting会自动返回匹配到的文本，所以就不需要再次返回文本了
-//        String[] includeFields = new String[]{"name", "id"};
-//        String[] excludeFields = new String[]{PIPELINE_NAME};
-//        srb.fetchSource(includeFields, excludeFields);
-//
-//        //把刚才设置的值导入进去
-//        srb.highlighter(highlightBuilder);
-//
-//        //查询
-//        searchRequest.source(srb);
-//        SearchResponse res;
-//        try {
-//            res = client.search(searchRequest, RequestOptions.DEFAULT);
-//        } catch (ConnectException e) {
-//            log.error("连接es失败！", e.getCause());
-//            res = null;
-//        }
-//
-//        if (res == null || res.getHits() == null) {
-//            return Lists.newArrayList();
-//        }
-//        //获取hits，这样就可以获取查询到的记录了
-//        SearchHits hits = res.getHits();
-//
-//        //hits是一个迭代器，所以需要迭代返回每一个hits
-//        Iterator<SearchHit> iterator = hits.iterator();
-//        int count = 0;
-//
-//        StringBuilder stringBuilder = new StringBuilder();
-//
-//        Set<String> idSet = Sets.newHashSet();
-//
-//        while (iterator.hasNext()) {
-//            SearchHit hit = iterator.next();
-//
-//            //获取返回的字段
-//            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-//            //统计找到了几条
-//            count++;
-//
-//            //这个就会把匹配到的文本返回，而且只返回匹配到的部分文本docId = -1
-//            Map<String, HighlightField> highlightFields = hit.getHighlightFields();
-//
-//            HighlightField highlightField = highlightFields.get(PIPELINE_NAME);
-////            float[] scores = highlightField.
-//            StringBuilder stringBuilder1 = new StringBuilder();
-//            for (Text fragment : highlightField.getFragments()) {
-//                System.out.println(fragment.toString());
-//                stringBuilder1.append(fragment.toString());
-//            }
-//            String abstractString = stringBuilder1.toString();
-//            if (abstractString.length() > 500) {
-//                abstractString = abstractString.substring(0, 500);
-//            }
-//
-//            if (sourceAsMap.containsKey("id")) {
-//                String id = (String) sourceAsMap.get("id");
-//                if (id != null && !idSet.contains(id)) {
-//                    idSet.add(id);
-//                    FileDocument fileDocument = fileServiceImpl.getByMd5(id);
-//                    if (fileDocument == null) {
-//                        System.out.println("mongodb没有这个md5对应的文件信息");
-//                        //从redis中剔除该doc，并跳过循环
-//                        continue;
-//                    }
-//                    fileDocument.setDescription(abstractString);
-//                    fileDocumentList.add(fileDocument);
-//                }
-//            }
-//
-//            stringBuilder.append(highlightFields);
-//        }
-//
-//        stringBuilder.append("查询到").append(count).append("条记录");
-//        return fileDocumentList;
-//    }
-
-
     @Override
     public void deleteByDocId(String docId){
         System.out.println("进入了删除es的方法中 ");
@@ -884,7 +886,6 @@ public class ElasticServiceImpl implements ElasticService {
             updateRequest.doc(jsonMap);
 
             UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
-//            System.out.println(updateResponse.getResult().toString());
         }
         else {
             System.out.println("No documents found for fileId " + fileId);
@@ -1022,13 +1023,11 @@ public class ElasticServiceImpl implements ElasticService {
 
     private void setEsSearch(EsSearch esSearch,Map<String,Object> objectMap)
     {
-        esSearch.setClick_num(((Integer) objectMap.get("click_rate")).longValue());
         esSearch.setName((String) objectMap.get("name"));
         esSearch.setType((String) objectMap.get("type"));
         esSearch.setMd5((String) objectMap.get("id"));
         esSearch.setFileId((String) objectMap.get("fileId"));
         esSearch.setId((String) objectMap.get("fileId") );
-        esSearch.setClick_num(((Integer) objectMap.get("click_rate")).longValue());
     }
 }
 

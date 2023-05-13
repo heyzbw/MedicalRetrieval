@@ -7,7 +7,7 @@ let vm = new Vue();
 const instance = axios.create({
     baseURL: 'http://localhost:8082/api/v1.0',
     // baseURL: 'http://121.36.201.185:8082/api/v1.0',
-    timeout: 10000,
+    timeout: 1000000,
     headers: {
         post: {
             'Content-Type': 'application/json;charset=UTF-8'
@@ -124,8 +124,14 @@ export function Post(url, params, config) {
         instance.post(url, params, config).then((res) => {
             resolve(res.data);
         }).catch((error) => {
-            reject(error.data);
+            console.error('Request error:', error);
+            if (error.response) {
+                reject(error.response.data);
+            } else {
+                reject(error);
+            }
         })
+
     })
 }
 

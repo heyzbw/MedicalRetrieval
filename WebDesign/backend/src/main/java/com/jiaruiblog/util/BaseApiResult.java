@@ -38,6 +38,7 @@ public abstract class BaseApiResult implements Serializable {
      * @return ApiResult
      */
     public static <T> BaseApiResult success(T data) {
+
         return new SuccessApiResult<T>(data);
     }
 

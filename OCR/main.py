@@ -3,17 +3,20 @@ from flask_cors import CORS
 
 from FromPCY.scan.ocrScan import getScaner
 from pdf2pic import *
-# from Bio import Entrez
-# from Bio import Medline
 import json
-import os
+
 import re
 import urllib.request
 import requests
 from flask import Flask, send_from_directory, send_file, make_response
 from Bio import Entrez
 from Bio import Medline
+# from NLP_medical.run_ner import getPredictCase
 # from FromPCY.scan.ocrScan import getScaner
+
+from NLP_medical.medical_ner import medical_ner
+
+my_pred = medical_ner()
 
 # 创建一个服务，赋值给APP
 app = Flask(__name__)
@@ -138,10 +141,80 @@ def pdfdownload():
     #       mimetype='application/pdf;chartset=UTF-8', as_attachment=True)))
     return response
 
+@app.route('/predictCase', methods=['POST'])
+def predictCase():
+    print("进入了疾病预测方法")
+    data = request.get_json()
+    md5 = data.get("md5")
+    texts = fromMd5TopredictCase(md5)
+    print("texts:", texts)
+    outcome_dict = my_pred.predict_sentence("".join(texts.split()))
+
+    print(outcome_dict)
+
+    # 创建一个新的字典，其字段与PredictCaseOutcome类的字段一致
+    result_dict = {
+        'disease': [],
+        'body': [],
+        'symptom': [],
+        'medicalProcedure': [],
+        'medicalEquipment': [],
+        'medicine': [],
+        'department': [],
+        'microorganism': [],
+        'medicalExamination': []
+    }
+
+    # 标签字典，用于将原始标签转换为英文字段名
+    tag_dic = {
+        "疾病": "disease",
+        "身体": "body",
+        "症状": "symptom",
+        "医疗程序": "medicalProcedure",
+        "医疗设备": "medicalEquipment",
+        "药物": "medicine",
+        "科室": "department",
+        "微生物类": "microorganism",
+        "医学检验项目": "medicalExamination"
+    }
+
+    # 更新result_dict的值
+    for key, value in outcome_dict.items():
+        if key in tag_dic:  # 确保key存在于tag_dic中
+            result_dict[tag_dic[key]] = value[:3]
+
+    # 将结果放入JSON对象的"data"键中并返回
+    json_obj = {"data": result_dict}
+    return json_obj
+
+
+# @app.route('/predictCase', methods=['POST'])  # 指定接口访问的路径，支持什么请求方式get，post
+# def predictCase():
+#     print("进入了疾病预测方法")
+#     # 通过MD5来传递文件的标识
+#     data = request.get_json()
+#     md5 = data.get("md5")
+#     # 读取文件，并进行处理
+#     texts = fromMd5TopredictCase(md5)
+#
+#     # json_data = [{'ocrText': text['ocrText'],
+#     #               'recordId': str(text['_id'])}
+#     #              for text in texts]
+#     outcome_dict = my_pred.predict_sentence("".join(texts.split()))
+#     print("outcome_dict:", outcome_dict)
+#     result_dict = {}
+#     for key, value in outcome_dict.items():
+#         result_dict[key] = value[:3]
+#
+#     # 将结果放入JSON对象的"data"键中并返回
+#     json_obj = {"data": result_dict}
+#     return json_obj
+
 
 @app.route('/')  # 这个路由将根URL映射到了hello——world函数上
 def hello_world():  # 定义视图函数
     return 'Hello World!'  # 返回响应对象
+
 
 
 if __name__ == '__main__':

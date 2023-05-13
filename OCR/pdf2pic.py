@@ -9,7 +9,6 @@ import tempfile
 
 import cv2
 import fitz
-import easyocr
 import numpy as np
 import io
 from PIL import Image
@@ -103,18 +102,15 @@ def pic2json(image_np, pageNum, pdfname, image_page):
     
     result = CommonOcr().getRecognize(image)
 
-    print("tempPath:",temp_file_path)
+    print("tempPath:", temp_file_path)
 
     img_base64 = numpy_to_base64(image_np)
-    # reader = easyocr.Reader(['ch_sim', 'en'])
 
-    # result = reader.readtext(image_np)
     text = {}
     text["ocrText"] = ""
     text["pdfURL"] = pdfname
     text["pdfPage"] = pageNum
     text["textResult"] = []
-    # text["image"] = img_base64
 
     for line in result['lines']:
         text_ocr = line["text"]
@@ -130,16 +126,6 @@ def pic2json(image_np, pageNum, pdfname, image_page):
         textarr["rightTop"] = "{x},{y}".format(x=position[2], y=position[3])
         textarr["rightBottom"] = "{x},{y}".format(x=position[4], y=position[5])
         textarr["leftBottom"] = "{x},{y}".format(x=position[6], y=position[7])
-        # sem = list(se)
-        # textarr = {}
-        # text["ocrText"] += sem[1]
-        # textarr["charNum"] = len(sem[1])
-        # textarr["isHandwritten"] = "false"
-        # textarr["leftTop"] = "{x},{y}".format(x=sem[0][0][0], y=sem[0][0][1])
-        # textarr["rightBottom"] = "{x},{y}".format(x=sem[0][2][0], y=sem[0][2][1])
-        # textarr["rightTop"] = "{x},{y}".format(x=sem[0][1][0], y=sem[0][1][1])
-        # textarr["text"] = sem[1]
-        # text["textResult"].append(textarr)
 
     os.remove(temp_file_path)
 
@@ -217,6 +203,21 @@ def fromMD5(md5):
     images, page_images = pdf2pic(doc)
     texts = []
     for i in range(0, len(images)):
+        image = images[i]
+        page_image = page_images[i]
+
+        text = pic2json(image.image_np, image.pageNum, image.filename, page_image)
+        if text != False:
+            texts.append(text)
+
+    return texts
+
+def fromMd5TopredictCase(md5):
+    mongoFIleDataUtil = MongoFileDataUtil()
+    doc = mongoFIleDataUtil.getFileByMD5(md5)
+    images, page_images = pdf2pic(doc)
+    texts = []
+    for i in range(0, len(images)):
 
         image = images[i]
         page_image = page_images[i]
@@ -225,8 +226,10 @@ def fromMD5(md5):
         if text != False:
             texts.append(text)
 
-
-    return texts
+    text_ocr = ""
+    for text in texts:
+        text_ocr += text["ocrText"]
+    return text_ocr
 
 
 if __name__ == '__main__':

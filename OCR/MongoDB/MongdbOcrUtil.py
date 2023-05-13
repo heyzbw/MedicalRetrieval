@@ -1,8 +1,7 @@
 from uuid import uuid1
 
 import gridfs
-import pymongo
-import json
+
 
 from MongoDB.MongoFileDataUtil import getMongoDBUtil
 

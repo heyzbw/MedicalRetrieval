@@ -1,6 +1,6 @@
 package com.jiaruiblog.service.impl;
 
-import com.jiaruiblog.entity.ocrResult.OcrResult;
+import com.jiaruiblog.entity.PredictCaseOutcome;
 import com.jiaruiblog.entity.ocrResult.OcrResultNew;
 import com.jiaruiblog.service.File2OcrService;
 import com.jiaruiblog.util.CallFlask;
@@ -18,5 +18,10 @@ public class File2OcrServiceImpl implements File2OcrService {
     public List<OcrResultNew> getOcrByPY(String md5) {
         List<OcrResultNew> ocrResultNewList = callFlask.doUpload(md5);
         return ocrResultNewList;
+    }
+
+    @Override
+    public PredictCaseOutcome getPredictCase(String md5){
+        return callFlask.predict_case(md5);
     }
 }

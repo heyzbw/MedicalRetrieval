@@ -15,7 +15,10 @@ import {
     COLLECT_ADD_URL,
     COLLECT_REMOVE_URL,
     DOC_IMAGE_URL,
-    DOC_SUPER_URL
+    DOC_SUPER_URL,
+
+    CASE_IMAGE_URL,
+    diagnosis_GET_URL
 
 } from './url'
 
@@ -34,6 +37,11 @@ export default {
     getImageData: (params) => {
         return Post(DOC_IMAGE_URL, params);
     },
+
+    getCasePredictionData: (params) => {
+        return Post(CASE_IMAGE_URL, params);
+    },
+
     getSuperData: (params) => {
         return Post(DOC_SUPER_URL, params);
     },
@@ -73,6 +81,9 @@ export default {
     addCollect: (param) => {
         return Post(COLLECT_ADD_URL, null, param)
     },
+    getDiagnosesRecord:(param) => {
+        return Post(diagnosis_GET_URL,null,param)
+    }
 
     // COLLECT_ADD_URL
 }

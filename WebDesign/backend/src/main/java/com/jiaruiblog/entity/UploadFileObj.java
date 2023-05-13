@@ -12,4 +12,5 @@ public class UploadFileObj {
     private List<String> labels;
     private String userId;
     private String username;
+    private String diagnosisDiseaseTypes;
 }

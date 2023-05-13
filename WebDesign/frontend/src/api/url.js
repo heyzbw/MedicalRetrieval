@@ -17,7 +17,7 @@ const DOC_REMOVE_URL = '/document/auth/remove'; // 文档删除
 const DOC_WITH_CHECK_URL = '/document/listWithCategory'; // 返回已经选中的信息
 
 const DOC_IMAGE_URL = '/document/Image' //图片转pdf扫描件
-
+const CASE_IMAGE_URL = '/document/Case' //图片转pdf扫描件
 const ABC = '/files/view/'
 
 const DOC_UPLOAD_URL = '/files/auth/upload'; // 上传文档
@@ -75,6 +75,8 @@ const GET_LIKE_URL = '/queryLikeInfo/';
 const COLLECT_ADD_URL = '/collect/auth/insert'; // 收藏增加
 const COLLECT_REMOVE_URL = '/collect/auth/remove'; // 收藏减少
 const COLLECT_GET_URL = '/collect/getDocByUserId'; //根据用户的ID去获取收藏
+
+const diagnosis_GET_URL = '/document/diagnosis'
 
 module.exports = {
     ADD_RELATE_URL,
@@ -145,5 +147,7 @@ module.exports = {
     GET_LIKE_URL,
 
     DOC_IMAGE_URL,
-    DOC_SUPER_URL
+    DOC_SUPER_URL,
+    CASE_IMAGE_URL,
+    diagnosis_GET_URL
 }

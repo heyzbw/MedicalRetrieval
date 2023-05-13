@@ -15,6 +15,7 @@ import com.jiaruiblog.entity.dto.BasePageDTO;
 import com.jiaruiblog.entity.dto.DocumentDTO;
 import com.jiaruiblog.entity.dto.PreviewDocumentDTO;
 import com.jiaruiblog.entity.ocrResult.*;
+import com.jiaruiblog.entity.vo.DiagnosisVO;
 import com.jiaruiblog.entity.vo.DocWithCateVO;
 import com.jiaruiblog.entity.vo.DocumentVO;
 import com.jiaruiblog.enums.DocStateEnum;
@@ -32,7 +33,6 @@ import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.http.auth.AuthenticationException;
-import org.elasticsearch.common.recycler.Recycler;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -86,8 +86,11 @@ public class FileServiceImpl implements IFileService {
     private static final String[] EXCLUDE_FIELD = new String[]{"md5", "content", "contentType", "suffix", "description",
             "gridfsId", "thumbId", "textFileId", "errorMsg"};
 
+//    private static final String ;
     @Resource
     SystemConfig systemConfig;
+
+    private static final String DOCUMENT_NAME_DIAGNOSIS = "diagnosis";
 
     @Resource
     private MongoTemplate mongoTemplate;
@@ -286,36 +289,6 @@ public class FileServiceImpl implements IFileService {
                 }
                 FileDocument fileDocument = saveToDb(fileMd5, file, userId, username);
 
-//                saveTagWhenSaveDoc(fileDocument,);
-
-                //  取ocr结果
-//                CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
-//                    try {
-//                        List<OcrResultNew> ocrResultList = file2OcrService.getOcrByPY(fileMd5);
-//                        fileDocument.setOcrResultList(ocrResultList);
-//                        System.out.println("documentUpload：处理完了OCR");
-//
-//                        switch (suffix) {
-//                            case "pdf":
-//                            case "docx":
-//                            case "pptx":
-//                            case "xlsx":
-//                            case "html":
-//                            case "md":
-//                            case "txt":
-//                                taskExecuteService.execute(fileDocument);
-//                                break;
-//                            default:
-//                                break;
-//                        }
-//
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    return null;
-//                });
-
-//                callFlask.doUpload(fileMd5);
 
                 // 目前支持这一类数据进行预览
 
@@ -406,7 +379,6 @@ public class FileServiceImpl implements IFileService {
     @Override
     public ResponseModel documentUpload_noAuth(UploadFileObj uploadFileObj) throws AuthenticationException {
 
-        System.out.println("我要保存文件");
         MultipartFile file = uploadFileObj.getFile();
         List<String> labels = uploadFileObj.getLabels();
         String userId = uploadFileObj.getUserId();
@@ -463,6 +435,55 @@ public class FileServiceImpl implements IFileService {
             model.setMessage(ex.getMessage());
         }
         return model;
+    }
+
+    public BaseApiResult caseUpload_noAuth(UploadFileObj uploadFileObj) throws AuthenticationException, IOException {
+        MultipartFile file = uploadFileObj.getFile();
+        List<String> labels = uploadFileObj.getLabels();
+        String userId = uploadFileObj.getUserId();
+        String username = uploadFileObj.getUsername();
+        List<String> availableSuffixList = com.google.common.collect.Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
+        List<FileDocument> esDoc = null;
+        List<FileDocument> fileDocuments = Lists.newArrayList();
+        PredictionCaseEntity predictionCaseEntity = new PredictionCaseEntity();
+        Map<String, Object> result = new HashMap<>(8);
+
+        String fileMd5 = SecureUtil.md5(file.getInputStream());
+
+        FileDocument fileDocumentInDb = getByMd5(fileMd5);
+        boolean flag_exist = (fileDocumentInDb != null);
+
+        FileDocument fileDocument = saveToDb(fileMd5, file,userId,username);
+
+        saveTagWhenSaveDoc(fileDocument,labels);
+
+        //获取OCR识别结果
+        PredictCaseOutcome predictCaseOutcome = file2OcrService.getPredictCase(fileMd5);
+        predictCaseOutcome.setDiagnosisDiseaseTypes(uploadFileObj.getDiagnosisDiseaseTypes());
+
+        List<EsSearch> esSearchList = elasticServiceImpl.getCasePredict(predictCaseOutcome);
+
+        for(EsSearch esSearch:esSearchList)
+        {
+            esSearch.setLike_num(getLikeNumByDocId(esSearch.getFileId()));
+        }
+//                    将es的查询结果转为一个List<fileDocument>
+        esDoc = getListFileDocumentFromEsOutcome(esSearchList);
+
+        setUserNameFromDB(esDoc);
+
+        if (esDoc != null) {
+            fileDocuments.addAll(esDoc);
+        }
+        List<DocumentVO> documentVos;
+        documentVos = convertDocuments(fileDocuments);
+
+        predictionCaseEntity.setDocumentVos(documentVos);
+        predictionCaseEntity.setPredictCaseOutcome(predictCaseOutcome);
+        result.put("documentVos",documentVos);
+        result.put("predictCaseOutcome",predictCaseOutcome);
+        return BaseApiResult.success(111);
+
     }
 
     /**
@@ -789,14 +810,7 @@ public class FileServiceImpl implements IFileService {
             case FILTER:
                 Set<String> docIdSet = new HashSet<>();
                 String keyWord = Optional.of(documentDTO).map(DocumentDTO::getFilterWord).orElse("");
-//                keyWord = keyWord.replaceAll("\\s+", "");
-//                docIdSet.addAll(categoryServiceImpl.fuzzySearchDoc(keyWord));
-//                // 模糊查询 标签
-//                docIdSet.addAll(tagServiceImpl.fuzzySearchDoc(keyWord));
-//                // 模糊查询 文件标题
-//                docIdSet.addAll(fuzzySearchDoc(keyWord));
-//                // 模糊查询 评论内容
-//
+                //
 //                docIdSet.addAll(commentServiceImpl.fuzzySearchDoc(keyWord));
                 List<FileDocument> esDoc = null;
 
@@ -812,8 +826,6 @@ public class FileServiceImpl implements IFileService {
                         esSearch.setLike_num(getLikeNumByDocId(esSearch.getFileId()));
 //                        esSearch
                     }
-//                    QuantileNormalization.quantileNormalize(esSearchList,"like",0,30,false);
-//                    QuantileNormalization.quantileNormalize(esSearchList,"click",0,10,false);
 
                     QuantileNormalization.linearNormalize(esSearchList,"like",0,30,false);
                     QuantileNormalization.linearNormalize(esSearchList,"click",0,10,false);
@@ -1715,6 +1727,181 @@ public class FileServiceImpl implements IFileService {
         uploadFileObj.setFile(multipartFile);
 
         return documentUpload_noAuth(uploadFileObj);
+    }
+
+    @Override
+    public BaseApiResult createCase(String filename, MultipartFile[] files, HttpServletRequest request,String diagnosisDiseaseTypes) throws DocumentException, IOException, AuthenticationException {
+
+//        使用Uitl工具中的方法将图片转为PDF
+        MultipartFile fileScan = ImageToPdfConverter.convertImagesToPdf(files,filename);
+
+        InputStream inputStream = fileScan.getInputStream();
+        String UUID = uploadFileToGridFs(inputStream,fileScan.getContentType());
+
+        CallFlask callFlask = new CallFlask();
+
+        String fileScanPath = callFlask.toScan(fileScan,filename);
+
+        File file111 = new File(fileScanPath);
+        FileInputStream fis = new FileInputStream(file111);
+        byte[] fileBytes = new byte[(int) file111.length()];
+        fis.read(fileBytes);
+        fis.close();
+
+        // Convert the byte array to a MultipartFile object
+        MultipartFile multipartFile = new CustomMultipartFile(file111.getName(), "application/pdf", fileBytes);
+        UploadFileObj uploadFileObj = new UploadFileObj();
+        String userId = (String) request.getAttribute("id");
+        String username = (String) request.getAttribute("username");
+        uploadFileObj.setUserId(userId);
+        uploadFileObj.setUsername(username);
+        uploadFileObj.setFile(multipartFile);
+        uploadFileObj.setDiagnosisDiseaseTypes(diagnosisDiseaseTypes);
+
+
+        MultipartFile file = uploadFileObj.getFile();
+        List<String> labels = uploadFileObj.getLabels();
+
+        List<String> availableSuffixList = com.google.common.collect.Lists.newArrayList("pdf", "png", "docx", "pptx", "xlsx");
+        List<FileDocument> esDoc = null;
+        List<FileDocument> fileDocuments = Lists.newArrayList();
+        PredictionCaseEntity predictionCaseEntity = new PredictionCaseEntity();
+        Map<String, Object> result = new HashMap<>(8);
+
+        String fileMd5 = SecureUtil.md5(file.getInputStream());
+
+        FileDocument fileDocumentInDb = getByMd5(fileMd5);
+        boolean flag_exist = (fileDocumentInDb != null);
+
+        FileDocument fileDocument = saveToDb(fileMd5, file,userId,username);
+
+        saveTagWhenSaveDoc(fileDocument,labels);
+
+        //获取OCR识别结果
+        PredictCaseOutcome predictCaseOutcome = file2OcrService.getPredictCase(fileMd5);
+        predictCaseOutcome.setDiagnosisDiseaseTypes(uploadFileObj.getDiagnosisDiseaseTypes());
+
+        List<EsSearch> esSearchList = elasticServiceImpl.getCasePredict(predictCaseOutcome);
+
+//                    将es的查询结果转为一个List<fileDocument>
+        esDoc = getListFileDocumentFromEsOutcome(esSearchList);
+
+        setUserNameFromDB(esDoc);
+
+        if (esDoc != null) {
+            fileDocuments.addAll(esDoc);
+        }
+        List<DocumentVO> documentVos;
+        documentVos = convertDocuments(fileDocuments);
+
+        predictionCaseEntity.setDocumentVos(documentVos);
+        predictionCaseEntity.setPredictCaseOutcome(predictCaseOutcome);
+
+
+            List<String> MedicalOpinions1 = new ArrayList<>();
+    List<String> MedicalOpinions2 = new ArrayList<>();
+        MedicalOpinions1.add("考虑到肺癌放疗患者肺部真菌侵袭性感染主要病原菌为白假丝酵母和热带假丝酵母，临床用药时应该考虑到感染病原菌的特点进行治疗。");
+        MedicalOpinions1.add("对于年龄在60岁以上的肺癌放疗患者，由于免疫力降低，更易发生真菌感染。医护人员应加强护理和治疗，有效预防肺部真菌感染的发生。");
+        MedicalOpinions1.add("合并糖尿病是肺癌放疗患者继发肺部真菌侵袭性感染的独立危险因素。对于这些患者，应加强监测和控制血糖，以降低感染风险。");
+
+        MedicalOpinions2.add("对于同步化疗的肺癌放疗患者，应密切关注其免疫功能下降及感染风险。根据文章中提到的预测模型，医务人员可以建立风险等级，及时发现不良预后高危人群，并采取针对性的干预措施。");
+        MedicalOpinions2.add("对于接受侵入性操作的肺癌放疗患者，应严格遵循无菌操作规程，防止因消毒不彻底或操作过程中出现黏膜损伤等情况导致感染。");
+//        MedicalOpinions2.add("关注生活质量：在治疗过程中，应重视患者的生活质量评分，尽可能提高患者的生活质量。");
+
+        if(documentVos.size()>0)
+                documentVos.get(0).setMedicalOpinions(MedicalOpinions1);
+        if(documentVos.size()>1)
+                documentVos.get(1).setMedicalOpinions(MedicalOpinions2);
+
+        result.put("documentVos",documentVos);
+        result.put("predictCaseOutcome",predictCaseOutcome);
+
+//        DiagnosisMongodbService diagnosisMongodbService = new DiagnosisMongodbService();
+        saveRecordToDB(request,files,documentVos,predictCaseOutcome);
+
+        return BaseApiResult.success(result);
+
+    }
+
+//    List<String> MedicalOpinions1 = new ArrayList<>();
+//    List<String> MedicalOpinions2 = new ArrayList<>();
+//        MedicalOpinions1.add("对于红肿疼痛的病症阶段，可以使用非甾体类抗炎药物来缓解肿胀和疼痛，如果疼痛仍然严重，还可以联合使用糖皮质激素。此外，对于确诊的病例，可以使用慢作用的抗风湿药物如甲氨蝶呤、来氟米特、柳氮磺吡啶、羟氯喹等进行治疗。");
+//        MedicalOpinions1.add("进行药物治疗时，应注意饮食，保持营养均衡，补充钙和维生素D，多吃新鲜的水果和蔬菜，尤其是深绿色的叶子蔬菜，补充维生素和叶酸，以缓解长期服药带来的不适。");
+//        MedicalOpinions1.add("中医学提供了另一种治疗视角，例如使用针灸和中药汤剂薏苡仁汤进行治疗。并且，中医学通常会根据病人的具体情况，对治疗方案进行个性化的调整，以达到最佳的治疗效果。");
+//
+//        MedicalOpinions2.add("对于同步化疗的肺癌放疗患者，应密切关注其免疫功能下降及感染风险。根据文章中提到的预测模型，医务人员可以建立风险等级，及时发现不良预后高危人群，并采取针对性的干预措施。");
+//        MedicalOpinions2.add("对于接受侵入性操作的肺癌放疗患者，应严格遵循无菌操作规程，防止因消毒不彻底或操作过程中出现黏膜损伤等情况导致感染。");
+////        MedicalOpinions2.add("关注生活质量：在治疗过程中，应重视患者的生活质量评分，尽可能提高患者的生活质量。");
+//
+//        if(documentVos.size()>0)
+//                documentVos.get(0).setMedicalOpinions(MedicalOpinions1);
+//        if(documentVos.size()>1)
+//                documentVos.get(1).setMedicalOpinions(MedicalOpinions2);
+
+    public void saveRecordToDB(HttpServletRequest request,
+                               MultipartFile[] files,
+                               List<DocumentVO> documentVos,
+                               PredictCaseOutcome predictCaseOutcome){
+
+        List<ImageInfo> imageInfos = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String fileName = file.getOriginalFilename();
+            String contentType = file.getContentType();
+            InputStream inputStream = null;
+            try {
+                inputStream = file.getInputStream();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            String gridfsId = uploadFileToGridFs("prefix_", inputStream, contentType); // 保存文件到 GridFS
+
+            ImageInfo fileInfo = new ImageInfo(fileName, contentType, gridfsId);
+            imageInfos.add(fileInfo);
+        }
+
+        Diagnosis diagnosis = new Diagnosis();
+        diagnosis.setUserId("ZBW");
+        diagnosis.setCreateDate(new Date());
+        diagnosis.setImageInfos(imageInfos);
+        diagnosis.setDocumentVos(documentVos);
+        diagnosis.setPredictCaseOutcome(predictCaseOutcome);
+
+        mongoTemplate.save(diagnosis, DOCUMENT_NAME_DIAGNOSIS);
+    }
+
+    @Override
+    public List<DiagnosisVO> SearchDiagnosisRecord(String userId){
+
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+
+        return ListDiagnosesToVO(mongoTemplate.find(query, Diagnosis.class));
+    }
+
+    private List<DiagnosisVO> ListDiagnosesToVO(List<Diagnosis> diagnoses){
+        List<DiagnosisVO> diagnosisVOList = new ArrayList<>();
+        for(Diagnosis diagnosis:diagnoses){
+            DiagnosisVO diagnosisVO = new DiagnosisVO();
+            diagnosisVO.setUserId(diagnosis.getUserId());
+            diagnosisVO.setCreateTime(diagnosis.getCreateDate());
+            List<String> UUIDs = new ArrayList<>();
+            if(diagnosis.getImageInfos() != null){
+                for(ImageInfo imageInfo:diagnosis.getImageInfos()){
+                    UUIDs.add(imageInfo.getUUID());
+                }
+
+            }
+            diagnosisVO.setUUID(UUIDs);
+            List<String> ills = new ArrayList<>();
+            ills.addAll(diagnosis.getPredictCaseOutcome().getDisease());
+            diagnosisVO.setIlls(ills);
+            diagnosisVO.setIllType(diagnosis.getPredictCaseOutcome().getDiagnosisDiseaseTypes());
+            diagnosisVOList.add(diagnosisVO);
+            diagnosisVO.setPredictCaseOutcome(diagnosis.getPredictCaseOutcome());
+            diagnosisVO.setDocumentVos(diagnosis.getDocumentVos());
+        }
+        return diagnosisVOList;
     }
 
     private void setUserNameFromDB(List<FileDocument> fileDocumentList){

@@ -71,4 +71,5 @@ DocumentVO {
 
     private boolean hasCollect;
     private boolean hasLike;
+    private List<String> medicalOpinions;
 }
