@@ -21,10 +21,7 @@ import com.jiaruiblog.entity.vo.DocumentVO;
 import com.jiaruiblog.enums.DocStateEnum;
 import com.jiaruiblog.service.*;
 import com.jiaruiblog.task.exception.TaskRunException;
-import com.jiaruiblog.util.BaseApiResult;
-import com.jiaruiblog.util.CallFlask;
-import com.jiaruiblog.util.PdfUtil;
-import com.jiaruiblog.util.QuantileNormalization;
+import com.jiaruiblog.util.*;
 import com.jiaruiblog.util.converter.ImageToPdfConverter;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
@@ -767,6 +764,8 @@ public class FileServiceImpl implements IFileService {
         List<DocumentVO> documentVos;
         List<FileDocument> fileDocuments = Lists.newArrayList();
 
+        String tipMsg = new String();
+
         PermissionEnum permissionEnum = documentDTO.getPermission();
         String userid = documentDTO.getUserId();
         long totalNum = 0L;
@@ -824,7 +823,7 @@ public class FileServiceImpl implements IFileService {
                             esSearch.setOcrResultList(OcrResultFromDB(esSearch,keyWord));
                         }
                         esSearch.setLike_num(getLikeNumByDocId(esSearch.getFileId()));
-//                        esSearch
+
                     }
 
                     QuantileNormalization.linearNormalize(esSearchList,"like",0,30,false);
@@ -849,6 +848,11 @@ public class FileServiceImpl implements IFileService {
                     fileDocuments = Optional.ofNullable(fileDocuments).orElse(new ArrayList<>());
                     fileDocuments.addAll(esDoc);
                     totalNum = fileDocuments.size();
+                }
+
+                if(totalNum == 0){
+                    AskGpt askGpt = new AskGpt();
+                    tipMsg = askGpt.ask(AskOptional.CORRECT,keyWord);
                 }
                 break;
             case CATEGORY:
@@ -880,7 +884,7 @@ public class FileServiceImpl implements IFileService {
         Map<String, Object> result = new HashMap<>(8);
         result.put("totalNum", totalNum);
         result.put("documents", documentVos);
-
+        result.put("tips", tipMsg);
         long endTime = System.currentTimeMillis();
 
         System.out.println("startTime:"+startTime);
@@ -1758,7 +1762,6 @@ public class FileServiceImpl implements IFileService {
         uploadFileObj.setFile(multipartFile);
         uploadFileObj.setDiagnosisDiseaseTypes(diagnosisDiseaseTypes);
 
-
         MultipartFile file = uploadFileObj.getFile();
         List<String> labels = uploadFileObj.getLabels();
 
@@ -1781,6 +1784,12 @@ public class FileServiceImpl implements IFileService {
         PredictCaseOutcome predictCaseOutcome = file2OcrService.getPredictCase(fileMd5);
         predictCaseOutcome.setDiagnosisDiseaseTypes(uploadFileObj.getDiagnosisDiseaseTypes());
 
+        String diagnosisToString = predictCaseOutcome.toString();
+
+        AskGpt askGpt = new AskGpt();
+        String advice = askGpt.ask(AskOptional.ADVICE,diagnosisToString);
+//        System.out.println("");
+
         List<EsSearch> esSearchList = elasticServiceImpl.getCasePredict(predictCaseOutcome);
 
 //                    将es的查询结果转为一个List<fileDocument>
@@ -1797,16 +1806,14 @@ public class FileServiceImpl implements IFileService {
         predictionCaseEntity.setDocumentVos(documentVos);
         predictionCaseEntity.setPredictCaseOutcome(predictCaseOutcome);
 
-
-            List<String> MedicalOpinions1 = new ArrayList<>();
-    List<String> MedicalOpinions2 = new ArrayList<>();
+        List<String> MedicalOpinions1 = new ArrayList<>();
+        List<String> MedicalOpinions2 = new ArrayList<>();
         MedicalOpinions1.add("考虑到肺癌放疗患者肺部真菌侵袭性感染主要病原菌为白假丝酵母和热带假丝酵母，临床用药时应该考虑到感染病原菌的特点进行治疗。");
         MedicalOpinions1.add("对于年龄在60岁以上的肺癌放疗患者，由于免疫力降低，更易发生真菌感染。医护人员应加强护理和治疗，有效预防肺部真菌感染的发生。");
         MedicalOpinions1.add("合并糖尿病是肺癌放疗患者继发肺部真菌侵袭性感染的独立危险因素。对于这些患者，应加强监测和控制血糖，以降低感染风险。");
 
         MedicalOpinions2.add("对于同步化疗的肺癌放疗患者，应密切关注其免疫功能下降及感染风险。根据文章中提到的预测模型，医务人员可以建立风险等级，及时发现不良预后高危人群，并采取针对性的干预措施。");
         MedicalOpinions2.add("对于接受侵入性操作的肺癌放疗患者，应严格遵循无菌操作规程，防止因消毒不彻底或操作过程中出现黏膜损伤等情况导致感染。");
-//        MedicalOpinions2.add("关注生活质量：在治疗过程中，应重视患者的生活质量评分，尽可能提高患者的生活质量。");
 
         if(documentVos.size()>0)
                 documentVos.get(0).setMedicalOpinions(MedicalOpinions1);
@@ -1815,6 +1822,7 @@ public class FileServiceImpl implements IFileService {
 
         result.put("documentVos",documentVos);
         result.put("predictCaseOutcome",predictCaseOutcome);
+        result.put("advice",advice);
 
 //        DiagnosisMongodbService diagnosisMongodbService = new DiagnosisMongodbService();
         saveRecordToDB(request,files,documentVos,predictCaseOutcome);

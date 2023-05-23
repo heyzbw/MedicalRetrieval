@@ -4,9 +4,23 @@
     <!--      <router-link to="/">Home</router-link> |-->
     <!--      <router-link to="/about">About</router-link>-->
     <!--    </div>-->
-    <router-view />
+      <router-view />
+      <ChatWindow/>
+
   </div>
 </template>
+
+<script>
+import ChatWindow from './components/chat/chatAI.vue';
+
+export default {
+    components: {
+        ChatWindow,
+        // ChatWindowTest,
+    },
+    // ...
+};
+</script>
 
 <style lang="scss">
 .information {
@@ -37,6 +51,15 @@
   text-align: center;
   color: #2c3e50;
   background-color: #f8f6f9;
+  position: relative;
+
+  .ChatWindow >>> .chat-button {
+    position: absolute;
+    top: 20%;
+    right: 20%;
+    z-index: 9999; // 确保在页面的最上层
+  }
+
 }
 
 #nav {
@@ -51,4 +74,5 @@
     }
   }
 }
+
 </style>

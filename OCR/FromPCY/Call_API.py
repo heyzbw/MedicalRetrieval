@@ -1,5 +1,13 @@
+import os
 import requests
 import json
+
+def get_system_proxies():
+    proxies = {}
+    for name in ['http', 'https', 'ftp', 'no']:
+        if name + '_proxy' in os.environ:
+            proxies[name] = os.environ[name + '_proxy']
+    return proxies if proxies else None
 
 def get_file_content(filePath):
     with open(filePath, 'rb') as fp:
@@ -9,11 +17,12 @@ class CommonOcr(object):
     def __init__(self):
         # 请登录后前往 “工作台-账号设置-开发者信息” 查看 x-ti-app-id
         # 示例代码中 x-ti-app-id 非真实数据
-        self._app_id = 'b0bc20b0fe704eb5c13681cd93340756'
+        self._app_id = 'd391fdd0940627b3afb4975245e3e390'
         # 请登录后前往 “工作台-账号设置-开发者信息” 查看 x-ti-secret-code
         # 示例代码中 x-ti-secret-code 非真实数据
-        self._secret_code = 'e3bddeb127810636d9d1db63c64d94bb'
-        # self._img = img
+        self._secret_code = 'ab49069821971eacc812fba88ce3b9ae'
+
+        self._proxies = get_system_proxies()
 
     def recognize(self,image):
         # 通用文字识别
@@ -25,6 +34,7 @@ class CommonOcr(object):
             head['x-ti-app-id'] = self._app_id
             head['x-ti-secret-code'] = self._secret_code
             result = requests.post(url, data=image, headers=head)
+            # result = requests.post(url, data=image, headers=head, proxies=self._proxies)
             return result.text
         except Exception as e:
             return e

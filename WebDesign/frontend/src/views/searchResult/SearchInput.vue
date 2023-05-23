@@ -14,10 +14,23 @@ export default {
             keyWord: this.$route.query.keyWord,
         }
     },
+
+    created() {
+        this.$eventBus.$on('search_correct', this.handleSearch);
+    },
+
+    beforeDestroy() {
+        this.$eventBus.$off('search_correct', this.handleSearch);  // 不要忘了在组件销毁前取消事件监听
+    },
+
     methods: {
+        handleSearch(value){
+            this.keyWord = value;
+            this.searchValue(value);
+        },
+
         searchValue(value) {
             if (value !== "") {
-
                 this.$router.push({
                     path: '/searchResult',
                     query: {

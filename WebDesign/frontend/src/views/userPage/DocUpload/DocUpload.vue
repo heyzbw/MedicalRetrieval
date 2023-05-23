@@ -94,12 +94,7 @@
                         <Col>
                         <div class="upload-button"
                             style="width: 180px; height: 45px; border: 2px solid #000;
-                            background: #65c3f2;
-                            box-shadow: 0 0 4px 0 rgba(129,100,0,0.3);
-                            border-radius: 8px;
-                            display: flex;
-                            justify-content: center;
-                            "
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
                             @click="uploadFile">
                             <div style="padding: 5px; line-height: 45px;">
                                 <!-- <img :src="buttonSrc" width="24px" height="28px" alt="pic" /> -->
@@ -132,54 +127,24 @@
                 </div>
 
             </el-tab-pane>
-
             <el-tab-pane label="导入图片生成扫描件" name="tab_third" width="100%">
-                <div class="upload-container">
-                    <el-upload
-                        action="#"
-                        ref="upload"
-                        list-type="picture-card"
-                        accept="image/png"
-                        :on-preview="handlePictureCardPreview"
-                        :on-remove="handleRemove2"
-                        :http-request="uploadAvatar"
-                        :before-upload="beforeAvatarUpload"
-                        :file-list="fileList"
-                    >
-                        <!-- :action="baseUrl" -->
-                        <img
-                            v-if="imageUrl"
-                            :src="imageUrl"
-                            class="avatar"
-                            :class="{ 'avatar-hover': avatarHover }"
-                            @mouseover="avatarHover = true"
-                            @mouseleave="avatarHover = false"
-                        />
-                        <i
-                            v-else
-                            class="el-icon-plus avatar-uploader-icon"
-                            :class="{ 'avatar-uploader-icon-hover': avatarHover }"
-                            @mouseover="avatarHover = true"
-                            @mouseleave="avatarHover = false"
-                        ></i>
-                    </el-upload>
 
-                    <div class="input-container">
-                        <el-input
-                            v-model="imagefile"
-                            placeholder="请输入文件名"
-                            class="file-name-input"
-                        ></el-input>
-                    </div>
+                </el-upload> -->
+                <el-upload action="#" ref="upload" list-type="picture-card" accept="image/png"
+                    :on-preview="handlePictureCardPreview" :on-remove="handleRemove2" :http-request="uploadAvatar"
+                    :before-upload="beforeAvatarUpload" :file-list="fileList">
+                    <!-- :action="baseUrl" -->
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
 
-                    <el-button
-                        class="submit-btn"
-                        type="primary"
-                        @click="submitUpload"
-                    >生成</el-button>
+                <div style="padding-top:20px">
+                    <el-input v-model="imagefile" placeholder="请输入文件名" style="width:20%;"></el-input>
                 </div>
-            </el-tab-pane>
 
+                <el-button style="margin-top:10px" type="primary" class="btn btn-primary btn-sm submit-btn"
+                    @click="submitUpload">生成</el-button>
+            </el-tab-pane>
         </el-tabs>
 
     </div>
@@ -287,13 +252,6 @@ export default {
                 },
             };
 
-            // 添加用户信息
-            //   config.headers.authorization = localStorage.getItem("token");
-            //   config.headers.id = localStorage.getItem("id")
-            //   config.headers.username = localStorage.getItem("username")
-            //   console.log("config.headers.id",config.headers.id)
-            // console.log("localStorage.getItem(id)",localStorage.getItem("id"))
-
             this.progressFlag = true;
             console.log(formData)
             axios.post(this.actionUrl, formData, config).then(res => {
@@ -306,7 +264,6 @@ export default {
                     this.$Message.error("出错：" + data['message'])
                     this.uploadProcess = 0.00
                 }
-
                 setTimeout(() => {
                     this.processFlag = false;
                     this.filename = ''
@@ -408,8 +365,7 @@ export default {
 
                 const config = {
                     onUploadProgress: (progressEvent) => {
-                        // progressEvent.loaded:已上传文件大小
-                        // progressEvent.total:被上传文件的总大小
+
                         this.uploadProcess = Number(
                             ((progressEvent.loaded / progressEvent.total) * 0.9).toFixed(2)
                         );
@@ -706,58 +662,4 @@ export default {
         padding: 1px 0 0 1px;
     }
 }
-
-.upload-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px;
-
-    .el-upload {
-        width: 200px;
-        height: 200px;
-        .avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
-            object-fit: cover;
-            transition: transform 0.3s;
-            &.avatar-hover {
-                transform: scale(1.1);
-            }
-        }
-
-        .avatar-uploader-icon {
-            font-size: 36px;
-            color: rgba(0, 0, 0, 0.3);
-            transition: color 0.3s;
-            &.avatar-uploader-icon-hover {
-                color: rgba(0, 0, 0, 0.7);
-            }
-        }
-    }
-
-    .input-container {
-        width: 100%;
-        padding-top: 20px;
-        display: flex;
-        justify-content: center;
-
-        .file-name-input {
-            width: 60%;
-            border: 1px solid #dcdfe6;
-            border-radius: 4px;
-            &:focus {
-                border-color: #409eff;
-            }
-        }
-    }
-
-    .submit-btn {
-        margin-top: 10px;
-        width: 60%;
-        height: 45px;
-    }
-}
-
 </style>

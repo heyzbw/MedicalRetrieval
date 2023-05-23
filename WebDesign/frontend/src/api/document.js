@@ -85,6 +85,5 @@ export default {
         return Post(diagnosis_GET_URL,null,param)
     }
 
-    // COLLECT_ADD_URL
 }
 

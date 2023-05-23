@@ -92,6 +92,7 @@ public class CallFlask {
         PredictCaseOutcome outcome = new PredictCaseOutcome();
 
         // 设置PredictCaseOutcome对象的字段
+        outcome.setDiagnosis((dataObject.getString("diagnosis")));
         outcome.setDisease(jsonArrayToList(dataObject.getJSONArray("disease")));
 //        outcome.getDisease().add(0,"肺癌");
         outcome.setBody(jsonArrayToList(dataObject.getJSONArray("body")));

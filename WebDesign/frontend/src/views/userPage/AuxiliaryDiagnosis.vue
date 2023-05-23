@@ -64,20 +64,6 @@ export default {
       isUploading: false, // 是否正在上传的标识
     }
   },
-
-  // clickToSearch(value) {
-  //   if (value !== "") {
-  //     this.$router.push({
-  //       path: '/searchResult',
-  //       query: {
-  //         keyWord: value
-  //       }
-  //     })
-  //   } else {
-  //     this.routeTo()
-  //   }
-  // },
-
   methods: {
     submitUpload() {
       this.isUploading = true;

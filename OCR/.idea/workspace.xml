@@ -5,40 +5,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c16fa5a-64b0-4ffd-a7fd-d8b63e8612e9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/NLP_medical/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/cws_constant.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/medical_ner.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/bert_lstm_crf.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/crf.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/._config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/config.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/model.pkl" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/pytorch_model.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/vocab.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/ner_constant.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/run_ner.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/train_example.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/train_ner.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NLP_medical/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/PredictCCaseItem.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/PredictionCase.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/AIDiagnosisRecord.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/AuxiliaryDiagnosis.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/controller/AskGptController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/AskOptional.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/dto/AskGptDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/executeGpt/Choice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/executeGpt/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/entity/executeGpt/OpenAIResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/AskGptService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/AskGptServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/AskGpt.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/CorrectContent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/src/test/java/com/jiaruiblog/service/testGpt.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/backend/不知道叫什么.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/askGpt.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/components/chat/chatAI.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/utils/event-bus.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload/DocUpload.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OCR.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FromPCY/Call_API.py" beforeDir="false" afterPath="$PROJECT_DIR$/FromPCY/Call_API.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/MongoDB/MongdbOcrUtil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/vocab.txt" beforeDir="false" afterPath="$PROJECT_DIR$/NLP_medical/model_ner/medical_ner/vocab.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pdf2pic.py" beforeDir="false" afterPath="$PROJECT_DIR$/pdf2pic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/common/MessageConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/common/MessageConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/ElasticServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/ElasticServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/service/impl/FileServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/QuantileNormalization.java" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/backend/src/main/java/com/jiaruiblog/util/QuantileNormalization.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/document.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/document.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/request.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/api/url.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/api/url.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/components/Navv.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/components/Navv.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/SearchInput.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/searchResult/SearchInput.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/AuxiliaryDiagnosis.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/AuxiliaryDiagnosis.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../WebDesign/frontend/src/views/userPage/DocUpload.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,23 +73,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/22533/Desktop/KD/MeachineLearningDqx",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/dailyUse/code/MedicalRetrieval/OCR/NLP_medical/model_ner/medical_ner&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\dailyUse\code\MedicalRetrieval\OCR\NLP_medical\model_ner\medical_ner" />
       <recent name="D:\study\code\NLP_SQRROW\NLP_version\MedicalRetrieval\OCR" />
     </key>
   </component>
@@ -319,6 +326,10 @@
       <workItem from="1683368397923" duration="664000" />
       <workItem from="1683532592107" duration="211000" />
       <workItem from="1683533359296" duration="628000" />
+      <workItem from="1684480756077" duration="4085000" />
+      <workItem from="1684486076201" duration="2547000" />
+      <workItem from="1684723187569" duration="11953000" />
+      <workItem from="1684824810389" duration="2126000" />
     </task>
     <servers />
   </component>
@@ -326,14 +337,14 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/heart_disease_json$Call_API.coverage" NAME="Call_API Coverage Results" MODIFIED="1680522579317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/OCR$testForAPI.coverage" NAME="testForAPI Coverage Results" MODIFIED="1680083529401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$pdf2pic.coverage" NAME="pdf2pic Coverage Results" MODIFIED="1680522017777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$run_ner.coverage" NAME="run_ner Coverage Results" MODIFIED="1683261880811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/NLP_medical" />
     <SUITE FILE_PATH="coverage/OCR$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1680089665661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/heart_disease_json$ocrScan.coverage" NAME="ocrScan Coverage Results" MODIFIED="1680335033809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/FromPCY/scan" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$Call_API.coverage" NAME="Call_API Coverage Results" MODIFIED="1680522579317" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$OCR.coverage" NAME="OCR Coverage Results" MODIFIED="1683261384266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1683368552179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$run_ner.coverage" NAME="run_ner Coverage Results" MODIFIED="1683261880811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/NLP_medical" />
     <SUITE FILE_PATH="coverage/OCR$pdf2pic.coverage" NAME="pdf2pic Coverage Results" MODIFIED="1680084220920" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$OCR.coverage" NAME="OCR Coverage Results" MODIFIED="1683261384266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$pdf2pic.coverage" NAME="pdf2pic Coverage Results" MODIFIED="1680522017777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heart_disease_json$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1684824851592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -78,6 +78,10 @@ const COLLECT_GET_URL = '/collect/getDocByUserId'; //根据用户的ID去获取�
 
 const diagnosis_GET_URL = '/document/diagnosis'
 
+const ASK_GPT_URL = '/askGpt/askGPT'
+const SUMMARIZE = '/askGpt/summarize'
+const CORRECT_GPT_URL = '/askGpt/askGPT'
+
 module.exports = {
     ADD_RELATE_URL,
     CATE_NO_RELATE_URL,
@@ -149,5 +153,9 @@ module.exports = {
     DOC_IMAGE_URL,
     DOC_SUPER_URL,
     CASE_IMAGE_URL,
-    diagnosis_GET_URL
+    diagnosis_GET_URL,
+
+    ASK_GPT_URL,
+    SUMMARIZE,
+    CORRECT_GPT_URL
 }

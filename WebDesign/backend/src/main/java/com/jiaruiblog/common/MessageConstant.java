@@ -35,4 +35,5 @@ public class MessageConstant {
     public static final String SUCCESS_REMOVE_COLLECT = "SUCCESS_REMOVE_COLLECT";
     public static final String FILE_NOT_FOUND = "File was not found";
     public static final String  EXIST_SENSITIVE_VOCABULARY = "exist sensitive vocabulary";
+
 }

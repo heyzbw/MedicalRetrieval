@@ -24,7 +24,8 @@
                 <template #list>
                     <DropdownMenu>
                         <DropdownItem @click.native="$router.push('/admin/allDocuments')">系统管理</DropdownItem>
-                        <DropdownItem @click.native="$router.push('/userPage')">个人主页</DropdownItem>
+<!--                        <DropdownItem @click.native="$router.push('/userPage')">个人主页</DropdownItem>-->
+                        <DropdownItem @click.native="click_user_page()">个人主页</DropdownItem>
                         <DropdownItem @click.native="logout()" divided>退出登录</DropdownItem>
                     </DropdownMenu>
                 </template>
@@ -77,6 +78,21 @@ export default {
             this.$router.push({
                 name: 'Login'
             })
+        },
+        click_user_page(){
+            // 登录过了就跳转到个人主页
+            let userId = localStorage.getItem("id")
+            if(userId){
+                this.$router.push({
+                    path: '/userPage'
+                })
+            }
+            // 否则，跳转到登录页面
+            else{
+                this.$router.push({
+                    path: '/login'
+                })
+            }
         }
     }
 }

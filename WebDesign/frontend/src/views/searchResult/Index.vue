@@ -45,6 +45,7 @@ import Footer from "@/components/MyFooter";
 import DocumentRequest from "@/api/document"
 import SearchInput from "./SearchInput"
 import PubmedItem from "./PubmedItem";
+import { EventBus } from '@/utils/event-bus';
 
 export default {
     name: "Index.vue",
@@ -72,8 +73,23 @@ export default {
     },
     mounted() {
         this.getListData()
+        console.log("searchrequest的mounted")
     },
+    // created() {
+    //     this.$eventBus.$on('search_correct', this.handleSearch);
+    // },
+    //
+    // beforeDestroy() {
+    //     this.$eventBus.$off('search_correct', this.handleSearch);  // 不要忘了在组件销毁前取消事件监听
+    // },
     methods: {
+        handleSearch(value) {
+            console.log("handleSearch",value)
+            this.keyword = value;
+            console.log("handleSearch_new:",this.keyword)
+            this.getListData();
+        },
+
         getListDatap() {
 
             this.loading = true
@@ -126,7 +142,7 @@ export default {
             this.currentPage = page
         },
         getListData() {
-
+            console.log("待搜索的内容为：",this.keyword)
             // 统计字符个数
             if (this.keyword) {
               let chineseChars = this.keyword.match(/[\u4e00-\u9fa5]/g);
@@ -178,6 +194,11 @@ export default {
                 this.listLoading = false
                 if (this.data == null || this.data.length === 0) {
                     this.info(false)
+                }
+                if(this.data.length === 0 && res.data.tips.length !== 0){
+                    let message = res.data.tips
+                    EventBus.$emit('message', message);
+                    console.log("res.data.tips", res.data.tips)
                 }
             })
         },

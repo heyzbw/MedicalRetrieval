@@ -1028,6 +1028,13 @@ public class ElasticServiceImpl implements ElasticService {
         esSearch.setMd5((String) objectMap.get("id"));
         esSearch.setFileId((String) objectMap.get("fileId"));
         esSearch.setId((String) objectMap.get("fileId") );
+        Integer integer = (Integer) objectMap.get("click_rate");
+        if(integer != null){
+            esSearch.setClick_num(Long.valueOf((Integer) objectMap.get("click_rate")));
+        }
+        else {
+            esSearch.setClick_num(0L);
+        }
     }
 }
 

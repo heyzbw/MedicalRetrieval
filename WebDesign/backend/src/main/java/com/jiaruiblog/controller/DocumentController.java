@@ -219,7 +219,6 @@ public class DocumentController {
     public BaseApiResult uploadImage_case(@RequestParam("filename") String filename,
                                           @RequestParam("imageList") MultipartFile[] imageList,
                                           @RequestParam("diagnosisDiseaseTypes") String diagnosisDiseaseTypes,
-//                                              private String diagnosisDiseaseTypes
                                           HttpServletRequest request) throws IOException, DocumentException, AuthenticationException {
         String userId = (String) request.getAttribute("id");
         System.out.println("ImageMethod的UserId为:"+userId);

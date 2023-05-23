@@ -24,16 +24,17 @@ Vue.directive('dialogDrag', {
 
     }
 })
-// Vue.prototype.$axios = Api;
 
-// The routing configuration
-// const RouterConfig = {
-//     routes: Routers
-// };
-// const router = new VueRouter(RouterConfig);
+// Create a new Vue instance as an event bus
+const EventBus = new Vue();
+Vue.prototype.$eventBus = EventBus; // Mount the event bus to the Vue prototype chain
 
 new Vue({
     el: '#app',
     router,
     render: h => h(App)
 });
+
+// import Vue from 'vue';
+
+export const bus = new Vue();
